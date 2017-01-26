@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SuperJumpingSumoKart.iml" filepath="$PROJECT_DIR$/SuperJumpingSumoKart.iml" />
+      <module fileurl="file://$PROJECT_DIR$/aRBaseLib/aRBaseLib.iml" filepath="$PROJECT_DIR$/aRBaseLib/aRBaseLib.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

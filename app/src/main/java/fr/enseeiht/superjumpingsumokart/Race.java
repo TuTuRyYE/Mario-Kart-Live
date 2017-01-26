@@ -10,11 +10,18 @@ import android.view.View;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 
+import com.parrot.arsdk.ARSDK;
+
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
 public class Race extends AppCompatActivity {
+
+    static {
+        ARSDK.loadSDKLibs();
+    }
+
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.

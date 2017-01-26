@@ -7,7 +7,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.parrot.arsdk.*;
+
 public class Menu extends AppCompatActivity {
+
+    static {
+        ARSDK.loadSDKLibs();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
