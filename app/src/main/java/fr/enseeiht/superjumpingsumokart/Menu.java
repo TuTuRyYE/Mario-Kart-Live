@@ -7,17 +7,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import com.parrot.arsdk.*;
+import org.artoolkit.ar.base.FPSCounter;
+import org.artoolkit.ar.base.NativeInterface;
+
+import com.parrot.arsdk.ARSDK;
 
 public class Menu extends AppCompatActivity {
 
     static {
         ARSDK.loadSDKLibs();
+        NativeInterface.loadNativeLibrary();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FPSCounter fpsCounter = new FPSCounter();
+        fpsCounter.reset();
         setContentView(R.layout.activity_menu);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
