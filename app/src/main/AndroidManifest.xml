@@ -9,7 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Menu"
+            android:name=".application.GUIWelcom"
             android:label="@string/title_activity_menu"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -18,14 +18,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Race"
+            android:name=".GUIGame"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_race"
-            android:parentActivityName=".Menu"
+            android:parentActivityName=".application.GUIWelcom"
             android:theme="@style/FullscreenTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="fr.enseeiht.superjumpingsumokart.Menu" />
+                android:value="fr.enseeiht.superjumpingsumokart.application.GUIWelcom" />
         </activity>
     </application>
 
