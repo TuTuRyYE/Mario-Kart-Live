@@ -32,7 +32,7 @@ public class GUIWelcom extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         FPSCounter fpsCounter = new FPSCounter();
         fpsCounter.reset();
-        setContentView(R.layout.activity_GUIWelcome);
+        setContentView(R.layout.activity_gui_welcome);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
