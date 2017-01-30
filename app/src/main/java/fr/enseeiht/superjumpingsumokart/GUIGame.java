@@ -9,14 +9,20 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
+import android.widget.FrameLayout;
 
 import com.parrot.arsdk.ARSDK;
+
+import org.artoolkit.ar.base.ARActivity;
+import org.artoolkit.ar.base.rendering.ARRenderer;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class Race extends AppCompatActivity {
+public class GUIGame extends ARActivity {
+
+
 
     static {
         ARSDK.loadSDKLibs();
@@ -96,7 +102,7 @@ public class Race extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_race);
+        setContentView(R.layout.activity_GUIGame);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -119,6 +125,16 @@ public class Race extends AppCompatActivity {
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
         findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
+    }
+
+    @Override
+    protected ARRenderer supplyRenderer() {
+        return null;
+    }
+
+    @Override
+    protected FrameLayout supplyFrameLayout() {
+        return null;
     }
 
     @Override
