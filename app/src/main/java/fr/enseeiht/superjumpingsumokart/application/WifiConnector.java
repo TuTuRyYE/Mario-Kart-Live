@@ -18,6 +18,7 @@ import com.parrot.arsdk.ardiscovery.ARDiscoveryService;
 import com.parrot.arsdk.ardiscovery.receivers.ARDiscoveryServicesDevicesListUpdatedReceiver;
 import com.parrot.arsdk.ardiscovery.receivers.ARDiscoveryServicesDevicesListUpdatedReceiverDelegate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -56,7 +57,7 @@ class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedReceiverDele
     /**
      * The list of all available devices.
      */
-    private List<ARDiscoveryDeviceService> devicesList;
+    private List<ARDiscoveryDeviceService> devicesList = new ArrayList<>();
 
     /**
      * The remote device connected with this connector.
@@ -167,7 +168,7 @@ class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedReceiverDele
         // Before everything, it is necessary to check the product ID of the device.
         if (discoveryDeviceService != null && ARDISCOVERY_PRODUCT_ENUM.ARDISCOVERY_PRODUCT_ARDRONE.equals(ARDiscoveryService.getProductFromProductID(discoveryDeviceService.getProductID()))) {
             try {
-                // Instanciates a device and a its network service.
+                // Creates a device and its network service.
                 device = new ARDiscoveryDevice();
                 ARDiscoveryDeviceNetService netService = (ARDiscoveryDeviceNetService) discoveryDeviceService.getDevice();
                 Log.d(WIFI_CONNECTOR_TAG, "Starting the network service of the device : Name = " + netService.getName() + " | IP = " + netService + " | Port = " + netService.getPort());
@@ -187,9 +188,20 @@ class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedReceiverDele
         return device;
     }
 
-    // Describes the action to do when there is an update in the available devices list.
+    /**
+     * (Romain Verset - 30/01/2017).
+     * @return The list of the availables devices.
+     */
+    public List<ARDiscoveryDeviceService> getAvailableDevices() {
+        return devicesList;
+    }
+
+    // Describes the action to do when there is an update in the available devices list. Here, updates
+    // the list of availables devices of the connector.
     @Override
     public void onServicesDevicesListUpdated() {
-        Log.d(WIFI_CONNECTOR_TAG, "Devices list updated : " + devicesList.size() + " devices available.");
+        devicesList = discoveryService.getDeviceServicesArray();
+        if (devicesList != null)
+            Log.d(WIFI_CONNECTOR_TAG, "Devices list updated : " + devicesList.size() + " devices available.");
     }
 }

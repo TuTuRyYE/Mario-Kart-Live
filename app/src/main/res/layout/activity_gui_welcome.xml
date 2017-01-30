@@ -5,67 +5,80 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="fr.enseeiht.superjumpingsumokart.application.GUIWelcom">
+    tools:context="fr.enseeiht.superjumpingsumokart.application.GUIWelcome">
 
-    <android.support.design.widget.AppBarLayout
+    <RelativeLayout
+        android:id="@+id/content_menu"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context="fr.enseeiht.superjumpingsumokart.application.GUIWelcome"
+        tools:showIn="@layout/activity_gui_welcome">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+        <GridLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:rowCount="2"
+            android:columnCount="2"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true">
 
-    </android.support.design.widget.AppBarLayout>
+            <Button
+                android:text="@string/start_race_btn"
+                android:layout_height="wrap_content"
+                android:id="@+id/startRaceBtn"
+                android:width="@dimen/menu_btn_width" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+            <Button
+                android:text="@string/set_circuit_btn"
+                android:layout_height="wrap_content"
+                android:id="@+id/setCircuitBtn"
+                android:width="@dimen/menu_btn_width" />
 
-    <Button
-        android:text="Connexion BT"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btConnexionBtn"
-        app:layout_anchor="@+id/include"
-        app:layout_anchorGravity="center_vertical|center_horizontal"
-        android:layout_gravity="center_vertical|center_horizontal" />
+            <Button
+                android:text="@string/connect_wifi_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/connectWifiBtn"
+                android:width="@dimen/menu_btn_width" />
 
-    <include layout="@layout/content_menu"
-        android:id="@+id/include" />
+            <Button
+                android:text="@string/connect_bluetooth_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/connectBluetoothBtn"
+                android:width="@dimen/menu_btn_width" />
+        </GridLayout>
 
-    <Button
-        android:text="Connexion WIFI"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/wifiConnexionBtn"
-        app:layout_anchor="@+id/include"
-        app:layout_anchorGravity="center_vertical|left"
-        android:layout_gravity="center_vertical|right" />
+        <Button
+            android:text="@string/exit_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/exitBtn" />
 
-    <Button
-        android:text="Start Race"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/startRaceBtn"
-        app:layout_anchor="@+id/include"
-        app:layout_anchorGravity="center_vertical|right"
-        android:layout_gravity="center_vertical|left" />
+        <TextView
+            android:text="@string/app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/textView"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
 
-    <Button
-        android:text="Set Circuit"
-        android:layout_width="wrap_content"
-        android:layout_height="62dp"
-        android:id="@+id/setCircuitBtn"
-        app:layout_anchor="@+id/include"
-        app:layout_anchorGravity="bottom|center_horizontal"
-        android:layout_gravity="top|center_horizontal" />
-
+        <ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/toggleButtonDebugMode"
+            android:textOff="@string/debug_mode_button_off"
+            android:textOn="@string/debug_mode_btn_on"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:checked="false" />
+    </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>
