@@ -21,7 +21,7 @@ import com.parrot.arsdk.ardiscovery.receivers.ARDiscoveryServicesDevicesListUpda
 import java.util.List;
 
 /**
- * @author Romain Verset
+ * @author Romain Verset.
  * This class allow the application to remotly connect with a Parrot drone.
  * Created by Romain Verset on 30/01/17.
  */
@@ -64,7 +64,7 @@ class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedReceiverDele
     private ARDiscoveryDevice device;
 
     /**
-     * Default constructor of the class. (Romain Verset - 30/01/2017)
+     * Default constructor of the class. (Romain Verset - 30/01/2017).
      * Sets up the context and starts the discovering service.
      * @param appContext The context of the android {@link android.app.Activity} running this connector.
      */
@@ -74,13 +74,13 @@ class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedReceiverDele
     }
 
     /**
-     * Starts the discovery service. (Romain Verset - 30/01/2017)
+     * Starts the discovery service. (Romain Verset - 30/01/2017).
      * This method first check if a connection is available. If so, it then tries to discover drones
      * to connect with.
      */
     private void start() {
         Log.d(WIFI_CONNECTOR_TAG, "Starting services...");
-        // First checks if a connection is already established
+        // First checks if a connection is already established.
         if (connectionService == null) {
             connectionService = new ServiceConnection() {
 
@@ -114,14 +114,16 @@ class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedReceiverDele
     }
 
     /**
-     * Stops every services started by this connector. (Romain Verset - 30/01/2017)
+     * Stops every services started by this connector. (Romain Verset - 30/01/2017).
      * It runs a separate thread to properly unbind and close the connection service and  to close
      * the discovery service.
      */
     public void stop()
     {
         Log.d(WIFI_CONNECTOR_TAG, "Closing services...");
+        // Checks if the discovery service exists.
         if (discoveryService != null) {
+            // Launch a new thread to stop the services previously launched by this connector.
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -136,6 +138,7 @@ class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedReceiverDele
     }
 
     /**
+     * (Romain Verset - 30/01/2017).
      * Register this connector so that it receives notification about changes in the list of available
      * devices.
      */
@@ -146,6 +149,7 @@ class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedReceiverDele
     }
 
     /**
+     * (Romain Verset - 30/01/2017).
      * Unregister this connector so that it no longer receives notification about changes in the
      * list of available devices.
      */
@@ -155,15 +159,18 @@ class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedReceiverDele
     }
 
     /**
-     * Creates a device using a discovery service. (Romain Verset - 30/01/2017)
+     * Creates a device using a discovery service. (Romain Verset - 30/01/2017).
      * @param discoveryDeviceService The discovery service used to construct the device.
      * @return The device corresponding to the given {@link ARDiscoveryDeviceService}.
      */
     public ARDiscoveryDevice createDevice(ARDiscoveryDeviceService discoveryDeviceService) {
+        // Before everything, it is necessary to check the product ID of the device.
         if (discoveryDeviceService != null && ARDISCOVERY_PRODUCT_ENUM.ARDISCOVERY_PRODUCT_ARDRONE.equals(ARDiscoveryService.getProductFromProductID(discoveryDeviceService.getProductID()))) {
             try {
+                // Instanciates a device and a its network service.
                 device = new ARDiscoveryDevice();
                 ARDiscoveryDeviceNetService netService = (ARDiscoveryDeviceNetService) discoveryDeviceService.getDevice();
+                Log.d(WIFI_CONNECTOR_TAG, "Starting the network service of the device : Name = " + netService.getName() + " | IP = " + netService + " | Port = " + netService.getPort());
                 device.initWifi(ARDISCOVERY_PRODUCT_ENUM.ARDISCOVERY_PRODUCT_ARDRONE, netService.getName(), netService.getIp(), netService.getPort());
             } catch (ARDiscoveryException arde) {
                 Log.e(WIFI_CONNECTOR_TAG, "Unable to create device : " + arde.getMessage());
@@ -173,14 +180,14 @@ class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedReceiverDele
     }
 
     /**
-     * (Romain Verset - 30/01/2017)
+     * (Romain Verset - 30/01/2017).
      * @return The device currently connected with this connector.
      */
     public ARDiscoveryDevice getDevice() {
         return device;
     }
 
-    // Describes the action to do when the a new connection is available or when
+    // Describes the action to do when there is an update in the available devices list.
     @Override
     public void onServicesDevicesListUpdated() {
         Log.d(WIFI_CONNECTOR_TAG, "Devices list updated : " + devicesList.size() + " devices available.");
