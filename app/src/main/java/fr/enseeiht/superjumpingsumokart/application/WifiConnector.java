@@ -68,7 +68,7 @@ class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedReceiverDele
      * Sets up the context and starts the discovering service.
      * @param appContext The context of the android {@link android.app.Activity} running this connector.
      */
-    private WifiConnector(Context appContext) {
+    public WifiConnector(Context appContext) {
         APP_CONTEXT = appContext;
         start();
     }
