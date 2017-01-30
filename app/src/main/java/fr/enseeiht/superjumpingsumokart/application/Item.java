@@ -37,4 +37,8 @@ public class Item {
     public boolean isInContact (Drone player) {
         return player.getCurrentPosition().equals(this.position);
     }
+
+    public void applyEffect(Drone sender,Drone receiver) {
+        // TODO
+    }
 }
