@@ -67,7 +67,7 @@ class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedReceiverDele
     private boolean hasStarted = false;
 
     /**
-     * Default constructor of the class. (Romain Verset - 30/01/2017).
+     * Default constructor of the class (Romain Verset - 30/01/2017).
      * Sets up the context and starts the discovering service.
      * @param appContext The context of the android {@link android.app.Activity} running this connector.
      */
@@ -77,7 +77,7 @@ class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedReceiverDele
     }
 
     /**
-     * Starts the discovery service. (Romain Verset - 30/01/2017).
+     * Starts the discovery service (Romain Verset - 30/01/2017).
      * This method first check if a connection is available. If so, it then tries to discover drones
      * to connect with.
      */
@@ -120,7 +120,7 @@ class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedReceiverDele
     }
 
     /**
-     * Stops every services started by this connector. (Romain Verset - 30/01/2017).
+     * Stops every services started by this connector (Romain Verset - 30/01/2017).
      * It runs a separate thread to properly unbind and close the connection service and  to close
      * the discovery service.
      */
@@ -167,19 +167,24 @@ class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedReceiverDele
     }
 
     /**
-     * Creates a device using a discovery service. (Romain Verset - 30/01/2017).
+     * Creates a device using a discovery service (Romain Verset - 30/01/2017).
      * @param discoveryDeviceService The discovery service used to construct the device.
      * @return The device corresponding to the given {@link ARDiscoveryDeviceService}.
      */
     public ARDiscoveryDevice createDevice(ARDiscoveryDeviceService discoveryDeviceService) {
         // Before everything, it is necessary to check the product ID of the device.
-        if (discoveryDeviceService != null && ARDISCOVERY_PRODUCT_ENUM.ARDISCOVERY_PRODUCT_ARDRONE.equals(ARDiscoveryService.getProductFromProductID(discoveryDeviceService.getProductID()))) {
+        Log.d(WIFI_CONNECTOR_TAG, "Attempting to create a device with following connection service : ");
+        Log.d(WIFI_CONNECTOR_TAG, "Name : " + discoveryDeviceService.getName());
+        Log.d(WIFI_CONNECTOR_TAG, "Product ID : " + discoveryDeviceService.getProductID());
+        Log.d(WIFI_CONNECTOR_TAG, "Device : " + discoveryDeviceService.getDevice().toString());
+        if (ARDISCOVERY_PRODUCT_ENUM.ARDISCOVERY_PRODUCT_JS_EVO_LIGHT.equals(ARDiscoveryService.getProductFromProductID(discoveryDeviceService.getProductID()))) {
+            Log.d(WIFI_CONNECTOR_TAG, "Jumping Sumo detected, attempting to create the device...");
             try {
                 // Creates a device and its network service.
                 device = new ARDiscoveryDevice();
                 ARDiscoveryDeviceNetService netService = (ARDiscoveryDeviceNetService) discoveryDeviceService.getDevice();
                 Log.d(WIFI_CONNECTOR_TAG, "Starting the network service of the device : Name = " + netService.getName() + " | IP = " + netService + " | Port = " + netService.getPort());
-                device.initWifi(ARDISCOVERY_PRODUCT_ENUM.ARDISCOVERY_PRODUCT_ARDRONE, netService.getName(), netService.getIp(), netService.getPort());
+                device.initWifi(ARDISCOVERY_PRODUCT_ENUM.ARDISCOVERY_PRODUCT_JS_EVO_LIGHT, netService.getName(), netService.getIp(), netService.getPort());
             } catch (ARDiscoveryException arde) {
                 Log.e(WIFI_CONNECTOR_TAG, "Unable to create device : " + arde.getMessage());
             }
@@ -208,9 +213,12 @@ class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedReceiverDele
     @Override
     public void onServicesDevicesListUpdated() {
         devicesList = discoveryService.getDeviceServicesArray();
-        if (devicesList != null) {
+        if (devicesList != null && devicesList.size() > 0) {
             ((GUIWelcome) APP_CONTEXT).setDevicesList(devicesList);
+            ((GUIWelcome) APP_CONTEXT).enableWifiConnectionBtn();
             Log.d(WIFI_CONNECTOR_TAG, "Devices list updated : " + devicesList.size() + " devices available.");
+        } else {
+            ((GUIWelcome) APP_CONTEXT).disableWifiConnectionBtn();
         }
     }
 }

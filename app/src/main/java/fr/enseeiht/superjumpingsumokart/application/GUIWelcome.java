@@ -1,19 +1,11 @@
 package fr.enseeiht.superjumpingsumokart.application;
 
-import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parrot.arsdk.ARSDK;
@@ -30,8 +22,15 @@ import fr.enseeiht.superjumpingsumokart.R;
 
 public class GUIWelcome extends AppCompatActivity {
 
+    // Static block to load libraries (ARToolkit + ParrotSDK3)
+    static {
+        ARSDK.loadSDKLibs();
+        NativeInterface.loadNativeLibrary();
+    }
+
     private final static String GUI_WELCOME_TAG = "GUIWelcome";
 
+    // Buttons in the GUI
     private Button startRaceBtn;
     private Button wifiConnectionBtn;
     private Button btConnectionBtn;
@@ -42,11 +41,6 @@ public class GUIWelcome extends AppCompatActivity {
     private WifiConnector wifiConnector = null;
     private ARDiscoveryDevice currentDevice = null;
     private List<ARDiscoveryDeviceService> devicesList = new ArrayList<>();
-
-    static {
-        ARSDK.loadSDKLibs();
-        NativeInterface.loadNativeLibrary();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +54,7 @@ public class GUIWelcome extends AppCompatActivity {
         // Initializes the views of the GUI
         startRaceBtn = (Button) findViewById(R.id.startRaceBtn);
         wifiConnectionBtn = (Button) findViewById(R.id.connectWifiBtn);
+        wifiConnectionBtn.setEnabled(false);
         btConnectionBtn = (Button) findViewById(R.id.connectBluetoothBtn);
         setCircuitBtn = (Button) findViewById(R.id.setCircuitBtn);
         exitBtn = (Button) findViewById(R.id.exitBtn);
@@ -99,7 +94,7 @@ public class GUIWelcome extends AppCompatActivity {
     }
 
     /**
-     * Switch the current {@link GUIWelcome} {@link android.app.Activity} for a {@link GUIGame} {@link android.app.Activity}.
+     * Switch the current {@link GUIWelcome} {@link android.app.Activity} for a {@link GUIGame} {@link android.app.Activity} (Romain Verset - 31/01/2017).
      * This switch requires to have a drone connected with the application.
      */
     private void startRaceBtnAction(){
@@ -113,28 +108,22 @@ public class GUIWelcome extends AppCompatActivity {
     }
 
     /**
-     *
+     * Enables to connect with a Jumping Sumo drone (Romain Verset - 31/01/2017).
+     * <b>Your cell phone has to be connected to the acces point provided by the Jumping Sumo drone.<b/>
      */
     private void wifiConnectionBtnAction() {
-        if (devicesList != null && devicesList.size() > 0) {
-            final Dialog wifiConnectionChoiceDialog = new Dialog(GUIWelcome.this);
-            wifiConnectionChoiceDialog.setContentView(R.layout.wifi_connections_list);
-            final ListView wifiConnectionsListView = (ListView) findViewById(R.id.wifiConnectionChoiceListView);
-            final WifiConnectionListViewAdapter wifiConnectionListViewAdapter = new WifiConnectionListViewAdapter(GUIWelcome.this, R.layout.wifi_connection_item, devicesList);
-            wifiConnectionsListView.setAdapter(wifiConnectionListViewAdapter);
-            wifiConnectionsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    wifiConnectionListViewAdapter.defineCurrentDevice(position);
-                }
-            });
-        } else {
-            Toast.makeText(GUIWelcome.this, R.string.no_connection_available, Toast.LENGTH_SHORT).show();
+        ARDiscoveryDeviceService arDiscoveryDeviceService = devicesList.get(0);
+        try {
+            currentDevice = wifiConnector.createDevice(arDiscoveryDeviceService);
+            Log.d(GUI_WELCOME_TAG, "New current device : " + currentDevice.toString());
+            wifiConnectionBtn.setBackgroundColor(getResources().getColor(R.color.connectionEstablished));
+        } catch (NullPointerException npe) {
+            Log.d(GUI_WELCOME_TAG, "Unable to get a device from the WifiConnector");
         }
     }
 
     /**
-     *
+     * //TODO
      */
     private void btConnectionBtnAction() {
         //TODO
@@ -142,7 +131,7 @@ public class GUIWelcome extends AppCompatActivity {
     }
 
     /**
-     *
+     * //TODO
      */
     private void setCircuitBtnAction() {
         //TODO
@@ -150,7 +139,7 @@ public class GUIWelcome extends AppCompatActivity {
     }
 
     /**
-     * Default action to do when the exit button is clicked.
+     * Default action to do when the exit button is clicked (Romain Verset - 31/01/2017).
      * It closes the eventual connection between the application and the drone and cleans
      * all variables used to avoid memory leak.
      */
@@ -159,38 +148,30 @@ public class GUIWelcome extends AppCompatActivity {
             wifiConnector.stop();
             wifiConnector = null;
         }
+        currentDevice = null;
+        devicesList = null;
         finish();
     }
 
+    /**
+     * Updates the list of available devices (Romain Verset - 31/01/2017).
+     * @param devicesList The new list of availables devices.
+     */
     public void setDevicesList(List<ARDiscoveryDeviceService> devicesList) {
         this.devicesList = devicesList;
     }
 
-    private class WifiConnectionListViewAdapter extends ArrayAdapter<ARDiscoveryDeviceService>{
+    /**
+     * Disable the WIFI connection button (Romain Verset - 31/01/2017).
+     */
+    public void disableWifiConnectionBtn() {
+        wifiConnectionBtn.setEnabled(false);
+    }
 
-        List<ARDiscoveryDeviceService> discoveryDeviceServicesList;
-        TextView nameField;
-        TextView idField;
-
-        WifiConnectionListViewAdapter(Context context, int resource, List<ARDiscoveryDeviceService> discoveryDeviceServicesList) {
-            super(context, -1, -1);
-            this.discoveryDeviceServicesList = discoveryDeviceServicesList;
-        }
-
-        @Override
-        public View getView(int positition, View convertView, ViewGroup parent) {
-            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View itemView = inflater.inflate(R.layout.wifi_connection_item, parent, false);
-            nameField = (TextView) findViewById(R.id.wifiConnectionItemNameField);
-            idField = (TextView) findViewById(R.id.wifiConnectionItemIDField);
-            nameField.setText(discoveryDeviceServicesList.get(positition).getName());
-            nameField.setText(discoveryDeviceServicesList.get(positition).getProductID());
-            return itemView;
-        }
-
-        void defineCurrentDevice(int position){
-            ARDiscoveryDeviceService  arDiscoveryDeviceService= getItem(position);
-            ((GUIWelcome) getContext()).currentDevice = wifiConnector.createDevice(arDiscoveryDeviceService);
-        }
+    /**
+     * Enable the WIFI connection button (Romain Verset - 31/01/2017).
+     */
+    public void enableWifiConnectionBtn() {
+        wifiConnectionBtn.setEnabled(true);
     }
 }
