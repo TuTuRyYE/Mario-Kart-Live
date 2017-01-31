@@ -32,7 +32,7 @@ public class GUIGame extends ARActivity {
 
     @Override
     protected FrameLayout supplyFrameLayout() {
-        throw new UnsupportedOperationException("TODO");
+        return (FrameLayout) findViewById(R.id.guiGameFrameLayout);
     }
 
     @Override
