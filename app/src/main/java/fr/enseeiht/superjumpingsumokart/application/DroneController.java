@@ -38,7 +38,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
 
 
     /**
-     * (Matthieu Michel - 30/01/2017) Default Constructor of DroneController
+     * (Matthieu Michel - 30/01/2017) Default Constructor of DroneController.
      *
      * @param guiGame : interface of the Game.
      * @param device  : the drone.
@@ -90,7 +90,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     /**
      * ( Matthieu Michel - 30/01/2017 ) set the interface linked to the DroneController.
      *
-     * @param guiGame interface linked to the DroneController
+     * @param guiGame interface linked to the DroneController.
      */
     public void setGuiGame(GUIGame guiGame) {
         this.guiGame = guiGame;
@@ -166,7 +166,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     }
 
     /**
-     * ( Matthieu Michel - 30/01/2017) send a request to Item class to use the item owned by the player
+     * ( Matthieu Michel - 30/01/2017) send a request to Item class to use the item owned by the player.
      */
     public void useItem() {
         Item currentItem = drone.getCurrentItem();
