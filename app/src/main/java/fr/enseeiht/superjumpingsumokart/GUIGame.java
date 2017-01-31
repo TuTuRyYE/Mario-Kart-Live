@@ -1,5 +1,6 @@
 package fr.enseeiht.superjumpingsumokart;
 
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,7 +12,11 @@ import com.parrot.arsdk.arcontroller.ARFrame;
 import org.artoolkit.ar.base.ARActivity;
 import org.artoolkit.ar.base.rendering.ARRenderer;
 
+import java.io.ByteArrayInputStream;
+
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 public class GUIGame extends ARActivity {
 
@@ -27,9 +32,8 @@ public class GUIGame extends ARActivity {
 
     @Override
     protected ARRenderer supplyRenderer() {
-        throw new UnsupportedOperationException("TODO");
+        return new ARRenderer();
     }
-
     @Override
     protected FrameLayout supplyFrameLayout() {
         return (FrameLayout) findViewById(R.id.guiGameFrameLayout);
@@ -40,6 +44,8 @@ public class GUIGame extends ARActivity {
         // Initializes the GUI from layout file
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gui_game);
+
+
 
         // Initializes the views of the GUI
         turnLeftBtn = (Button) findViewById(R.id.turnLeftBtn);
@@ -83,6 +89,7 @@ public class GUIGame extends ARActivity {
      * @param controller
      */
     public void setController(DroneController controller) {
+
         this.controller = controller;
     }
 
@@ -95,6 +102,7 @@ public class GUIGame extends ARActivity {
     }
 
     public void setCurrentFrame(ARFrame frame) {
+
         this.currentFrame = frame;
     }
 }

@@ -19,14 +19,17 @@ public class Drone {
     }
 
     public String getName() {
+
         return name;
     }
 
     public void setName(String name) {
+
         this.name = name;
     }
 
     public Vector3D getCurrentPosition() {
+
         return currentPosition;
     }
 
@@ -39,14 +42,17 @@ public class Drone {
     }
 
     public void setCurrentItem(Item currentItem) {
+
         this.currentItem = currentItem;
     }
 
     public Vector3D getSpeed() {
+
         return currentSpeed;
     }
 
     public void setSpeed(Vector3D speed) {
+
         this.currentSpeed = speed;
     }
 }
