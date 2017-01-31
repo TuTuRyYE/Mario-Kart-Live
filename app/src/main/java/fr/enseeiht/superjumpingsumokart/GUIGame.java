@@ -1,7 +1,6 @@
 package fr.enseeiht.superjumpingsumokart;
 
 import android.annotation.SuppressLint;
-import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
@@ -20,8 +19,6 @@ import org.artoolkit.ar.base.rendering.ARRenderer;
  * status bar and navigation/system bar) with user interaction.
  */
 public class GUIGame extends ARActivity {
-
-
 
     static {
         ARSDK.loadSDKLibs();
@@ -100,30 +97,7 @@ public class GUIGame extends ARActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_gui_game);
-//        ActionBar actionBar = getSupportActionBar();
-//        if (actionBar != null) {
-//            actionBar.setDisplayHomeAsUpEnabled(true);
-//        }
-
-        mVisible = true;
-        mControlsView = findViewById(R.id.fullscreen_content_controls);
-        mContentView = findViewById(R.id.fullscreen_content);
-
-
-        // Set up the user interaction to manually show or hide the system UI.
-        mContentView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggle();
-            }
-        });
-
-        // Upon interacting with UI controls, delay any scheduled hide()
-        // operations to prevent the jarring behavior of controls going away
-        // while interacting with the UI.
-        findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
     }
 
     @Override
