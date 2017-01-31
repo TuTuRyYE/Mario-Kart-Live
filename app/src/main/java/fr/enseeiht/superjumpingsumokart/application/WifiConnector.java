@@ -64,6 +64,8 @@ class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedReceiverDele
      */
     private ARDiscoveryDevice device;
 
+    private boolean hasStarted = false;
+
     /**
      * Default constructor of the class. (Romain Verset - 30/01/2017).
      * Sets up the context and starts the discovering service.
@@ -80,38 +82,41 @@ class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedReceiverDele
      * to connect with.
      */
     private void start() {
-        Log.d(WIFI_CONNECTOR_TAG, "Starting services...");
-        // First checks if a connection is already established.
-        if (connectionService == null) {
-            connectionService = new ServiceConnection() {
+        if (!hasStarted) {
+            Log.d(WIFI_CONNECTOR_TAG, "Starting services...");
+            // First checks if a connection is already established.
+            if (connectionService == null) {
+                connectionService = new ServiceConnection() {
 
-                // When a connection is gotten, initializes the device discovery.
-                @Override
-                public void onServiceConnected(ComponentName name, IBinder service) {
-                    discoveryService = ((ARDiscoveryService.LocalBinder) service).getService();
-                    discoveryService.start();
-                }
-
-                // When the connection is closed or lost, stops the discovery service if it exists
-                // and deletes the discovery service.
-                @Override
-                public void onServiceDisconnected(ComponentName name) {
-                    if (discoveryService != null) {
-                        discoveryService.stop();
+                    // When a connection is gotten, initializes the device discovery.
+                    @Override
+                    public void onServiceConnected(ComponentName name, IBinder service) {
+                        discoveryService = ((ARDiscoveryService.LocalBinder) service).getService();
+                        discoveryService.start();
                     }
-                }
-            };
-            registerReceivers();
-        }
 
-        // If the discovery service does not exist yet, creates it and binds it to the
-        // application context and starts it. Otherwise just starts it.
-        if (discoveryService == null) {
-            Intent discoveryIntent = new Intent(APP_CONTEXT, ARDiscoveryService.class);
-            APP_CONTEXT.bindService(discoveryIntent, connectionService, Context.BIND_AUTO_CREATE);
-        } else {
-            discoveryService.start();
+                    // When the connection is closed or lost, stops the discovery service if it exists
+                    // and deletes the discovery service.
+                    @Override
+                    public void onServiceDisconnected(ComponentName name) {
+                        if (discoveryService != null) {
+                            discoveryService.stop();
+                        }
+                    }
+                };
+                registerReceivers();
+            }
+
+            // If the discovery service does not exist yet, creates it and binds it to the
+            // application context and starts it. Otherwise just starts it.
+            if (discoveryService == null) {
+                Intent discoveryIntent = new Intent(APP_CONTEXT, ARDiscoveryService.class);
+                APP_CONTEXT.bindService(discoveryIntent, connectionService, Context.BIND_AUTO_CREATE);
+            } else {
+                discoveryService.start();
+            }
         }
+        hasStarted = true;
     }
 
     /**
@@ -119,23 +124,25 @@ class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedReceiverDele
      * It runs a separate thread to properly unbind and close the connection service and  to close
      * the discovery service.
      */
-    public void stop()
-    {
-        Log.d(WIFI_CONNECTOR_TAG, "Closing services...");
-        // Checks if the discovery service exists.
-        if (discoveryService != null) {
-            // Launch a new thread to stop the services previously launched by this connector.
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    unregisterReceivers();
-                    discoveryService.stop();
-                    APP_CONTEXT.unbindService(connectionService);
-                    connectionService = null;
-                    discoveryService = null;
-                }
-            }).start();
+    public void stop() {
+        if (hasStarted) {
+            Log.d(WIFI_CONNECTOR_TAG, "Closing services...");
+            // Checks if the discovery service exists.
+            if (discoveryService != null) {
+                // Launch a new thread to stop the services previously launched by this connector.
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        unregisterReceivers();
+                        discoveryService.stop();
+                        APP_CONTEXT.unbindService(connectionService);
+                        connectionService = null;
+                        discoveryService = null;
+                    }
+                }).start();
+            }
         }
+        hasStarted = false;
     }
 
     /**
@@ -201,7 +208,9 @@ class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedReceiverDele
     @Override
     public void onServicesDevicesListUpdated() {
         devicesList = discoveryService.getDeviceServicesArray();
-        if (devicesList != null)
+        if (devicesList != null) {
+            ((GUIWelcome) APP_CONTEXT).setDevicesList(devicesList);
             Log.d(WIFI_CONNECTOR_TAG, "Devices list updated : " + devicesList.size() + " devices available.");
+        }
     }
 }

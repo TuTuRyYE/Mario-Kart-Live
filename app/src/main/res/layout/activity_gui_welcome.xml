@@ -75,7 +75,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/toggleButtonDebugMode"
-            android:textOff="@string/debug_mode_button_off"
+            android:textOff="@string/debug_mode_btn_off"
             android:textOn="@string/debug_mode_btn_on"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"

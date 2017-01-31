@@ -1,17 +1,29 @@
 package fr.enseeiht.superjumpingsumokart.application;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parrot.arsdk.ARSDK;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDevice;
+import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
 
 import org.artoolkit.ar.base.NativeInterface;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import fr.enseeiht.superjumpingsumokart.GUIGame;
 import fr.enseeiht.superjumpingsumokart.R;
@@ -27,8 +39,9 @@ public class GUIWelcome extends AppCompatActivity {
     private Button exitBtn;
 
     // Connection and device variables
-    private WifiConnector wifiConnector;
-    private ARDiscoveryDevice currentDevice;
+    private WifiConnector wifiConnector = null;
+    private ARDiscoveryDevice currentDevice = null;
+    private List<ARDiscoveryDeviceService> devicesList = new ArrayList<>();
 
     static {
         ARSDK.loadSDKLibs();
@@ -76,7 +89,7 @@ public class GUIWelcome extends AppCompatActivity {
                 setCircuitBtnAction();
             }
         });
-        setCircuitBtn.setOnClickListener(new View.OnClickListener() {
+        exitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 exitBtnAction();
@@ -95,7 +108,7 @@ public class GUIWelcome extends AppCompatActivity {
             Log.d(GUI_WELCOME_TAG, "Starting a GUIGame Activity...");
             startActivity(i);
         } else {
-            Toast.makeText(GUIWelcome.this, R.string.no_drone_connected, Toast.LENGTH_SHORT);
+            Toast.makeText(GUIWelcome.this, R.string.no_drone_connected, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -103,20 +116,37 @@ public class GUIWelcome extends AppCompatActivity {
      *
      */
     private void wifiConnectionBtnAction() {
+        if (devicesList != null && devicesList.size() > 0) {
+            final Dialog wifiConnectionChoiceDialog = new Dialog(GUIWelcome.this);
+            wifiConnectionChoiceDialog.setContentView(R.layout.wifi_connections_list);
+            final ListView wifiConnectionsListView = (ListView) findViewById(R.id.wifiConnectionChoiceListView);
+            final WifiConnectionListViewAdapter wifiConnectionListViewAdapter = new WifiConnectionListViewAdapter(GUIWelcome.this, R.layout.wifi_connection_item, devicesList);
+            wifiConnectionsListView.setAdapter(wifiConnectionListViewAdapter);
+            wifiConnectionsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    wifiConnectionListViewAdapter.defineCurrentDevice(position);
+                }
+            });
+        } else {
+            Toast.makeText(GUIWelcome.this, R.string.no_connection_available, Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
      *
      */
     private void btConnectionBtnAction() {
-
+        //TODO
+        Toast.makeText(GUIWelcome.this, "TODO", Toast.LENGTH_SHORT).show();
     }
 
     /**
      *
      */
     private void setCircuitBtnAction() {
-
+        //TODO
+        Toast.makeText(GUIWelcome.this, "TODO", Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -132,4 +162,35 @@ public class GUIWelcome extends AppCompatActivity {
         finish();
     }
 
+    public void setDevicesList(List<ARDiscoveryDeviceService> devicesList) {
+        this.devicesList = devicesList;
+    }
+
+    private class WifiConnectionListViewAdapter extends ArrayAdapter<ARDiscoveryDeviceService>{
+
+        List<ARDiscoveryDeviceService> discoveryDeviceServicesList;
+        TextView nameField;
+        TextView idField;
+
+        WifiConnectionListViewAdapter(Context context, int resource, List<ARDiscoveryDeviceService> discoveryDeviceServicesList) {
+            super(context, -1, -1);
+            this.discoveryDeviceServicesList = discoveryDeviceServicesList;
+        }
+
+        @Override
+        public View getView(int positition, View convertView, ViewGroup parent) {
+            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View itemView = inflater.inflate(R.layout.wifi_connection_item, parent, false);
+            nameField = (TextView) findViewById(R.id.wifiConnectionItemNameField);
+            idField = (TextView) findViewById(R.id.wifiConnectionItemIDField);
+            nameField.setText(discoveryDeviceServicesList.get(positition).getName());
+            nameField.setText(discoveryDeviceServicesList.get(positition).getProductID());
+            return itemView;
+        }
+
+        void defineCurrentDevice(int position){
+            ARDiscoveryDeviceService  arDiscoveryDeviceService= getItem(position);
+            ((GUIWelcome) getContext()).currentDevice = wifiConnector.createDevice(arDiscoveryDeviceService);
+        }
+    }
 }
