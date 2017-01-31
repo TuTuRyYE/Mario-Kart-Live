@@ -1,7 +1,5 @@
 package fr.enseeiht.superjumpingsumokart.application;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.parrot.arsdk.arcontroller.*;
@@ -13,32 +11,35 @@ import java.io.ByteArrayInputStream;
 import fr.enseeiht.superjumpingsumokart.GUIGame;
 
 /**
- * Created by Vivian on 27/01/2017.
+ * @author Matthieu Michel
+ * This class is used as a controller of the drone
  */
 
 public class DroneController implements ARDeviceControllerListener, ARDeviceControllerStreamListener {
-
+    /**
+     * The logging TAG. Useful for debugging.
+     */
     private final static String TAG = DroneController.class.getSimpleName();
     /**
-     *
+     * Drone associated to the DroneController.
      */
     private Drone drone;
     /**
-     * Graphique interface of the game
+     * Graphique interface of the game.
      */
     private GUIGame guiGame;
     /**
-     * controller associated to the device
+     * Controller associated to the device.
      */
     public ARDeviceController deviceController;
     /**
-     * the remote device connected
+     * The remote device connected.
      */
     public ARDiscoveryDevice device;
 
 
     /**
-     * (Matthieu Michel - 30/01/2017) Default Constructor of DroneController.
+     * Default Constructor of the class. (Matthieu Michel - 30/01/2017)
      *
      * @param guiGame : interface of the Game.
      * @param device  : the drone.
@@ -61,7 +62,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
 
 
     /**
-     * (Matthieu Michel - 30/01/2017) return a drone.
+     * Return a drone. (Matthieu Michel - 30/01/2017)
      *
      * @return the current drone owned by the DroneController.
      */
@@ -70,7 +71,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     }
 
     /**
-     * (Matthieu Michel - 30/01/2017 ) set the drone owned by the DroneController.
+     * Set the drone owned by the DroneController. (Matthieu Michel - 30/01/2017)
      *
      * @param drone to be owned by the DroneController.
      */
@@ -79,7 +80,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     }
 
     /**
-     * (Matthieu Michel - 30/01/2017) retunr a GuiGame interface.
+     * Return a GuiGame interface. (Matthieu Michel - 30/01/2017)
      *
      * @return the current GuiGame linked to the DroneController
      */
@@ -88,7 +89,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     }
 
     /**
-     * ( Matthieu Michel - 30/01/2017 ) set the interface linked to the DroneController.
+     * Set the interface linked to the DroneController. (Matthieu Michel - 30/01/2017)
      *
      * @param guiGame interface linked to the DroneController.
      */
@@ -97,7 +98,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     }
 
     /**
-     * ( Matthieu Michel - 30/01/2017 ) Make the drone go forward with the constant speed.
+     * Make the drone go forward with the constant speed. (Matthieu Michel - 30/01/2017)
      */
     public void moveForward() {
 
@@ -112,7 +113,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
 
 
     /**
-     * ( Matthieu Michel - 30/01/2017 ) Make the drone go backward with the constant speed.
+     *  Make the drone go backward with the constant speed. (Matthieu Michel - 30/01/2017)
      */
     public void moveBackward() {
 
@@ -125,7 +126,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     }
 
     /**
-     * ( Matthieu Michel - 30/01/2017) Make the drone turn left with the constant speed.
+     * Make the drone turn left with the constant speed. (Matthieu Michel - 30/01/2017)
      */
     public void turnLeft() {
 
@@ -140,7 +141,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     }
 
     /**
-     * ( Matthieu Michel - 30/01/2017 ) Make the drone turn right with the constant speed.
+     * Make the drone turn right with the constant speed. (Matthieu Michel - 30/01/2017)
      */
 
     public void turnRight() {
@@ -155,7 +156,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     }
 
     /**
-     * ( Matthieu Michel - 30/01/2017) Make the drone stop.
+     * Make the drone stop. (Matthieu Michel - 30/01/2017)
      */
     public void stopMotion() {
         if (deviceController != null) {
@@ -166,7 +167,8 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     }
 
     /**
-     * ( Matthieu Michel - 30/01/2017) send a request to Item class to use the item owned by the player.
+     * Method used to use an Item. (Matthieu Michel - 30/01/2017)
+     * <br> Send a request to Item class to use the item owned by the player.
      */
     public void useItem() {
         Item currentItem = drone.getCurrentItem();
@@ -177,7 +179,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     }
 
     /**
-     * ( Matthieu Michel - 30/01/2017) Make the drone jump.
+     * Make the drone jump. (Matthieu Michel - 30/01/2017)
      */
     public void jump() {
         if (deviceController != null) {
@@ -191,7 +193,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     }
 
     /**
-     * (  Matthieu Michel - 30/01/2017 ) notify the user when there is a changement of state for the robot.
+     * Notify the user when there is a changement of state for the robot. (Matthieu Michel - 30/01/2017)
      *
      * @param deviceController controller associated to the device.
      * @param newState         new state of the drone (moving, turning, stop..).
@@ -218,11 +220,11 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     }
 
     /**
-     * ( Matthieu Michel - 30/01/2017 ) get the current frame of the video.
-     *
+     * Get the current frame of the video and send it to GuiGame where the frame will be displayed. (Matthieu Michel - 30/01/2017)
+     *  <br> A different return depending if there is an error or not.
      * @param deviceController controller associated to the device.
      * @param frame            current frame get from the drone.
-     * @return ARCONTROLLER_OK if there is no problem otherwise ARCONTROLLER_ERROR_STREAM if there is a streaming problem.
+     * @return ARCONTROLLER_OK if there is no problem (if display went well) otherwise ARCONTROLLER_ERROR_STREAM if there is a streaming problem.
      */
 
     @Override
@@ -231,9 +233,16 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
             return ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_ERROR_STREAM;
         }
 
+        /* code pour la transformation de la frame et l'affichage a mettre dans la classe GuiGame et fonction setCurrentFrame
         byte[] data = frame.getByteData();
         ByteArrayInputStream ins = new ByteArrayInputStream(data);
         Bitmap bmp = BitmapFactory.decodeStream(ins);
+
+        FrameDisplay fDisplay = new FrameDisplay(imgView, bmp);
+        fDisplay.execute();
+     */
+
+        guiGame.setCurrentFrame(frame);
 
         return ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_OK;
     }
