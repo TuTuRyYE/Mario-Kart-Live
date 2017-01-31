@@ -241,7 +241,6 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
         FrameDisplay fDisplay = new FrameDisplay(imgView, bmp);
         fDisplay.execute();
      */
-
         guiGame.setCurrentFrame(frame);
 
         return ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_OK;
