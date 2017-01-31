@@ -11,4 +11,6 @@
     <string name="debug_mode_btn_on">Debug mode ON</string>
     <string name="debug_mode_button_off">Debug mode OFF</string>
     <string name="exit_btn">Exit</string>
+
+    <string name="no_drone_connected">No drone is connected to the application. You need to connect a drone before starting a race.</string>
 </resources>

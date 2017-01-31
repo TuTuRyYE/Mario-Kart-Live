@@ -10,6 +10,7 @@ import android.support.v4.app.NavUtils;
 import android.widget.FrameLayout;
 
 import com.parrot.arsdk.ARSDK;
+import com.parrot.arsdk.arcontroller.ARFrame;
 
 import org.artoolkit.ar.base.ARActivity;
 import org.artoolkit.ar.base.rendering.ARRenderer;
@@ -23,6 +24,9 @@ public class GUIGame extends ARActivity {
     static {
         ARSDK.loadSDKLibs();
     }
+
+    private Thread renderingThread;
+    private ARFrame currentFrame;
 
     /**
      * Whether or not the system UI should be auto-hidden after
@@ -172,5 +176,9 @@ public class GUIGame extends ARActivity {
     private void delayedHide(int delayMillis) {
         mHideHandler.removeCallbacks(mHideRunnable);
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
+    }
+
+    public void setCurrentFrame(ARFrame frame) {
+        this.currentFrame = frame;
     }
 }
