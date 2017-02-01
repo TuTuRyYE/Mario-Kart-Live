@@ -2,6 +2,7 @@ package fr.enseeiht.superjumpingsumokart;
 
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -40,7 +41,7 @@ public class GUIGame extends ARActivity {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         // Initializes the GUI from layout file
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gui_game);
