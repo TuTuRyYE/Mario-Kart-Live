@@ -196,25 +196,30 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     @Override
     public void onStateChanged(ARDeviceController deviceController, ARCONTROLLER_DEVICE_STATE_ENUM newState, ARCONTROLLER_ERROR_ENUM error) {
         Log.d(DRONE_CONTROLLER_TAG, "State changed -> new state :" + newState + "| error: " + error);
-        if (newState.compareTo(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_STARTING) == 0) {
-            started = true;
-        }
-        if (newState.compareTo(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_RUNNING) == 0) {
-            running = true;
-        }
-        if (newState.compareTo(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_STOPPING) == 0) {
-            running = false;
-        }
-        if (newState.compareTo(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_PAUSED) == 0) {
-            running = false;
-        }
-        if (newState.compareTo(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_STOPPED) == 0) {
-            started = false;
-            running = false;
+        switch (newState) {
+            case ARCONTROLLER_DEVICE_STATE_STARTING:
+                started = true;
+                break;
+            case ARCONTROLLER_DEVICE_STATE_RUNNING :
+                running = true;
+                break;
+            case ARCONTROLLER_DEVICE_STATE_STOPPING :
+                running = false;
+                break;
+            case ARCONTROLLER_DEVICE_STATE_PAUSED :
+                running = false;
+                break;
+            case ARCONTROLLER_DEVICE_STATE_STOPPED :
+                started = false;
+                running = false;
+                break;
+            default:
+                break;
         }
         if (error.compareTo(ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_ERROR_COMMAND_GENERATING) == 0) {
             startController();
         }
+
     }
 
     @Override
