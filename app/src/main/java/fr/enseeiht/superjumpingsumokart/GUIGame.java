@@ -1,19 +1,20 @@
 package fr.enseeiht.superjumpingsumokart;
 
 import android.app.Activity;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import com.parrot.arsdk.arcontroller.ARCONTROLLER_ERROR_ENUM;
 import com.parrot.arsdk.arcontroller.ARFrame;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDevice;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
@@ -25,29 +26,60 @@ import fr.enseeiht.superjumpingsumokart.application.WifiConnector;
 
 public class GUIGame extends Activity {
 
+    /**
+     * The logging tag. Useful for debugging.
+     */
     private static String GUI_GAME_TAG = "GUIGame";
 
-    private Thread renderingThread;
-    private ARFrame currentFrame;
+    /**
+     * Message for the {@link Handler} of the {@link GUIGame} activity.
+     */
+    private final static int UPDATE_BACKGROUND = 0;
+
+    /**
+     * Handler to update GUI.
+     */
+    private final Handler UPDATER = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case UPDATE_BACKGROUND :
+                    updateView();
+                    displayTrapImageView();
+                    break;
+                default :
+                    break;
+            }
+        }
+    };
+
+    /**
+     * The current frame to display.
+     */
+    private BitmapDrawable currentFrame;
+
     private ImageButton turnLeftBtn;
     private ImageButton turnRightBtn;
     private ImageButton moveForwardBtn;
     private ImageButton moveBackwardBtn;
     private ImageButton sendTrapBtn;
     private ImageButton jumpBtn;
-    private DroneController controller;
     private ARDiscoveryDevice currentDevice;
+
+    /**
+     * The controller that dispatches commands from the user to the device.
+     */
+    private DroneController controller;
+
+    /**
+     * The view to display the owned object.
+     */
     private ImageView trapImageView;
 
-    /*@Override
-    protected ARRenderer supplyRenderer() {
-        return new ARRenderer();
-    }*/
-
-    /*@Override
-    protected FrameLayout supplyFrameLayout() {
-        return (FrameLayout) findViewById(R.id.guiGameFrameLayout);
-    }*/
+    /**
+     * The area to display the video stream from the device.
+     */
+    private FrameLayout fl;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,7 +90,7 @@ public class GUIGame extends Activity {
         // Bind with the drone and creates its controller
         ARDiscoveryDeviceService currentDeviceService = (ARDiscoveryDeviceService) getIntent().getExtras().get("currentDeviceService");
         Log.d(GUI_GAME_TAG, "Got device service from activity GUIWelcome...");
-        currentDevice = WifiConnector.createDevice(currentDeviceService);
+        ARDiscoveryDevice currentDevice = WifiConnector.createDevice(currentDeviceService);
         Log.d(GUI_GAME_TAG, "Device created, attempting to create its controller...");
         controller = new DroneController(this, currentDevice);
         Log.d(GUI_GAME_TAG, "Controller of the device created.");
@@ -70,6 +102,7 @@ public class GUIGame extends Activity {
         moveForwardBtn = (ImageButton) findViewById(R.id.moveForwardBtn);
         jumpBtn = (ImageButton) findViewById(R.id.jumpBtn);
         sendTrapBtn = (ImageButton) findViewById(R.id.sendTrapBtn);
+        fl = (FrameLayout) findViewById(R.id.guiGameFrameLayout);
 
         // Defines action listener
         turnLeftBtn.setOnTouchListener(new View.OnTouchListener() {
@@ -155,7 +188,6 @@ public class GUIGame extends Activity {
                 return true;
             }
         });
-        displayTrapImageView();
     }
 
     @Override
@@ -177,31 +209,29 @@ public class GUIGame extends Activity {
     }
 
     /**
-     * Set the controller.
-     *
-     * @param controller
+     * Method used to display the current trap owned by the player (Matthieu Michel - 30/01/2017).
      */
-    public void setController(DroneController controller) {
-
-        this.controller = controller;
-    }
-
-    /**
-     * Method used to display the current trap owned by the player.
-     */
-    public void displayTrapImageView() {
-        //my_img est l'image et elle a pour adresse file/res/drawable/my_img.png
+    private void displayTrapImageView() {
         trapImageView.setImageResource(R.drawable.banane);
     }
 
+    /**
+     * Method called by {@link #UPDATER} to refresh the view of the GUI and update the displayed
+     * frame from the video stream of the device (Romain Verset - 01/02/2017).
+     */
+    private void updateView() {
+        fl.setBackground(currentFrame);
+    }
+
+    /**
+     * Method used by {@link #controller} to send the current frame of its video stream to the GUI (Romain Verset - 01/02/2017).
+     * @param frame The frame received from the device
+     */
     public void setCurrentFrame(ARFrame frame) {
-        this.currentFrame = frame;
-        //code pour la transformation de la frame et l'affichage a mettre dans la classe GuiGame et fonction setCurrentFrame
         byte[] data = frame.getByteData();
         ByteArrayInputStream ins = new ByteArrayInputStream(data);
         Bitmap bmp = BitmapFactory.decodeStream(ins);
-        BitmapDrawable bmpd = new BitmapDrawable(bmp);
-        FrameLayout fl = (FrameLayout) findViewById(R.id.guiGameFrameLayout);
-        fl.setBackground(bmpd);
+        this.currentFrame = new BitmapDrawable(bmp);
+        UPDATER.sendEmptyMessage(UPDATE_BACKGROUND);
     }
 }
