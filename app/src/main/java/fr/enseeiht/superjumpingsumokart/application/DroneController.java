@@ -46,7 +46,6 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
      */
     public DroneController(GUIGame guiGame, ARDiscoveryDevice device) {
         this.guiGame = guiGame;
-        this.drone = drone;
         this.device = device;
         if (device != null) {
             try {
@@ -54,6 +53,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
                 deviceController = new ARDeviceController(device);
                 deviceController.addListener(this);
                 deviceController.addStreamListener(this);
+                deviceController.getFeatureJumpingSumo().sendMediaStreamingVideoEnable((byte) 0);
             } catch (ARControllerException e) {
                 e.printStackTrace();
             }
@@ -193,7 +193,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     }
 
     /**
-     * Notify the user when there is a changement of state for the robot. (Matthieu Michel - 30/01/2017)
+     * Notify the user when there is a switch of state for the robot. (Matthieu Michel - 30/01/2017)
      *
      * @param deviceController controller associated to the device.
      * @param newState         new state of the drone (moving, turning, stop..).
@@ -232,23 +232,12 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
         if (!frame.isIFrame()) {
             return ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_ERROR_STREAM;
         }
-
-        /* code pour la transformation de la frame et l'affichage a mettre dans la classe GuiGame et fonction setCurrentFrame
-        byte[] data = frame.getByteData();
-        ByteArrayInputStream ins = new ByteArrayInputStream(data);
-        Bitmap bmp = BitmapFactory.decodeStream(ins);
-
-        FrameDisplay fDisplay = new FrameDisplay(imgView, bmp);
-        fDisplay.execute();
-     */
         guiGame.setCurrentFrame(frame);
-
         return ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_OK;
     }
 
     @Override
     public void onFrameTimeout(ARDeviceController deviceController) {
-        Log.d(TAG, "onFrameTimeout ... ");
     }
 }
 

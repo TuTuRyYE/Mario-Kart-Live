@@ -1,7 +1,11 @@
 package fr.enseeiht.superjumpingsumokart;
 
+import android.app.Activity;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -9,13 +13,19 @@ import android.widget.ImageView;
 
 import com.parrot.arsdk.arcontroller.ARFrame;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDevice;
+import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
 
 import org.artoolkit.ar.base.ARActivity;
 import org.artoolkit.ar.base.rendering.ARRenderer;
 
-import fr.enseeiht.superjumpingsumokart.application.DroneController;
+import java.io.ByteArrayInputStream;
 
-public class GUIGame extends ARActivity {
+import fr.enseeiht.superjumpingsumokart.application.DroneController;
+import fr.enseeiht.superjumpingsumokart.application.WifiConnector;
+
+public class GUIGame extends Activity {
+
+    private static String GUI_GAME_TAG = "GUIGame";
 
     private Thread renderingThread;
     private ARFrame currentFrame;
@@ -28,14 +38,15 @@ public class GUIGame extends ARActivity {
     private ARDiscoveryDevice currentDevice;
     private ImageView trapImageView;
 
-    @Override
+    /*@Override
     protected ARRenderer supplyRenderer() {
         return new ARRenderer();
-    }
-    @Override
+    }*/
+
+    /*@Override
     protected FrameLayout supplyFrameLayout() {
         return (FrameLayout) findViewById(R.id.guiGameFrameLayout);
-    }
+    }*/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,8 +55,12 @@ public class GUIGame extends ARActivity {
         setContentView(R.layout.activity_gui_game);
 
         // Bind with the drone and creates its controller
-        currentDevice = (ARDiscoveryDevice) savedInstanceState.get("currentDevice");
+        ARDiscoveryDeviceService currentDeviceService = (ARDiscoveryDeviceService) getIntent().getExtras().get("currentDeviceService");
+        Log.d(GUI_GAME_TAG, "Got device service from activity GUIWelcome...");
+        currentDevice = WifiConnector.createDevice(currentDeviceService);
+        Log.d(GUI_GAME_TAG, "Device created, attenpting to create its controller...");
         controller = new DroneController(this, currentDevice);
+        Log.d(GUI_GAME_TAG, "Controller of the device created.");
 
         // Initializes the views of the GUI
         turnLeftBtn = (Button) findViewById(R.id.turnLeftBtn);
@@ -102,7 +117,13 @@ public class GUIGame extends ARActivity {
     }
 
     public void setCurrentFrame(ARFrame frame) {
-
         this.currentFrame = frame;
+        //code pour la transformation de la frame et l'affichage a mettre dans la classe GuiGame et fonction setCurrentFrame
+        byte[] data = frame.getByteData();
+        ByteArrayInputStream ins = new ByteArrayInputStream(data);
+        Bitmap bmp = BitmapFactory.decodeStream(ins);
+        BitmapDrawable bmpd = new BitmapDrawable(bmp);
+        FrameLayout fl = (FrameLayout) findViewById(R.id.guiGameFrameLayout);
+        fl.setBackground(bmpd);
     }
 }

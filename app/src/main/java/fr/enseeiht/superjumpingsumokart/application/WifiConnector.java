@@ -27,7 +27,7 @@ import java.util.List;
  * Created by Romain Verset on 30/01/17.
  */
 
-class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedReceiverDelegate {
+public class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedReceiverDelegate {
 
     /**
      * The logging tag. Useful for debugging purpose.
@@ -171,8 +171,9 @@ class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedReceiverDele
      * @param discoveryDeviceService The discovery service used to construct the device.
      * @return The device corresponding to the given {@link ARDiscoveryDeviceService}.
      */
-    public ARDiscoveryDevice createDevice(ARDiscoveryDeviceService discoveryDeviceService) {
+    public static ARDiscoveryDevice createDevice(ARDiscoveryDeviceService discoveryDeviceService) {
         // Before everything, it is necessary to check the product ID of the device.
+        ARDiscoveryDevice device = null;
         Log.d(WIFI_CONNECTOR_TAG, "Attempting to create a device with following connection service : ");
         Log.d(WIFI_CONNECTOR_TAG, "Name : " + discoveryDeviceService.getName());
         Log.d(WIFI_CONNECTOR_TAG, "Product ID : " + discoveryDeviceService.getProductID());

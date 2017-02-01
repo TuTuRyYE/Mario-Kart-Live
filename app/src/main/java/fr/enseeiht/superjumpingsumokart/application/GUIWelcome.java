@@ -2,7 +2,6 @@ package fr.enseeiht.superjumpingsumokart.application;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -10,12 +9,10 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.parrot.arsdk.ARSDK;
-import com.parrot.arsdk.ardiscovery.ARDiscoveryDevice;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
 
 import org.artoolkit.ar.base.NativeInterface;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +38,7 @@ public class GUIWelcome extends AppCompatActivity {
 
     // Connection and device variables
     private WifiConnector wifiConnector = null;
-    private ARDiscoveryDevice currentDevice = null;
+    private ARDiscoveryDeviceService currentDeviceService = null;
     private List<ARDiscoveryDeviceService> devicesList = new ArrayList<>();
 
     @Override
@@ -100,9 +97,9 @@ public class GUIWelcome extends AppCompatActivity {
      * This switch requires to have a drone connected with the application.
      */
     private void startRaceBtnAction(){
-        if (currentDevice != null) {
+        if (currentDeviceService != null) {
             Intent i = new Intent(GUIWelcome.this, GUIGame.class);
-            i.putExtra("currentDevice", (Parcelable) currentDevice);
+            i.putExtra("currentDeviceService", currentDeviceService);
             Log.d(GUI_WELCOME_TAG, "Starting a GUIGame Activity...");
             startActivity(i);
         } else {
@@ -115,13 +112,12 @@ public class GUIWelcome extends AppCompatActivity {
      * <b>Your cell phone has to be connected to the acces point provided by the Jumping Sumo drone.<b/>
      */
     private void wifiConnectionBtnAction() {
-        ARDiscoveryDeviceService arDiscoveryDeviceService = devicesList.get(0);
         try {
-            currentDevice = wifiConnector.createDevice(arDiscoveryDeviceService);
-            Log.d(GUI_WELCOME_TAG, "New current device : " + currentDevice.toString());
+            currentDeviceService = devicesList.get(0);
+            Log.d(GUI_WELCOME_TAG, "New device service bind to the application : " + currentDeviceService.toString());
             wifiConnectionBtn.setBackgroundColor(getResources().getColor(R.color.connectionEstablished));
         } catch (NullPointerException npe) {
-            Log.d(GUI_WELCOME_TAG, "Unable to get a device from the WifiConnector");
+            Log.d(GUI_WELCOME_TAG, "Unable to gbind the device service");
         }
     }
 
@@ -151,7 +147,7 @@ public class GUIWelcome extends AppCompatActivity {
             wifiConnector.stop();
             wifiConnector = null;
         }
-        currentDevice = null;
+        currentDeviceService = null;
         devicesList = null;
         finish();
     }
