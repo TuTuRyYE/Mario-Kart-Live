@@ -8,15 +8,12 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.parrot.arsdk.arcontroller.ARFrame;
+import com.parrot.arsdk.ardiscovery.ARDiscoveryDevice;
 
 import org.artoolkit.ar.base.ARActivity;
 import org.artoolkit.ar.base.rendering.ARRenderer;
 
-import java.io.ByteArrayInputStream;
-
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 
 public class GUIGame extends ARActivity {
 
@@ -28,6 +25,7 @@ public class GUIGame extends ARActivity {
     private Button moveBackwardBtn;
     private Button sendTrapBtn;
     private DroneController controller;
+    private ARDiscoveryDevice currentDevice;
     private ImageView trapImageView;
 
     @Override
@@ -45,7 +43,9 @@ public class GUIGame extends ARActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gui_game);
 
-
+        // Bind with the drone and creates its controller
+        currentDevice = (ARDiscoveryDevice) savedInstanceState.get("currentDevice");
+        controller = new DroneController(this, currentDevice);
 
         // Initializes the views of the GUI
         turnLeftBtn = (Button) findViewById(R.id.turnLeftBtn);
