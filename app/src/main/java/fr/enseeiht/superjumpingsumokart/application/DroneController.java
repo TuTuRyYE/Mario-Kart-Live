@@ -54,20 +54,6 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     public DroneController(GUIGame guiGame, ARDiscoveryDevice device) {
         this.guiGame = guiGame;
         this.device = device;
-        if (device != null) {
-            try {
-                //create the deviceController
-                deviceController = new ARDeviceController(device);
-                deviceController.start();
-                deviceController.addListener(this);
-                deviceController.addStreamListener(this);
-                deviceController.getFeatureJumpingSumo().sendMediaStreamingVideoEnable((byte) 0);
-                deviceController.getFeatureJumpingSumo().setPilotingPCMDFlag((byte) 1);
-                started = true;
-            } catch (ARControllerException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
 
@@ -237,21 +223,33 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     public void onFrameTimeout(ARDeviceController deviceController) {
     }
 
-//    public ARCONTROLLER_ERROR_ENUM startController() {
-//        ARCONTROLLER_ERROR_ENUM errCode = ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_OK;
-//        if (!started) {
-//            errCode = deviceController.start();
-//        }
-//        started =  (errCode.compareTo(ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_ERROR) == 0);
-//        return errCode;
-//    }
+    public ARCONTROLLER_ERROR_ENUM startController() {
+        ARCONTROLLER_ERROR_ENUM errCode = ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_OK;
+        if (!started) {
+            try {
+                deviceController = new ARDeviceController(device);
+                errCode = deviceController.start();
+                deviceController.addListener(this);
+                deviceController.addStreamListener(this);
+                deviceController.getFeatureJumpingSumo().sendMediaStreamingVideoEnable((byte) 0);
+                deviceController.getFeatureJumpingSumo().setPilotingPCMDFlag((byte) 1);
+                started = true;
+            } catch (ARControllerException e) {
+                Log.e(DRONE_CONTROLLER_TAG, "Unable to create device controller : " + e.getMessage());
+            }
+        }
+        started =  (errCode.compareTo(ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_ERROR) == 0);
+        return errCode;
+    }
 
     public ARCONTROLLER_ERROR_ENUM stopController() {
+        ARCONTROLLER_ERROR_ENUM errCode = ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_OK;
         if (deviceController!= null && started) {
             stopMotion();
+            errCode = deviceController.stop();
             started = false;
         }
-        return deviceController.stop();
+        return errCode;
     }
 
 

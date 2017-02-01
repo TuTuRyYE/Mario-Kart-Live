@@ -145,11 +145,11 @@ public class GUIGame extends Activity {
         displayTrapImageView();
     }
 
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        controller.startController();
-//    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        controller.startController();
+    }
 
     @Override
     public void onStop() {

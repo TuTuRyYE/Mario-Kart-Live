@@ -27,6 +27,9 @@ public class GUIWelcome extends AppCompatActivity {
         NativeInterface.loadNativeLibrary();
     }
 
+    /**
+     *
+     */
     private final static String GUI_WELCOME_TAG = "GUIWelcome";
 
     // Buttons in the GUI
