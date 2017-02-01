@@ -2,12 +2,15 @@ package fr.enseeiht.superjumpingsumokart;
 
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.parrot.arsdk.arcontroller.ARFrame;
+import com.parrot.arsdk.ardiscovery.ARDiscoveryDevice;
 
 import org.artoolkit.ar.base.ARActivity;
 import org.artoolkit.ar.base.rendering.ARRenderer;
@@ -29,6 +32,7 @@ public class GUIGame extends ARActivity {
     private Button sendTrapBtn;
     private DroneController controller;
     private ImageView trapImageView;
+    private ARDiscoveryDevice currentDevice;
 
     @Override
     protected ARRenderer supplyRenderer() {
@@ -41,11 +45,15 @@ public class GUIGame extends ARActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+        Log.d("D","je suis debut GUI");
         // Initializes the GUI from layout file
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gui_game);
 
+        currentDevice =(ARDiscoveryDevice) savedInstanceState.get("currentDevice");
 
+        controller = new DroneController(this,currentDevice);
 
         // Initializes the views of the GUI
         turnLeftBtn = (Button) findViewById(R.id.turnLeftBtn);
@@ -58,6 +66,7 @@ public class GUIGame extends ARActivity {
         // Defines action listener
         turnLeftBtn.setOnClickListener(new View.OnClickListener() {
             @Override
+
             public void onClick(View view) {
                 controller.turnLeft();
             }
@@ -68,18 +77,35 @@ public class GUIGame extends ARActivity {
             }
 
         });
-        moveBackwardBtn.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view) {
-                controller.moveBackward();
+        moveBackwardBtn.setOnTouchListener(new View.OnTouchListener(){
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        controller.moveBackward();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        controller.stopMotion();
+                        break;
+                }
             }
 
-        });
-        moveForwardBtn.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view) {
-                controller.moveForward();
-            }
 
         });
+
+        moveForwardBtn.setOnTouchListener(new View.OnTouchListener(){
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        controller.moveForward();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                       controller.stopMotion();
+                        break;
+                }
+            }
+
+
+            });
 
         displayTrapImageView();
     }
