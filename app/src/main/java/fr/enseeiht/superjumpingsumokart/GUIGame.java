@@ -33,6 +33,7 @@ public class GUIGame extends Activity {
     private Button moveForwardBtn;
     private Button moveBackwardBtn;
     private Button sendTrapBtn;
+    private Button jumpBtn;
     private DroneController controller;
     private ARDiscoveryDevice currentDevice;
     private ImageView trapImageView;
@@ -67,6 +68,7 @@ public class GUIGame extends Activity {
         moveBackwardBtn = (Button) findViewById(R.id.moveBackwardBtn);
         moveForwardBtn = (Button) findViewById(R.id.moveForwardBtn);
         sendTrapBtn = (Button) findViewById(R.id.sendTrapBtn);
+        jumpBtn = (Button) findViewById(R.id.jumpBtn);
         trapImageView = (ImageView) findViewById(R.id.trapImageView);
 
         // Defines action listener
@@ -139,6 +141,18 @@ public class GUIGame extends Activity {
             public void onClick(View v) {
                 Log.d(GUI_GAME_TAG, "use item pressed");
                 controller.useItem();
+            }
+        });
+        jumpBtn.setOnTouchListener( new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        Log.d(GUI_GAME_TAG, "jump pressed");
+                        controller.jump();
+                        break;
+                }
+                return true;
             }
         });
 

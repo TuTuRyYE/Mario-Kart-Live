@@ -28,8 +28,8 @@
             android:layout_marginBottom="27dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
-            android:minHeight="96dip"
-            android:minWidth="172dip" />
+            android:minHeight="60dp"
+            android:minWidth="140dp" />
 
         <Button
             android:text="right"
@@ -38,43 +38,42 @@
             android:layout_alignBottom="@+id/turnLeftBtn"
             android:layout_toEndOf="@+id/turnLeftBtn"
             android:id="@+id/turnRightBtn"
-            android:minHeight="96dip"
-            android:minWidth="172dip" />
+            android:minHeight="60dp"
+            android:minWidth="140dp" />
 
         <Button
             android:text="UP"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/moveForwardBtn"
-            android:layout_marginEnd="66dp"
-            android:layout_marginBottom="46dp"
+            android:layout_marginEnd="30dp"
+            android:minHeight="60dip"
+            android:minWidth="140dip"
             android:layout_above="@+id/turnRightBtn"
-            android:layout_alignParentEnd="true"
-            android:minHeight="96dip"
-            android:minWidth="172dip" />
+            android:layout_alignParentEnd="true" />
 
         <Button
             android:text="DOWN"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/moveBackwardBtn"
+            android:minHeight="60dp"
+            android:minWidth="140dp"
+            android:layout_alignBaseline="@+id/turnRightBtn"
             android:layout_alignBottom="@+id/turnRightBtn"
             android:layout_alignEnd="@+id/moveForwardBtn"
-            android:layout_marginBottom="12dp"
-            android:id="@+id/moveBackwardBtn"
-            android:minHeight="96dp"
-            android:minWidth="172dp" />
+            android:layout_marginEnd="12dp" />
 
         <Button
             android:text="USE TRAP"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/turnRightBtn"
-            android:layout_toStartOf="@+id/moveForwardBtn"
-            android:layout_marginEnd="77dp"
             android:id="@+id/sendTrapBtn"
-            android:minHeight="96dp"
-            android:minWidth="172dp"
-            android:allowUndo="true" />
+            android:minHeight="60dp"
+            android:minWidth="140dp"
+            android:allowUndo="true"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/turnLeftBtn" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -83,9 +82,20 @@
             android:id="@+id/trapImageView"
             android:minHeight="100dp"
             android:minWidth="200dp"
-            android:layout_marginTop="30dp"
             android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/moveForwardBtn" />
+            android:layout_alignStart="@+id/moveBackwardBtn" />
+
+        <Button
+            android:text="JUMP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/jumpBtn"
+            android:layout_alignBottom="@+id/trapImageView"
+            android:layout_toStartOf="@+id/trapImageView"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="18dp"
+            android:minHeight="60dp"
+            android:minWidth="110dp" />
 
     </RelativeLayout>
 </FrameLayout>
