@@ -2,6 +2,7 @@ package fr.enseeiht.superjumpingsumokart.application;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
 
 import org.artoolkit.ar.base.NativeInterface;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,9 +100,9 @@ public class GUIWelcome extends AppCompatActivity {
      * This switch requires to have a drone connected with the application.
      */
     private void startRaceBtnAction(){
-        Log.d(GUI_WELCOME_TAG, ": coucou");
         if (currentDevice != null) {
-            Intent i = new Intent(this, GUIGame.class);
+            Intent i = new Intent(GUIWelcome.this, GUIGame.class);
+            i.putExtra("currentDevice", (Parcelable) currentDevice);
             Log.d(GUI_WELCOME_TAG, "Starting a GUIGame Activity...");
             startActivity(i);
         } else {
