@@ -98,6 +98,7 @@ public class GUIWelcome extends AppCompatActivity {
      * This switch requires to have a drone connected with the application.
      */
     private void startRaceBtnAction(){
+        Log.d(GUI_WELCOME_TAG, ": coucou");
         if (currentDevice != null) {
             Intent i = new Intent(this, GUIGame.class);
             Log.d(GUI_WELCOME_TAG, "Starting a GUIGame Activity...");
