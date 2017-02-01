@@ -108,6 +108,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
      * Make the drone go forward with the constant speed. (Matthieu Michel - 30/01/2017)
      */
     public void moveForward() {
+        Log.d(DRONE_CONTROLLER_TAG, "MOVE FORWARD order received !");
         if (deviceController != null && started) {
             Log.d(DRONE_CONTROLLER_TAG, "MOVE FORWARD order received !");
             deviceController.getFeatureJumpingSumo().setPilotingPCMDSpeed(NORMAL_SPEED);

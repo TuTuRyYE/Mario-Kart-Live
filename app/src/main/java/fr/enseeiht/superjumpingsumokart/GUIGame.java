@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.parrot.arsdk.arcontroller.ARCONTROLLER_ERROR_ENUM;
@@ -28,12 +29,12 @@ public class GUIGame extends Activity {
 
     private Thread renderingThread;
     private ARFrame currentFrame;
-    private Button turnLeftBtn;
-    private Button turnRightBtn;
-    private Button moveForwardBtn;
-    private Button moveBackwardBtn;
-    private Button sendTrapBtn;
-    private Button jumpBtn;
+    private ImageButton turnLeftBtn;
+    private ImageButton turnRightBtn;
+    private ImageButton moveForwardBtn;
+    private ImageButton moveBackwardBtn;
+    private ImageButton sendTrapBtn;
+    private ImageButton jumpBtn;
     private DroneController controller;
     private ARDiscoveryDevice currentDevice;
     private ImageView trapImageView;
@@ -63,13 +64,12 @@ public class GUIGame extends Activity {
         Log.d(GUI_GAME_TAG, "Controller of the device created.");
 
         // Initializes the views of the GUI
-        turnLeftBtn = (Button) findViewById(R.id.turnLeftBtn);
-        turnRightBtn = (Button) findViewById(R.id.turnRightBtn);
-        moveBackwardBtn = (Button) findViewById(R.id.moveBackwardBtn);
-        moveForwardBtn = (Button) findViewById(R.id.moveForwardBtn);
-        sendTrapBtn = (Button) findViewById(R.id.sendTrapBtn);
-        jumpBtn = (Button) findViewById(R.id.jumpBtn);
-        trapImageView = (ImageView) findViewById(R.id.trapImageView);
+        turnLeftBtn = (ImageButton) findViewById(R.id.turnLeftBtn);
+        turnRightBtn = (ImageButton) findViewById(R.id.turnRightBtn);
+        moveBackwardBtn = (ImageButton) findViewById(R.id.moveBackwardBtn);
+        moveForwardBtn = (ImageButton) findViewById(R.id.moveForwardBtn);
+        jumpBtn = (ImageButton) findViewById(R.id.jumpBtn);
+        sendTrapBtn = (ImageButton) findViewById(R.id.sendTrapBtn);
 
         // Defines action listener
         turnLeftBtn.setOnTouchListener(new View.OnTouchListener() {
