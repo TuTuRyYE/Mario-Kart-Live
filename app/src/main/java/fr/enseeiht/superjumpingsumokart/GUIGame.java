@@ -45,13 +45,17 @@ public class GUIGame extends Activity {
             switch (msg.what) {
                 case UPDATE_BACKGROUND :
                     updateView();
-                    displayTrapImageView();
                     break;
                 default :
                     break;
             }
         }
     };
+
+    /**
+     * The controller that dispatches commands from the user to the device.
+     */
+    private DroneController controller;
 
     /**
      * The current frame to display.
@@ -64,12 +68,6 @@ public class GUIGame extends Activity {
     private ImageButton moveBackwardBtn;
     private ImageButton sendTrapBtn;
     private ImageButton jumpBtn;
-    private ARDiscoveryDevice currentDevice;
-
-    /**
-     * The controller that dispatches commands from the user to the device.
-     */
-    private DroneController controller;
 
     /**
      * The view to display the owned object.

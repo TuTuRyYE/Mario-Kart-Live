@@ -16,8 +16,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/guiGameFrameLayout">
+        android:layout_height="match_parent">
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -25,7 +24,8 @@
             app:srcCompat="@drawable/left_arrow"
             android:id="@+id/turnLeftBtn"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:background="@drawable/left_arrow" />
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -34,7 +34,8 @@
             android:layout_marginStart="20dp"
             android:id="@+id/turnRightBtn"
             android:layout_alignParentBottom="true"
-            android:layout_toEndOf="@+id/turnLeftBtn" />
+            android:layout_toEndOf="@+id/turnLeftBtn"
+            android:background="@drawable/right_arrow" />
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -43,7 +44,8 @@
             android:layout_marginEnd="18dp"
             android:id="@+id/moveBackwardBtn"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/bottom_arrow" />
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -52,7 +54,8 @@
             android:layout_marginBottom="14dp"
             android:id="@+id/moveForwardBtn"
             android:layout_above="@+id/moveBackwardBtn"
-            android:layout_alignStart="@+id/moveBackwardBtn" />
+            android:layout_alignStart="@+id/moveBackwardBtn"
+            android:background="@drawable/top_arrow" />
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -60,7 +63,8 @@
             app:srcCompat="@drawable/banane"
             android:layout_alignParentTop="true"
             android:layout_toStartOf="@+id/turnRightBtn"
-            android:id="@+id/sendTrapBtn" />
+            android:id="@+id/sendTrapBtn"
+            android:background="@drawable/banane" />
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -69,7 +73,8 @@
             android:id="@+id/jumpBtn"
             android:layout_marginEnd="99dp"
             android:layout_alignParentBottom="true"
-            android:layout_toStartOf="@+id/moveBackwardBtn" />
+            android:layout_toStartOf="@+id/moveBackwardBtn"
+            android:background="@drawable/jump_arrow" />
 
     </RelativeLayout>
 </FrameLayout>

@@ -240,16 +240,13 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
      * Stops the device controller by launching an external {@link Thread} (Romain Verset - 01/02/2017).
      * It first stops the engine (speed equals to 0) and then disconnects the driver.
      */
-    public void stopController() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (deviceController != null && started && running) {
-                    stopMotion();
-                    deviceController.stop();
-                }
-            }
-        });
+    public ARCONTROLLER_ERROR_ENUM stopController() {
+        ARCONTROLLER_ERROR_ENUM errCode = ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_OK;
+        if (deviceController != null && started && running) {
+            stopMotion();
+            errCode = deviceController.stop();
+        }
+        return errCode;
     }
 }
 
