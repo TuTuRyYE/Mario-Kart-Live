@@ -28,7 +28,7 @@ public class GUIWelcome extends AppCompatActivity {
     }
 
     /**
-     *
+     * The logging tag. Useful for debugging.
      */
     private final static String GUI_WELCOME_TAG = "GUIWelcome";
 
@@ -92,7 +92,6 @@ public class GUIWelcome extends AppCompatActivity {
                 exitBtnAction();
             }
         });
-
     }
 
     /**
