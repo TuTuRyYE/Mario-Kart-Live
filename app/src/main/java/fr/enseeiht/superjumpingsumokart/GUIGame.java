@@ -155,21 +155,20 @@ public class GUIGame extends Activity {
                 return true;
             }
         });
-
         displayTrapImageView();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        Log.d(GUI_GAME_TAG, "Resuming GUIGame activity");
         controller.startController();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        ARCONTROLLER_ERROR_ENUM errCode = controller.stopController();
-        Log.d(GUI_GAME_TAG, "Stopped controller, returned " + errCode.toString());
+        controller.stopController();
     }
 
     @Override

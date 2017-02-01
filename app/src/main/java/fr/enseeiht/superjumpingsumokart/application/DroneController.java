@@ -8,6 +8,8 @@ import com.parrot.arsdk.arcommands.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_E
 
 import fr.enseeiht.superjumpingsumokart.GUIGame;
 
+import static com.parrot.arsdk.arcontroller.ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_STARTING;
+
 /**
  * @author Matthieu Michel
  * This class is used as a controller of the drone
@@ -43,7 +45,8 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     private final static byte FAST_SPEED = (byte) 50;
     private final static byte NEG_FAST_SPEED = (byte) 50;
 
-    private boolean started = false;
+    boolean started = false;
+    boolean running = false;
 
     /**
      * Default Constructor of the class. (Matthieu Michel - 30/01/2017)
@@ -54,6 +57,14 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     public DroneController(GUIGame guiGame, ARDiscoveryDevice device) {
         this.guiGame = guiGame;
         this.device = device;
+        try {
+            deviceController = new ARDeviceController(device);
+            deviceController.addListener(this);
+            deviceController.addStreamListener(this);
+        } catch (ARControllerException e) {
+            Log.e(DRONE_CONTROLLER_TAG, "Unable to create device controller : " + e.getMessage());
+        }
+
     }
 
 
@@ -97,7 +108,6 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
      * Make the drone go forward with the constant speed. (Matthieu Michel - 30/01/2017)
      */
     public void moveForward() {
-        Log.d(DRONE_CONTROLLER_TAG, "MOVE FORWARD order received !");
         if (deviceController != null && started) {
             Log.d(DRONE_CONTROLLER_TAG, "MOVE FORWARD order received !");
             deviceController.getFeatureJumpingSumo().setPilotingPCMDSpeed(NORMAL_SPEED);
@@ -109,7 +119,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
      *  Make the drone go backward with the constant speed. (Matthieu Michel - 30/01/2017)
      */
     public void moveBackward() {
-        if (deviceController != null && started) {
+        if (deviceController != null && running) {
             Log.d(DRONE_CONTROLLER_TAG, "MOVE BACKWARD order received !");
             deviceController.getFeatureJumpingSumo().setPilotingPCMDSpeed(NEG_SLOW_SPEED);
         }
@@ -119,7 +129,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
      * Make the drone turn left with the constant speed. (Matthieu Michel - 30/01/2017)
      */
     public void turnLeft() {
-        if (deviceController != null && started) {
+        if (deviceController != null && running) {
             Log.d(DRONE_CONTROLLER_TAG, "TURN LEFT order received !");
             deviceController.getFeatureJumpingSumo().setPilotingPCMDTurn(NEG_SLOW_SPEED);
         }
@@ -130,7 +140,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
      */
 
     public void turnRight() {
-        if (deviceController != null && started) {
+        if (deviceController != null && running) {
             Log.d(DRONE_CONTROLLER_TAG, "TURN RIGHT order received !");
             deviceController.getFeatureJumpingSumo().setPilotingPCMDTurn(SLOW_SPEED);
         }
@@ -140,14 +150,14 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
      * Make the drone stop. (Matthieu Michel - 30/01/2017)
      */
     public void stopMotion() {
-        if (deviceController != null && started) {
+        if (deviceController != null && running) {
             Log.d(DRONE_CONTROLLER_TAG, "STOP MOTION order received !");
             deviceController.getFeatureJumpingSumo().setPilotingPCMDSpeed(NO_SPEED);
         }
     }
 
     public void stopRotation() {
-        if (deviceController != null && started) {
+        if (deviceController != null && running) {
             Log.d(DRONE_CONTROLLER_TAG, "STOP ROTATION order received !");
             deviceController.getFeatureJumpingSumo().setPilotingPCMDTurn(NO_SPEED);
         }
@@ -158,18 +168,18 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
      * <br> Send a request to Item class to use the item owned by the player.
      */
     public void useItem() {
-        Log.d(DRONE_CONTROLLER_TAG, "USE ITEM order received !");
-        Item currentItem = drone.getCurrentItem();
-        // a definir une fois la course definie //TODO
-        throw new UnsupportedOperationException("TODO");
-
+        if (deviceController != null && running) {
+            Log.d(DRONE_CONTROLLER_TAG, "USE ITEM order received !");
+            //TODO
+            throw new UnsupportedOperationException("TODO");
+        }
     }
 
     /**
      * Makes the drone jump. (Matthieu Michel - 30/01/2017)
      */
     public void jump() {
-        if (deviceController != null && started) {
+        if (deviceController != null && running) {
             Log.d(DRONE_CONTROLLER_TAG, "JUMP order received !");
             deviceController.getFeatureJumpingSumo().sendAnimationsJump(ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_ENUM.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_HIGH);
         }
@@ -184,7 +194,26 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
      */
     @Override
     public void onStateChanged(ARDeviceController deviceController, ARCONTROLLER_DEVICE_STATE_ENUM newState, ARCONTROLLER_ERROR_ENUM error) {
-        Log.d(DRONE_CONTROLLER_TAG, "onStateChanged ... newState:" + newState + " error: " + error);
+        Log.d(DRONE_CONTROLLER_TAG, "State changed -> new state :" + newState + "| error: " + error);
+        if (newState.compareTo(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_STARTING) == 0) {
+            started = true;
+        }
+        if (newState.compareTo(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_RUNNING) == 0) {
+            running = true;
+        }
+        if (newState.compareTo(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_STOPPING) == 0) {
+            running = false;
+        }
+        if (newState.compareTo(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_PAUSED) == 0) {
+            running = false;
+        }
+        if (newState.compareTo(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_STOPPED) == 0) {
+            started = false;
+            running = false;
+        }
+        if (error.compareTo(ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_ERROR_COMMAND_GENERATING) == 0) {
+            startController();
+        }
     }
 
     @Override
@@ -212,6 +241,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
 
     @Override
     public ARCONTROLLER_ERROR_ENUM onFrameReceived(ARDeviceController deviceController, ARFrame frame) {
+        Log.d(DRONE_CONTROLLER_TAG, "Frame received");
         if (!frame.isIFrame()) {
             return ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_ERROR_STREAM;
         }
@@ -225,33 +255,21 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
 
     public ARCONTROLLER_ERROR_ENUM startController() {
         ARCONTROLLER_ERROR_ENUM errCode = ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_OK;
-        if (!started) {
-            try {
-                deviceController = new ARDeviceController(device);
-                errCode = deviceController.start();
-                deviceController.addListener(this);
-                deviceController.addStreamListener(this);
-                deviceController.getFeatureJumpingSumo().sendMediaStreamingVideoEnable((byte) 0);
-                deviceController.getFeatureJumpingSumo().setPilotingPCMDFlag((byte) 1);
-                started = true;
-            } catch (ARControllerException e) {
-                Log.e(DRONE_CONTROLLER_TAG, "Unable to create device controller : " + e.getMessage());
-            }
+        if (deviceController != null && !started) {
+            errCode = deviceController.start();
+            deviceController.getFeatureJumpingSumo().sendMediaStreamingVideoEnable((byte) 1);
+            deviceController.getFeatureJumpingSumo().setPilotingPCMDFlag((byte) 1);
         }
-        started =  (errCode.compareTo(ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_ERROR) == 0);
         return errCode;
     }
 
     public ARCONTROLLER_ERROR_ENUM stopController() {
         ARCONTROLLER_ERROR_ENUM errCode = ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_OK;
-        if (deviceController!= null && started) {
+        if (deviceController!= null && started && running) {
             stopMotion();
             errCode = deviceController.stop();
-            started = false;
         }
         return errCode;
     }
-
-
 }
 
