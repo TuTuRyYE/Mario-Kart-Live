@@ -6,17 +6,16 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.parrot.arsdk.arcontroller.ARCONTROLLER_ERROR_ENUM;
 import com.parrot.arsdk.arcontroller.ARFrame;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDevice;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
-
-import org.artoolkit.ar.base.ARActivity;
-import org.artoolkit.ar.base.rendering.ARRenderer;
 
 import java.io.ByteArrayInputStream;
 
@@ -58,49 +57,115 @@ public class GUIGame extends Activity {
         ARDiscoveryDeviceService currentDeviceService = (ARDiscoveryDeviceService) getIntent().getExtras().get("currentDeviceService");
         Log.d(GUI_GAME_TAG, "Got device service from activity GUIWelcome...");
         currentDevice = WifiConnector.createDevice(currentDeviceService);
-        Log.d(GUI_GAME_TAG, "Device created, attenpting to create its controller...");
+        Log.d(GUI_GAME_TAG, "Device created, attempting to create its controller...");
         controller = new DroneController(this, currentDevice);
         Log.d(GUI_GAME_TAG, "Controller of the device created.");
 
         // Initializes the views of the GUI
         turnLeftBtn = (Button) findViewById(R.id.turnLeftBtn);
-        turnRightBtn=(Button)  findViewById(R.id.turnRightBtn);
-        moveBackwardBtn=(Button)  findViewById(R.id.moveBackwardBtn);
-        moveForwardBtn=(Button)  findViewById(R.id.moveForwardBtn);
-        sendTrapBtn=(Button)  findViewById(R.id.sendTrapBtn);
-        trapImageView=(ImageView) findViewById(R.id.trapImageView);
+        turnRightBtn = (Button) findViewById(R.id.turnRightBtn);
+        moveBackwardBtn = (Button) findViewById(R.id.moveBackwardBtn);
+        moveForwardBtn = (Button) findViewById(R.id.moveForwardBtn);
+        sendTrapBtn = (Button) findViewById(R.id.sendTrapBtn);
+        trapImageView = (ImageView) findViewById(R.id.trapImageView);
 
         // Defines action listener
-        turnLeftBtn.setOnClickListener(new View.OnClickListener() {
+        turnLeftBtn.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
-                controller.turnLeft();
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        Log.d(GUI_GAME_TAG, "turn left pressed");
+                        controller.turnLeft();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        Log.d(GUI_GAME_TAG, "turn left released");
+                        controller.stopRotation();
+                        break;
+                }
+                return true;
             }
         });
-        turnRightBtn.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view) {
-                controller.turnRight();
+        turnRightBtn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        Log.d(GUI_GAME_TAG, "turn right pressed");
+                        controller.turnRight();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        Log.d(GUI_GAME_TAG, "turn right released");
+                        controller.stopRotation();
+                        break;
+                }
+                return true;
             }
-
         });
-        moveBackwardBtn.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view) {
-                controller.moveBackward();
+        moveForwardBtn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        Log.d(GUI_GAME_TAG, "move forward pressed");
+                        controller.moveForward();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        Log.d(GUI_GAME_TAG, "move forward released");
+                        controller.stopMotion();
+                        break;
+                }
+                return true;
             }
-
         });
-        moveForwardBtn.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view) {
-                controller.moveForward();
+        moveBackwardBtn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        Log.d(GUI_GAME_TAG, "move backward pressed");
+                        controller.moveBackward();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        Log.d(GUI_GAME_TAG, "move backward released");
+                        controller.stopMotion();
+                        break;
+                }
+                return true;
             }
-
+        });
+        sendTrapBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(GUI_GAME_TAG, "use item pressed");
+                controller.useItem();
+            }
         });
 
         displayTrapImageView();
     }
 
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        controller.startController();
+//    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        ARCONTROLLER_ERROR_ENUM errCode = controller.stopController();
+        Log.d(GUI_GAME_TAG, "Stopped controller, returned " + errCode.toString());
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
     /**
      * Set the controller.
+     *
      * @param controller
      */
     public void setController(DroneController controller) {
@@ -111,7 +176,7 @@ public class GUIGame extends Activity {
     /**
      * Method used to display the current trap owned by the player.
      */
-    public void displayTrapImageView(){
+    public void displayTrapImageView() {
         //my_img est l'image et elle a pour adresse file/res/drawable/my_img.png
         trapImageView.setImageResource(R.drawable.banane);
     }
