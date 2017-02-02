@@ -70,6 +70,15 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     }
 
     /**
+     * Get the {@link Drone} (Matthieu Michel - 30/01/2017).
+     * @return the drone.
+     */
+
+    public Drone getDRONE() {
+        return DRONE;
+    }
+
+    /**
      * Makes the drone go forward with the constant speed (Matthieu Michel - 30/01/2017).
      */
     public void moveForward() {

@@ -2,6 +2,8 @@ package fr.enseeiht.superjumpingsumokart;
 
 import android.app.Activity;
 
+
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -21,6 +23,8 @@ import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
 
 import java.io.ByteArrayInputStream;
 
+import fr.enseeiht.superjumpingsumokart.application.Banana;
+import fr.enseeiht.superjumpingsumokart.application.Item;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
 import fr.enseeiht.superjumpingsumokart.application.WifiConnector;
 
@@ -68,11 +72,6 @@ public class GUIGame extends Activity {
     private ImageButton moveBackwardBtn;
     private ImageButton sendTrapBtn;
     private ImageButton jumpBtn;
-
-    /**
-     * The view to display the owned object.
-     */
-    private ImageView trapImageView;
 
     /**
      * The area to display the video stream from the device.
@@ -209,8 +208,15 @@ public class GUIGame extends Activity {
     /**
      * Method used to display the current trap owned by the player (Matthieu Michel - 30/01/2017).
      */
-    private void displayTrapImageView() {
-        trapImageView.setImageResource(R.drawable.banane);
+    private void displayTrap() {
+
+        Item currentItem = (Item) controller.getDRONE().getCurrentItem();
+        String itemName = currentItem.getName();
+
+        if (itemName.equals("banana")) {
+            sendTrapBtn.setImageResource(R.drawable.banane);
+        }
+
     }
 
     /**
