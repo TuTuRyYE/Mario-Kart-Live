@@ -1,5 +1,7 @@
 package fr.enseeiht.superjumpingsumokart.application;
 
+import fr.enseeiht.superjumpingsumokart.application.items.Item;
+
 /**
  * Created by Vivian on 27/01/2017.
  * Class representing a drone
@@ -11,7 +13,7 @@ public class Drone {
     private Item currentItem;
     private Vector3D currentSpeed;
 
-    public Drone(String name, Vector3D currentPosition, Item currentItem, Vector3D speed) {
+    Drone(String name, Vector3D currentPosition, Item currentItem, Vector3D speed) {
         this.name = name;
         this.currentPosition = currentPosition;
         this.currentItem = currentItem;

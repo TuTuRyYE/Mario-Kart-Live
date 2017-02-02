@@ -8,6 +8,7 @@ import com.parrot.arsdk.arcontroller.*;
 import com.parrot.arsdk.ardiscovery.*;
 import com.parrot.arsdk.arcommands.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_ENUM;
 
+import fr.enseeiht.superjumpingsumokart.application.items.TestItem;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 
 /**
@@ -189,8 +190,6 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     }
 
         public void testFeature() {
-        deviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation(ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_SPIN);
-        deviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation(ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_STOP);
     }
 
 

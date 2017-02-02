@@ -21,11 +21,10 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/banane"
             android:layout_alignParentTop="true"
             android:layout_toStartOf="@+id/turnRightBtn"
             android:id="@+id/sendTrapBtn"
-            android:background="@drawable/banane" />
+            app:srcCompat="@drawable/nul" />
 
         <ImageButton
             android:layout_width="wrap_content"

@@ -2,6 +2,8 @@ package fr.enseeiht.superjumpingsumokart.application;
 
 import java.util.ArrayList;
 
+import fr.enseeiht.superjumpingsumokart.application.items.Item;
+
 /**
  * Created by Vivian on 27/01/2017.
  */

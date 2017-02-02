@@ -21,14 +21,12 @@ import com.parrot.arsdk.arcontroller.ARFrame;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDevice;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
 
-import org.artoolkit.ar.base.rendering.ARRenderer;
-
 import java.io.ByteArrayInputStream;
 
 import fr.enseeiht.superjumpingsumokart.R;
-import fr.enseeiht.superjumpingsumokart.application.Item;
+import fr.enseeiht.superjumpingsumokart.application.items.Item;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
-import fr.enseeiht.superjumpingsumokart.application.WifiConnector;
+import fr.enseeiht.superjumpingsumokart.application.network.WifiConnector;
 
 public class GUIGame extends Activity {
 

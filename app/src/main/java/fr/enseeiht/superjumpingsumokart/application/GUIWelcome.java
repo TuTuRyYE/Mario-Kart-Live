@@ -17,9 +17,16 @@ import org.artoolkit.ar.base.NativeInterface;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.enseeiht.superjumpingsumokart.application.network.WifiConnector;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 import fr.enseeiht.superjumpingsumokart.R;
 
+/**
+ * @author Romain Verset
+ * The activity used as home screen for the application. From there it is possible to connect to a
+ * drone, to launch a race, to edit circuits and to connect with another SuperJumpingSumoKart
+ * application using Bluetooth.
+ */
 public class GUIWelcome extends Activity {
 
     // Static block to load libraries (ARToolkit + ParrotSDK3)
@@ -174,6 +181,7 @@ public class GUIWelcome extends Activity {
      */
     public void disableWifiConnectionBtn() {
         wifiConnectionBtn.setEnabled(false);
+        wifiConnectionBtn.setChecked(false);
     }
 
     /**

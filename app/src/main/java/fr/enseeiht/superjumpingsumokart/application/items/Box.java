@@ -1,32 +1,37 @@
-package fr.enseeiht.superjumpingsumokart.application;
+package fr.enseeiht.superjumpingsumokart.application.items;
 
 import android.widget.ImageButton;
 
 import fr.enseeiht.superjumpingsumokart.R;
+import fr.enseeiht.superjumpingsumokart.application.DroneController;
+import fr.enseeiht.superjumpingsumokart.application.Vector3D;
 
 /**
  * Created by michelmatthieu on 02/02/2017.
  */
 
-public class Banana extends Item {
+public class Box extends Item {
 
-    private final static String  NAME = "banana";
+    private final static String  NAME = "box";
+
     /**
      * Default constructor of the class {@link Item}. (Matthieu Michel - 02/02/2017).
      * @param position position of the Item.
      */
-    public Banana (Vector3D position) {
-        super(NAME, position);
+    public Box(Vector3D position) {
+        super(NAME);
     }
 
     @Override
     public void applyEffect(DroneController sender, DroneController receiver) {
-        sender.slow();
-        sender.spin();
+        sender.stopMotion();
+        sender.jump();
+
     }
 
     @Override
     public void assignResource(ImageButton ib) {
-        ib.setImageResource(R.drawable.banane);
+        ib.setImageResource(R.drawable.nul);
     }
+
 }

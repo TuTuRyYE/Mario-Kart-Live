@@ -1,6 +1,10 @@
-package fr.enseeiht.superjumpingsumokart.application;
+package fr.enseeiht.superjumpingsumokart.application.items;
 
 import android.widget.ImageButton;
+
+import fr.enseeiht.superjumpingsumokart.application.Drone;
+import fr.enseeiht.superjumpingsumokart.application.DroneController;
+import fr.enseeiht.superjumpingsumokart.application.Vector3D;
 
 /**
  * Created by Vivian on 27/01/2017.
@@ -11,25 +15,23 @@ public abstract class Item {
     /**
      * Threshold for the distance mesure to know if the object is in contact with the device or not.
      */
-    protected final static double thresholdDistance = 2;
+    private final static double thresholdDistance = 2;
     /**
      * Item name.
      */
-    protected final String NAME;
+    private final String NAME;
     // 3D model to add
     /**
      * Item position relative to the startItem (x,y,z).
      */
-    protected Vector3D position;
+    private Vector3D position;
 
     /**
      * Default constructor of the class {@link Item}. (Matthieu Michel - 02/02/2017).
      * @param name name given to the Item.
-     * @param position position of the Item.
      */
-    public Item(String name, Vector3D position) {
+    Item(String name) {
         this.NAME = name;
-        this.position = position;
     }
 
     /**
@@ -93,8 +95,12 @@ public abstract class Item {
      * @param sender the device sending the trap.
      * @param receiver the device undergoing the trap.
      */
-    public abstract void applyEffect(DroneController sender,DroneController receiver);
+    public abstract void applyEffect(DroneController sender, DroneController receiver);
 
+    /**
+     * Put the object image on a {@link ImageButton} (Romain Verset - 02/02/2017).
+     * @param ib The {@link ImageButton} on which the image has to be displayed;
+     */
     public abstract void assignResource(ImageButton ib);
 
 }

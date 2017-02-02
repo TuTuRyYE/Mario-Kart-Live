@@ -1,4 +1,4 @@
-package fr.enseeiht.superjumpingsumokart.application;
+package fr.enseeiht.superjumpingsumokart.application.network;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -21,9 +21,11 @@ import com.parrot.arsdk.ardiscovery.receivers.ARDiscoveryServicesDevicesListUpda
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.enseeiht.superjumpingsumokart.application.GUIWelcome;
+
 /**
  * @author Romain Verset.
- * This class allow the application to remotly connect with a Parrot drone.
+ * This class allows the application to remotly connect with a Jumpin Sumo Evo Light Parrot drone.
  * Created by Romain Verset on 30/01/17.
  */
 
@@ -58,11 +60,6 @@ public class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedRecei
      * The list of all available devices.
      */
     private List<ARDiscoveryDeviceService> devicesList = new ArrayList<>();
-
-    /**
-     * The remote device connected with this connector.
-     */
-    private ARDiscoveryDevice device;
 
     private boolean hasStarted = false;
 
@@ -191,22 +188,6 @@ public class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedRecei
             }
         }
         return device;
-    }
-
-    /**
-     * (Romain Verset - 30/01/2017).
-     * @return The device currently connected with this connector.
-     */
-    public ARDiscoveryDevice getDevice() {
-        return device;
-    }
-
-    /**
-     * (Romain Verset - 30/01/2017).
-     * @return The list of the availables devices.
-     */
-    public List<ARDiscoveryDeviceService> getAvailableDevices() {
-        return devicesList;
     }
 
     // Describes the action to do when there is an update in the available devices list. Here, updates

@@ -1,8 +1,11 @@
-package fr.enseeiht.superjumpingsumokart.application;
+package fr.enseeiht.superjumpingsumokart.application.items;
 
 import android.widget.ImageButton;
 
 import fr.enseeiht.superjumpingsumokart.R;
+import fr.enseeiht.superjumpingsumokart.application.DroneController;
+import fr.enseeiht.superjumpingsumokart.application.Vector3D;
+import fr.enseeiht.superjumpingsumokart.application.items.Item;
 
 /**
  * Created by michelmatthieu on 02/02/2017.
@@ -17,12 +20,12 @@ public class TestItem extends Item {
      * @param position position of the Item.
      */
     public TestItem(Vector3D position) {
-        super(NAME, position);
+        super(NAME);
     }
 
     @Override
     public void applyEffect(DroneController sender, DroneController receiver) {
-        receiver.testFeature();
+        sender.testFeature();
     }
 
     @Override
