@@ -1,10 +1,13 @@
 package fr.enseeiht.superjumpingsumokart.application;
 
+import android.widget.ImageButton;
+
 /**
  * Created by Vivian on 27/01/2017.
  */
 
 public abstract class Item {
+
     /**
      * Threshold for the distance mesure to know if the object is in contact with the device or not.
      */
@@ -90,6 +93,8 @@ public abstract class Item {
      * @param sender the device sending the trap.
      * @param receiver the device undergoing the trap.
      */
-    abstract void applyEffect(DroneController sender,DroneController receiver);
+    public abstract void applyEffect(DroneController sender,DroneController receiver);
+
+    public abstract void assignResource(ImageButton ib);
 
 }

@@ -44,7 +44,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/connectWifiBtn"
-                android:width="@dimen/menu_btn_width" />
+                android:width="@dimen/menu_btn_width"
+                android:textOn="@string/wifiConnectionBtnOn"
+                android:textOff="@string/wifiConnectionBtnOff"/>
 
             <Button
                 android:text="@string/connect_bluetooth_btn"

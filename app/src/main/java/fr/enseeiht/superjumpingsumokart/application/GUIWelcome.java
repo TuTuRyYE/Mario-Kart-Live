@@ -117,18 +117,16 @@ public class GUIWelcome extends Activity {
      */
     private void wifiConnectionBtnAction() {
         try {
-            if (!wifiConnectionBtn.isChecked()) {
+            if (wifiConnectionBtn.isChecked()) {
                 currentDeviceService = devicesList.get(0);
                 Log.d(GUI_WELCOME_TAG, "New device service bound to the application : " + currentDeviceService.toString());
-                wifiConnectionBtn.setChecked(true);
             } else {
-                currentDeviceService = null;
                 Log.d(GUI_WELCOME_TAG, "Device service unbound from the application : " + currentDeviceService.toString());
-                wifiConnectionBtn.setChecked(false);
+                currentDeviceService = null;
             }
 
         } catch (NullPointerException npe) {
-            Log.d(GUI_WELCOME_TAG, "Unable to gbind the device service");
+            Log.d(GUI_WELCOME_TAG, "Unable to bind the device service");
         }
     }
 

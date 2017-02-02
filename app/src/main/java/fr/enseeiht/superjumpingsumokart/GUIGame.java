@@ -49,6 +49,7 @@ public class GUIGame extends Activity {
             switch (msg.what) {
                 case UPDATE_BACKGROUND :
                     updateView();
+                    displayTrap();
                     break;
                 default :
                     break;
@@ -211,16 +212,7 @@ public class GUIGame extends Activity {
     private void displayTrap() {
 
         Item currentItem = (Item) controller.getDRONE().getCurrentItem();
-        String itemName = currentItem.getName();
-
-        if (currentItem == null) {
-            sendTrapBtn.setImageResource(R.drawable.nul);
-        }
-        else if (itemName.equals("banana")) {
-            sendTrapBtn.setImageResource(R.drawable.banane);
-        }
-
-
+        currentItem.assignResource(sendTrapBtn);
     }
 
     /**

@@ -15,4 +15,6 @@
     <string name="no_drone_connected">No drone is connected to the application. You need to connect a drone before starting a race.</string>
     <string name="no_connection_available">No connection available.</string>
     <string name="wifiConnectionDialogChoiceTitle">Choose a Jumping Sumo</string>
+    <string name="wifiConnectionBtnOff">Connect</string>
+    <string name="wifiConnectionBtnOn">Connected</string>
 </resources>

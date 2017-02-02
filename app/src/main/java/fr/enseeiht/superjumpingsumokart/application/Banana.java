@@ -1,5 +1,9 @@
 package fr.enseeiht.superjumpingsumokart.application;
 
+import android.widget.ImageButton;
+
+import fr.enseeiht.superjumpingsumokart.R;
+
 /**
  * Created by michelmatthieu on 02/02/2017.
  */
@@ -16,10 +20,13 @@ public class Banana extends Item {
     }
 
     @Override
-    void applyEffect(DroneController sender, DroneController receiver) {
-        sender.stopMotion();
+    public void applyEffect(DroneController sender, DroneController receiver) {
+        sender.slow();
         sender.spin();
+    }
 
-
+    @Override
+    public void assignResource(ImageButton ib) {
+        ib.setImageResource(R.drawable.banane);
     }
 }

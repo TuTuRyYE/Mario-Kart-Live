@@ -38,13 +38,13 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     private ARDeviceController deviceController;
 
     // Speed constants
-    private final static byte NO_SPEED = (byte) 0;
-    private final static byte NORMAL_SPEED = (byte) 40;
-    private final static byte NEG_NORMAL_SPEED = (byte) -40;
-    private final static byte SLOW_SPEED = (byte) 30;
-    private final static byte NEG_SLOW_SPEED = (byte) -30;
-    private final static byte FAST_SPEED = (byte) 50;
-    private final static byte NEG_FAST_SPEED = (byte) 50;
+    public final static byte NO_SPEED = (byte) 0;
+    public final static byte NORMAL_SPEED = (byte) 40;
+    public final static byte NEG_NORMAL_SPEED = (byte) -40;
+    public final static byte SLOW_SPEED = (byte) 30;
+    public final static byte NEG_SLOW_SPEED = (byte) -30;
+    public final static byte FAST_SPEED = (byte) 50;
+    public final static byte NEG_FAST_SPEED = (byte) 50;
 
     // Inner state variables
     private boolean started = false;
@@ -166,16 +166,33 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
         if (deviceController != null && running) {
             Log.d(DRONE_CONTROLLER_TAG, "SPIN order received !");
             deviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation(ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_SPIN);
+
         }
     }
 
     public void spinningJump() {
+        if (deviceController != null && running) {
         deviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation(ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_SPINJUMP);
+        }
     }
 
-    public void testFeature() {
-        deviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation(ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_SLOWSHAKE);
+    public void metronome() {
+        if (deviceController != null && running) {
+        deviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation(ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_METRONOME);
+        }
     }
+
+    public void slow() {
+        if (deviceController != null && running) {
+            deviceController.getFeatureJumpingSumo().setPilotingPCMDSpeed(SLOW_SPEED);
+        }
+    }
+
+        public void testFeature() {
+        deviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation(ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_SPIN);
+        deviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation(ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_STOP);
+    }
+
 
     /**
      * Notify the user when there is a switch of state for the device (Matthieu Michel - 30/01/2017).
