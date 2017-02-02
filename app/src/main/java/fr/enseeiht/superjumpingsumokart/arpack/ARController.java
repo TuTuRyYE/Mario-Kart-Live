@@ -14,13 +14,13 @@ import org.artoolkit.ar.base.rendering.ARRenderer;
  * Created by JorgeEnrique on 2/02/2017.
  */
 
-public abstract class ARController implements CameraEventListener {
+public class ARController implements CameraEventListener {
 
-    protected final static String TAG = "ARController";
+    private final static String AR_CONTROLLER_TAG = "ARController";
 
     private CaptureCameraPreview preview;
 
-    private byte[] framePreview = new byte[0];;
+    private byte[] framePreview = new byte[0];
 
     private GLSurfaceView glView;
 
@@ -53,10 +53,10 @@ public abstract class ARController implements CameraEventListener {
     @Override
     public void cameraPreviewStarted(int width, int height, int rate, int cameraIndex, boolean cameraIsFrontFacing) {
         if (ARToolKit.getInstance().initialiseAR(width, height, "Data/camera_para.dat", 0, false)) { // Expects Data to be already in the cache dir. This can be done with the AssetUnpacker.
-            Log.i(TAG, "Camera initialised");
+            Log.i(AR_CONTROLLER_TAG, "Camera initialised");
         } else {
             // Error
-            Log.e(TAG, "Error initialising camera. Cannot continue.");
+            Log.e(AR_CONTROLLER_TAG, "Error initialising camera. Cannot continue.");
         }
 
         firstUpdate = true;
@@ -66,16 +66,15 @@ public abstract class ARController implements CameraEventListener {
         this.framePreview = frame;
     }
 
-    @Override
     public void cameraPreviewFrame(byte[] frame) {
 
         if (firstUpdate) {
             // ARToolKit has been initialised. The renderer can now add markers, etc...
             if (renderer.configureARScene()) {
-                Log.i(TAG, "Scene configured successfully");
+                Log.i(AR_CONTROLLER_TAG, "Scene configured successfully");
             } else {
                 // Error
-                Log.e(TAG, "Error configuring scene. Cannot continue.");
+                Log.e(AR_CONTROLLER_TAG, "Error configuring scene. Cannot continue.");
             }
             firstUpdate = false;
         }

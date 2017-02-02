@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".GUIGame"
+            android:name=".arpack.GUIGame"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_gui_welcome"
             android:parentActivityName=".application.GUIWelcome"

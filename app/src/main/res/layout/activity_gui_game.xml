@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#0099cc"
-    tools:context="fr.enseeiht.superjumpingsumokart.GUIGame"
+    tools:context="fr.enseeiht.superjumpingsumokart.arpack.GUIGame"
     android:id="@+id/guiGameFrameLayout">
 
     <!-- The primary full-screen view. This can be replaced with whatever view

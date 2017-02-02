@@ -17,7 +17,7 @@ import org.artoolkit.ar.base.NativeInterface;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.enseeiht.superjumpingsumokart.GUIGame;
+import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 import fr.enseeiht.superjumpingsumokart.R;
 
 public class GUIWelcome extends Activity {

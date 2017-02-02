@@ -2,7 +2,6 @@ package fr.enseeiht.superjumpingsumokart.application;
 
 import android.widget.ImageButton;
 
-import fr.enseeiht.superjumpingsumokart.GUIGame;
 import fr.enseeiht.superjumpingsumokart.R;
 
 /**

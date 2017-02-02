@@ -1,4 +1,4 @@
-package fr.enseeiht.superjumpingsumokart;
+package fr.enseeiht.superjumpingsumokart.arpack;
 
 import android.app.Activity;
 
@@ -25,9 +25,8 @@ import org.artoolkit.ar.base.rendering.ARRenderer;
 
 import java.io.ByteArrayInputStream;
 
-import fr.enseeiht.superjumpingsumokart.application.Banana;
+import fr.enseeiht.superjumpingsumokart.R;
 import fr.enseeiht.superjumpingsumokart.application.Item;
-import fr.enseeiht.superjumpingsumokart.arpack.ARController;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
 import fr.enseeiht.superjumpingsumokart.application.WifiConnector;
 
@@ -94,17 +93,7 @@ public class GUIGame extends Activity {
         // Initializes the GUI from layout file
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gui_game);
-        arnActivity = new ARController() {
-            @Override
-            protected ARRenderer supplyRenderer() {
-                return null;
-            }
-
-            @Override
-            protected FrameLayout supplyFrameLayout() {
-                return null;
-            }
-        };
+        arnActivity = new ARController();
 
         // Bind with the drone and creates its controller
         ARDiscoveryDeviceService currentDeviceService = (ARDiscoveryDeviceService) getIntent().getExtras().get("currentDeviceService");
@@ -232,7 +221,7 @@ public class GUIGame extends Activity {
      */
     private void displayTrap() {
 
-        Item currentItem = (Item) controller.getDRONE().getCurrentItem();
+        Item currentItem = controller.getDRONE().getCurrentItem();
         currentItem.assignResource(sendTrapBtn);
     }
 

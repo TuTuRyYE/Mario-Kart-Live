@@ -8,7 +8,7 @@ import com.parrot.arsdk.arcontroller.*;
 import com.parrot.arsdk.ardiscovery.*;
 import com.parrot.arsdk.arcommands.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_ENUM;
 
-import fr.enseeiht.superjumpingsumokart.GUIGame;
+import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 
 /**
  * @author Matthieu Michel, Romain Verset
@@ -38,13 +38,13 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     private ARDeviceController deviceController;
 
     // Speed constants
-    public final static byte NO_SPEED = (byte) 0;
-    public final static byte NORMAL_SPEED = (byte) 40;
-    public final static byte NEG_NORMAL_SPEED = (byte) -40;
-    public final static byte SLOW_SPEED = (byte) 30;
-    public final static byte NEG_SLOW_SPEED = (byte) -30;
-    public final static byte FAST_SPEED = (byte) 50;
-    public final static byte NEG_FAST_SPEED = (byte) 50;
+    private final static byte NO_SPEED = (byte) 0;
+    private final static byte NORMAL_SPEED = (byte) 40;
+    private final static byte NEG_NORMAL_SPEED = (byte) -40;
+    private final static byte SLOW_SPEED = (byte) 30;
+    private final static byte NEG_SLOW_SPEED = (byte) -30;
+    private final static byte FAST_SPEED = (byte) 50;
+    private final static byte NEG_FAST_SPEED = (byte) 50;
 
     // Inner state variables
     private boolean started = false;
@@ -58,7 +58,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
      */
     public DroneController(GUIGame guiGame, ARDiscoveryDevice device) {
         GUI_GAME = guiGame;
-        DRONE = new Drone(new Vector3D(0,0,0),new TestItem(), new Vector3D(0,0,0));
+        DRONE = new Drone("JUMPY", new Vector3D(0,0,0),new TestItem(new Vector3D(0,0,0)), new Vector3D(0,0,0));
         try {
             deviceController = new ARDeviceController(device);
             deviceController.addListener(this);
