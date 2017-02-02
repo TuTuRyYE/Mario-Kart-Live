@@ -58,7 +58,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
      */
     public DroneController(GUIGame guiGame, ARDiscoveryDevice device) {
         GUI_GAME = guiGame;
-        DRONE = new Drone("JUMPY", new Vector3D(0,0,0),new TestItem(new Vector3D(0,0,0)), new Vector3D(0,0,0));
+        DRONE = new Drone(new Vector3D(0,0,0),new TestItem(), new Vector3D(0,0,0));
         try {
             deviceController = new ARDeviceController(device);
             deviceController.addListener(this);
