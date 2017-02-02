@@ -170,6 +170,14 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
         }
     }
 
+    public void spinningJump() {
+        deviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation(ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_SPINJUMP);
+    }
+
+    public void testFeature() {
+        deviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation(ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_SLOWSHAKE);
+    }
+
     /**
      * Notify the user when there is a switch of state for the device (Matthieu Michel - 30/01/2017).
      * @param deviceController controller associated to the device.
