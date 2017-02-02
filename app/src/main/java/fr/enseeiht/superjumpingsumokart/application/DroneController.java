@@ -58,7 +58,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
      */
     public DroneController(GUIGame guiGame, ARDiscoveryDevice device) {
         GUI_GAME = guiGame;
-        DRONE = null;//TODO
+        DRONE = new Drone(new Vector3D(0,0,0),new TestItem(), new Vector3D(0,0,0));
         try {
             deviceController = new ARDeviceController(device);
             deviceController.addListener(this);
@@ -148,8 +148,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     public void useItem() {
         if (deviceController != null && running) {
             Log.d(DRONE_CONTROLLER_TAG, "USE ITEM order received !");
-            //TODO
-            throw new UnsupportedOperationException("TODO");
+            DRONE.getCurrentItem().applyEffect(this, null);
         }
     }
 
