@@ -12,7 +12,7 @@ public abstract class Item {
     /**
      * Item name.
      */
-    protected String name;
+    protected final String NAME;
     // 3D model to add
     /**
      * Item position relative to the startItem (x,y,z).
@@ -25,7 +25,7 @@ public abstract class Item {
      * @param position position of the Item.
      */
     public Item(String name, Vector3D position) {
-        this.name = name;
+        this.NAME = name;
         this.position = position;
     }
 
@@ -34,16 +34,9 @@ public abstract class Item {
      * @return name of the Item.
      */
     public String getName() {
-        return name;
+        return this.NAME;
     }
 
-    /**
-     * Set the name of the Item. (Matthieu Michel - 02/02/2017).
-     * @param name name of the Item.
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
 
     /**
      * Get the position of the Item. (Matthieu Michel - 02/02/2017).

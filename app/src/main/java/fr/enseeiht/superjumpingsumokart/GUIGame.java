@@ -213,9 +213,13 @@ public class GUIGame extends Activity {
         Item currentItem = (Item) controller.getDRONE().getCurrentItem();
         String itemName = currentItem.getName();
 
-        if (itemName.equals("banana")) {
+        if (currentItem == null) {
+            sendTrapBtn.setImageResource(R.drawable.nul);
+        }
+        else if (itemName.equals("banana")) {
             sendTrapBtn.setImageResource(R.drawable.banane);
         }
+
 
     }
 
