@@ -19,8 +19,11 @@ import com.parrot.arsdk.arcontroller.ARFrame;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDevice;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
 
+import org.artoolkit.ar.base.rendering.ARRenderer;
+
 import java.io.ByteArrayInputStream;
 
+import fr.enseeiht.superjumpingsumokart.arpack.ARController;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
 import fr.enseeiht.superjumpingsumokart.application.WifiConnector;
 
@@ -69,6 +72,8 @@ public class GUIGame extends Activity {
     private ImageButton sendTrapBtn;
     private ImageButton jumpBtn;
 
+    private ARController arnActivity;
+
     /**
      * The view to display the owned object.
      */
@@ -84,6 +89,17 @@ public class GUIGame extends Activity {
         // Initializes the GUI from layout file
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gui_game);
+        arnActivity = new ARController() {
+            @Override
+            protected ARRenderer supplyRenderer() {
+                return null;
+            }
+
+            @Override
+            protected FrameLayout supplyFrameLayout() {
+                return null;
+            }
+        };
 
         // Bind with the drone and creates its controller
         ARDiscoveryDeviceService currentDeviceService = (ARDiscoveryDeviceService) getIntent().getExtras().get("currentDeviceService");
@@ -227,6 +243,7 @@ public class GUIGame extends Activity {
      */
     public void setCurrentFrame(ARFrame frame) {
         byte[] data = frame.getByteData();
+        arnActivity.receiveFrame(data);
         ByteArrayInputStream ins = new ByteArrayInputStream(data);
         Bitmap bmp = BitmapFactory.decodeStream(ins);
         this.currentFrame = new BitmapDrawable(bmp);
