@@ -39,7 +39,7 @@
                 android:id="@+id/setCircuitBtn"
                 android:width="@dimen/menu_btn_width" />
 
-            <Button
+            <ToggleButton
                 android:text="@string/connect_wifi_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
