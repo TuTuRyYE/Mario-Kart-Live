@@ -21,45 +21,6 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/left_arrow"
-            android:id="@+id/turnLeftBtn"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:background="@drawable/left_arrow" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/right_arrow"
-            android:layout_marginStart="20dp"
-            android:id="@+id/turnRightBtn"
-            android:layout_alignParentBottom="true"
-            android:layout_toEndOf="@+id/turnLeftBtn"
-            android:background="@drawable/right_arrow" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/bottom_arrow"
-            android:layout_marginEnd="18dp"
-            android:id="@+id/moveBackwardBtn"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:background="@drawable/bottom_arrow" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/top_arrow"
-            android:layout_marginBottom="14dp"
-            android:id="@+id/moveForwardBtn"
-            android:layout_above="@+id/moveBackwardBtn"
-            android:layout_alignStart="@+id/moveBackwardBtn"
-            android:background="@drawable/top_arrow" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             app:srcCompat="@drawable/banane"
             android:layout_alignParentTop="true"
             android:layout_toStartOf="@+id/turnRightBtn"
@@ -69,12 +30,53 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:srcCompat="@drawable/left_arrow"
+            android:id="@+id/turnLeftBtn"
+            android:background="@drawable/left_arrow"
+            android:layout_marginStart="22dp"
+            android:layout_alignTop="@+id/turnRightBtn"
+            android:layout_alignParentStart="true" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/bottom_arrow"
+            android:layout_marginEnd="18dp"
+            android:id="@+id/moveBackwardBtn"
+            android:background="@drawable/bottom_arrow"
+            android:layout_below="@+id/moveForwardBtn"
+            android:layout_alignParentEnd="true" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/top_arrow"
+            android:id="@+id/moveForwardBtn"
+            android:background="@drawable/top_arrow"
+            android:layout_above="@+id/turnRightBtn"
+            android:layout_alignStart="@+id/moveBackwardBtn"
+            android:layout_marginBottom="21dp" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:srcCompat="@drawable/jump_arrow"
             android:id="@+id/jumpBtn"
-            android:layout_marginEnd="99dp"
+            android:layout_marginEnd="73dp"
+            android:background="@drawable/jump_arrow"
+            android:layout_alignTop="@+id/moveBackwardBtn"
+            android:layout_toStartOf="@+id/moveBackwardBtn" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/right_arrow"
+            android:id="@+id/turnRightBtn"
+            android:background="@drawable/right_arrow"
+            android:layout_marginStart="53dp"
+            android:layout_marginBottom="21dp"
             android:layout_alignParentBottom="true"
-            android:layout_toStartOf="@+id/moveBackwardBtn"
-            android:background="@drawable/jump_arrow" />
+            android:layout_toEndOf="@+id/turnLeftBtn" />
 
     </RelativeLayout>
 </FrameLayout>

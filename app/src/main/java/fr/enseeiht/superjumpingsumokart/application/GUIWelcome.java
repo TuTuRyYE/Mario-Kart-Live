@@ -1,12 +1,13 @@
 package fr.enseeiht.superjumpingsumokart.application;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.parrot.arsdk.ARSDK;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
@@ -19,7 +20,7 @@ import java.util.List;
 import fr.enseeiht.superjumpingsumokart.GUIGame;
 import fr.enseeiht.superjumpingsumokart.R;
 
-public class GUIWelcome extends AppCompatActivity {
+public class GUIWelcome extends Activity {
 
     // Static block to load libraries (ARToolkit + ParrotSDK3)
     static {
@@ -34,7 +35,7 @@ public class GUIWelcome extends AppCompatActivity {
 
     // Buttons in the GUI
     private Button startRaceBtn;
-    private Button wifiConnectionBtn;
+    private ToggleButton wifiConnectionBtn;
     private Button btConnectionBtn;
     private Button setCircuitBtn;
     private Button exitBtn;
@@ -46,6 +47,7 @@ public class GUIWelcome extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         // Initializes the GUI from layout file
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gui_welcome);
@@ -55,7 +57,7 @@ public class GUIWelcome extends AppCompatActivity {
 
         // Initializes the views of the GUI
         startRaceBtn = (Button) findViewById(R.id.startRaceBtn);
-        wifiConnectionBtn = (Button) findViewById(R.id.connectWifiBtn);
+        wifiConnectionBtn = (ToggleButton) findViewById(R.id.connectWifiBtn);
         wifiConnectionBtn.setEnabled(false);
         btConnectionBtn = (Button) findViewById(R.id.connectBluetoothBtn);
         setCircuitBtn = (Button) findViewById(R.id.setCircuitBtn);
@@ -115,11 +117,16 @@ public class GUIWelcome extends AppCompatActivity {
      */
     private void wifiConnectionBtnAction() {
         try {
-            currentDeviceService = devicesList.get(0);
-            Log.d(GUI_WELCOME_TAG, "New device service bind to the application : " + currentDeviceService.toString());
-            wifiConnectionBtn.setBackgroundColor(getResources().getColor(R.color.connectionEstablished));
+            if (wifiConnectionBtn.isChecked()) {
+                currentDeviceService = devicesList.get(0);
+                Log.d(GUI_WELCOME_TAG, "New device service bound to the application : " + currentDeviceService.toString());
+            } else {
+                Log.d(GUI_WELCOME_TAG, "Device service unbound from the application : " + currentDeviceService.toString());
+                currentDeviceService = null;
+            }
+
         } catch (NullPointerException npe) {
-            Log.d(GUI_WELCOME_TAG, "Unable to gbind the device service");
+            Log.d(GUI_WELCOME_TAG, "Unable to bind the device service");
         }
     }
 
@@ -175,4 +182,5 @@ public class GUIWelcome extends AppCompatActivity {
     public void enableWifiConnectionBtn() {
         wifiConnectionBtn.setEnabled(true);
     }
+
 }
