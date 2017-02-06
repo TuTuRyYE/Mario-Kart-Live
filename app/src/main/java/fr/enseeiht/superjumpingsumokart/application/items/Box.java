@@ -31,7 +31,7 @@ public class Box extends Item {
 
     @Override
     public void assignResource(ImageButton ib) {
-        ib.setImageResource(R.drawable.nul);
+        ib.setImageResource(R.drawable.banane);
     }
 
 }

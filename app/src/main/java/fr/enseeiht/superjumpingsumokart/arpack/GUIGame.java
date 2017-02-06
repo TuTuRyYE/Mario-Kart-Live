@@ -3,16 +3,20 @@ package fr.enseeiht.superjumpingsumokart.arpack;
 import android.app.Activity;
 
 
-
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PixelFormat;
 import android.graphics.drawable.BitmapDrawable;
+import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -21,6 +25,10 @@ import com.parrot.arsdk.arcontroller.ARFrame;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDevice;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
 
+import org.artoolkit.ar.base.ARToolKit;
+import org.artoolkit.ar.base.AndroidUtils;
+import org.artoolkit.ar.base.NativeInterface;
+
 import java.io.ByteArrayInputStream;
 
 import fr.enseeiht.superjumpingsumokart.R;
@@ -28,8 +36,9 @@ import fr.enseeiht.superjumpingsumokart.application.items.Item;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
 import fr.enseeiht.superjumpingsumokart.application.network.WifiConnector;
 
-public class GUIGame extends Activity {
 
+
+public class GUIGame extends Activity {
     /**
      * The logging tag. Useful for debugging.
      */
@@ -74,7 +83,7 @@ public class GUIGame extends Activity {
     private ImageButton sendTrapBtn;
     private ImageButton jumpBtn;
 
-    private ARController arnActivity;
+    private ARController arControler;
 
     /**
      * The view to display the owned object.
@@ -86,12 +95,16 @@ public class GUIGame extends Activity {
      */
     private FrameLayout fl;
 
+    private GLSurfaceView glView;
+
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // Initializes the GUI from layout file
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gui_game);
-        arnActivity = new ARController();
+        arControler = new ARController();
 
         // Bind with the drone and creates its controller
         ARDiscoveryDeviceService currentDeviceService = (ARDiscoveryDeviceService) getIntent().getExtras().get("currentDeviceService");
@@ -100,6 +113,14 @@ public class GUIGame extends Activity {
         Log.d(GUI_GAME_TAG, "Device created, attempting to create its controller...");
         controller = new DroneController(this, currentDevice);
         Log.d(GUI_GAME_TAG, "Controller of the device created.");
+
+
+        //transparent background//jorge
+        getWindow().setFormat(PixelFormat.TRANSLUCENT);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
+        AndroidUtils.reportDisplayInformation(this);
 
         // Initializes the views of the GUI
         turnLeftBtn = (ImageButton) findViewById(R.id.turnLeftBtn);
@@ -194,6 +215,8 @@ public class GUIGame extends Activity {
                 return true;
             }
         });
+
+        arControler.startAR(this);
     }
 
     @Override
@@ -201,6 +224,23 @@ public class GUIGame extends Activity {
         super.onResume();
         Log.d(GUI_GAME_TAG, "Resuming GUIGame activity");
         controller.startController();
+
+        // Create the GL view
+        glView = new GLSurfaceView(this);
+        glView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
+        glView.getHolder().setFormat(PixelFormat.TRANSLUCENT); // Needs to be a translucent surface so the camera preview shows through.
+        glView.setRenderer(arControler.getARRender());
+        glView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY); // Only render when we have a frame (must call requestRender()).
+        glView.setZOrderMediaOverlay(true); // Request that GL view's SurfaceView be on top of other SurfaceViews (including CameraPreview's SurfaceView).
+
+        Log.i(GUI_GAME_TAG, "GLSurfaceView created");
+
+        // Add the views to the interface
+        //mainLayout.addView(preview, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
+        //fl.addView(glView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
+
+        Log.i(GUI_GAME_TAG, "Views added to main layout.");
+
     }
 
     @Override
@@ -237,10 +277,29 @@ public class GUIGame extends Activity {
      */
     public void setCurrentFrame(ARFrame frame) {
         byte[] data = frame.getByteData();
-        arnActivity.receiveFrame(data);
+        //arControler.receiveFrame(data);
         ByteArrayInputStream ins = new ByteArrayInputStream(data);
         Bitmap bmp = BitmapFactory.decodeStream(ins);
         this.currentFrame = new BitmapDrawable(bmp);
         UPDATER.sendEmptyMessage(UPDATE_BACKGROUND);
+        if (ARToolKit.getInstance().convertAndDetect(data)) {
+
+            // Update the renderer as the frame has changed
+            if (glView != null) glView.requestRender();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        //Log.i(TAG, "onPause()");
+        super.onPause();
+
+        if (glView != null) glView.onPause();
+
+        // System hardware must be released in onPause(), so it's available to
+        // any incoming activity. Removing the CameraPreview will do this for the
+        // camera. Also do it for the GLSurfaceView, since it serves no purpose
+        // with the camera preview gone.
+        fl.removeView(glView);
     }
 }

@@ -24,7 +24,7 @@
             android:layout_alignParentTop="true"
             android:layout_toStartOf="@+id/turnRightBtn"
             android:id="@+id/sendTrapBtn"
-            app:srcCompat="@drawable/nul" />
+            app:srcCompat="@drawable/banane" />
 
         <ImageButton
             android:layout_width="wrap_content"
