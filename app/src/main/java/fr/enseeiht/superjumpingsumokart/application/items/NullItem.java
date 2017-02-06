@@ -17,7 +17,7 @@ public class NullItem extends Item {
      *
      * @param name name given to the Item.
      */
-    NullItem() {
+    public NullItem() {
         super(NAME);
     }
 

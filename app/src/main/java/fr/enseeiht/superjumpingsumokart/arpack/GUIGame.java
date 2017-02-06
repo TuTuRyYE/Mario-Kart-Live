@@ -22,8 +22,10 @@ import com.parrot.arsdk.ardiscovery.ARDiscoveryDevice;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
 
 import java.io.ByteArrayInputStream;
+import java.util.concurrent.CyclicBarrier;
 
 import fr.enseeiht.superjumpingsumokart.R;
+import fr.enseeiht.superjumpingsumokart.application.Game;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
 import fr.enseeiht.superjumpingsumokart.application.network.WifiConnector;
@@ -62,6 +64,8 @@ public class GUIGame extends Activity {
      */
     private DroneController controller;
 
+
+
     /**
      * The current frame to display.
      */
@@ -86,6 +90,8 @@ public class GUIGame extends Activity {
      */
     private FrameLayout fl;
 
+    private Game game; // The game associated to the GUIGame
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // Initializes the GUI from layout file
@@ -109,6 +115,11 @@ public class GUIGame extends Activity {
         jumpBtn = (ImageButton) findViewById(R.id.jumpBtn);
         sendTrapBtn = (ImageButton) findViewById(R.id.sendTrapBtn);
         fl = (FrameLayout) findViewById(R.id.guiGameFrameLayout);
+
+        // Creation of the game
+            game = new Game(this);
+            game.start();
+            // Every players is ready
 
         // Defines action listener
         turnLeftBtn.setOnTouchListener(new View.OnTouchListener() {
@@ -242,5 +253,21 @@ public class GUIGame extends Activity {
         Bitmap bmp = BitmapFactory.decodeStream(ins);
         this.currentFrame = new BitmapDrawable(bmp);
         UPDATER.sendEmptyMessage(UPDATE_BACKGROUND);
+
+        if (this.isFinished()) {
+            game.stop();
+        }
+    }
+
+    public boolean isFinished(){
+        return controller.isFinished();
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 }

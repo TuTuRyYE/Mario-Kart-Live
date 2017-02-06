@@ -1,5 +1,7 @@
 package fr.enseeiht.superjumpingsumokart.application;
 
+import java.util.ArrayList;
+
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
 
 /**
@@ -12,12 +14,15 @@ public class Drone {
     private Vector3D currentPosition;
     private Item currentItem;
     private Vector3D currentSpeed;
+    private int currentLap;
+    private ArrayList<Integer> markersSeen;
 
     Drone(String name, Vector3D currentPosition, Item currentItem, Vector3D speed) {
         this.name = name;
         this.currentPosition = currentPosition;
         this.currentItem = currentItem;
         this.currentSpeed = speed;
+        this.currentLap = 0;
     }
 
     public String getName() {
@@ -56,5 +61,21 @@ public class Drone {
     public void setSpeed(Vector3D speed) {
 
         this.currentSpeed = speed;
+    }
+
+    public int getCurrentLap() {
+        return currentLap;
+    }
+
+    public void setCurrentLap(int currentLap) {
+        this.currentLap = currentLap;
+    }
+
+    public ArrayList<Integer> getMarkersSeen() {
+        return markersSeen;
+    }
+
+    public void setMarkersSeen(ArrayList<Integer> markersSeen) {
+        this.markersSeen = markersSeen;
     }
 }
