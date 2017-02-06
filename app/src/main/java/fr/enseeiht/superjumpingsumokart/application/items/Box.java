@@ -16,9 +16,8 @@ public class Box extends Item {
 
     /**
      * Default constructor of the class {@link Item}. (Matthieu Michel - 02/02/2017).
-     * @param position position of the Item.
      */
-    public Box(Vector3D position) {
+    public Box() {
         super(NAME);
     }
 

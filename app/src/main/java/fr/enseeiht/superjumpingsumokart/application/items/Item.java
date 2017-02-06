@@ -30,7 +30,7 @@ public abstract class Item {
      * Default constructor of the class {@link Item}. (Matthieu Michel - 02/02/2017).
      * @param name name given to the Item.
      */
-    Item(String name) {
+    public Item(String name) {
         this.NAME = name;
     }
 

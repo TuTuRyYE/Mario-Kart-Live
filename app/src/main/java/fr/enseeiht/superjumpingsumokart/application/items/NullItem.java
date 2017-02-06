@@ -10,7 +10,7 @@ import fr.enseeiht.superjumpingsumokart.application.DroneController;
 
 public class NullItem extends Item {
 
-    private final static String  NAME = "banana";
+    private final static String  NAME = "nullItem";
 
     /**
      * Default constructor of the class {@link Item}. (Matthieu Michel - 06/02/2017).

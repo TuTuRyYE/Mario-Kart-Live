@@ -3,6 +3,8 @@ package fr.enseeiht.superjumpingsumokart.application;
 import java.util.ArrayList;
 import java.util.concurrent.CyclicBarrier;
 
+import fr.enseeiht.superjumpingsumokart.application.items.Banana;
+import fr.enseeiht.superjumpingsumokart.application.items.Box;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 
@@ -20,9 +22,29 @@ public class Game extends Thread{
 
     public Game(GUIGame guiGame) {
         this.circuit = createCircuit();
-        this.currentItems = null; // For the moment, there are no items at the beginning
+        this.currentItems = setRandomItems(1); // For the moment, there are no items at the beginning
         this.guiGame = guiGame;
         this.isStarted = false;
+    }
+
+    public ArrayList<Item> setRandomItems(int numberOfItems) {
+        ArrayList<Item> result = new ArrayList<Item>();
+        for (int i=0; i<numberOfItems; i++) {
+            int rand = (int) Math.floor(Math.random()*2);
+            Item item;
+            if (rand == 1) { //Banana
+                item = new Banana();
+            }
+            if (rand == 2) { //Box
+                item = new Box();
+            }
+            else {
+                item = null;
+            }
+            item.setPosition(new Vector3D(0,0,0)); // TODO Set position randomly on the circuit
+            result.add(item);
+        }
+        return result;
     }
 
     public GUIGame getGuiGame() {
