@@ -225,16 +225,25 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
         Vector3D endPoint1 = this.GUI_GAME.getGame().getCircuit().getEndPoints()[0];
         Vector3D endPoint2 = this.GUI_GAME.getGame().getCircuit().getEndPoints()[1];
 
-        double a = (endPoint1.getY()-endPoint2.getY())/(endPoint1.getX()-endPoint2.getX());
-        double b = (endPoint1.getX()*endPoint2.getY()-endPoint2.getX()*endPoint1.getY())/(endPoint1.getX()-endPoint2.getX());
+        double aux = (endPoint1.getX()-endPoint2.getX());
+        double relativePosition;
 
-        double relativePosition = positionDrone.getY()-(a*positionDrone.getX())-b;
+        if(aux !=0) { // if the end line isn't vertical
+            double a = (endPoint1.getY()-endPoint2.getY())/aux;
+            double b = (endPoint1.getX()*endPoint2.getY()-endPoint2.getX()*endPoint1.getY())/(endPoint1.getX()-endPoint2.getX());
+            relativePosition = positionDrone.getY()-(a*positionDrone.getX())-b;
+        }
 
-        if(b>0) {
-            overpassed = false;
+        else { // if the end line is vertical
+            relativePosition = positionDrone.getX()-endPoint1.getX();
+        }
+
+
+        if(relativePosition>0) {
+            overpassed = true;
         }
         else {
-            overpassed = true;
+            overpassed = false;
         }
 
 

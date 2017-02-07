@@ -75,4 +75,12 @@ public class Circuit {
     public void removeMarker(int markerID){
         this.markersID.remove(markerID);
     }
+
+    public HashMap<Integer, Vector3D> getMarkersID() {
+        return markersID;
+    }
+
+    public void setMarkersID(HashMap<Integer, Vector3D> markersID) {
+        this.markersID = markersID;
+    }
 }

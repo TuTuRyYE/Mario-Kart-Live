@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.parrot.arsdk.arcontroller.ARFrame;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDevice;
@@ -25,6 +26,7 @@ import java.io.ByteArrayInputStream;
 import java.util.concurrent.CyclicBarrier;
 
 import fr.enseeiht.superjumpingsumokart.R;
+import fr.enseeiht.superjumpingsumokart.application.GUIWelcome;
 import fr.enseeiht.superjumpingsumokart.application.Game;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
@@ -255,7 +257,8 @@ public class GUIGame extends Activity {
         UPDATER.sendEmptyMessage(UPDATE_BACKGROUND);
 
         if (this.isFinished()) {
-            game.stop();
+            game.stop(controller); // Send to each drone the name of the winner
+            Toast.makeText(GUIGame.this, "Congratulisation" + controller.getDRONE().getName() + ", you've won !", Toast.LENGTH_SHORT).show(); // Inform the player that he has won
         }
     }
 
