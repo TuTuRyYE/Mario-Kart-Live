@@ -44,7 +44,7 @@ public class Drone {
         this.currentPosition = currentPosition;
     }
 
-    public Item getCurrentItem() {
+    public Item  getCurrentItem() {
         return currentItem;
     }
 

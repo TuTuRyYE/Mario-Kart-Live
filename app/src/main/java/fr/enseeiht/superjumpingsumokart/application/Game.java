@@ -11,16 +11,39 @@ import fr.enseeiht.superjumpingsumokart.application.items.MagicBox;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 
 /**
- * Created by Vivian on 27/01/2017.
+ *  * @author Vivian Guy, Matthieu Michel.
+ * This class is used to manage the game.
  */
 
 public class Game {
+
+    /**
+     * Circuit where the race takes place.
+     */
     private Circuit circuit;
+
+    /**
+     * {@link GUIGame}, the interface of the Game.
+     */
     private GUIGame guiGame;
-    // InputStream, OutputStream
+
+
+    /**
+     * {@link ArrayList} of {@link Item} present on the circuit.
+     */
     private ArrayList<Item> currentItems;
+    /**
+     * Boolean to check if the race is started or not.
+     */
     private boolean isStarted;
 
+    // InputStream, OutputStream
+
+
+    /**
+     * Default constructor of the class {@link Game} (Vivian - 07/02/2017).
+     * @param guiGame interface of the {@link Game}
+     */
     public Game(GUIGame guiGame) {
         this.circuit = createCircuit();
         // Add markers for boxes
@@ -33,6 +56,11 @@ public class Game {
         this.guiGame = guiGame;
         this.isStarted = false;
     }
+
+    /**
+     * Generate magic boxes on the circuit (Vivian - 07/02/2017).
+     * @return the {@link ArrayList} of {@link MagicBox} generate on the circuit.
+     */
 
     public ArrayList<Item> setMagicBoxes() {
         ArrayList<Item> result = new ArrayList<Item>();
@@ -71,30 +99,57 @@ public class Game {
 
     }
 
+    /**
+     * Get the {@link GUIGame} associated to the Game (Vivian - 07/02/2017).
+     * @return the {@link GUIGame} of the {@link Game}.
+     */
     public GUIGame getGuiGame() {
         return guiGame;
     }
 
+    /**
+     * Set the {@link GUIGame} associated to the Game (Vivian - 07/02/2017).
+     * @param guiGame of the {@link Game}.
+     */
     public void setGuiGame(GUIGame guiGame) {
         this.guiGame = guiGame;
     }
 
+    /**
+     * Get the {@link Circuit} associated to the Game (Vivian - 07/02/2017).
+     * @return the {@link Circuit} of the Game.
+     */
     public Circuit getCircuit() {
         return circuit;
     }
-
+    /**
+     * Set the {@link Circuit} associated to the Game (Vivian - 07/02/2017).
+     * @param circuit of the {@link Game}.
+     */
     public void setCircuit(Circuit circuit) {
         this.circuit = circuit;
     }
 
+    /**
+     * Get currentItems {@link ArrayList} present on the circuit (Vivian - 07/02/2017).
+     * @return currentItems {@link ArrayList}.
+     */
     public ArrayList<Item> getCurrentItems() {
         return currentItems;
     }
 
+    /**
+     * Set Items present on {@link Circuit} (Vivian - 07/02/2017).
+     * @param currentItems present
+     */
     public void setCurrentItems(ArrayList<Item> currentItems) {
         this.currentItems = currentItems;
     }
 
+    /**
+     * Check if the current status of the {@link Game} (Vivian - 07/02/2017).
+     * @return true if the {@link Game} if started otherwise false.
+     */
     public boolean isStarted() {
         return isStarted;
     }
@@ -103,16 +158,27 @@ public class Game {
         isStarted = started;
     }
 
+    /**
+     * Create the {@link Circuit} (Vivian - 07/02/2017).
+     * @return {@link Circuit} created.
+     */
     public Circuit createCircuit () {
         int laps = 1; // Number of laps for the game
         return new Circuit(laps);
     }
 
+    /**
+     * Start the {@link Game} (Vivian - 07/02/2017).
+     */
     public void start() {
         // wait for every player to be ready
-        this.isStarted = true;
+        this.setStarted(true);
     }
 
+    /**
+     * Stop the Game
+     * @param controller of the {@link Drone} to notify of the end of the race (Vivian - 07/02/2017).
+     */
     public void stop(DroneController controller){
         // Stop the drone
             controller.stopMotion();
@@ -124,6 +190,10 @@ public class Game {
 
     }
 
+    /**
+     * Get the number of player on the {@link Game} (Vivian - 07/02/2017).
+     * @return number of Player.
+     */
     public int getNumberPlayer() {
         // Return the number of players
         return 1;

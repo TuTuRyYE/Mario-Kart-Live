@@ -25,7 +25,7 @@ public class TestItem extends Item {
 
     @Override
     public void applyEffect(DroneController sender, DroneController receiver) {
-        sender.testFeature();
+       // sender.testFeature();
     }
 
     @Override

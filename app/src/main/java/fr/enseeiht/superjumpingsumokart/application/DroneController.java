@@ -101,7 +101,6 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
         if (deviceController != null && running) {
             Log.d(DRONE_CONTROLLER_TAG, "MOVE BACKWARD order received !");
             deviceController.getFeatureJumpingSumo().setPilotingPCMDSpeed(NEG_SLOW_SPEED);
-            deviceController.getFeatureCommon().sendAnimationsStartAnimation(ARCOMMANDS_COMMON_ANIMATIONS_STARTANIMATION_ANIM_ENUM.ARCOMMANDS_COMMON_ANIMATIONS_STARTANIMATION_ANIM_HEADLIGHTS_OSCILLATION);
         }
     }
 
@@ -166,6 +165,9 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
         }
     }
 
+    /**
+     * Makes the drone spin (Romain Verset - 31/01/2017).
+     */
     public void spin() {
         if (deviceController != null && running) {
             Log.d(DRONE_CONTROLLER_TAG, "SPIN order received !");
@@ -174,26 +176,28 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
         }
     }
 
+    /**
+     * Makes the drone spin and jump (Romain Verset - 31/01/2017).
+     */
     public void spinningJump() {
         if (deviceController != null && running) {
         deviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation(ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_SPINJUMP);
         }
     }
 
-    public void metronome() {
-        if (deviceController != null && running) {
-        deviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation(ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_METRONOME);
-        }
-    }
-
+    /**
+     * Makes the drone go slower (Romain Verset - 31/01/2017).
+     */
     public void slow() {
         if (deviceController != null && running) {
             deviceController.getFeatureJumpingSumo().setPilotingPCMDSpeed(SLOW_SPEED);
         }
     }
 
-        public void testFeature() {
-    }
+    /**
+     * Test if the drone finished the race  (Matthieu Michel - 07/02/2017).
+     * @return true if the drone has finished the race otherwise false.
+     */
 
     public boolean isFinished(){
         ArrayList<Integer> markersSeen = this.getDRONE().getMarkersSeen();
@@ -217,6 +221,10 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
         return result;
     }
 
+    /**
+     * Check if the drone has passed the end line (Matthieu Michel - 07/02/2017).
+     * @return true if the drone has passed the end line/lap line otherwise return false.
+     */
     private boolean checkPosition() {
         boolean overpassed;
         //get the current position of the drone
@@ -233,11 +241,9 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
             double b = (endPoint1.getX()*endPoint2.getY()-endPoint2.getX()*endPoint1.getY())/(endPoint1.getX()-endPoint2.getX());
             relativePosition = positionDrone.getY()-(a*positionDrone.getX())-b;
         }
-
         else { // if the end line is vertical
             relativePosition = positionDrone.getX()-endPoint1.getX();
         }
-
 
         if(relativePosition>0) {
             overpassed = true;
@@ -245,7 +251,6 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
         else {
             overpassed = false;
         }
-
 
         return overpassed;
 
