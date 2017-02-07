@@ -190,8 +190,8 @@ public class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedRecei
         return device;
     }
 
-    // Describes the action to do when there is an update in the available devices list. Here, updates
-    // the list of availables devices of the connector.
+    /** Describes the action to do when there is an update in the available devices list.
+     *  When a device is available, unlocks the "Connect" button in {@link GUIWelcome}. */
     @Override
     public void onServicesDevicesListUpdated() {
         devicesList = discoveryService.getDeviceServicesArray();

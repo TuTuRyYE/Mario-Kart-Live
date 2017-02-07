@@ -17,6 +17,7 @@
             android:name=".application.GUIWelcome"
             android:label="@string/title_activity_gui_game"
             android:theme="@style/AppTheme.NoActionBar"
+            android:hardwareAccelerated="true"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
