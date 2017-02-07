@@ -2,6 +2,7 @@ package fr.enseeiht.superjumpingsumokart.application.items;
 
 import android.widget.ImageButton;
 
+import fr.enseeiht.superjumpingsumokart.R;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
 
 /**
@@ -14,8 +15,6 @@ public class NullItem extends Item {
 
     /**
      * Default constructor of the class {@link Item}. (Matthieu Michel - 06/02/2017).
-     *
-     * @param name name given to the Item.
      */
     public NullItem() {
         super(NAME);
@@ -28,6 +27,6 @@ public class NullItem extends Item {
 
     @Override
     public void assignResource(ImageButton ib) {
-
+        ib.setImageResource(R.drawable.nul);
     }
 }

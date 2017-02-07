@@ -73,10 +73,6 @@ public class Drone {
         this.name = name;
     }
 
-    /**
-     * Get the position of the drone
-     * @return the current position of the drone
-     */
     public Vector3D getCurrentPosition() {
 
         return currentPosition;

@@ -1,7 +1,5 @@
 package fr.enseeiht.superjumpingsumokart.application;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.CyclicBarrier;
@@ -13,25 +11,41 @@ import fr.enseeiht.superjumpingsumokart.application.items.MagicBox;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 
 /**
- * Created by Vivian on 27/01/2017.
+ *  * @author Vivian Guy, Matthieu Michel.
+ * This class is used to manage the game.
  */
 
 public class Game {
-    /**
-     * The logging tag. Useful for debugging.
-     */
-    private final static String GAME_TAG = "GAME";
 
+    /**
+     * Circuit where the race takes place.
+     */
     private Circuit circuit;
+
+    /**
+     * {@link GUIGame}, the interface of the Game.
+     */
     private GUIGame guiGame;
-    // InputStream, OutputStream
+
+
+    /**
+     * {@link ArrayList} of {@link Item} present on the circuit.
+     */
     private ArrayList<Item> currentItems;
+    /**
+     * Boolean to check if the race is started or not.
+     */
     private boolean isStarted;
 
+    // InputStream, OutputStream
+
+
+    /**
+     * Default constructor of the class {@link Game} (Vivian - 07/02/2017).
+     * @param guiGame interface of the {@link Game}
+     */
     public Game(GUIGame guiGame) {
         this.circuit = createCircuit();
-
-
         // Add markers for boxes
         circuit.addMarker(1, new Vector3D(0,0,0)); // position to change when markers are placed
         circuit.addMarker(2, new Vector3D(0,0,0)); // position to change when markers are placed
@@ -41,11 +55,15 @@ public class Game {
         this.currentItems = setMagicBoxes();
         this.guiGame = guiGame;
         this.isStarted = false;
-        Log.d(GAME_TAG, "Game created for drone " + guiGame.getController().getDRONE().getName());
     }
 
+    /**
+     * Generate magic boxes on the circuit (Vivian - 07/02/2017).
+     * @return the {@link ArrayList} of {@link MagicBox} generate on the circuit.
+     */
+
     public ArrayList<Item> setMagicBoxes() {
-        ArrayList<Item> result = new ArrayList<>();
+        ArrayList<Item> result = new ArrayList<Item>();
 
         HashMap<Integer, Vector3D> markersID = this.circuit.getMarkersID();
         Vector3D position1 = markersID.get(1);
@@ -76,35 +94,62 @@ public class Game {
                 y = position4.getY() + i*distanceY/numberOfBoxesPerLine;
                 result.add(new MagicBox(new Vector3D(x, y, 0)));
             }
-        Log.d(GAME_TAG, numberOfBoxesPerLine + "lines of boxes set");
+
         return result;
 
     }
 
+    /**
+     * Get the {@link GUIGame} associated to the Game (Vivian - 07/02/2017).
+     * @return the {@link GUIGame} of the {@link Game}.
+     */
     public GUIGame getGuiGame() {
         return guiGame;
     }
 
+    /**
+     * Set the {@link GUIGame} associated to the Game (Vivian - 07/02/2017).
+     * @param guiGame of the {@link Game}.
+     */
     public void setGuiGame(GUIGame guiGame) {
         this.guiGame = guiGame;
     }
 
+    /**
+     * Get the {@link Circuit} associated to the Game (Vivian - 07/02/2017).
+     * @return the {@link Circuit} of the Game.
+     */
     public Circuit getCircuit() {
         return circuit;
     }
-
+    /**
+     * Set the {@link Circuit} associated to the Game (Vivian - 07/02/2017).
+     * @param circuit of the {@link Game}.
+     */
     public void setCircuit(Circuit circuit) {
         this.circuit = circuit;
     }
 
+    /**
+     * Get currentItems {@link ArrayList} present on the circuit (Vivian - 07/02/2017).
+     * @return currentItems {@link ArrayList}.
+     */
     public ArrayList<Item> getCurrentItems() {
         return currentItems;
     }
 
+    /**
+     * Set Items present on {@link Circuit} (Vivian - 07/02/2017).
+     * @param currentItems present
+     */
     public void setCurrentItems(ArrayList<Item> currentItems) {
         this.currentItems = currentItems;
     }
 
+    /**
+     * Check if the current status of the {@link Game} (Vivian - 07/02/2017).
+     * @return true if the {@link Game} if started otherwise false.
+     */
     public boolean isStarted() {
         return isStarted;
     }
@@ -113,31 +158,44 @@ public class Game {
         isStarted = started;
     }
 
+    /**
+     * Create the {@link Circuit} (Vivian - 07/02/2017).
+     * @return {@link Circuit} created.
+     */
     public Circuit createCircuit () {
         int laps = 1; // Number of laps for the game
         return new Circuit(laps);
     }
 
+    /**
+     * Start the {@link Game} (Vivian - 07/02/2017).
+     */
     public void start() {
-        Log.d(GAME_TAG, "start fonction called");
-        // TODO wait for every player to be ready
-        this.isStarted = true;
+        // wait for every player to be ready
+        this.setStarted(true);
     }
 
+    /**
+     * Stop the Game
+     * @param controller of the {@link Drone} to notify of the end of the race (Vivian - 07/02/2017).
+     */
     public void stop(DroneController controller){
-        Log.d(GAME_TAG, "stop fonction called");
         // Stop the drone
             controller.stopMotion();
 
-        // TODO Send to each player a message saying that the game in finished
+        // Send to each player a message saying that the game in finished
 
         this.currentItems = null;
         this.circuit = null;
 
     }
 
+    /**
+     * Get the number of player on the {@link Game} (Vivian - 07/02/2017).
+     * @return number of Player.
+     */
     public int getNumberPlayer() {
-        // TODO Return the number of players
+        // Return the number of players
         return 1;
     }
 }
