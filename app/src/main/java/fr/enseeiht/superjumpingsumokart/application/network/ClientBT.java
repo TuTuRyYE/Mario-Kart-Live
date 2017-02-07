@@ -1,5 +1,6 @@
 package fr.enseeiht.superjumpingsumokart.application.network;
 
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
@@ -18,6 +19,7 @@ import java.util.UUID;
 public class ClientBT extends Thread {
     private final BluetoothSocket btSocket;
     private final BluetoothDevice btDevice;
+    private BluetoothAdapter btAdapter;
 
     public ClientBT(BluetoothDevice device) {
         // On utilise un objet temporaire car btSocket et btDevice sont "final"
@@ -34,20 +36,34 @@ public class ClientBT extends Thread {
 
 
     public void run() {
+        // We verify that the device include BT
+        btAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (btAdapter == null) {
+            // The phone doesn't include bluetooth
+        }
+
+        // If the BT is disconnected, we force it to connect
+        if (!btAdapter.isEnabled()) {
+            btAdapter.enable();
+        }
+
         // On annule la découverte des périphériques (inutile puisqu'on est en train d'essayer de se connecter) TODO
 
         try {
-            // On se connecte. Cet appel est bloquant jusqu'à la réussite ou la levée d'une erreur
+            // connexion
             btSocket.connect();
         } catch (IOException connectException) {
-            // Impossible de se connecter, on ferme la socket et on tue le thread
+            // If impossible to connect, we close the socket and kill the thread
             try {
                 btSocket.close();
             } catch (IOException closeException) { }
             return;
         }
 
-        // Utilisez la connexion (dans un thread séparé) pour faire ce que vous voulez
+        // We launch the BT communication threads
+        CommunicationBT comServer = new CommunicationBT(btSocket);
+        CommunicationBT comClient = new CommunicationBT(btSocket);
+        comClient.start();
     }
 
     // Annule toute connexion en cours et tue le thread

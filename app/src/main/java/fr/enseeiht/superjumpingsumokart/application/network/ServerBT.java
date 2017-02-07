@@ -5,17 +5,19 @@ import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.UUID;
 
 /**
  * Created by Lucas on 07/02/2017.
  */
 
-public class ServerBT extends Thread{
+public class ServerBT extends Thread {
     private final BluetoothServerSocket btServerSocket;
     private BluetoothAdapter btAdapter;
     private boolean isConnected;
@@ -34,7 +36,19 @@ public class ServerBT extends Thread{
 
     @Override
     public void run() {
-        Log.w("plume server","run");
+
+        // We verify that the device include BT
+        btAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (btAdapter == null) {
+            // The phone doesn't include bluetooth
+        }
+
+        // If the BT is disconnected, we force it to connect
+        if (!btAdapter.isEnabled()) {
+            btAdapter.enable();
+        }
+
+
         BluetoothSocket socket = null;
         while (!isConnected) {
             // On attend que le client se connecte
@@ -56,6 +70,11 @@ public class ServerBT extends Thread{
                 break;
             }
         }
+
+        // We launch the BT communication threads
+        CommunicationBT comServer = new CommunicationBT(socket);
+        CommunicationBT comClient = new CommunicationBT(socket);
+        comServer.start();
 
     }
 
