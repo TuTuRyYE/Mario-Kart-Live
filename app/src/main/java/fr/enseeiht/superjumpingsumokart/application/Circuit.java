@@ -1,5 +1,7 @@
 package fr.enseeiht.superjumpingsumokart.application;
 
+import android.util.Log;
+
 import java.util.HashMap;
 
 /**
@@ -7,6 +9,13 @@ import java.util.HashMap;
  */
 
 public class Circuit {
+
+
+    /**
+     * The logging tag. Useful for debugging.
+     */
+    private final static String CIRCUIT_TAG = "CIRCUIT";
+
 
     /**
      * The name of the circuit
@@ -37,15 +46,37 @@ public class Circuit {
      * The coordinates of the startline and endline (for the moment they're written manually here)
      */
     private final static double STARTPOINTX = 2.0;
+    /**
+     * The coordinates of the startline and endline (for the moment they're written manually here)
+     */
     private final static double STARTPOINTY = 0;
+    /**
+     * The coordinates of the startline and endline (for the moment they're written manually here)
+     */
     private final static double STARTPOINTZ = 0;
-
+    /**
+     * The coordinates of the startline and endline (for the moment they're written manually here)
+     */
     private final static double ENDPOINT1X = 10;
+    /**
+     * The coordinates of the startline and endline (for the moment they're written manually here)
+     */
     private final static double ENDPOINT1Y = 10;
+    /**
+     * The coordinates of the startline and endline (for the moment they're written manually here)
+     */
     private final static double ENDPOINT1Z = 0;
-
+    /**
+     * The coordinates of the startline and endline (for the moment they're written manually here)
+     */
     private final static double ENDPOINT2X = 20;
+    /**
+     * The coordinates of the startline and endline (for the moment they're written manually here)
+     */
     private final static double ENDPOINT2Y = 10;
+    /**
+     * The coordinates of the startline and endline (for the moment they're written manually here)
+     */
     private final static double ENDPOINT2Z = 0;
 
     /**
@@ -69,6 +100,7 @@ public class Circuit {
             markers.put(-1, endPoints[0]);
             markers.put(-2, endPoints[1]);
             this.markersID = markers;
+        Log.d(CIRCUIT_TAG, "startline and endline markers added");
     }
 
     /**

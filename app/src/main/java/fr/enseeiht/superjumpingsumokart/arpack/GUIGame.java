@@ -273,4 +273,12 @@ public class GUIGame extends Activity {
     public void setGame(Game game) {
         this.game = game;
     }
+
+    public DroneController getController() {
+        return controller;
+    }
+
+    public void setController(DroneController controller) {
+        this.controller = controller;
+    }
 }

@@ -204,6 +204,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
                     if (checkPosition()) {
                         if (this.getDRONE().getCurrentLap() == this.GUI_GAME.getGame().getCircuit().getLaps()) { // if the number of laps is correct
                             result = true;
+                            Log.d(DRONE_CONTROLLER_TAG, "Drone " + this.getDRONE().getName() + "has finished");
                         }
                         else {
                             this.getDRONE().setCurrentLap(this.getDRONE().getCurrentLap() + 1);
@@ -213,7 +214,6 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
                 }
             }
         }
-
         return result;
     }
 
@@ -233,11 +233,9 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
             double b = (endPoint1.getX()*endPoint2.getY()-endPoint2.getX()*endPoint1.getY())/(endPoint1.getX()-endPoint2.getX());
             relativePosition = positionDrone.getY()-(a*positionDrone.getX())-b;
         }
-
         else { // if the end line is vertical
             relativePosition = positionDrone.getX()-endPoint1.getX();
         }
-
 
         if(relativePosition>0) {
             overpassed = true;
@@ -245,8 +243,6 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
         else {
             overpassed = false;
         }
-
-
         return overpassed;
 
     }

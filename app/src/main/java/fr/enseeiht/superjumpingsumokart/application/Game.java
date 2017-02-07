@@ -1,5 +1,7 @@
 package fr.enseeiht.superjumpingsumokart.application;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.CyclicBarrier;
@@ -15,6 +17,11 @@ import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
  */
 
 public class Game {
+    /**
+     * The logging tag. Useful for debugging.
+     */
+    private final static String GAME_TAG = "GAME";
+
     private Circuit circuit;
     private GUIGame guiGame;
     // InputStream, OutputStream
@@ -23,6 +30,8 @@ public class Game {
 
     public Game(GUIGame guiGame) {
         this.circuit = createCircuit();
+
+
         // Add markers for boxes
         circuit.addMarker(1, new Vector3D(0,0,0)); // position to change when markers are placed
         circuit.addMarker(2, new Vector3D(0,0,0)); // position to change when markers are placed
@@ -32,10 +41,11 @@ public class Game {
         this.currentItems = setMagicBoxes();
         this.guiGame = guiGame;
         this.isStarted = false;
+        Log.d(GAME_TAG, "Game created for drone " + guiGame.getController().getDRONE().getName());
     }
 
     public ArrayList<Item> setMagicBoxes() {
-        ArrayList<Item> result = new ArrayList<Item>();
+        ArrayList<Item> result = new ArrayList<>();
 
         HashMap<Integer, Vector3D> markersID = this.circuit.getMarkersID();
         Vector3D position1 = markersID.get(1);
@@ -66,7 +76,7 @@ public class Game {
                 y = position4.getY() + i*distanceY/numberOfBoxesPerLine;
                 result.add(new MagicBox(new Vector3D(x, y, 0)));
             }
-
+        Log.d(GAME_TAG, numberOfBoxesPerLine + "lines of boxes set");
         return result;
 
     }
@@ -109,15 +119,17 @@ public class Game {
     }
 
     public void start() {
-        // wait for every player to be ready
+        Log.d(GAME_TAG, "start fonction called");
+        // TODO wait for every player to be ready
         this.isStarted = true;
     }
 
     public void stop(DroneController controller){
+        Log.d(GAME_TAG, "stop fonction called");
         // Stop the drone
             controller.stopMotion();
 
-        // Send to each player a message saying that the game in finished
+        // TODO Send to each player a message saying that the game in finished
 
         this.currentItems = null;
         this.circuit = null;
@@ -125,7 +137,7 @@ public class Game {
     }
 
     public int getNumberPlayer() {
-        // Return the number of players
+        // TODO Return the number of players
         return 1;
     }
 }
