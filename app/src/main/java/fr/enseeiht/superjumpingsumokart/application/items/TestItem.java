@@ -5,7 +5,6 @@ import android.widget.ImageButton;
 import fr.enseeiht.superjumpingsumokart.R;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
 import fr.enseeiht.superjumpingsumokart.application.Vector3D;
-import fr.enseeiht.superjumpingsumokart.application.items.Item;
 
 /**
  * Created by michelmatthieu on 02/02/2017.
@@ -30,6 +29,6 @@ public class TestItem extends Item {
 
     @Override
     public void assignResource(ImageButton ib) {
-        ib.setImageResource(R.drawable.nul);
+        ib.setImageResource(R.drawable.null_object);
     }
 }
