@@ -17,7 +17,7 @@ import java.util.UUID;
  */
 
 public class ClientBT extends Thread {
-    private final BluetoothSocket btSocket;
+    private BluetoothSocket btSocket;
     private final BluetoothDevice btDevice;
     private BluetoothAdapter btAdapter;
 
@@ -58,8 +58,9 @@ public class ClientBT extends Thread {
             Log.d("CLIENT",connectException.getMessage());
             Log.d("CLIENT", "impossible to connect");
             try {
-                btSocket.close();
-            } catch (IOException closeException) { }
+                btSocket =(BluetoothSocket) btDevice.getClass().getMethod("createRfcommSocket", new Class[] {int.class}).invoke(btDevice,1);
+                btSocket.connect();
+            } catch (Exception e) { }
             return;
         }
 
