@@ -26,6 +26,12 @@ public class ClientBT extends Thread {
         BluetoothSocket tmp = null;
         btDevice = device;
 
+        // If the BT is disconnected, we force it to connect
+        if (!btAdapter.isEnabled()) {
+            btAdapter.enable();
+            Log.v("CLIENT", "BT connected");
+        }
+
         // On récupère un objet BluetoothSocket grâce à l'objet BluetoothDevice
         try {
             // MON_UUID est l'UUID (comprenez identifiant serveur) de l'application. Cette valeur est nécessaire côté serveur également !
@@ -36,17 +42,6 @@ public class ClientBT extends Thread {
 
 
     public void run() {
-        // We verify that the device include BT
-        btAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (btAdapter == null) {
-            // The phone doesn't include bluetooth
-        }
-
-        // If the BT is disconnected, we force it to connect
-        if (!btAdapter.isEnabled()) {
-            btAdapter.enable();
-            Log.v("CLIENT", "BT connected");
-        }
 
         // On annule la découverte des périphériques (inutile puisqu'on est en train d'essayer de se connecter) TODO
 

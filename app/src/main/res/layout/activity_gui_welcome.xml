@@ -15,7 +15,6 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context="fr.enseeiht.superjumpingsumokart.application.GUIWelcome"
         tools:showIn="@layout/activity_gui_welcome">
 
@@ -54,6 +53,13 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/connectBluetoothBtn"
                 android:width="@dimen/menu_btn_width" />
+
+            <Button
+                android:text="@string/join_bluetooth_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/joinBluetoothBtn"
+                android:width="@dimen/menu_btn_width" />
         </GridLayout>
 
         <Button
@@ -70,8 +76,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:id="@+id/textView"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
-
+            android:id="@+id/textView"/>
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

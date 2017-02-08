@@ -1,6 +1,8 @@
 package fr.enseeiht.superjumpingsumokart.application;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,7 +18,10 @@ import org.artoolkit.ar.base.NativeInterface;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+import fr.enseeiht.superjumpingsumokart.application.network.ClientBT;
+import fr.enseeiht.superjumpingsumokart.application.network.ServerBT;
 import fr.enseeiht.superjumpingsumokart.application.network.WifiConnector;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 import fr.enseeiht.superjumpingsumokart.R;
@@ -44,6 +49,7 @@ public class GUIWelcome extends Activity {
     private Button startRaceBtn;
     private ToggleButton wifiConnectionBtn;
     private Button btConnectionBtn;
+    private Button btJoinBtn;
     private Button setCircuitBtn;
     private Button exitBtn;
 
@@ -51,6 +57,8 @@ public class GUIWelcome extends Activity {
     private WifiConnector wifiConnector = null;
     private ARDiscoveryDeviceService currentDeviceService = null;
     private List<ARDiscoveryDeviceService> devicesList = new ArrayList<>();
+    private BluetoothAdapter btAdapter;
+    private BluetoothDevice btDevice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +75,7 @@ public class GUIWelcome extends Activity {
         wifiConnectionBtn = (ToggleButton) findViewById(R.id.connectWifiBtn);
         wifiConnectionBtn.setEnabled(false);
         btConnectionBtn = (Button) findViewById(R.id.connectBluetoothBtn);
+        btJoinBtn = (Button) findViewById(R.id.joinBluetoothBtn);
         setCircuitBtn = (Button) findViewById(R.id.setCircuitBtn);
         exitBtn = (Button) findViewById(R.id.exitBtn);
 
@@ -89,6 +98,13 @@ public class GUIWelcome extends Activity {
                 btConnectionBtnAction();
             }
         });
+        btJoinBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btJoinBtnAction();
+            }
+        });
+
         setCircuitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -142,7 +158,37 @@ public class GUIWelcome extends Activity {
      */
     private void btConnectionBtnAction() {
         //TODO
-        Toast.makeText(GUIWelcome.this, "TODO", Toast.LENGTH_SHORT).show();
+        // We verify that the device include BT
+        btAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (btAdapter == null) {
+            // The phone doesn't include bluetooth
+        }
+
+        ServerBT server = new ServerBT(btAdapter);
+        server.start();
+    }
+
+    /**
+     * //TODO
+     */
+    private void btJoinBtnAction() {
+        //TODO
+        btAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (btAdapter == null) {
+            // The phone doesn't include bluetooth
+        }
+
+        Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
+
+        //Seul les deux telephones sont appareillés, le seul device que l'on peut trouver est donc celui qu'on veut
+        if (pairedDevices.size() > 0) {
+            for (BluetoothDevice device : pairedDevices) {
+                btDevice = device;
+            }
+        }
+
+        ClientBT client = new ClientBT(btDevice);
+        client.start();
     }
 
     /**

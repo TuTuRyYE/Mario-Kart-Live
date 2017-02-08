@@ -28,6 +28,14 @@ public class ServerBT extends Thread {
         tmp = null;
         btAdapter = BA;
         isConnected = false;
+
+        // If the BT is disconnected, we force it to connect
+        if (!btAdapter.isEnabled()) {
+            btAdapter.enable();
+            Log.v("SERVER", "BT connected");
+        }
+        while (!btAdapter.isEnabled()){}
+
         try {
             tmp = btAdapter.listenUsingRfcommWithServiceRecord("My Server", UUID.fromString("00002415-0000-1000-8000-00805F9B34FB"));
         } catch (IOException e) {        }
@@ -37,22 +45,18 @@ public class ServerBT extends Thread {
     @Override
     public void run() {
 
-        // We verify that the device include BT
-        btAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (btAdapter == null) {
-            // The phone doesn't include bluetooth
-        }
-
-        // If the BT is disconnected, we force it to connect
-        if (!btAdapter.isEnabled()) {
-            btAdapter.enable();
-            Log.v("SERVER", "BT connected");
-        }
-
 
         BluetoothSocket socket = null;
         Log.v("SERVER", "waiting for connections");
         while (!isConnected) {
+
+
+            if (btServerSocket != null) {
+                Log.d("coucou", "connecté");
+            }
+            else{Log.d("coucou", "pas connecté");}
+
+
             // On attend que le client se connecte
             try {
                 socket = btServerSocket.accept();
