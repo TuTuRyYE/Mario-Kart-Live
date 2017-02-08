@@ -30,7 +30,7 @@ public class ClientBT extends Thread {
         // If the BT is disconnected, we force it to connect
         if (!btAdapter.isEnabled()) {
             btAdapter.enable();
-            Log.v("CLIENT", "BT connected");
+            Log.d("CLIENT", "BT connected");
         }
 
         // On récupère un objet BluetoothSocket grâce à l'objet BluetoothDevice
@@ -39,6 +39,7 @@ public class ClientBT extends Thread {
             tmp = device.createRfcommSocketToServiceRecord(UUID.fromString("00002415-0000-1000-8000-00805F9B34FB"));
         } catch (IOException e) { }
         btSocket = tmp;
+        btAdapter.cancelDiscovery();
     }
 
 
@@ -48,12 +49,14 @@ public class ClientBT extends Thread {
 
         try {
             // connexion
-            Log.v("CLIENT", "trying to connect");
+            Log.d("CLIENT", "trying to connect");
+
             btSocket.connect();
-            Log.v("CLIENT", "connected to server");
+            Log.d("CLIENT", "connected to server");
         } catch (IOException connectException) {
             // If impossible to connect, we close the socket and kill the thread
-            Log.v("CLIENT", "impossible to connect");
+            Log.d("CLIENT",connectException.getMessage());
+            Log.d("CLIENT", "impossible to connect");
             try {
                 btSocket.close();
             } catch (IOException closeException) { }
@@ -64,7 +67,7 @@ public class ClientBT extends Thread {
         CommunicationBT comServer = new CommunicationBT(btSocket);
         CommunicationBT comClient = new CommunicationBT(btSocket);
         comClient.start();
-        Log.v("CLIENT", "communication launched");
+        Log.d("CLIENT", "communication launched");
     }
 
     // Annule toute connexion en cours et tue le thread

@@ -63,7 +63,7 @@ public class ServerBT extends Thread {
             } catch (IOException e) {
                 break;
             }
-            // On vérifie si le client c'est connecté
+            // On vérifie si le client s'est connecté
             if (socket != null) {
                 Log.v("SERVER", "connected to client");
                 try {
