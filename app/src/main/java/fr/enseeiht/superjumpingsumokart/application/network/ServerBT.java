@@ -46,10 +46,12 @@ public class ServerBT extends Thread {
         // If the BT is disconnected, we force it to connect
         if (!btAdapter.isEnabled()) {
             btAdapter.enable();
+            Log.v("SERVER", "BT connected");
         }
 
 
         BluetoothSocket socket = null;
+        Log.v("SERVER", "waiting for connections");
         while (!isConnected) {
             // On attend que le client se connecte
             try {
@@ -59,6 +61,7 @@ public class ServerBT extends Thread {
             }
             // On vérifie si le client c'est connecté
             if (socket != null) {
+                Log.v("SERVER", "connected to client");
                 try {
                     isConnected = true;
                     // on bloque les autres arrivées sur le socket
@@ -75,6 +78,8 @@ public class ServerBT extends Thread {
         CommunicationBT comServer = new CommunicationBT(socket);
         CommunicationBT comClient = new CommunicationBT(socket);
         comServer.start();
+        Log.v("SERVER", "communication launched");
+
 
     }
 

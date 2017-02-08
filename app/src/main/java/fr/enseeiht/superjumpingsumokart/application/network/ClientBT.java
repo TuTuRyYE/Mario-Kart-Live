@@ -45,15 +45,19 @@ public class ClientBT extends Thread {
         // If the BT is disconnected, we force it to connect
         if (!btAdapter.isEnabled()) {
             btAdapter.enable();
+            Log.v("CLIENT", "BT connected");
         }
 
         // On annule la découverte des périphériques (inutile puisqu'on est en train d'essayer de se connecter) TODO
 
         try {
             // connexion
+            Log.v("CLIENT", "trying to connect");
             btSocket.connect();
+            Log.v("CLIENT", "connected to server");
         } catch (IOException connectException) {
             // If impossible to connect, we close the socket and kill the thread
+            Log.v("CLIENT", "impossible to connect");
             try {
                 btSocket.close();
             } catch (IOException closeException) { }
@@ -64,6 +68,7 @@ public class ClientBT extends Thread {
         CommunicationBT comServer = new CommunicationBT(btSocket);
         CommunicationBT comClient = new CommunicationBT(btSocket);
         comClient.start();
+        Log.v("CLIENT", "communication launched");
     }
 
     // Annule toute connexion en cours et tue le thread
