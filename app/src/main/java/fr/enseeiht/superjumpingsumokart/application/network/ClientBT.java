@@ -68,7 +68,7 @@ public class ClientBT extends Thread {
         CommunicationBT comServer = new CommunicationBT(btSocket);
         CommunicationBT comClient = new CommunicationBT(btSocket);
         comClient.start();
-        Log.v("CLIENT", "communication started");
+        Log.v("CLIENT", "communication launched");
     }
 
     // Annule toute connexion en cours et tue le thread
