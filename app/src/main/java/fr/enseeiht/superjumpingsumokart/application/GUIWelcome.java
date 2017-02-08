@@ -187,7 +187,7 @@ public class GUIWelcome extends Activity {
             }
         }
 
-        ClientBT client = new ClientBT(btDevice);
+        ClientBT client = new ClientBT(btDevice,btAdapter);
         client.start();
     }
 

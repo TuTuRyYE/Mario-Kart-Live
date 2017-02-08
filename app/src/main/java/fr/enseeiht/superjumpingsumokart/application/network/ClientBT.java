@@ -21,10 +21,11 @@ public class ClientBT extends Thread {
     private final BluetoothDevice btDevice;
     private BluetoothAdapter btAdapter;
 
-    public ClientBT(BluetoothDevice device) {
+    public ClientBT(BluetoothDevice device, BluetoothAdapter btAdapter) {
         // On utilise un objet temporaire car btSocket et btDevice sont "final"
         BluetoothSocket tmp = null;
         btDevice = device;
+        this.btAdapter = btAdapter;
 
         // If the BT is disconnected, we force it to connect
         if (!btAdapter.isEnabled()) {
