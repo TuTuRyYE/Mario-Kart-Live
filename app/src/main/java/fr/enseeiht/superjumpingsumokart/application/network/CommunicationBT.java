@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothSocket;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 
@@ -12,15 +13,18 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import fr.enseeiht.superjumpingsumokart.application.Game;
+
 /**
  * Created by Lucas on 07/02/2017.
  */
 
 /* Manages the bluetooth communication for an appeared device */
-public class CommunicationBT extends Thread {
+public class CommunicationBT extends Thread implements Serializable {
     private final BluetoothSocket btSocket;
     private InputStream btInputStream;
     private OutputStream btOutputStream;
+    private Game game;
 
     public CommunicationBT(BluetoothSocket socket) {
         btSocket = socket;
@@ -44,9 +48,10 @@ public class CommunicationBT extends Thread {
                 // copy it
                 byte[] data = new byte[bytes];
                 System.arraycopy(buffer, 0, data, 0, bytes);
-                // TODO : take care of the received data
-                String recu = new String(data, Charset.forName("UTF-8"));
-                Log.d("recu", recu);
+
+                String receivedMsg = new String(data, Charset.forName("UTF-8"));
+                Log.d("COMMUNICATIONBT", "Message received");
+                this.game.receiveMessage(receivedMsg);
             } catch (IOException e) {
                 break;
             }
@@ -65,5 +70,9 @@ public class CommunicationBT extends Thread {
         try {
             btSocket.close();
         } catch (IOException e) { }
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 }

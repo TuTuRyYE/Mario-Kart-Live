@@ -23,7 +23,11 @@ public class ServerBT extends Thread {
     private final BluetoothServerSocket btServerSocket;
     private BluetoothAdapter btAdapter;
     private boolean isConnected;
+    private CommunicationBT comServer;
 
+    public CommunicationBT getComServer() {
+        return comServer;
+    }
 
     public boolean isConnected() {
         return isConnected;
@@ -86,8 +90,7 @@ public class ServerBT extends Thread {
         }
 
         // We launch the BT communication threads
-        CommunicationBT comServer = new CommunicationBT(socket);
-        CommunicationBT comClient = new CommunicationBT(socket);
+        this.comServer = new CommunicationBT(socket);
         comServer.start();
         String test = "coucou";
         Log.d("envoieMessage",test.getBytes().toString());

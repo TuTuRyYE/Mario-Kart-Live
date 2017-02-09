@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 import fr.enseeiht.superjumpingsumokart.application.network.ClientBT;
+import fr.enseeiht.superjumpingsumokart.application.network.CommunicationBT;
 import fr.enseeiht.superjumpingsumokart.application.network.ServerBT;
 import fr.enseeiht.superjumpingsumokart.application.network.WifiConnector;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
@@ -59,6 +60,12 @@ public class GUIWelcome extends Activity {
     private List<ARDiscoveryDeviceService> devicesList = new ArrayList<>();
     private BluetoothAdapter btAdapter;
     private BluetoothDevice btDevice;
+    private CommunicationBT com;
+
+    // à déplacer au besoin...
+    public CommunicationBT getCom() {
+        return com;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +134,7 @@ public class GUIWelcome extends Activity {
         if (currentDeviceService != null) {
             Intent i = new Intent(GUIWelcome.this, GUIGame.class);
             i.putExtra("currentDeviceService", currentDeviceService);
+            i.putExtra("bluetoothCommunication", com);
             Log.d(GUI_WELCOME_TAG, "Starting a GUIGame Activity...");
             startActivity(i);
         } else {
@@ -166,6 +174,9 @@ public class GUIWelcome extends Activity {
 
         ServerBT server = new ServerBT(btAdapter);
         server.start();
+        this.com = server.getComServer();
+
+
     }
 
     /**
@@ -189,6 +200,7 @@ public class GUIWelcome extends Activity {
 
         ClientBT client = new ClientBT(btDevice,btAdapter);
         client.start();
+        this.com = client.getComClient();
     }
 
     /**

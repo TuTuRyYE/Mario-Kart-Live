@@ -21,6 +21,11 @@ public class ClientBT extends Thread {
     private final BluetoothDevice btDevice;
     private BluetoothAdapter btAdapter;
     private boolean isConnected;
+    private CommunicationBT comClient;
+
+    public CommunicationBT getComClient() {
+        return comClient;
+    }
 
     public boolean isConnected() {
         return isConnected;
@@ -72,8 +77,7 @@ public class ClientBT extends Thread {
         isConnected = true;
 
         // We launch the BT communication threads
-        CommunicationBT comServer = new CommunicationBT(btSocket);
-        CommunicationBT comClient = new CommunicationBT(btSocket);
+        this.comClient = new CommunicationBT(btSocket);
         comClient.start();
         Log.d("CLIENT", "communication launched");
     }

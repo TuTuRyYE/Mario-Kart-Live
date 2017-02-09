@@ -30,6 +30,7 @@ import fr.enseeiht.superjumpingsumokart.application.GUIWelcome;
 import fr.enseeiht.superjumpingsumokart.application.Game;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
+import fr.enseeiht.superjumpingsumokart.application.network.CommunicationBT;
 import fr.enseeiht.superjumpingsumokart.application.network.WifiConnector;
 
 public class GUIGame extends Activity {
@@ -109,6 +110,10 @@ public class GUIGame extends Activity {
         controller = new DroneController(this, currentDevice);
         Log.d(GUI_GAME_TAG, "Controller of the device created.");
 
+        // Get the BT communication
+        CommunicationBT comBT = (CommunicationBT) getIntent().getExtras().get("bluetoothCommunication");
+
+
         // Initializes the views of the GUI
         turnLeftBtn = (ImageButton) findViewById(R.id.turnLeftBtn);
         turnRightBtn = (ImageButton) findViewById(R.id.turnRightBtn);
@@ -118,9 +123,13 @@ public class GUIGame extends Activity {
         sendTrapBtn = (ImageButton) findViewById(R.id.sendTrapBtn);
         fl = (FrameLayout) findViewById(R.id.guiGameFrameLayout);
 
+
+
         // Creation of the game
-            game = new Game(this);
-            game.start();
+            game = new Game(this,comBT);
+            while(!game.isStarted()){
+
+            }
             // Every players is ready
 
         // Defines action listener

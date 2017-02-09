@@ -10,6 +10,7 @@ import fr.enseeiht.superjumpingsumokart.application.items.Banana;
 import fr.enseeiht.superjumpingsumokart.application.items.Box;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
 import fr.enseeiht.superjumpingsumokart.application.items.MagicBox;
+import fr.enseeiht.superjumpingsumokart.application.network.CommunicationBT;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 
 /**
@@ -41,14 +42,15 @@ public class Game {
      */
     private boolean isStarted;
 
-    // InputStream, OutputStream
+
+    private CommunicationBT comBT;
 
 
     /**
      * Default constructor of the class {@link Game} (Vivian - 07/02/2017).
      * @param guiGame interface of the {@link Game}
      */
-    public Game(GUIGame guiGame) {
+    public Game(GUIGame guiGame, CommunicationBT comBT) {
         this.circuit = createCircuit();
 
 
@@ -61,6 +63,8 @@ public class Game {
         this.currentItems = setMagicBoxes();
         this.guiGame = guiGame;
         this.isStarted = false;
+        this.comBT = comBT;
+        this.comBT.setGame(this);
         Log.d(GAME_TAG, "Game created for drone " + guiGame.getController().getDRONE().getName());
     }
 
@@ -178,12 +182,15 @@ public class Game {
      * Start the {@link Game} (Vivian - 07/02/2017).
      */
     public void start() {
-        Log.d(GAME_TAG, "start fonction called");
+        Log.d(GAME_TAG, "start function called");
         // TODO wait for every player to be ready
-        this.isStarted = true;
+        if (getNumberPlayer() == 1) {
+            this.isStarted =true;
+        }
+        else {
 
-        // wait for every player to be ready
-        this.setStarted(true);
+        }
+
     }
 
     /**
@@ -207,7 +214,26 @@ public class Game {
      * @return number of Player.
      */
     public int getNumberPlayer() {
-        // TODO Return the number of players
-        return 1;
+        int numberOfPlayer;
+        if (comBT != null){
+            numberOfPlayer = 2;
+        }
+        else {
+            numberOfPlayer = 1;
+        }
+        Log.d(GAME_TAG, "Number of players: " + numberOfPlayer);
+        return numberOfPlayer;
     }
+
+    public boolean isReady() {
+        return (this.circuit !=null && !this.isStarted());
+    }
+
+    public void receiveMessage(String msg) {
+        switch (msg) {
+            case msg.equals("lol");
+        }
+
+    }
+
 }
