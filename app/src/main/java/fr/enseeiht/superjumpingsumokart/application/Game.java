@@ -1,9 +1,14 @@
 package fr.enseeiht.superjumpingsumokart.application;
 
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.StringTokenizer;
 import java.util.concurrent.CyclicBarrier;
 
 import fr.enseeiht.superjumpingsumokart.application.items.Banana;
@@ -42,9 +47,82 @@ public class Game {
      */
     private boolean isStarted;
 
+    private boolean otherIsReady;
+
 
     private CommunicationBT comBT;
 
+    public Handler handlerComBT;
+
+    public Handler handlerGame = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            Bundle bundle = msg.getData();
+            byte[] byteReceived = bundle.getByteArray("0");
+            String receivedMsg = new String(byteReceived, Charset.forName("UTF-8"));
+            String[] receivedMsgSplit = receivedMsg.split("/");
+            String key = receivedMsgSplit[0];
+            switch (key) {
+
+                case "item": // the other drone used an item
+                    String name = receivedMsgSplit[1];
+                    switch (name) {
+                        case "banana":
+                            double xBanana = Double.parseDouble(receivedMsgSplit[2]);
+                            double yBanana = Double.parseDouble(receivedMsgSplit[3]);
+                            double zBanana = Double.parseDouble(receivedMsgSplit[4]);
+
+                            Banana banana = new Banana();
+                            banana.setPosition(new Vector3D(xBanana,yBanana,zBanana));
+                            currentItems.add(banana);
+                            break;
+                        case "box" :
+                            double xBox = Double.parseDouble(receivedMsgSplit[2]);
+                            double yBox = Double.parseDouble(receivedMsgSplit[3]);
+                            double zBox = Double.parseDouble(receivedMsgSplit[4]);
+
+                            Box box = new Box();
+                            box.setPosition(new Vector3D(xBox,yBox,zBox));
+                            currentItems.add(box);
+                            break;
+
+                        case "magicbox" :
+                            double xMagicBox = Double.parseDouble(receivedMsgSplit[2]);
+                            double yMagicBox = Double.parseDouble(receivedMsgSplit[3]);
+                            double zMagicBox = Double.parseDouble(receivedMsgSplit[4]);
+
+                            Vector3D position = new Vector3D(xMagicBox,yMagicBox,zMagicBox);
+
+                            boolean found = false;
+                            int ind =0;
+                            Item currentItem;
+                            while( !found && ind<=currentItems.size()) {
+                                currentItem = currentItems.get(ind);
+                                if(currentItem.getPosition().equals(position)) {
+                                    found = true;
+                                    currentItems.remove(ind);
+                                }
+                                else {ind++;};
+                            }
+                            break;
+
+
+                    }
+                case "isReady" : // the other drone is ready to start
+                    otherIsReady = true;
+                    break;
+                case "finished" : // the other drone has finished
+                    String nameFinished = receivedMsgSplit[1];
+                    stop(nameFinished);
+                case "position" : // received the position of the other drone
+                    double xMagicBox = Double.parseDouble(receivedMsgSplit[2]);
+                    double yMagicBox = Double.parseDouble(receivedMsgSplit[3]);
+                    double zMagicBox = Double.parseDouble(receivedMsgSplit[4]);
+            }
+
+
+        }
+    };
 
     /**
      * Default constructor of the class {@link Game} (Vivian - 07/02/2017).
@@ -65,7 +143,12 @@ public class Game {
         this.isStarted = false;
         this.comBT = comBT;
         this.comBT.setGame(this);
+        this.otherIsReady = false;
         Log.d(GAME_TAG, "Game created for drone " + guiGame.getController().getDRONE().getName());
+
+
+        comBT.setHandlerGame(handlerGame);
+
     }
 
     /**
@@ -197,10 +280,12 @@ public class Game {
      * Stop the Game
      * @param controller of the {@link Drone} to notify of the end of the race (Vivian - 07/02/2017).
      */
-    public void stop(DroneController controller){
+    public void stop(String nameFinished){
         Log.d(GAME_TAG, "stop fonction called");
         // Stop the drone
-            controller.stopMotion();
+            guiGame.getController().stopMotion();
+
+        // Say the name of the winner
 
         // TODO Send to each player a message saying that the game in finished
 
@@ -229,14 +314,8 @@ public class Game {
         return (this.circuit !=null && !this.isStarted());
     }
 
-    public void receiveMessage(String msg) {
-        switch (msg) {
-            case "lol" :
-                break;
-            case "mdr" :
-                break;
-        }
 
+    public void setHandlerComBT(Handler handlerComBT) {
+        this.handlerComBT = handlerComBT;
     }
-
 }

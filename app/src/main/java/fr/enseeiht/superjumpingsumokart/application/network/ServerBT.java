@@ -3,17 +3,10 @@ package fr.enseeiht.superjumpingsumokart.application.network;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.UUID;
-
-import static android.net.Uri.decode;
 
 /**
  * Created by Lucas on 07/02/2017.
@@ -90,7 +83,7 @@ public class ServerBT extends Thread {
         }
 
         // We launch the BT communication threads
-        this.comServer = new CommunicationBT(socket);
+        this.comServer = new CommunicationBT(socket, handlergame);
         comServer.start();
         String test = "coucou";
         Log.d("envoieMessage",test.getBytes().toString());

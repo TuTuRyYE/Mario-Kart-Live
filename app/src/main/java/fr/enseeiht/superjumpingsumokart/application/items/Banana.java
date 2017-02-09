@@ -19,6 +19,7 @@ public class Banana extends Item {
      */
     public Banana () {
         super(NAME);
+        
     }
 
     @Override

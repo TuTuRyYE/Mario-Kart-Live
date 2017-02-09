@@ -25,6 +25,8 @@ public class CommunicationBT extends Thread implements Serializable {
     private InputStream btInputStream;
     private OutputStream btOutputStream;
     private Game game;
+    private Handler handlerGame;
+
 
     public CommunicationBT(BluetoothSocket socket) {
         btSocket = socket;
@@ -40,6 +42,7 @@ public class CommunicationBT extends Thread implements Serializable {
         byte[] buffer = new byte[1024];
         int bytes;
 
+
         // Permanent listening on the inputstream
         while (true) {
             try {
@@ -51,7 +54,14 @@ public class CommunicationBT extends Thread implements Serializable {
 
                 String receivedMsg = new String(data, Charset.forName("UTF-8"));
                 Log.d("COMMUNICATIONBT", "Message received");
-                this.game.receiveMessage(receivedMsg);
+                //Create message
+                Message mes = new Message();
+                //Create bundle
+                Bundle bundle = new Bundle();
+                bundle.putByteArray("0", data);
+                mes.setData(bundle);
+                handlerGame.sendMessage(mes);
+
             } catch (IOException e) {
                 break;
             }
@@ -74,5 +84,9 @@ public class CommunicationBT extends Thread implements Serializable {
 
     public void setGame(Game game) {
         this.game = game;
+    }
+
+    public void setHandlerGame(Handler handlerGame) {
+        this.handlerGame = handlerGame;
     }
 }

@@ -3,11 +3,7 @@ package fr.enseeiht.superjumpingsumokart.application.network;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -77,7 +73,7 @@ public class ClientBT extends Thread {
         isConnected = true;
 
         // We launch the BT communication threads
-        this.comClient = new CommunicationBT(btSocket);
+        this.comClient = new CommunicationBT(btSocket, handlergame);
         comClient.start();
         Log.d("CLIENT", "communication launched");
     }
