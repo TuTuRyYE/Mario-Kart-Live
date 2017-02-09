@@ -73,7 +73,7 @@ public class ClientBT extends Thread {
         isConnected = true;
 
         // We launch the BT communication threads
-        this.comClient = new CommunicationBT(btSocket, handlergame);
+        this.comClient = new CommunicationBT(btSocket);
         comClient.start();
         Log.d("CLIENT", "communication launched");
     }

@@ -266,7 +266,7 @@ public class GUIGame extends Activity {
         UPDATER.sendEmptyMessage(UPDATE_BACKGROUND);
 
         if (this.isFinished()) {
-            game.stop(controller); // Send to each drone the name of the winner
+            game.stop(controller.getDRONE().getName()); // Send to each drone the name of the winner
             Toast.makeText(GUIGame.this, "Congratulisation" + controller.getDRONE().getName() + ", you've won !", Toast.LENGTH_SHORT).show(); // Inform the player that he has won
         }
     }
