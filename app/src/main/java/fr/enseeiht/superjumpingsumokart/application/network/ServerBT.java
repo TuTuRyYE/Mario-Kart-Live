@@ -82,6 +82,8 @@ public class ServerBT extends Thread {
         CommunicationBT comServer = new CommunicationBT(socket);
         CommunicationBT comClient = new CommunicationBT(socket);
         comServer.start();
+        String test = "coucou";
+        comServer.write(test.getBytes());
         Log.v("SERVER", "communication launched");
 
 

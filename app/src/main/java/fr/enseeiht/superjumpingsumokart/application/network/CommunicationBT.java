@@ -43,6 +43,7 @@ public class CommunicationBT extends Thread {
                 byte[] data = new byte[bytes];
                 System.arraycopy(buffer, 0, data, 0, bytes);
                 // TODO : take care of the received data
+                Log.d("recu",data.toString());
             } catch (IOException e) {
                 break;
             }
