@@ -4,6 +4,8 @@ import android.bluetooth.BluetoothSocket;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
+import java.util.Arrays;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -43,7 +45,8 @@ public class CommunicationBT extends Thread {
                 byte[] data = new byte[bytes];
                 System.arraycopy(buffer, 0, data, 0, bytes);
                 // TODO : take care of the received data
-                Log.d("recu",data.toString());
+                String recu = new String(data, Charset.forName("UTF-8"));
+                Log.d("recu", recu);
             } catch (IOException e) {
                 break;
             }

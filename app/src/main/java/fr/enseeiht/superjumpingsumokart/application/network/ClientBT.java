@@ -20,12 +20,14 @@ public class ClientBT extends Thread {
     private BluetoothSocket btSocket;
     private final BluetoothDevice btDevice;
     private BluetoothAdapter btAdapter;
+    private boolean isConnected;
 
     public ClientBT(BluetoothDevice device, BluetoothAdapter btAdapter) {
         // On utilise un objet temporaire car btSocket et btDevice sont "final"
         BluetoothSocket tmp = null;
         btDevice = device;
         this.btAdapter = btAdapter;
+        isConnected = false;
 
         // If the BT is disconnected, we force it to connect
         if (!btAdapter.isEnabled()) {
@@ -63,6 +65,7 @@ public class ClientBT extends Thread {
             } catch (Exception e) { }
             return;
         }
+        isConnected = true;
 
         // We launch the BT communication threads
         CommunicationBT comServer = new CommunicationBT(btSocket);
