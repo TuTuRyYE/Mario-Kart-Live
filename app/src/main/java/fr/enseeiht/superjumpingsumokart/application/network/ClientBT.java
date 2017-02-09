@@ -22,6 +22,10 @@ public class ClientBT extends Thread {
     private BluetoothAdapter btAdapter;
     private boolean isConnected;
 
+    public boolean isConnected() {
+        return isConnected;
+    }
+
     public ClientBT(BluetoothDevice device, BluetoothAdapter btAdapter) {
         // On utilise un objet temporaire car btSocket et btDevice sont "final"
         BluetoothSocket tmp = null;

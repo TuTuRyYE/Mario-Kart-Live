@@ -25,11 +25,16 @@ public class ServerBT extends Thread {
     private boolean isConnected;
 
 
+    public boolean isConnected() {
+        return isConnected;
+    }
+
     public ServerBT(BluetoothAdapter BA) {
         BluetoothServerSocket tmp;
         tmp = null;
         btAdapter = BA;
         isConnected = false;
+
 
         // If the BT is disconnected, we force it to connect
         if (!btAdapter.isEnabled()) {
