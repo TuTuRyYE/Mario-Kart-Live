@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.UUID;
 
+import static android.net.Uri.decode;
+
 /**
  * Created by Lucas on 07/02/2017.
  */
@@ -83,6 +85,7 @@ public class ServerBT extends Thread {
         CommunicationBT comClient = new CommunicationBT(socket);
         comServer.start();
         String test = "coucou";
+        Log.d("envoieMessage",test.getBytes().toString());
         comServer.write(test.getBytes());
         Log.v("SERVER", "communication launched");
 
