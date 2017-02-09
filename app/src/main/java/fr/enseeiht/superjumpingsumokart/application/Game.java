@@ -231,7 +231,10 @@ public class Game {
 
     public void receiveMessage(String msg) {
         switch (msg) {
-            case msg.equals("lol");
+            case "lol" :
+                break;
+            case "mdr" :
+                break;
         }
 
     }
