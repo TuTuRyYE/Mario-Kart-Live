@@ -1,9 +1,12 @@
 package fr.enseeiht.superjumpingsumokart.arpack;
 
+import android.util.Log;
+
 import org.artoolkit.ar.base.ARToolKit;
 import org.artoolkit.ar.base.rendering.ARRenderer;
 import org.artoolkit.ar.base.rendering.Cube;
 
+import javax.microedition.khronos.opengles.GL;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
@@ -11,6 +14,8 @@ import javax.microedition.khronos.opengles.GL10;
  */
 
 public class ItemRenderer extends ARRenderer {
+
+    private final static String ITEM_RENDERER_TAG = "ItemRenderer";
 
     private int markerID = -1;
     private Cube cube = new Cube(40.0f, 0.0f, 0.0f, 20.0f);
@@ -22,11 +27,19 @@ public class ItemRenderer extends ARRenderer {
      */
     @Override
     public boolean configureARScene() {
-
+        Log.d(ITEM_RENDERER_TAG, "configureARScene() called.");
         markerID = ARToolKit.getInstance().addMarker("single;Data/hiro.patt;80");
         if (markerID < 0) return false;
-
         return true;
+    }
+
+    @Override
+    public void onDrawFrame(GL10 gl) {
+        if (ARToolKit.getInstance().getProjectionMatrix() != null){
+            super.onDrawFrame(gl);
+            Log.d(ITEM_RENDERER_TAG, "onDrawFrame() called.");
+            draw(gl);
+        }
     }
 
     /**
@@ -34,6 +47,8 @@ public class ItemRenderer extends ARRenderer {
      */
     @Override
     public void draw(GL10 gl) {
+
+        Log.d(ITEM_RENDERER_TAG, "draw() function called.");
 
         gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 

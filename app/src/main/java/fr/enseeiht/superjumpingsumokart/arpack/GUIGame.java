@@ -1,6 +1,7 @@
 package fr.enseeiht.superjumpingsumokart.arpack;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -20,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.parrot.arsdk.arcontroller.ARFrame;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDevice;
@@ -27,18 +29,22 @@ import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
 
 import org.artoolkit.ar.base.ARToolKit;
 import org.artoolkit.ar.base.AndroidUtils;
-import org.artoolkit.ar.base.assets.AssetHelper;
 
 import java.io.ByteArrayInputStream;
 
 import fr.enseeiht.superjumpingsumokart.R;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
+import fr.enseeiht.superjumpingsumokart.application.GUIWelcome;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
 import fr.enseeiht.superjumpingsumokart.application.network.WifiConnector;
 
 
 
 public class GUIGame extends Activity {
+
+    final static int VIDEO_WIDTH = 640;
+    final static int VIDEO_HEIGHT = 480;
+
     /**
      * The logging tag. Useful for debugging.
      */
@@ -47,35 +53,47 @@ public class GUIGame extends Activity {
     /**
      * Message for the {@link Handler} of the {@link GUIGame} activity.
      */
-    final static int UPDATE_CAMERA_SURFACE_VIEW = 0;
-    final static int UPDATE_ITEM_ICON = 1;
-    final static int PROCESS_CAMERA_STREAM = 2;
-    final static int RENDER_AR = 3;
+    public final static int RECEIVE_FRAME = 0;
+    public final static int UPDATE_ITEM_ICON = 1;
+    public final static int PROCESS_CAMERA_STREAM = 2;
+    public final static int RENDER_AR = 3;
+    public final static int CONTROLLER_STOPPING = 4;
 
     /**
      * Handler to update GUI.
      */
-    final Handler UPDATER = new Handler() {
+    public final Handler UPDATER = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case UPDATE_CAMERA_SURFACE_VIEW:
-                    updateCameraSurfaceView();
+                case RECEIVE_FRAME:
+                    new DetectionTask(GUIGame.this).execute(currentFrame);
+                    break;
+                case PROCESS_CAMERA_STREAM :
+                    Bitmap currentFrameToDisplay = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(new ByteArrayInputStream(currentFrame)), getDisplayWidth(), getDisplayHeight(), true);
+                    updateCameraSurfaceView(currentFrameToDisplay);
                     break;
                 case UPDATE_ITEM_ICON :
                     displayTrap();
                     break;
-                case PROCESS_CAMERA_STREAM :
-                    (new DetectionTask(GUIGame.this)).execute(currentFrame);
+                case CONTROLLER_STOPPING :
+//                    Toast.makeText(GUIGame.this, "Loosing controller connection", Toast.LENGTH_LONG).show();
+//                    try {
+//                        wait();
+//                    } catch (InterruptedException e) {
+//                        Log.d(GUI_GAME_TAG, "Interrupted exception : " + e.getMessage());
+//                    }
+//                    startActivity(new Intent(GUIGame.this, GUIWelcome.class));
                     break;
                 case RENDER_AR :
-                    glView.requestRender();
-                    break;
+                    renderAR();
                 default :
                     break;
             }
         }
     };
+
+    DetectionTask detectionTask = new DetectionTask(GUIGame.this);
 
     /**
      * The controller that dispatches commands from the user to the device.
@@ -94,13 +112,14 @@ public class GUIGame extends Activity {
     private ImageButton sendTrapBtn;
     private ImageButton jumpBtn;
 
+    private boolean firstUpdate = true, cameraViewAvailable = false;
+
 
     /**
      * The area to display the video stream from the device.
      */
     private RelativeLayout mainLayout;
     private SurfaceView cameraView;
-    private boolean cameraViewAvailable = false;
     private GLSurfaceView glView;
     private ItemRenderer renderer;
 
@@ -112,9 +131,7 @@ public class GUIGame extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gui_game);
 
-
-
-        // Bind with the drone and creates its controller
+        // Binds with the drone and creates its controller
         ARDiscoveryDeviceService currentDeviceService = (ARDiscoveryDeviceService) getIntent().getExtras().get("currentDeviceService");
         Log.d(GUI_GAME_TAG, "Got device service from activity GUIWelcome...");
         ARDiscoveryDevice currentDevice = WifiConnector.createDevice(currentDeviceService);
@@ -122,17 +139,16 @@ public class GUIGame extends Activity {
         controller = new DroneController(this, currentDevice);
         Log.d(GUI_GAME_TAG, "Controller of the device created.");
 
-        //transparent background//jorge
+        // Sets some graphical settings;
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        mainLayout = (RelativeLayout) findViewById(R.id.mainLayout);
 
-
-        // Enables graphic events logging
+        // Logs information about the displaying screen
         AndroidUtils.reportDisplayInformation(this);
 
         // Initializes the views of the GUI
+        mainLayout = (RelativeLayout) findViewById(R.id.mainLayout);
         turnLeftBtn = (ImageButton) findViewById(R.id.turnLeftBtn);
         turnRightBtn = (ImageButton) findViewById(R.id.turnRightBtn);
         moveBackwardBtn = (ImageButton) findViewById(R.id.moveBackwardBtn);
@@ -146,11 +162,11 @@ public class GUIGame extends Activity {
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        Log.d(GUI_GAME_TAG, "turn left pressed");
+                        Log.d(GUI_GAME_TAG, "Turn left pressed");
                         controller.turnLeft();
                         break;
                     case MotionEvent.ACTION_UP:
-                        Log.d(GUI_GAME_TAG, "turn left released");
+                        Log.d(GUI_GAME_TAG, "Turn left released");
                         controller.stopRotation();
                         break;
                 }
@@ -162,11 +178,11 @@ public class GUIGame extends Activity {
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        Log.d(GUI_GAME_TAG, "turn right pressed");
+                        Log.d(GUI_GAME_TAG, "Turn right pressed");
                         controller.turnRight();
                         break;
                     case MotionEvent.ACTION_UP:
-                        Log.d(GUI_GAME_TAG, "turn right released");
+                        Log.d(GUI_GAME_TAG, "Turn right released");
                         controller.stopRotation();
                         break;
                 }
@@ -178,11 +194,11 @@ public class GUIGame extends Activity {
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        Log.d(GUI_GAME_TAG, "move forward pressed");
+                        Log.d(GUI_GAME_TAG, "Move forward pressed.");
                         controller.moveForward();
                         break;
                     case MotionEvent.ACTION_UP:
-                        Log.d(GUI_GAME_TAG, "move forward released");
+                        Log.d(GUI_GAME_TAG, "Move forward released.");
                         controller.stopMotion();
                         break;
                 }
@@ -194,11 +210,11 @@ public class GUIGame extends Activity {
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        Log.d(GUI_GAME_TAG, "move backward pressed");
+                        Log.d(GUI_GAME_TAG, "Move backward pressed.");
                         controller.moveBackward();
                         break;
                     case MotionEvent.ACTION_UP:
-                        Log.d(GUI_GAME_TAG, "move backward released");
+                        Log.d(GUI_GAME_TAG, "Move backward released.");
                         controller.stopMotion();
                         break;
                 }
@@ -208,22 +224,25 @@ public class GUIGame extends Activity {
         sendTrapBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(GUI_GAME_TAG, "use item pressed");
+                Log.d(GUI_GAME_TAG, "Use item pressed.");
                 controller.useItem();
             }
         });
-        jumpBtn.setOnTouchListener( new View.OnTouchListener() {
+        jumpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        Log.d(GUI_GAME_TAG, "jump pressed");
-                        controller.jump();
-                        break;
-                }
-                return true;
+            public void onClick(View v) {
+                Log.d(GUI_GAME_TAG, "Jump pressed.");
+                controller.jump();
             }
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (! ARToolKit.getInstance().nativeInitialised()) {
+            ARToolKit.getInstance().initialiseNative(getCacheDir().getAbsolutePath());
+        }
     }
 
     @Override
@@ -233,18 +252,22 @@ public class GUIGame extends Activity {
         controller.startController();
         initCameraSurfaceView();
         initGLSurfaceView();
+        ARToolKit.getInstance().initialiseAR(VIDEO_WIDTH, VIDEO_HEIGHT, "Data/camera_para.dat", 0, false);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        if (glView != null) {
+            glView.onPause();
+        }
+        mainLayout.removeView(glView);
     }
 
     @Override
     public void onStop() {
+        cleanup();
         super.onStop();
-        controller.stopController();
-        cameraView.getHolder().getSurface().release();
     }
 
     @Override
@@ -264,21 +287,37 @@ public class GUIGame extends Activity {
      * Method called by {@link #UPDATER} to refresh the view of the GUI and update the displayed
      * frame from the video stream of the device (Romain Verset - 01/02/2017).
      */
-    private void updateCameraSurfaceView() {
-        ByteArrayInputStream ins = new ByteArrayInputStream(currentFrame);
-        Bitmap currentFrameBmp = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(ins), cameraView.getWidth(), cameraView.getHeight(), true);
-        Canvas canvas = cameraView.getHolder().lockCanvas();
-        canvas.drawBitmap(currentFrameBmp, 0, 0, null);
-        cameraView.getHolder().unlockCanvasAndPost(canvas);
+    public void updateCameraSurfaceView(Bitmap frameToDraw) {
+        if (cameraViewAvailable) {
+            Canvas canvas = cameraView.getHolder().lockCanvas();
+            canvas.drawBitmap(frameToDraw, 0, 0, null);
+            cameraView.getHolder().unlockCanvasAndPost(canvas);
+        }
     }
 
+    public void renderAR() {
+        if (ARToolKit.getInstance().getProjectionMatrix() == null) {
+            Log.d(GUI_GAME_TAG, "GET_PROJECTION_MATRIX NULL !");
+        } else {
+            Log.d(GUI_GAME_TAG, " YOLOOOOOOOOO ! (NULL)");
+
+        }
+        if (glView != null && renderer != null && ARToolKit.getInstance().getProjectionMatrix() != null) {
+            Log.d(GUI_GAME_TAG, "renderAR() called.");
+            glView.requestRender();
+        }
+    }
+
+    /**
+     * TODO
+     */
     private void initCameraSurfaceView(){
         cameraView = (SurfaceView) findViewById(R.id.cameraSurfaceView);
         cameraView.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
-                Log.d(GUI_GAME_TAG, "Camera surface view created, ready to display.");
                 cameraViewAvailable = true;
+                Log.d(GUI_GAME_TAG, "Camera surface view created, ready to display.");
             }
 
             @Override
@@ -288,14 +327,14 @@ public class GUIGame extends Activity {
 
             @Override
             public void surfaceDestroyed(SurfaceHolder holder) {
-                Log.d(GUI_GAME_TAG, "Camera surface view destroyed.");
                 cameraViewAvailable = false;
+                Log.d(GUI_GAME_TAG, "Camera surface view destroyed.");
             }
         });
     }
 
     /**
-     *
+     * TODO
      */
     private void initGLSurfaceView(){
         // Create the GL view
@@ -306,19 +345,44 @@ public class GUIGame extends Activity {
         glView.setRenderer(renderer);
         glView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         glView.setZOrderMediaOverlay(true); // Request that GL view's SurfaceView be on top of other SurfaceViews (including CameraPreview's SurfaceView).
-        mainLayout.addView(glView, 1, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
+        mainLayout.addView(glView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        if(glView != null) {
+            glView.onResume();
+        }
+    }
+
+    /**
+     * TODO
+     */
+    private void cleanup() {
+        cameraView.getHolder().getSurface().release();
+        glView.getHolder().getSurface().release();
+        mainLayout.removeView(cameraView);
+        mainLayout.removeView(glView);
+        ARToolKit.getInstance().cleanup();
     }
 
     /**
      * Method used by {@link #controller} to send the current frame of its video stream to the GUI (Romain Verset - 01/02/2017).
      * @param frame The frame received from the device
      */
-    public void setCurrentFrame(ARFrame frame) {
-        currentFrame = frame.getByteData();
-        if (cameraViewAvailable) {
-            UPDATER.sendEmptyMessage(PROCESS_CAMERA_STREAM);
-            UPDATER.sendEmptyMessage(UPDATE_CAMERA_SURFACE_VIEW);
+    public void receiveFrame(ARFrame frame) {
+        if (firstUpdate) {
+            renderer.configureARScene();
+            firstUpdate = false;
         }
+        currentFrame = frame.getByteData();
+        UPDATER.sendEmptyMessage(RECEIVE_FRAME);
+//        UPDATER.sendEmptyMessage(PROCESS_CAMERA_STREAM);
         UPDATER.sendEmptyMessage(UPDATE_ITEM_ICON);
     }
+
+    public int getDisplayWidth() {
+        return cameraView.getWidth();
+    }
+
+    public int getDisplayHeight() {
+        return cameraView.getHeight();
+    }
+
 }

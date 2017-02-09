@@ -3,6 +3,8 @@ package fr.enseeiht.superjumpingsumokart.application;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +16,7 @@ import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
 
 import org.artoolkit.ar.base.NativeInterface;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,10 +32,32 @@ import fr.enseeiht.superjumpingsumokart.R;
  */
 public class GUIWelcome extends Activity {
 
-    // Static block to load libraries (ARToolkit + ParrotSDK3)
+    public final static int DEVICE_SERVICE_CONNECTED = 0;
+    public final static int DEVICE_SERVICE_DISCONNECTED = 1;
+
+    public final Handler GUIWELCOME_HANDLER = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case DEVICE_SERVICE_CONNECTED :
+                    enableWifiConnectionBtn();
+                    if (msg.obj instanceof List) {
+                        devicesList = (List<ARDiscoveryDeviceService>) msg.obj;
+                    } else {
+                        Log.d(GUI_WELCOME_TAG, "Object in msg can not be cast in List<ARDiscoveryDeviceService>");
+                    }
+                    break;
+                case DEVICE_SERVICE_DISCONNECTED :
+                    disableWifiConnectionBtn();
+                default :
+                    break;
+            }
+        }
+    };
+
+    // Static block to load libraries ParrotSDK3
     static {
         ARSDK.loadSDKLibs();
-        NativeInterface.loadNativeLibrary();
     }
 
     /**
@@ -103,6 +128,12 @@ public class GUIWelcome extends Activity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        disableWifiConnectionBtn();
+    }
+
     /**
      * Switch the current {@link GUIWelcome} {@link android.app.Activity} for a {@link GUIGame} {@link android.app.Activity} (Romain Verset - 31/01/2017).
      * This switch requires to have a drone connected with the application.
@@ -111,7 +142,7 @@ public class GUIWelcome extends Activity {
         if (currentDeviceService != null) {
             Intent i = new Intent(GUIWelcome.this, GUIGame.class);
             i.putExtra("currentDeviceService", currentDeviceService);
-            Log.d(GUI_WELCOME_TAG, "Starting a GUIGame Activity...");
+            Log.d(GUI_WELCOME_TAG, "Launching a GUIGame Activity...");
             startActivity(i);
         } else {
             Toast.makeText(GUIWelcome.this, R.string.no_drone_connected, Toast.LENGTH_SHORT).show();
@@ -131,7 +162,6 @@ public class GUIWelcome extends Activity {
                 Log.d(GUI_WELCOME_TAG, "Device service unbound from the application : " + currentDeviceService.toString());
                 currentDeviceService = null;
             }
-
         } catch (NullPointerException npe) {
             Log.d(GUI_WELCOME_TAG, "Unable to bind the device service");
         }
@@ -169,17 +199,9 @@ public class GUIWelcome extends Activity {
     }
 
     /**
-     * Updates the list of available devices (Romain Verset - 31/01/2017).
-     * @param devicesList The new list of availables devices.
-     */
-    public void setDevicesList(List<ARDiscoveryDeviceService> devicesList) {
-        this.devicesList = devicesList;
-    }
-
-    /**
      * Disable the WIFI connection button (Romain Verset - 31/01/2017).
      */
-    public void disableWifiConnectionBtn() {
+    private void disableWifiConnectionBtn() {
         wifiConnectionBtn.setEnabled(false);
         wifiConnectionBtn.setChecked(false);
     }
@@ -187,7 +209,7 @@ public class GUIWelcome extends Activity {
     /**
      * Enable the WIFI connection button (Romain Verset - 31/01/2017).
      */
-    public void enableWifiConnectionBtn() {
+    private void enableWifiConnectionBtn() {
         wifiConnectionBtn.setEnabled(true);
     }
 

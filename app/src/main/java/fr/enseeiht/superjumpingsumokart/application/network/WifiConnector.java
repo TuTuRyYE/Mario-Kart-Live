@@ -5,7 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Message;
+import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -55,11 +58,6 @@ public class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedRecei
      * The receiver for notification about available devices.
      */
     private ARDiscoveryServicesDevicesListUpdatedReceiver discoveryServiceDeviceListUpdateReceiver;
-
-    /**
-     * The list of all available devices.
-     */
-    private List<ARDiscoveryDeviceService> devicesList = new ArrayList<>();
 
     private boolean hasStarted = false;
 
@@ -191,16 +189,18 @@ public class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedRecei
     }
 
     /** Describes the action to do when there is an update in the available devices list.
-     *  When a device is available, unlocks the "Connect" button in {@link GUIWelcome}. */
+     * Here send a message to the {@link GUIWelcome} handler. {@link GUIWelcome}. */
     @Override
     public void onServicesDevicesListUpdated() {
-        devicesList = discoveryService.getDeviceServicesArray();
+        List<ARDiscoveryDeviceService> devicesList = discoveryService.getDeviceServicesArray();
+        Message msg = new Message();
         if (devicesList != null && devicesList.size() > 0) {
-            ((GUIWelcome) APP_CONTEXT).setDevicesList(devicesList);
-            ((GUIWelcome) APP_CONTEXT).enableWifiConnectionBtn();
-            Log.d(WIFI_CONNECTOR_TAG, "Devices list updated : " + devicesList.size() + " devices available.");
+            msg.what = GUIWelcome.DEVICE_SERVICE_CONNECTED;
+            msg.obj = devicesList;
         } else {
-            ((GUIWelcome) APP_CONTEXT).disableWifiConnectionBtn();
+            msg.what = GUIWelcome.DEVICE_SERVICE_DISCONNECTED;
         }
+        Log.d(WIFI_CONNECTOR_TAG, "Devices list updated : " + devicesList.size() + " devices available.");
+        ((GUIWelcome) APP_CONTEXT).GUIWELCOME_HANDLER.sendMessage(msg);
     }
 }

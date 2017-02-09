@@ -1,8 +1,9 @@
 package fr.enseeiht.superjumpingsumokart.application;
 
+import android.os.Bundle;
+import android.os.Message;
 import android.util.Log;
 
-import com.parrot.arsdk.arcommands.ARCOMMANDS_COMMON_ANIMATIONS_STARTANIMATION_ANIM_ENUM;
 import com.parrot.arsdk.arcommands.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM;
 import com.parrot.arsdk.arcontroller.*;
 import com.parrot.arsdk.ardiscovery.*;
@@ -32,6 +33,8 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
      * Graphic user interface of the game, this is the interface displayed during a race.
      */
     private final GUIGame GUI_GAME;
+
+    private static  long fps_count = 0;
 
     /**
      * Controller associated to the device.
@@ -98,7 +101,6 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
         if (deviceController != null && running) {
             Log.d(DRONE_CONTROLLER_TAG, "MOVE BACKWARD order received !");
             deviceController.getFeatureJumpingSumo().setPilotingPCMDSpeed(NEG_SLOW_SPEED);
-            deviceController.getFeatureCommon().sendAnimationsStartAnimation(ARCOMMANDS_COMMON_ANIMATIONS_STARTANIMATION_ANIM_ENUM.ARCOMMANDS_COMMON_ANIMATIONS_STARTANIMATION_ANIM_HEADLIGHTS_OSCILLATION);
         }
     }
 
@@ -214,6 +216,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
             case ARCONTROLLER_DEVICE_STATE_STOPPING :
                 deviceController.getFeatureJumpingSumo().sendMediaStreamingVideoEnable((byte) 0);
                 deviceController.getFeatureJumpingSumo().setPilotingPCMDFlag((byte) 0);
+                //GUI_GAME.UPDATER.sendEmptyMessage(GUIGame.CONTROLLER_STOPPING);
                 running = false;
                 break;
             case ARCONTROLLER_DEVICE_STATE_PAUSED :
@@ -222,6 +225,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
             case ARCONTROLLER_DEVICE_STATE_STOPPED :
                 started = false;
                 running = false;
+                //GUI_GAME.notify();
                 break;
             default:
                 break;
@@ -253,10 +257,14 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
      */
     @Override
     public ARCONTROLLER_ERROR_ENUM onFrameReceived(ARDeviceController deviceController, ARFrame frame) {
-        if (!frame.isIFrame()) {
-            return ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_ERROR_STREAM;
+        fps_count++;
+        if (fps_count%2 == 0) {
+            if (!frame.isIFrame()) {
+                return ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_ERROR_STREAM;
+            }
+            GUI_GAME.receiveFrame(frame);
+            fps_count = 0;
         }
-        GUI_GAME.setCurrentFrame(frame);
         return ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_OK;
     }
 
