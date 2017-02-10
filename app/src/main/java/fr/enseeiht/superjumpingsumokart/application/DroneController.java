@@ -1,5 +1,7 @@
 package fr.enseeiht.superjumpingsumokart.application;
 
+import android.os.Bundle;
+import android.os.Message;
 import android.util.Log;
 
 import com.parrot.arsdk.arcommands.ARCOMMANDS_COMMON_ANIMATIONS_STARTANIMATION_ANIM_ENUM;
@@ -12,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 import fr.enseeiht.superjumpingsumokart.application.items.TestItem;
+import fr.enseeiht.superjumpingsumokart.application.network.CommunicationBT;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 
 /**
@@ -152,6 +155,31 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
         if (deviceController != null && running) {
             Log.d(DRONE_CONTROLLER_TAG, "USE ITEM order received !");
             DRONE.getCurrentItem().applyEffect(this, null);
+            DRONE.getCurrentItem().setPosition(DRONE.getCurrentPosition());
+
+            // Transmit the information to the other player if he exists
+                // Get the instance of the communicationBT object
+                CommunicationBT comBT = CommunicationBT.getInstance();
+                if (comBT != null) {
+
+                    // Create the message to send
+                    Message msg = new Message();
+                    String message = "item/" + DRONE.getCurrentItem().getName() + "/" + DRONE.getCurrentItem().getPosition().getX() + "/" + DRONE.getCurrentItem().getPosition().getY() + "/" + DRONE.getCurrentItem().getPosition().getZ();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("0", message);
+                    msg.setData(bundle);
+
+                    // Transmit the message to communicationBT
+                    comBT.getHandlerComBT().handleMessage(msg);
+                }
+
+            // Transmit the information to the game
+                String nameItem = DRONE.getCurrentItem().getName();
+                if (nameItem.equals("banana") || nameItem.equals("box") ) {
+                    this.GUI_GAME.getGame().addItem(DRONE.getCurrentItem());
+                }
+
+
         }
     }
 
@@ -200,7 +228,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
      */
 
     public boolean isFinished(){
-        ArrayList<Integer> markersSeen = this.getDRONE().getMarkersSeen();
+      /*  ArrayList<Integer> markersSeen = this.getDRONE().getMarkersSeen();
         Boolean result = false;
         if (!markersSeen.isEmpty()) {
             if ((markersSeen.get(markersSeen.size() - 1) == -1) || (markersSeen.get(markersSeen.size() - 1) == -2)) { // if the last marker is on the finished lane
@@ -217,7 +245,8 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
                 }
             }
         }
-
+*/
+        boolean result =true;
         return result;
     }
 

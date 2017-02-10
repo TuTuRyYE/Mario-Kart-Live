@@ -50,8 +50,6 @@ public class Game {
     private boolean otherIsReady;
 
 
-    private CommunicationBT comBT;
-
     public Handler handlerComBT;
 
     public Handler handlerGame = new Handler() {
@@ -60,6 +58,7 @@ public class Game {
             Bundle bundle = msg.getData();
             byte[] byteReceived = bundle.getByteArray("0");
             String receivedMsg = new String(byteReceived, Charset.forName("UTF-8"));
+            Log.d(GAME_TAG, receivedMsg);
             String[] receivedMsgSplit = receivedMsg.split("/");
             String key = receivedMsgSplit[0];
             switch (key) {
@@ -128,7 +127,7 @@ public class Game {
      * Default constructor of the class {@link Game} (Vivian - 07/02/2017).
      * @param guiGame interface of the {@link Game}
      */
-    public Game(GUIGame guiGame, CommunicationBT comBT) {
+    public Game(GUIGame guiGame) {
         this.circuit = createCircuit();
 
 
@@ -141,14 +140,14 @@ public class Game {
         this.currentItems = setMagicBoxes();
         this.guiGame = guiGame;
         this.isStarted = false;
-        this.comBT = comBT;
-        this.comBT.setGame(this);
         this.otherIsReady = false;
         Log.d(GAME_TAG, "Game created for drone " + guiGame.getController().getDRONE().getName());
 
-
-        comBT.setHandlerGame(handlerGame);
-
+        CommunicationBT comBT = CommunicationBT.getInstance();
+        Log.d(GAME_TAG,"instace recup");
+        if (comBT != null) {
+            comBT.setHandlerGame(handlerGame);
+        }
     }
 
     /**
@@ -240,6 +239,10 @@ public class Game {
         this.currentItems = currentItems;
     }
 
+    public void addItem(Item it) {
+        this.currentItems.add(it);
+    }
+
     /**
      * Check if the current status of the {@link Game} (Vivian - 07/02/2017).
      * @return true if the {@link Game} if started otherwise false.
@@ -278,7 +281,7 @@ public class Game {
 
     /**
      * Stop the Game
-     * @param controller of the {@link Drone} to notify of the end of the race (Vivian - 07/02/2017).
+     * @param String the name of winner drone (Vivian - 07/02/2017).
      */
     public void stop(String nameFinished){
         Log.d(GAME_TAG, "stop fonction called");
@@ -300,7 +303,7 @@ public class Game {
      */
     public int getNumberPlayer() {
         int numberOfPlayer;
-        if (comBT != null){
+        if (CommunicationBT.getInstance() != null){
             numberOfPlayer = 2;
         }
         else {

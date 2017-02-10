@@ -27,8 +27,19 @@ public class CommunicationBT extends Thread implements Serializable {
     private Game game;
     private Handler handlerGame;
 
+    private static CommunicationBT comBTInstance;
 
-    public CommunicationBT(BluetoothSocket socket) {
+    public Handler handlerComBT = new Handler(){
+        @Override
+        public void handleMessage (Message msg) {
+            Bundle bundle = msg.getData();
+            byte[] byteMsg = bundle.getByteArray("0");
+            comBTInstance.write(byteMsg);
+        }
+    };
+
+
+    private CommunicationBT(BluetoothSocket socket) {
         btSocket = socket;
 
         // Initialization of the streams
@@ -36,6 +47,16 @@ public class CommunicationBT extends Thread implements Serializable {
             btInputStream = socket.getInputStream();
             btOutputStream = socket.getOutputStream();
         } catch (IOException e) { }
+    }
+
+    public static void initInstance(BluetoothSocket socket) {
+        if (comBTInstance == null) {
+            comBTInstance = new CommunicationBT(socket);
+        }
+    }
+
+    public static CommunicationBT getInstance() {
+        return comBTInstance;
     }
 
     public void run() {
@@ -54,12 +75,16 @@ public class CommunicationBT extends Thread implements Serializable {
 
                 String receivedMsg = new String(data, Charset.forName("UTF-8"));
                 Log.d("COMMUNICATIONBT", "Message received");
+                Log.d("COMMUNICATIONBT", receivedMsg);
                 //Create message
                 Message mes = new Message();
                 //Create bundle
                 Bundle bundle = new Bundle();
                 bundle.putByteArray("0", data);
                 mes.setData(bundle);
+                if (handlerGame == null) {
+                    Log.d("COMMUNICATIONBT", "yolo");
+                }
                 handlerGame.sendMessage(mes);
 
             } catch (IOException e) {
@@ -88,5 +113,9 @@ public class CommunicationBT extends Thread implements Serializable {
 
     public void setHandlerGame(Handler handlerGame) {
         this.handlerGame = handlerGame;
+    }
+
+    public Handler getHandlerComBT() {
+        return handlerComBT;
     }
 }

@@ -126,10 +126,8 @@ public class GUIGame extends Activity {
 
 
         // Creation of the game
-            game = new Game(this,comBT);
-            while(!game.isStarted()){
+            game = new Game(this);
 
-            }
             // Every players is ready
 
         // Defines action listener
@@ -265,9 +263,10 @@ public class GUIGame extends Activity {
         this.currentFrame = new BitmapDrawable(bmp);
         UPDATER.sendEmptyMessage(UPDATE_BACKGROUND);
 
+        // TODO move this part somewhere
         if (this.isFinished()) {
-            game.stop(controller.getDRONE().getName()); // Send to each drone the name of the winner
-            Toast.makeText(GUIGame.this, "Congratulisation" + controller.getDRONE().getName() + ", you've won !", Toast.LENGTH_SHORT).show(); // Inform the player that he has won
+           // game.stop(controller.getDRONE().getName()); // Send to each drone the name of the winner
+//            Toast.makeText(GUIGame.this, "Congratulisation" + controller.getDRONE().getName() + ", you've won !", Toast.LENGTH_SHORT).show(); // Inform the player that he has won
         }
     }
 

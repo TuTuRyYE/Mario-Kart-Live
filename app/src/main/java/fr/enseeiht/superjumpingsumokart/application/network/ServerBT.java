@@ -83,7 +83,8 @@ public class ServerBT extends Thread {
         }
 
         // We launch the BT communication threads
-        this.comServer = new CommunicationBT(socket);
+        CommunicationBT.initInstance(socket);
+        this.comServer = CommunicationBT.getInstance();
         comServer.start();
         String test = "coucou";
         Log.d("envoieMessage",test.getBytes().toString());
