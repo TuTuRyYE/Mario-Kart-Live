@@ -38,6 +38,7 @@ public class ServerBT extends Thread {
             btAdapter.enable();
             Log.v("SERVER", "BT connected");
         }
+
         while (!btAdapter.isEnabled()){}
 
         try {
