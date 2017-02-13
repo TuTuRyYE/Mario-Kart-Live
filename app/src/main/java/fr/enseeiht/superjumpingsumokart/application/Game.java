@@ -109,6 +109,7 @@ public class Game {
                     }
                 case "isReady" : // the other drone is ready to start
                     otherIsReady = true;
+                    Log.d(GAME_TAG,"isReady received");
 
                     break;
                 case "finished" : // the other drone has finished
@@ -315,8 +316,34 @@ public class Game {
         return numberOfPlayer;
     }
 
-    public boolean isReady() {
-        return (this.circuit !=null && !this.isStarted());
+    public boolean iAmReady() {
+        boolean result;
+        if(this.circuit !=null && !this.isStarted()) {
+            result = true;
+            Log.d(GAME_TAG, "iAmReady");
+        }
+        else {
+            result = false;
+            Log.d(GAME_TAG, "not iAmReady");
+        }
+        return result;
+
+    }
+
+    public boolean raceReady() {
+        boolean iAmReady= iAmReady();
+        boolean result = iAmReady;
+        CommunicationBT comBT = CommunicationBT.getInstance();
+        if (comBT != null) {
+            result = result && otherIsReady;
+        }
+        if (result) {
+            Log.d(GAME_TAG, "raceReady");
+        }
+        else {
+            Log.d(GAME_TAG, "not raceReady");
+        }
+        return result;
     }
 
 

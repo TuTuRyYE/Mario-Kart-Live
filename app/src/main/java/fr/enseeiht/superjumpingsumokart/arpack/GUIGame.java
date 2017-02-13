@@ -110,8 +110,6 @@ public class GUIGame extends Activity {
         controller = new DroneController(this, currentDevice);
         Log.d(GUI_GAME_TAG, "Controller of the device created.");
 
-        // Get the BT communication
-        CommunicationBT comBT = (CommunicationBT) getIntent().getExtras().get("bluetoothCommunication");
 
 
         // Initializes the views of the GUI
@@ -128,7 +126,7 @@ public class GUIGame extends Activity {
         // Creation of the game
             game = new Game(this);
 
-            // Every players is ready
+
 
         // Defines action listener
         turnLeftBtn.setOnTouchListener(new View.OnTouchListener() {
@@ -214,6 +212,23 @@ public class GUIGame extends Activity {
                 return true;
             }
         });
+
+        // Send a message to the otherDrone saying that the current GUIGame is ready
+        CommunicationBT comBT = CommunicationBT.getInstance();
+        if (comBT != null) {
+            if(game.iAmReady()) {
+                // Create the message to send
+                Message msg = new Message();
+                String message = "isReady";
+                Bundle bundle = new Bundle();
+                bundle.putString("0", message);
+                msg.setData(bundle);
+
+                // Transmit the message to communicationBT
+                comBT.getHandlerComBT().handleMessage(msg);
+                Log.d(GUI_GAME_TAG, "isReady sent");
+            }
+        }
     }
 
     @Override
