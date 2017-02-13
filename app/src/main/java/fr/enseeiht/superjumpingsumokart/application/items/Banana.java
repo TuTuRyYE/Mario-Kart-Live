@@ -26,6 +26,7 @@ public class Banana extends Item {
     public void applyEffect(DroneController sender, DroneController receiver) {
         sender.slow();
         sender.spin();
+
     }
 
     @Override

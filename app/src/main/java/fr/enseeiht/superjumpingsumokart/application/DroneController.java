@@ -228,7 +228,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
      */
 
     public boolean isFinished(){
-      /*  ArrayList<Integer> markersSeen = this.getDRONE().getMarkersSeen();
+        ArrayList<Integer> markersSeen = this.getDRONE().getMarkersSeen();
         Boolean result = false;
         if (!markersSeen.isEmpty()) {
             if ((markersSeen.get(markersSeen.size() - 1) == -1) || (markersSeen.get(markersSeen.size() - 1) == -2)) { // if the last marker is on the finished lane
@@ -245,8 +245,6 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
                 }
             }
         }
-*/
-        boolean result =true;
         return result;
     }
 

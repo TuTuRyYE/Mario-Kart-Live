@@ -109,6 +109,7 @@ public class Game {
                     }
                 case "isReady" : // the other drone is ready to start
                     otherIsReady = true;
+
                     break;
                 case "finished" : // the other drone has finished
                     String nameFinished = receivedMsgSplit[1];
@@ -147,6 +148,7 @@ public class Game {
         Log.d(GAME_TAG,"instace recup");
         if (comBT != null) {
             comBT.setHandlerGame(handlerGame);
+
         }
     }
 

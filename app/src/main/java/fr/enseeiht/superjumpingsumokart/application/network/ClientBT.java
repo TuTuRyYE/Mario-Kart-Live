@@ -78,6 +78,7 @@ public class ClientBT extends Thread {
         CommunicationBT.initInstance(btSocket);
         comClient = CommunicationBT.getInstance();
         comClient.start();
+
         Log.d("CLIENT", "communication launched");
     }
 

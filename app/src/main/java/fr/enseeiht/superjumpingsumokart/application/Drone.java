@@ -53,6 +53,7 @@ public class Drone {
         this.currentItem = currentItem;
         this.currentSpeed = speed;
         this.currentLap = 0;
+        this.markersSeen = new ArrayList<>();
     }
 
     /**
