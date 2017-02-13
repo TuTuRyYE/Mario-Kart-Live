@@ -35,7 +35,7 @@ public class GUIWelcome extends Activity {
     public final static int DEVICE_SERVICE_CONNECTED = 0;
     public final static int DEVICE_SERVICE_DISCONNECTED = 1;
 
-    public final Handler GUIWELCOME_HANDLER = new Handler() {
+    public final Handler GUI_WELCOME_HANDLER = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {

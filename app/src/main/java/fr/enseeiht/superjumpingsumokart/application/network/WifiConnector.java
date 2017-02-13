@@ -5,10 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
-import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -21,7 +19,6 @@ import com.parrot.arsdk.ardiscovery.ARDiscoveryService;
 import com.parrot.arsdk.ardiscovery.receivers.ARDiscoveryServicesDevicesListUpdatedReceiver;
 import com.parrot.arsdk.ardiscovery.receivers.ARDiscoveryServicesDevicesListUpdatedReceiverDelegate;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import fr.enseeiht.superjumpingsumokart.application.GUIWelcome;
@@ -201,6 +198,6 @@ public class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedRecei
             msg.what = GUIWelcome.DEVICE_SERVICE_DISCONNECTED;
         }
         Log.d(WIFI_CONNECTOR_TAG, "Devices list updated : " + devicesList.size() + " devices available.");
-        ((GUIWelcome) APP_CONTEXT).GUIWELCOME_HANDLER.sendMessage(msg);
+        ((GUIWelcome) APP_CONTEXT).GUI_WELCOME_HANDLER.sendMessage(msg);
     }
 }

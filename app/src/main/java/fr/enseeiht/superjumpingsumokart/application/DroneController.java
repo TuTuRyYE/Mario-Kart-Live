@@ -1,7 +1,5 @@
 package fr.enseeiht.superjumpingsumokart.application;
 
-import android.os.Bundle;
-import android.os.Message;
 import android.util.Log;
 
 import com.parrot.arsdk.arcommands.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM;
@@ -216,8 +214,10 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
             case ARCONTROLLER_DEVICE_STATE_STOPPING :
                 deviceController.getFeatureJumpingSumo().sendMediaStreamingVideoEnable((byte) 0);
                 deviceController.getFeatureJumpingSumo().setPilotingPCMDFlag((byte) 0);
-                //GUI_GAME.UPDATER.sendEmptyMessage(GUIGame.CONTROLLER_STOPPING);
                 running = false;
+                if (!(error.compareTo(ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_OK) == 0)) {
+                    GUI_GAME.UPDATER.sendEmptyMessage(GUIGame.CONTROLLER_STOPPING_ON_ERROR);
+                }
                 break;
             case ARCONTROLLER_DEVICE_STATE_PAUSED :
                 running = false;
@@ -258,7 +258,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     @Override
     public ARCONTROLLER_ERROR_ENUM onFrameReceived(ARDeviceController deviceController, ARFrame frame) {
         fps_count++;
-        if (fps_count%2 == 0) {
+        if (fps_count%6 == 0) {
             if (!frame.isIFrame()) {
                 return ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_ERROR_STREAM;
             }
@@ -292,11 +292,21 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
      */
     public ARCONTROLLER_ERROR_ENUM stopController() {
         ARCONTROLLER_ERROR_ENUM errCode = ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_OK;
-        if (deviceController != null && started && running) {
-            stopMotion();
-            errCode = deviceController.stop();
-        }
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (deviceController != null && started && running) {
+                    stopMotion();
+                    deviceController.stop();
+                }
+            }
+        }).start();
         return errCode;
+    }
+
+    public boolean isRunning() {
+        return running;
     }
 }
 

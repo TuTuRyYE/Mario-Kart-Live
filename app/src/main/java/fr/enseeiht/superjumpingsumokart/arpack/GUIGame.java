@@ -1,17 +1,19 @@
 package fr.enseeiht.superjumpingsumokart.arpack;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ImageFormat;
+import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v8.renderscript.RenderScript;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -19,6 +21,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -31,10 +34,11 @@ import org.artoolkit.ar.base.ARToolKit;
 import org.artoolkit.ar.base.AndroidUtils;
 
 import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
 
 import fr.enseeiht.superjumpingsumokart.R;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
-import fr.enseeiht.superjumpingsumokart.application.GUIWelcome;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
 import fr.enseeiht.superjumpingsumokart.application.network.WifiConnector;
 
@@ -55,9 +59,8 @@ public class GUIGame extends Activity {
      */
     public final static int RECEIVE_FRAME = 0;
     public final static int UPDATE_ITEM_ICON = 1;
-    public final static int PROCESS_CAMERA_STREAM = 2;
     public final static int RENDER_AR = 3;
-    public final static int CONTROLLER_STOPPING = 4;
+    public final static int CONTROLLER_STOPPING_ON_ERROR = 4;
 
     /**
      * Handler to update GUI.
@@ -69,21 +72,17 @@ public class GUIGame extends Activity {
                 case RECEIVE_FRAME:
                     new DetectionTask(GUIGame.this).execute(currentFrame);
                     break;
-                case PROCESS_CAMERA_STREAM :
-                    Bitmap currentFrameToDisplay = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(new ByteArrayInputStream(currentFrame)), getDisplayWidth(), getDisplayHeight(), true);
-                    updateCameraSurfaceView(currentFrameToDisplay);
-                    break;
                 case UPDATE_ITEM_ICON :
                     displayTrap();
                     break;
-                case CONTROLLER_STOPPING :
-//                    Toast.makeText(GUIGame.this, "Loosing controller connection", Toast.LENGTH_LONG).show();
-//                    try {
-//                        wait();
-//                    } catch (InterruptedException e) {
-//                        Log.d(GUI_GAME_TAG, "Interrupted exception : " + e.getMessage());
-//                    }
-//                    startActivity(new Intent(GUIGame.this, GUIWelcome.class));
+                case CONTROLLER_STOPPING_ON_ERROR:
+                    Toast.makeText(GUIGame.this, "Loosing controller connection", Toast.LENGTH_LONG).show();
+                    try {
+                        wait();
+                    } catch (InterruptedException e) {
+                        Log.d(GUI_GAME_TAG, "Interrupted exception : " + e.getMessage());
+                    }
+                    finish();
                     break;
                 case RENDER_AR :
                     renderAR();
@@ -92,8 +91,6 @@ public class GUIGame extends Activity {
             }
         }
     };
-
-    DetectionTask detectionTask = new DetectionTask(GUIGame.this);
 
     /**
      * The controller that dispatches commands from the user to the device.
@@ -118,7 +115,7 @@ public class GUIGame extends Activity {
     /**
      * The area to display the video stream from the device.
      */
-    private RelativeLayout mainLayout;
+    private FrameLayout mainLayout;
     private SurfaceView cameraView;
     private GLSurfaceView glView;
     private ItemRenderer renderer;
@@ -148,7 +145,7 @@ public class GUIGame extends Activity {
         AndroidUtils.reportDisplayInformation(this);
 
         // Initializes the views of the GUI
-        mainLayout = (RelativeLayout) findViewById(R.id.mainLayout);
+        mainLayout = (FrameLayout) findViewById(R.id.mainLayout);
         turnLeftBtn = (ImageButton) findViewById(R.id.turnLeftBtn);
         turnRightBtn = (ImageButton) findViewById(R.id.turnRightBtn);
         moveBackwardBtn = (ImageButton) findViewById(R.id.moveBackwardBtn);
@@ -249,10 +246,12 @@ public class GUIGame extends Activity {
     public void onResume() {
         super.onResume();
         Log.d(GUI_GAME_TAG, "Resuming GUIGame activity");
+        firstUpdate = true;
         controller.startController();
         initCameraSurfaceView();
         initGLSurfaceView();
         ARToolKit.getInstance().initialiseAR(VIDEO_WIDTH, VIDEO_HEIGHT, "Data/camera_para.dat", 0, false);
+        DetectionTask.rs = RenderScript.create(this);
     }
 
     @Override
@@ -266,7 +265,9 @@ public class GUIGame extends Activity {
 
     @Override
     public void onStop() {
-        cleanup();
+        if (controller.isRunning()) {
+            controller.stopController();
+        }
         super.onStop();
     }
 
@@ -287,21 +288,18 @@ public class GUIGame extends Activity {
      * Method called by {@link #UPDATER} to refresh the view of the GUI and update the displayed
      * frame from the video stream of the device (Romain Verset - 01/02/2017).
      */
-    public void updateCameraSurfaceView(Bitmap frameToDraw) {
+    public void updateCameraSurfaceView(Bitmap frameToDraw, float[] cornerPoints) {
         if (cameraViewAvailable) {
             Canvas canvas = cameraView.getHolder().lockCanvas();
             canvas.drawBitmap(frameToDraw, 0, 0, null);
+            if (cornerPoints != null) {
+                canvas.drawRect(cornerPoints[0], cornerPoints[1], cornerPoints[4], cornerPoints[5], new Paint(Color.RED));
+            }
             cameraView.getHolder().unlockCanvasAndPost(canvas);
         }
     }
 
     public void renderAR() {
-        if (ARToolKit.getInstance().getProjectionMatrix() == null) {
-            Log.d(GUI_GAME_TAG, "GET_PROJECTION_MATRIX NULL !");
-        } else {
-            Log.d(GUI_GAME_TAG, " YOLOOOOOOOOO ! (NULL)");
-
-        }
         if (glView != null && renderer != null && ARToolKit.getInstance().getProjectionMatrix() != null) {
             Log.d(GUI_GAME_TAG, "renderAR() called.");
             glView.requestRender();
@@ -328,6 +326,7 @@ public class GUIGame extends Activity {
             @Override
             public void surfaceDestroyed(SurfaceHolder holder) {
                 cameraViewAvailable = false;
+                ARToolKit.getInstance().cleanup();
                 Log.d(GUI_GAME_TAG, "Camera surface view destroyed.");
             }
         });
@@ -352,17 +351,6 @@ public class GUIGame extends Activity {
     }
 
     /**
-     * TODO
-     */
-    private void cleanup() {
-        cameraView.getHolder().getSurface().release();
-        glView.getHolder().getSurface().release();
-        mainLayout.removeView(cameraView);
-        mainLayout.removeView(glView);
-        ARToolKit.getInstance().cleanup();
-    }
-
-    /**
      * Method used by {@link #controller} to send the current frame of its video stream to the GUI (Romain Verset - 01/02/2017).
      * @param frame The frame received from the device
      */
@@ -373,7 +361,6 @@ public class GUIGame extends Activity {
         }
         currentFrame = frame.getByteData();
         UPDATER.sendEmptyMessage(RECEIVE_FRAME);
-//        UPDATER.sendEmptyMessage(PROCESS_CAMERA_STREAM);
         UPDATER.sendEmptyMessage(UPDATE_ITEM_ICON);
     }
 

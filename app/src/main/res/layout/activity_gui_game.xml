@@ -16,14 +16,29 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/mainLayout">
+        android:layout_height="match_parent">
 
-        <SurfaceView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/cameraSurfaceView"
-            android:clickable="false" />
+        <FrameLayout
+            android:layout_width="@dimen/video_width"
+            android:layout_height="@dimen/video_height"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/mainLayout">
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="@dimen/video_width"
+            android:layout_height="@dimen/video_height"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true">
+
+            <SurfaceView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/cameraSurfaceView"
+                android:clickable="false" />
+        </FrameLayout>
 
         <ImageButton
             android:layout_width="wrap_content"
