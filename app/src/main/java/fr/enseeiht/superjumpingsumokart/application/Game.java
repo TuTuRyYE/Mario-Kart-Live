@@ -116,7 +116,7 @@ public class Game {
         this.comBT.setGame(this);
         this.otherIsReady = false;
         Log.d(GAME_TAG, "Game created for drone " + guiGame.getController().getDRONE().getName());
-        comBT.setHandlerGame(handlerGame);
+       // comBT.setHandlerGame(handlerGame);
     }
     /**
      * Generate magic boxes on the circuit (Vivian - 07/02/2017).

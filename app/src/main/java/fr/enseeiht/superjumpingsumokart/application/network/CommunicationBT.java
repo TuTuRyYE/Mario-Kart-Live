@@ -20,7 +20,7 @@ public class CommunicationBT extends Thread implements Serializable {
     private InputStream btInputStream;
     private OutputStream btOutputStream;
     private Game game;
-    private Handler handlerGame;
+  //  private Handler handlerGame;
     public CommunicationBT(BluetoothSocket socket) {
         btSocket = socket;
         // Initialization of the streams
@@ -45,10 +45,11 @@ public class CommunicationBT extends Thread implements Serializable {
                 //Create message
                 Message mes = new Message();
                 //Create bundle
-                Bundle bundle = new Bundle();
+       /*         Bundle bundle = new Bundle();
                 bundle.putByteArray("0", data);
                 mes.setData(bundle);
-                handlerGame.sendMessage(mes);
+//                handlerGame.sendMessage(mes);
+*/
             } catch (IOException e) {
                 break;
             }
@@ -69,7 +70,5 @@ public class CommunicationBT extends Thread implements Serializable {
     public void setGame(Game game) {
         this.game = game;
     }
-    public void setHandlerGame(Handler handlerGame) {
-        this.handlerGame = handlerGame;
-    }
+
 }
