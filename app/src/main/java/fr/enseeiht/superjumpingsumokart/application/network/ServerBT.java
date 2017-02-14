@@ -41,11 +41,12 @@ public class ServerBT extends Thread {
         Log.v("SERVER", "waiting for connections");
         while (!isConnected) {
             if (btServerSocket != null) {
-                Log.d("coucou", "connecté");
+                Log.d("coucou", " server socket initialized");
             }
             else{Log.d("coucou", "pas connecté");}
             // On attend que le client se connecte
             try {
+                Log.d("SERVER","On essaye de se connecter...");
                 socket = btServerSocket.accept();
             } catch (IOException e) {
                 break;
