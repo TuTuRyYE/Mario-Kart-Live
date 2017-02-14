@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -125,7 +126,8 @@ public class GUIGame extends Activity {
 
         // Creation of the game
             game = new Game(this, "handlerThread");
-            game.start();
+            game.run();
+
 
 
 

@@ -10,6 +10,7 @@ import java.util.Arrays;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
@@ -29,14 +30,14 @@ public class CommunicationBT extends Thread implements Serializable {
 
     private static CommunicationBT comBTInstance;
 
-    public Handler handlerComBT = new Handler(){
+/*    public Handler handlerComBT = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage (Message msg) {
             Bundle bundle = msg.getData();
             byte[] byteMsg = bundle.getByteArray("0");
             comBTInstance.write(byteMsg);
         }
-    };
+    };*/
 
 
     private CommunicationBT(BluetoothSocket socket) {
@@ -85,7 +86,9 @@ public class CommunicationBT extends Thread implements Serializable {
                 if (handlerGame == null) {
                     Log.d("COMMUNICATIONBT", "yolo");
                 }
-                handlerGame.sendMessage(mes);
+
+                    // handlerGame.sendMessage(mes);
+
 
             } catch (IOException e) {
                 break;
@@ -114,8 +117,8 @@ public class CommunicationBT extends Thread implements Serializable {
     public void setHandlerGame(Handler handlerGame) {
         this.handlerGame = handlerGame;
     }
-
+/*
     public Handler getHandlerComBT() {
         return handlerComBT;
-    }
+    }*/
 }

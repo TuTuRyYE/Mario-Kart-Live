@@ -287,7 +287,7 @@ public class Game extends HandlerThread{
 
     /**
      * Stop the Game
-     * @param String the name of winner drone (Vivian - 07/02/2017).
+     * @param nameFinished the name of winner drone (Vivian - 07/02/2017).
      */
     public void stop(String nameFinished){
         Log.d(GAME_TAG, "stop fonction called");
@@ -352,6 +352,19 @@ public class Game extends HandlerThread{
 
     public void setHandlerComBT(Handler handlerComBT) {
         this.handlerComBT = handlerComBT;
+    }
+
+    public void run() {
+        Looper lp = this.getLooper();
+        lp.prepare();
+        while (true) {
+            try {
+                Log.d(GAME_TAG, "I'm sleeping");
+                sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 

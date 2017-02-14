@@ -55,11 +55,10 @@ public class ClientBT extends Thread {
     public void run() {
 
         // On annule la découverte des périphériques (inutile puisqu'on est en train d'essayer de se connecter) TODO
-
+        btAdapter.cancelDiscovery();
         try {
             // connexion
             Log.d("CLIENT", "trying to connect");
-
             btSocket.connect();
             Log.d("CLIENT", "connected to server");
         } catch (IOException connectException) {
