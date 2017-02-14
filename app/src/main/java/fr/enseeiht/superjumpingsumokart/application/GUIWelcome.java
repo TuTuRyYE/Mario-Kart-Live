@@ -1,5 +1,4 @@
 package fr.enseeiht.superjumpingsumokart.application;
-
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -10,23 +9,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
 import com.parrot.arsdk.ARSDK;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
-
 import org.artoolkit.ar.base.NativeInterface;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
 import fr.enseeiht.superjumpingsumokart.application.network.ClientBT;
 import fr.enseeiht.superjumpingsumokart.application.network.CommunicationBT;
 import fr.enseeiht.superjumpingsumokart.application.network.ServerBT;
 import fr.enseeiht.superjumpingsumokart.application.network.WifiConnector;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 import fr.enseeiht.superjumpingsumokart.R;
-
 /**
  * @author Romain Verset
  * The activity used as home screen for the application. From there it is possible to connect to a
@@ -34,18 +28,15 @@ import fr.enseeiht.superjumpingsumokart.R;
  * application using Bluetooth.
  */
 public class GUIWelcome extends Activity {
-
     // Static block to load libraries (ARToolkit + ParrotSDK3)
     static {
         ARSDK.loadSDKLibs();
         NativeInterface.loadNativeLibrary();
     }
-
     /**
      * The logging tag. Useful for debugging.
      */
     private final static String GUI_WELCOME_TAG = "GUIWelcome";
-
     // Buttons in the GUI
     private Button startRaceBtn;
     private ToggleButton wifiConnectionBtn;
@@ -53,7 +44,6 @@ public class GUIWelcome extends Activity {
     private Button btJoinBtn;
     private Button setCircuitBtn;
     private Button exitBtn;
-
     // Connection and device variables
     private WifiConnector wifiConnector = null;
     private ARDiscoveryDeviceService currentDeviceService = null;
@@ -61,22 +51,17 @@ public class GUIWelcome extends Activity {
     private BluetoothAdapter btAdapter;
     private BluetoothDevice btDevice;
     private CommunicationBT com;
-
     // à déplacer au besoin...
     public CommunicationBT getCom() {
         return com;
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         // Initializes the GUI from layout file
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gui_welcome);
-
         // Initializes remote connection
         wifiConnector = new WifiConnector(GUIWelcome.this);
-
         // Initializes the views of the GUI
         startRaceBtn = (Button) findViewById(R.id.startRaceBtn);
         wifiConnectionBtn = (ToggleButton) findViewById(R.id.connectWifiBtn);
@@ -85,7 +70,6 @@ public class GUIWelcome extends Activity {
         btJoinBtn = (Button) findViewById(R.id.joinBluetoothBtn);
         setCircuitBtn = (Button) findViewById(R.id.setCircuitBtn);
         exitBtn = (Button) findViewById(R.id.exitBtn);
-
         // Defines action listener
         startRaceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,7 +95,6 @@ public class GUIWelcome extends Activity {
                 btJoinBtnAction();
             }
         });
-
         setCircuitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,7 +108,6 @@ public class GUIWelcome extends Activity {
             }
         });
     }
-
     /**
      * Switch the current {@link GUIWelcome} {@link android.app.Activity} for a {@link GUIGame} {@link android.app.Activity} (Romain Verset - 31/01/2017).
      * This switch requires to have a drone connected with the application.
@@ -141,7 +123,6 @@ public class GUIWelcome extends Activity {
             Toast.makeText(GUIWelcome.this, R.string.no_drone_connected, Toast.LENGTH_SHORT).show();
         }
     }
-
     /**
      * Enables to connect with a Jumping Sumo drone (Romain Verset - 31/01/2017).
      * <b>Your cell phone has to be connected to the acces point provided by the Jumping Sumo drone.<b/>
@@ -155,12 +136,10 @@ public class GUIWelcome extends Activity {
                 Log.d(GUI_WELCOME_TAG, "Device service unbound from the application : " + currentDeviceService.toString());
                 currentDeviceService = null;
             }
-
         } catch (NullPointerException npe) {
             Log.d(GUI_WELCOME_TAG, "Unable to bind the device service");
         }
     }
-
     /**
      * //TODO
      */
@@ -171,14 +150,10 @@ public class GUIWelcome extends Activity {
         if (btAdapter == null) {
             // The phone doesn't include bluetooth
         }
-
         ServerBT server = new ServerBT(btAdapter);
         server.start();
         this.com = server.getComServer();
-
-
     }
-
     /**
      * //TODO
      */
@@ -188,21 +163,17 @@ public class GUIWelcome extends Activity {
         if (btAdapter == null) {
             // The phone doesn't include bluetooth
         }
-
         Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
-
         //Seul les deux telephones sont appareillés, le seul device que l'on peut trouver est donc celui qu'on veut
         if (pairedDevices.size() > 0) {
             for (BluetoothDevice device : pairedDevices) {
                 btDevice = device;
             }
         }
-
         ClientBT client = new ClientBT(btDevice,btAdapter);
         client.start();
         this.com = client.getComClient();
     }
-
     /**
      * //TODO
      */
@@ -210,7 +181,6 @@ public class GUIWelcome extends Activity {
         //TODO
         Toast.makeText(GUIWelcome.this, "TODO", Toast.LENGTH_SHORT).show();
     }
-
     /**
      * Default action to do when the exit button is clicked (Romain Verset - 31/01/2017).
      * It closes the eventual connection between the application and the drone and cleans
@@ -225,7 +195,6 @@ public class GUIWelcome extends Activity {
         devicesList = null;
         finish();
     }
-
     /**
      * Updates the list of available devices (Romain Verset - 31/01/2017).
      * @param devicesList The new list of availables devices.
@@ -233,7 +202,6 @@ public class GUIWelcome extends Activity {
     public void setDevicesList(List<ARDiscoveryDeviceService> devicesList) {
         this.devicesList = devicesList;
     }
-
     /**
      * Disable the WIFI connection button (Romain Verset - 31/01/2017).
      */
@@ -241,12 +209,10 @@ public class GUIWelcome extends Activity {
         wifiConnectionBtn.setEnabled(false);
         wifiConnectionBtn.setChecked(false);
     }
-
     /**
      * Enable the WIFI connection button (Romain Verset - 31/01/2017).
      */
     public void enableWifiConnectionBtn() {
         wifiConnectionBtn.setEnabled(true);
     }
-
 }
