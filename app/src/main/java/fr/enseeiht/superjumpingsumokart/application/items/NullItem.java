@@ -4,27 +4,25 @@ import android.widget.ImageButton;
 
 import fr.enseeiht.superjumpingsumokart.R;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
-import fr.enseeiht.superjumpingsumokart.application.Vector3D;
 
 /**
- * Created by michelmatthieu on 02/02/2017.
+ * Created by michelmatthieu on 06/02/2017.
  */
 
-public class TestItem extends Item {
+public class NullItem extends Item {
 
-    private final static String  NAME = "testItem";
+    private final static String  NAME = "nullItem";
+
     /**
-     * Default constructor of the class {@link Item}. (Matthieu Michel - 02/02/2017).
-     *
-     * @param position position of the Item.
+     * Default constructor of the class {@link Item}. (Matthieu Michel - 06/02/2017).
      */
-    public TestItem(Vector3D position) {
+    public NullItem() {
         super(NAME);
     }
 
     @Override
     public void applyEffect(DroneController sender, DroneController receiver) {
-       // sender.testFeature();
+
     }
 
     @Override

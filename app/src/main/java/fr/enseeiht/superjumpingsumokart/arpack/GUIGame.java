@@ -38,8 +38,12 @@ import java.io.DataInputStream;
 import java.io.IOException;
 
 import fr.enseeiht.superjumpingsumokart.R;
+import fr.enseeiht.superjumpingsumokart.application.GUIWelcome;
+import fr.enseeiht.superjumpingsumokart.application.Game;
+import fr.enseeiht.superjumpingsumokart.application.items.Item;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
+import fr.enseeiht.superjumpingsumokart.application.network.CommunicationBT;
 import fr.enseeiht.superjumpingsumokart.application.network.WifiConnector;
 
 
@@ -53,7 +57,6 @@ public class GUIGame extends Activity {
      * The logging tag. Useful for debugging.
      */
     private static String GUI_GAME_TAG = "GUIGame";
-
     /**
      * Message for the {@link Handler} of the {@link GUIGame} activity.
      */
@@ -91,12 +94,10 @@ public class GUIGame extends Activity {
             }
         }
     };
-
     /**
      * The controller that dispatches commands from the user to the device.
      */
     private DroneController controller;
-
     /**
      * The current frame to display.
      */
@@ -120,7 +121,7 @@ public class GUIGame extends Activity {
     private GLSurfaceView glView;
     private ItemRenderer renderer;
 
-
+    private Game game; // The game associated to the GUIGame
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -144,6 +145,8 @@ public class GUIGame extends Activity {
         // Logs information about the displaying screen
         AndroidUtils.reportDisplayInformation(this);
 
+        // Get the BT communication
+        CommunicationBT comBT = (CommunicationBT) getIntent().getExtras().get("bluetoothCommunication");
         // Initializes the views of the GUI
         mainLayout = (FrameLayout) findViewById(R.id.mainLayout);
         turnLeftBtn = (ImageButton) findViewById(R.id.turnLeftBtn);
@@ -153,6 +156,12 @@ public class GUIGame extends Activity {
         jumpBtn = (ImageButton) findViewById(R.id.jumpBtn);
         sendTrapBtn = (ImageButton) findViewById(R.id.sendTrapBtn);
 
+        fl = (FrameLayout) findViewById(R.id.guiGameFrameLayout);
+        // Creation of the game
+        game = new Game(this,comBT);
+        while(!game.isStarted()){
+        }
+        // Every players is ready
         // Defines action listener
         turnLeftBtn.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -262,7 +271,6 @@ public class GUIGame extends Activity {
         }
         mainLayout.removeView(glView);
     }
-
     @Override
     public void onStop() {
         if (controller.isRunning()) {
@@ -270,12 +278,10 @@ public class GUIGame extends Activity {
         }
         super.onStop();
     }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
     }
-
     /**
      * Method used to display the current trap owned by the player (Matthieu Michel - 30/01/2017).
      */
@@ -283,7 +289,6 @@ public class GUIGame extends Activity {
         Item currentItem = controller.getDRONE().getCurrentItem();
         currentItem.assignResource(sendTrapBtn);
     }
-
     /**
      * Method called by {@link #UPDATER} to refresh the view of the GUI and update the displayed
      * frame from the video stream of the device (Romain Verset - 01/02/2017).
@@ -349,7 +354,6 @@ public class GUIGame extends Activity {
             glView.onResume();
         }
     }
-
     /**
      * Method used by {@link #controller} to send the current frame of its video stream to the GUI (Romain Verset - 01/02/2017).
      * @param frame The frame received from the device
@@ -372,4 +376,19 @@ public class GUIGame extends Activity {
         return cameraView.getHeight();
     }
 
+    public boolean isFinished(){
+        return controller.isFinished();
+    }
+    public Game getGame() {
+        return game;
+    }
+    public void setGame(Game game) {
+        this.game = game;
+    }
+    public DroneController getController() {
+        return controller;
+    }
+    public void setController(DroneController controller) {
+        this.controller = controller;
+    }
 }

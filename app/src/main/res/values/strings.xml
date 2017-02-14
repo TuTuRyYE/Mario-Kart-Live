@@ -8,6 +8,7 @@
     <string name="start_race_btn">Start a race</string>
     <string name="connect_wifi_btn">Connect to a Jumping Sumo</string>
     <string name="connect_bluetooth_btn">Connect to another player</string>
+    <string name="join_bluetooth_btn">Join another player</string>
     <string name="debug_mode_btn_on">Debug mode ON</string>
     <string name="debug_mode_btn_off">Debug mode OFF</string>
     <string name="exit_btn">Exit</string>
