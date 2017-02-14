@@ -258,7 +258,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     @Override
     public ARCONTROLLER_ERROR_ENUM onFrameReceived(ARDeviceController deviceController, ARFrame frame) {
         fps_count++;
-        if (fps_count%6 == 0) {
+        if (fps_count%2 == 0) {
             if (!frame.isIFrame()) {
                 return ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_ERROR_STREAM;
             }
@@ -305,6 +305,10 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
         return errCode;
     }
 
+    /**
+     * (Romain Verset - 01/02/2017)
+     * @return True if the {@link ARDeviceController} is running.
+     */
     public boolean isRunning() {
         return running;
     }
