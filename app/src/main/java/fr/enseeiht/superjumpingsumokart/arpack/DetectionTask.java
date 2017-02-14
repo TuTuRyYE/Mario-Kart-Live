@@ -2,97 +2,151 @@ package fr.enseeiht.superjumpingsumokart.arpack;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.ImageFormat;
-import android.graphics.Rect;
-import android.graphics.YuvImage;
 import android.os.AsyncTask;
 import android.os.SystemClock;
 import android.support.v8.renderscript.Allocation;
 import android.support.v8.renderscript.Element;
 import android.support.v8.renderscript.RenderScript;
-import android.support.v8.renderscript.ScriptIntrinsicYuvToRGB;
 import android.support.v8.renderscript.Type;
 import android.util.Log;
 
 import org.artoolkit.ar.base.ARToolKit;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.ByteBuffer;
 
 /**
- * Created by romain on 06/02/17.
+ * @author Romain Verset, Jorge Enrique Gutierrez
+ * Class that implement several image transformations. It extends {@link AsyncTask} to run heavy computation
+ * work outside of the UI {@link Thread}. Once the work is done UI {@link Thread} will update its graphical components.
  */
+class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
 
-public class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
-
+    /**
+     * Logging tag. Useful for debugging.
+     */
     private final static String DETECTION_TASK_TAG = "DetectionTask";
+
+    /**
+     * The {@link RenderScript} context used. It has to be initialised before running any instance of
+     * {@link DetectionTask}.
+     */
     public static RenderScript rs;
 
-    private ScriptC_rbgaToNv21 script;
-    ScriptIntrinsicYuvToRGB script2;
-
+    /**
+     * The {@link GUIGame} that launches this {@link DetectionTask}.
+     */
     private final GUIGame GUI_GAME;
-    private Bitmap bitmapToProcess;
+
+    /**
+     * The bitmap created from the bytes stream received from the Jumping Sumo camera.
+     */
     private Bitmap bitmapToDisplay;
-    byte[] b;
 
-    private Type.Builder yuvType = new Type.Builder(rs, Element.U8(rs)).setX(640*480*3/2);
-    private Type.Builder argb888Type = new Type.Builder(rs, Element.RGBA_8888(rs)).setX(640).setY(480);
+    // RenderScript variables
+
+    /**
+     * The RenderScript {@link ScriptC_rbgaToNv21} that performs the ARGB_8888 -> NV21 conversion.
+     */
+    private ScriptC_rbgaToNv21 script = new ScriptC_rbgaToNv21(rs);
+
+    /**
+     * {@link Type} used to represent the NV21 bytes in {@link ScriptC_rbgaToNv21} {@link #script}.
+     */
+    private Type.Builder nv21Type = new Type.Builder(rs, Element.U8(rs)).setX(640*480*3/2);
+
+    /**
+     * {@link Type} used to represent the {@link android.graphics.Bitmap.Config} ARGB_8888 bytes in {@link ScriptC_rbgaToNv21} {@link #script}.
+     */
+    private Type.Builder argb888Type = new Type.Builder(rs, Element.I32(rs)).setX(640*480);
+
+    /**
+     * {@link Allocation} used to contain and manage the ARGB_8888 bytes in {@link ScriptC_rbgaToNv21} {@link #script}.
+     */
+    private Allocation argb8888In = Allocation.createTyped(rs, argb888Type.create(), Allocation.USAGE_SCRIPT);
+
+    /**
+     * {@link Allocation} used to contain and manage the NV21 bytes in {@link ScriptC_rbgaToNv21} {@link #script}.
+     */
+    private Allocation nv21Out = Allocation.createTyped(rs, nv21Type.create(), Allocation.USAGE_SCRIPT);
 
 
-
-    public DetectionTask(GUIGame guiGame) {
+    /**
+     * Default constructor of {@link DetectionTask} (Romain Verset, Jorge Gutierrez - 08/02/2017).
+     * @param guiGame The {@link GUIGame} activity that launches this {@link DetectionTask}.
+     */
+    DetectionTask(GUIGame guiGame) {
         GUI_GAME = guiGame;
-        script = new ScriptC_rbgaToNv21(rs);
-        script2 = ScriptIntrinsicYuvToRGB.create(rs, Element.U8_4(rs));
     }
 
+    /**
+     * Task performed in background (i.e. not on the UI {@link Thread} for marker detection (Romain Verset, Jorge Gutierrez - 08/02/2017).
+     * It converts the bytes from the Jumping Sumo camera stream into a displayable {@link Bitmap}.
+     * Then launches the {@link ScriptC_rbgaToNv21} {@link #script} to convert ARGB_8888 bytes into
+     * NV21 bytes. Finally it runs the marker detection on the NV21 bytes (Android ARToolkit supports only NV21 encoding).
+     * @param frames The bytes revceived from the Jumping Sumo Camera stream.
+     * @return True if a marker has been detected, false otherwise.
+     */
     @Override
     protected Boolean doInBackground(byte[]... frames) {
         long startTime = SystemClock.currentThreadTimeMillis();
-        bitmapToProcess = BitmapFactory.decodeStream(new ByteArrayInputStream(frames[0]));
+        bitmapToDisplay = BitmapFactory.decodeStream(new ByteArrayInputStream(frames[0]));
 
-        //METHOD 1 ~60ms
-        //ARToolKit.getInstance().convertAndDetect(getNV21(640, 480, bitmapToProcess));
+        //METHOD 1 (uses java code, is slow)
+        //ARToolKit.getInstance().convertAndDetect(getNV21(640, 480, bitmapToDisplay));
 
-        //METHOD 2 ~~ 45ms
-        Allocation argb8888In = Allocation.createFromBitmap(rs, bitmapToProcess);
-        Allocation nv21Out = Allocation.createTyped(rs, yuvType.create(), Allocation.USAGE_SCRIPT);
+        //METHOD 2 (uses RenderScript API)
 
+        // Buffer to contains pixel from the bitmap decoded from the byte stream of the Jumping Sumo camera.
+        int[] argb8888Pixels = new int[GUIGame.VIDEO_WIDTH * GUIGame.VIDEO_HEIGHT];
+        // Initialisation of the RenderScript Allocation for ARGB_8888 pixels.
+        bitmapToDisplay.getPixels(argb8888Pixels, 0, GUIGame.VIDEO_WIDTH, 0, 0, GUIGame.VIDEO_WIDTH, GUIGame.VIDEO_HEIGHT);
+        argb8888In.copyFrom(argb8888Pixels);
+
+        // Initialisation of the variables RenderScript script.
         script.set_nv21ByteArray(nv21Out);
+        // Launch the script.
         script.forEach_convertToNV21(argb8888In);
-        byte[] yuvBytes = new byte[640*480*3/2];
-        nv21Out.copyTo(yuvBytes);
+
+        // One pixel is encoded on 1.5 Byte in NV21 format.
+        byte[] nv21Bytes = new byte[GUIGame.VIDEO_WIDTH*GUIGame.VIDEO_HEIGHT*3/2];
+        // We copy the bytes from the RenderScript Allocation into a buffer.
+        nv21Out.copyTo(nv21Bytes);
+
+        //DECOMMENT TO DISPLAY THE YUV IMAGE (DEBUGGING). Considerably decreases the framerate.
+        /*
         YuvImage yuvImage = new YuvImage(yuvBytes, ImageFormat.NV21, 640, 480, null);
         ByteArrayOutputStream o = new ByteArrayOutputStream(640*480*3/2);
-        yuvImage.compressToJpeg(new Rect(0, 0, 640, 480), 50, o);
+        yuvImage.compressToJpeg(new Rect(0, 0, 640, 480), 100, o);
         bitmapToDisplay = BitmapFactory.decodeStream(new ByteArrayInputStream(o.toByteArray()));
+        */
 
-
-        //Allocation nv21In = Allocation.createTyped(rs, yuvType.create(), Allocation.USAGE_SCRIPT);
-        //Allocation argb8888Out = Allocation.createTyped(rs, argb888Type.create(), Allocation.USAGE_SCRIPT);
-
-        //nv21In.copyFrom(nv21Out);
-        //script2.setInput(nv21Out);
-        //script2.forEach(argb8888Out);
-        //argb8888Out.copyTo(bitmapToProcess);
-//        ARToolKit.getInstance().convertAndDetect(nv21Allocation.getByteBuffer().array());
-//        if (ARToolKit.getInstance().queryMarkerVisible(0)) {
-//            Log.d(DETECTION_TASK_TAG, "Marker detected, distance to the camera = " + ARToolKit.getInstance().queryMarkerTransformation(0)[14]);
-//        }
-//        Log.d(DETECTION_TASK_TAG, "Detection task time : " + Long.toString((SystemClock.currentThreadTimeMillis() - startTime)));
-        return true;
+        boolean markerDetected;
+        ARToolKit.getInstance().convertAndDetect(nv21Bytes);
+        if (ARToolKit.getInstance().queryMarkerVisible(0)) {
+            markerDetected = true;
+            Log.d(DETECTION_TASK_TAG, "Marker detected, distance to the camera = " + ARToolKit.getInstance().queryMarkerTransformation(0)[14]);
+        } else {
+            markerDetected = false;
+        }
+        Log.d(DETECTION_TASK_TAG, "Detection task time : " + Long.toString((SystemClock.currentThreadTimeMillis() - startTime)));
+        return markerDetected;
     }
 
+    /**
+     * Tasks performed on the UI {@link Thread} ONCE the {@link #doInBackground(byte[]...)} method is
+     * over.
+     * @param aBoolean .
+     */
     @Override
     protected void onPostExecute(Boolean aBoolean) {
         GUI_GAME.updateCameraSurfaceView(bitmapToDisplay, null);
         GUI_GAME.renderAR();
     }
 
+
+    // Java ARG_8888 -> NV21 conversion code (slow)
+
+    /*
     private byte[] getNV21(int inputWidth, int inputHeight, Bitmap scaled) {
         long startTime = SystemClock.currentThreadTimeMillis();
         int [] argb = new int[inputWidth * inputHeight];
@@ -139,4 +193,5 @@ public class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
             }
         }
     }
+    */
 }

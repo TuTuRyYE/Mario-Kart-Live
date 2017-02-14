@@ -23,7 +23,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     private final static String DRONE_CONTROLLER_TAG = "DRONE_CONTROLLER";
 
     /**
-     * Drone associated to the DroneController.
+     * Drone associated to the {@link DroneController}.
      */
     private final Drone DRONE;
 

@@ -9,19 +9,27 @@
 
 rs_allocation nv21ByteArray;
 
-void RS_KERNEL convertToNV21(uchar4 argb_8888Pixel, uint32_t x, uint32_t y){
+int r, g, b, c, l, Y;
 
-    int yIndex = y * VIDEO_HEIGHT + x;
-    int Y = ( (  66 * argb_8888Pixel.s1 + 129 * argb_8888Pixel.s2 +  25 * argb_8888Pixel.s3 + 128) >> 8) +  16;
+void RS_KERNEL convertToNV21(int argb_8888Pixel, uint32_t x){
 
-    rsSetElementAt_uchar(nv21ByteArray, ((uchar) clamp(Y, 0, 255)), yIndex);
+    c = x % VIDEO_WIDTH;
+    l = ((x + 1) / VIDEO_WIDTH);
 
-    if (y % 2 == 1 && x % 2 == 1) {
-        int uvIndex = VIDEO_HEIGHT * VIDEO_WIDTH + (y / 2) * (VIDEO_WIDTH / 2) + (x / 2);
-        int U = ( ( -38 * argb_8888Pixel.s1 -  74 * argb_8888Pixel.s2 + 112 * argb_8888Pixel.s3 + 128) >> 8) + 128;
-        int V = ( ( 112 * argb_8888Pixel.s1 -  94 * argb_8888Pixel.s2 -  18 * argb_8888Pixel.s3 + 128) >> 8) + 128;
-        rsSetElementAt_uchar(nv21ByteArray, ((uchar) clamp(U, 0, 255)), uvIndex + 1);
-        rsSetElementAt_uchar(nv21ByteArray, ((uchar) clamp(V, 0, 255)), uvIndex);
+    r = (argb_8888Pixel & 0xff0000) >> 16;
+    g = (argb_8888Pixel & 0xff00) >> 8;
+    b = (argb_8888Pixel & 0xff);
+
+    Y = ( (  66 * r + 129 * g +  25 * b + 128) >> 8) +  16;
+
+    rsSetElementAt_uchar(nv21ByteArray, ((char) clamp(Y, 0, 255)), x);
+
+    if ((c % 2) == 0 && (l % 2) == 0) {
+        int uvIndex = VIDEO_HEIGHT * VIDEO_WIDTH + (x - ((l / 2) * VIDEO_WIDTH));
+        int U = ( ( -38 * r -  74 * g + 112 * b + 128) >> 8) + 128;
+        int V = ( ( 112 * r -  94 * g -  18 * b + 128) >> 8) + 128;
+        rsSetElementAt_char(nv21ByteArray, ((char) clamp(V, 0, 255)), uvIndex++);
+        rsSetElementAt_char(nv21ByteArray, ((char) clamp(U, 0, 255)), uvIndex);
     }
 
     return;
