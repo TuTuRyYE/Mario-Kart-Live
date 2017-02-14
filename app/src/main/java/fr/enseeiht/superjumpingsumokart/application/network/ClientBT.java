@@ -40,8 +40,6 @@ public class ClientBT extends Thread {
             Log.d("CLIENT", "BT connected");
         }
 
-        while (!btAdapter.isEnabled()){}
-
         // On récupère un objet BluetoothSocket grâce à l'objet BluetoothDevice
         try {
             // MON_UUID est l'UUID (comprenez identifiant serveur) de l'application. Cette valeur est nécessaire côté serveur également !
