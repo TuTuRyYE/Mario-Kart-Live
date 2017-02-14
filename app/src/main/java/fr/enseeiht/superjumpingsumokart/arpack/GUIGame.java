@@ -3,10 +3,8 @@ package fr.enseeiht.superjumpingsumokart.arpack;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.ImageFormat;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
@@ -23,7 +21,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.parrot.arsdk.arcontroller.ARFrame;
@@ -32,10 +29,6 @@ import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
 
 import org.artoolkit.ar.base.ARToolKit;
 import org.artoolkit.ar.base.AndroidUtils;
-
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.io.IOException;
 
 import fr.enseeiht.superjumpingsumokart.R;
 import fr.enseeiht.superjumpingsumokart.application.GUIWelcome;
@@ -156,7 +149,6 @@ public class GUIGame extends Activity {
         jumpBtn = (ImageButton) findViewById(R.id.jumpBtn);
         sendTrapBtn = (ImageButton) findViewById(R.id.sendTrapBtn);
 
-        fl = (FrameLayout) findViewById(R.id.guiGameFrameLayout);
         // Creation of the game
         game = new Game(this,comBT);
         while(!game.isStarted()){
