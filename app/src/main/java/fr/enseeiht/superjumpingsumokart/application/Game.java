@@ -2,6 +2,8 @@ package fr.enseeiht.superjumpingsumokart.application;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
@@ -23,11 +25,13 @@ import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
  * This class is used to manage the game.
  */
 
-public class Game {
+public class Game extends HandlerThread{
     /**
      * The logging tag. Useful for debugging.
      */
     private final static String GAME_TAG = "GAME";
+
+    private String name;
 
 
     private Circuit circuit;
@@ -52,7 +56,7 @@ public class Game {
 
     public Handler handlerComBT;
 
-    public Handler handlerGame = new Handler() {
+    public Handler handlerGame = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
             Bundle bundle = msg.getData();
@@ -129,10 +133,9 @@ public class Game {
      * Default constructor of the class {@link Game} (Vivian - 07/02/2017).
      * @param guiGame interface of the {@link Game}
      */
-    public Game(GUIGame guiGame) {
+    public Game(GUIGame guiGame, String name) {
+        super(name);
         this.circuit = createCircuit();
-
-
         // Add markers for boxes
         circuit.addMarker(1, new Vector3D(0,0,0)); // position to change when markers are placed
         circuit.addMarker(2, new Vector3D(0,0,0)); // position to change when markers are placed
@@ -350,4 +353,6 @@ public class Game {
     public void setHandlerComBT(Handler handlerComBT) {
         this.handlerComBT = handlerComBT;
     }
+
+
 }

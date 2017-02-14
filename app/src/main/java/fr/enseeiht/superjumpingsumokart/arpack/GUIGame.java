@@ -124,7 +124,8 @@ public class GUIGame extends Activity {
 
 
         // Creation of the game
-            game = new Game(this);
+            game = new Game(this, "handlerThread");
+            game.start();
 
 
 
