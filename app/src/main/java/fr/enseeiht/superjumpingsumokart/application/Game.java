@@ -113,7 +113,9 @@ public class Game {
         this.guiGame = guiGame;
         this.isStarted = false;
         this.comBT = comBT;
-        this.comBT.setGame(this);
+        if (comBT != null) {
+            this.comBT.setGame(this);
+        }
         this.otherIsReady = false;
         Log.d(GAME_TAG, "Game created for drone " + guiGame.getController().getDRONE().getName());
        // comBT.setHandlerGame(handlerGame);

@@ -140,7 +140,7 @@ public class GUIGame extends Activity {
         AndroidUtils.reportDisplayInformation(this);
 
         // Get the BT communication
-        CommunicationBT comBT = (CommunicationBT) getIntent().getExtras().get("bluetoothCommunication");
+        //CommunicationBT comBT = (CommunicationBT) getIntent().getExtras().get("bluetoothCommunication");
         // Initializes the views of the GUI
         mainLayout = (FrameLayout) findViewById(R.id.mainLayout);
         turnLeftBtn = (ImageButton) findViewById(R.id.turnLeftBtn);
@@ -151,9 +151,10 @@ public class GUIGame extends Activity {
         sendTrapBtn = (ImageButton) findViewById(R.id.sendTrapBtn);
 
         // Creation of the game
-        game = new Game(this,comBT);
-        while(!game.isStarted()){
-        }
+
+
+        game = new Game(this,null);
+
         // Every players is ready
         // Defines action listener
         turnLeftBtn.setOnTouchListener(new View.OnTouchListener() {

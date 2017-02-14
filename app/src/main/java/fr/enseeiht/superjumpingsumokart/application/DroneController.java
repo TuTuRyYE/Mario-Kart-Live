@@ -42,6 +42,9 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     // Inner state variables
     private boolean started = false;
     private boolean running = false;
+
+    private int fps_count = 0;
+
     /**
      * Default Constructor of the class {@link DroneController} (Matthieu Michel - 30/01/2017).
      * It binds the {@link}
