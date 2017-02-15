@@ -281,7 +281,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
     }
 
     @Override
-    public void onSecondPLayerReady() {
+    public void onSecondPlayerReady() {
         this.otherIsReady = true;
         this.otherIsActive = true;
         this.otherCurrentLap = 1;
