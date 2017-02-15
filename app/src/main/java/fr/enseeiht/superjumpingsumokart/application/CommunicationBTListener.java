@@ -10,26 +10,26 @@ public interface CommunicationBTListener {
     /**
      * Notify the game that the second player is ready.
      */
-    void secondPLayerReady();
+    void onSecondPLayerReady();
 
     /**
      * Notify the game that the second player has finished a lap.
      */
-    void secondPlayerLapFinished();
+    void onSecondPlayerLapFinished();
 
     /**
      * Notify the game that the second player has finished the race.
      */
-    void secondPlayerFinished();
+    void onSecondPlayerFinished();
 
     /**
      * Notify the game that the second player has given up.
      */
-    void secondPLayerGaveUp();
+    void onSecondPLayerGaveUp();
 
     /**
      * Notify the game that the second player is using an item.
      * @param item used by the second player.
      */
-    void secondPlayerUsesItem(Item item);
+    void onSecondPlayerUsesItem(String msg);
 }

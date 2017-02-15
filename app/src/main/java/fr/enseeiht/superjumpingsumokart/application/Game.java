@@ -262,28 +262,65 @@ public class Game implements CommunicationBTListener,GuiGameListener{
     }
 
     @Override
-    public void secondPLayerReady() {
+    public void onSecondPLayerReady() {
         this.otherIsReady = true;
     }
 
     @Override
-    public void secondPlayerLapFinished() {
+    public void onSecondPlayerLapFinished() {
 
     }
 
     @Override
-    public void secondPlayerFinished() {
+    public void onSecondPlayerFinished() {
 
     }
 
     @Override
-    public void secondPLayerGaveUp() {
+    public void onSecondPLayerGaveUp() {
 
     }
 
     @Override
-    public void secondPlayerUsesItem(Item item) {
-
+    public void onSecondPlayerUsesItem(String msg) {
+        String[] msgSplit = msg.split("/");
+        String name = msgSplit[0];
+        switch (name) {
+            case "banana":
+                double xBanana = Double.parseDouble(msgSplit[2]);
+                double yBanana = Double.parseDouble(msgSplit[3]);
+                double zBanana = Double.parseDouble(msgSplit[4]);
+                Banana banana = new Banana();
+                banana.setPosition(new Vector3D(xBanana, yBanana, zBanana));
+                currentItems.add(banana);
+                break;
+            case "box":
+                double xBox = Double.parseDouble(msgSplit[2]);
+                double yBox = Double.parseDouble(msgSplit[3]);
+                double zBox = Double.parseDouble(msgSplit[4]);
+                Box box = new Box();
+                box.setPosition(new Vector3D(xBox, yBox, zBox));
+                currentItems.add(box);
+                break;
+            case "magicbox":
+                double xMagicBox = Double.parseDouble(msgSplit[2]);
+                double yMagicBox = Double.parseDouble(msgSplit[3]);
+                double zMagicBox = Double.parseDouble(msgSplit[4]);
+                Vector3D position = new Vector3D(xMagicBox, yMagicBox, zMagicBox);
+                boolean found = false;
+                int ind = 0;
+                Item currentItem;
+                while (!found && ind <= currentItems.size()) {
+                    currentItem = currentItems.get(ind);
+                    if (currentItem.getPosition().equals(position)) {
+                        found = true;
+                        currentItems.remove(ind);
+                    } else {
+                        ind++;
+                    }
+                }
+                break;
+        }
     }
 
 
