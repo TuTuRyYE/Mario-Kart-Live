@@ -6,7 +6,7 @@ import fr.enseeiht.superjumpingsumokart.application.items.Item;
  * Created by Lucas on 15/02/2017.
  */
 
-public interface BluetoothListener {
+public interface CommunicationBTListener {
     /**
      * Notify the game that the second player is ready.
      */

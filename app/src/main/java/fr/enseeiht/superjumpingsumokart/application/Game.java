@@ -6,8 +6,7 @@ import android.util.Log;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.StringTokenizer;
-import java.util.concurrent.CyclicBarrier;
+
 import fr.enseeiht.superjumpingsumokart.application.items.Banana;
 import fr.enseeiht.superjumpingsumokart.application.items.Box;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
@@ -18,7 +17,7 @@ import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
  *  * @author Vivian Guy, Matthieu Michel.
  * This class is used to manage the game.
  */
-public class Game implements BluetoothListener,GuiGameListener{
+public class Game implements CommunicationBTListener,GuiGameListener{
 
     /**
      * The logging tag. Useful for debugging.
