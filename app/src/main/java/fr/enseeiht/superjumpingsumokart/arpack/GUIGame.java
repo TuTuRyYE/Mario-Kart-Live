@@ -39,6 +39,7 @@ import fr.enseeiht.superjumpingsumokart.application.Game;
 import fr.enseeiht.superjumpingsumokart.application.GameListener;
 import fr.enseeiht.superjumpingsumokart.application.GuiGameListener;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
+import fr.enseeiht.superjumpingsumokart.application.network.CommunicationBT;
 import fr.enseeiht.superjumpingsumokart.application.network.WifiConnector;
 
 public class GUIGame extends Activity implements GameListener {
@@ -141,9 +142,6 @@ public class GUIGame extends Activity implements GameListener {
      */
     private Game game;
 
-    private GuiGameListener guiGameListener;
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // Initializes the GUI from layout file
@@ -157,6 +155,16 @@ public class GUIGame extends Activity implements GameListener {
         Log.d(GUI_GAME_TAG, "Device created, attempting to create its controller...");
         controller = new DroneController(this, currentDevice);
         Log.d(GUI_GAME_TAG, "Controller of the device created.");
+
+        // Binds with the bluetooth connector
+        CommunicationBT bluetoothConnector = (CommunicationBT) getIntent().getExtras().get("bluetoothCommunication");
+        if (bluetoothConnector != null) {
+            Log.d(GUI_GAME_TAG, "BluetoothConnector not null, multiplayer mode.");
+        }
+
+        // Creation of the game
+        game = new Game(this,bluetoothConnector);
+        registerGuiGameListener(game);
 
         // Sets some graphical settings;
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
@@ -176,12 +184,6 @@ public class GUIGame extends Activity implements GameListener {
         moveForwardBtn = (ImageButton) findViewById(R.id.moveForwardBtn);
         jumpBtn = (ImageButton) findViewById(R.id.jumpBtn);
         sendTrapBtn = (ImageButton) findViewById(R.id.sendTrapBtn);
-
-        // Creation of the game
-
-
-        game = new Game(this,null);
-        registerGuiGameListener(game);
 
         // Every players is ready
         // Defines action listener

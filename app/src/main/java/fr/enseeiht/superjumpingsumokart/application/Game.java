@@ -49,68 +49,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
     private boolean otherIsActive;
     private int otherCurrentLap;
     private CommunicationBT comBT;
-    public Handler handlerComBT;
-    public Handler handlerGame = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            Bundle bundle = msg.getData();
-            byte[] byteReceived = bundle.getByteArray("0");
-            String receivedMsg = new String(byteReceived, Charset.forName("UTF-8"));
-            String[] receivedMsgSplit = receivedMsg.split("/");
-            String key = receivedMsgSplit[0];
-            switch (key) {
-                case "item": // the other drone used an item
-                    String name = receivedMsgSplit[1];
-                    switch (name) {
-                        case "banana":
-                            double xBanana = Double.parseDouble(receivedMsgSplit[2]);
-                            double yBanana = Double.parseDouble(receivedMsgSplit[3]);
-                            double zBanana = Double.parseDouble(receivedMsgSplit[4]);
-                            Banana banana = new Banana();
-                            banana.setPosition(new Vector3D(xBanana,yBanana,zBanana));
-                            currentItems.add(banana);
-                            break;
-                        case "box" :
-                            double xBox = Double.parseDouble(receivedMsgSplit[2]);
-                            double yBox = Double.parseDouble(receivedMsgSplit[3]);
-                            double zBox = Double.parseDouble(receivedMsgSplit[4]);
-                            Box box = new Box();
-                            box.setPosition(new Vector3D(xBox,yBox,zBox));
-                            currentItems.add(box);
-                            break;
-                        case "magicbox" :
-                            double xMagicBox = Double.parseDouble(receivedMsgSplit[2]);
-                            double yMagicBox = Double.parseDouble(receivedMsgSplit[3]);
-                            double zMagicBox = Double.parseDouble(receivedMsgSplit[4]);
-                            Vector3D position = new Vector3D(xMagicBox,yMagicBox,zMagicBox);
-                            boolean found = false;
-                            int ind =0;
-                            Item currentItem;
-                            while( !found && ind<=currentItems.size()) {
-                                currentItem = currentItems.get(ind);
-                                if(currentItem.getPosition().equals(position)) {
-                                    found = true;
-                                    currentItems.remove(ind);
-                                }
-                                else {ind++;};
-                            }
-                            break;
-                    }
-                case "isReady" : // the other drone is ready to start
-                    otherIsReady = true;
-                    break;
-                case "hasFinished" : // the other drone has finished
-                    String nameFinished = receivedMsgSplit[1];
-                    stop(nameFinished);
-                case "position" : // received the position of the other drone
-                    double xMagicBox = Double.parseDouble(receivedMsgSplit[2]);
-                    double yMagicBox = Double.parseDouble(receivedMsgSplit[3]);
-                    double zMagicBox = Double.parseDouble(receivedMsgSplit[4]);
-                case "hasGiveUp" :
-                    //TODO
-            }
-        }
-    };
+
     /**
      * Default constructor of the class {@link Game} (Vivian - 07/02/2017).
      * @param guiGame interface of the {@link Game}
@@ -286,9 +225,6 @@ public class Game implements CommunicationBTListener, GuiGameListener{
     }
     public boolean isReady() {
         return (this.circuit !=null && !this.isStarted());
-    }
-    public void setHandlerComBT(Handler handlerComBT) {
-        this.handlerComBT = handlerComBT;
     }
 
     public void registerGameListener(GameListener gameListener) {
