@@ -88,13 +88,15 @@ public class Game {
                 case "isReady" : // the other drone is ready to start
                     otherIsReady = true;
                     break;
-                case "finished" : // the other drone has finished
+                case "hasFinished" : // the other drone has finished
                     String nameFinished = receivedMsgSplit[1];
                     stop(nameFinished);
                 case "position" : // received the position of the other drone
                     double xMagicBox = Double.parseDouble(receivedMsgSplit[2]);
                     double yMagicBox = Double.parseDouble(receivedMsgSplit[3]);
                     double zMagicBox = Double.parseDouble(receivedMsgSplit[4]);
+                case "hasGiveUp" :
+                    //TODO
             }
         }
     };

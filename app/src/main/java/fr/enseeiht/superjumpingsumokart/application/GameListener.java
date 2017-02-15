@@ -10,23 +10,23 @@ import fr.enseeiht.superjumpingsumokart.application.items.Item;
 public interface GameListener {
 
     /**
-     * Called when the player is ready to start the race
+     * Called when the player is ready to start the race.
      */
     void onPlayerReady();
 
     /**
-     * Called when the player has finished the race
+     * Called when the player has finished the race.
      */
     void onPlayerFinished();
 
     /**
-     * Called when the player use an {@link Item}
+     * Called when the player use an {@link Item}.
      * @param item
      */
     void onPlayerUseItem(Item item);
 
     /**
-     * Called when the player give up the race
+     * Called when the player give up the race.
      */
     void onPlayerGiveUp();
 }
