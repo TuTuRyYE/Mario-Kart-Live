@@ -1,5 +1,6 @@
 package fr.enseeiht.superjumpingsumokart.application.items;
 
+import android.util.Log;
 import android.widget.ImageButton;
 
 import fr.enseeiht.superjumpingsumokart.R;
@@ -13,6 +14,13 @@ import fr.enseeiht.superjumpingsumokart.application.Vector3D;
 
 public class MagicBox extends Item {
 
+    /**
+     * The logging tag. Useful for debugging.
+     */
+    private final static String ITEM_TAG = "ITEM";
+    /**
+     * Name of the {@link Item}.
+     */
     private final static String NAME = "magicBox";
 
     /**
@@ -27,6 +35,7 @@ public class MagicBox extends Item {
 
     @Override
     public void applyEffect(DroneController droneController) {
+        Log.d(ITEM_TAG,"A magic box has been touched");
         int rand = (int) Math.floor(Math.random()*2);
         Item item;
         if (rand == 1) { //Banana
@@ -38,7 +47,9 @@ public class MagicBox extends Item {
         else {
             item = null;
         }
+
         droneController.getDrone().setCurrentItem(item);
+        Log.d(ITEM_TAG,"An item has been assigned to the droneController");
     }
 
     @Override

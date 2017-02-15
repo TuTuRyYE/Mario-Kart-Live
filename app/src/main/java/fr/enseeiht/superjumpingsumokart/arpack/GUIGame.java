@@ -89,7 +89,7 @@ public class GUIGame extends Activity implements GameListener {
                     }
                     Toast.makeText(GUIGame.this, "YOU LOSE !", Toast.LENGTH_SHORT).show();
                     for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
-                        ggl.onPlayerGiveUp();
+                        ggl.onPlayerGaveUp();
                     }
                     finish();
                     break;
@@ -301,7 +301,7 @@ public class GUIGame extends Activity implements GameListener {
         super.onStop();
         for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
             if (game != null && game.isStarted()) {
-                ggl.onPlayerGiveUp();
+                ggl.onPlayerGaveUp();
             }
         }
     }
