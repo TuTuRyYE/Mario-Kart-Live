@@ -373,6 +373,7 @@ public class GUIGame extends Activity {
     public boolean isFinished(){
         return controller.isFinished();
     }
+
     public Game getGame() {
         return game;
     }
