@@ -12,7 +12,7 @@ import fr.enseeiht.superjumpingsumokart.application.items.Box;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
 import fr.enseeiht.superjumpingsumokart.application.items.MagicBox;
 import fr.enseeiht.superjumpingsumokart.application.network.CommunicationBT;
-
+import fr.enseeiht.superjumpingsumokart.application.network.CommunicationBTListener;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 /**
  *  * @author Vivian Guy, Matthieu Michel.
@@ -297,7 +297,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
     }
 
     @Override
-    public void onSecondPLayerReady() {
+    public void onSecondPlayerReady() {
         this.otherIsReady = true;
         this.otherIsActive = true;
         this.otherCurrentLap = 1;
@@ -318,9 +318,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
 
     }
 
-    public void onSecondPlayerGaveUp() {
 
-    }
 
     @Override
     public void onSecondPlayerUsesItem(String msg) {

@@ -1,4 +1,4 @@
-package fr.enseeiht.superjumpingsumokart.application;
+package fr.enseeiht.superjumpingsumokart.application.network;
 
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
 
@@ -10,7 +10,7 @@ public interface CommunicationBTListener {
     /**
      * Notify the game that the second player is ready.
      */
-    void onSecondPLayerReady();
+    void onSecondPlayerReady();
 
     /**
      * Notify the game that the second player has finished a lap.
@@ -25,7 +25,7 @@ public interface CommunicationBTListener {
     /**
      * Notify the game that the second player has given up.
      */
-    void onSecondPLayerGaveUp();
+    void onSecondPlayerGaveUp();
 
     /**
      * Notify the game that the second player is using an item.
