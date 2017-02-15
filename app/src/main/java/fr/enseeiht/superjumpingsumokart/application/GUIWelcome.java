@@ -1,4 +1,5 @@
 package fr.enseeiht.superjumpingsumokart.application;
+
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -11,18 +12,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
 import com.parrot.arsdk.ARSDK;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
-import org.artoolkit.ar.base.NativeInterface;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import fr.enseeiht.superjumpingsumokart.R;
 import fr.enseeiht.superjumpingsumokart.application.network.ClientBT;
 import fr.enseeiht.superjumpingsumokart.application.network.CommunicationBT;
 import fr.enseeiht.superjumpingsumokart.application.network.ServerBT;
 import fr.enseeiht.superjumpingsumokart.application.network.WifiConnector;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
-import fr.enseeiht.superjumpingsumokart.R;
 /**
  * @author Romain Verset
  * The activity used as home screen for the application. From there it is possible to connect to a

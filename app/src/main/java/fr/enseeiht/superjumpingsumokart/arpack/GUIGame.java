@@ -38,6 +38,7 @@ import fr.enseeiht.superjumpingsumokart.application.DroneController;
 import fr.enseeiht.superjumpingsumokart.application.Game;
 import fr.enseeiht.superjumpingsumokart.application.GameListener;
 import fr.enseeiht.superjumpingsumokart.application.GuiGameListener;
+import fr.enseeiht.superjumpingsumokart.application.Vector3D;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
 import fr.enseeiht.superjumpingsumokart.application.network.CommunicationBT;
 import fr.enseeiht.superjumpingsumokart.application.network.WifiConnector;
@@ -455,6 +456,16 @@ public class GUIGame extends Activity implements GameListener {
     @Override
     public void onItemTouched(Item item) {
         // Nothing to do
+    }
+
+    @Override
+    public void onStartRace() {
+        controller.setRunning(true);
+    }
+
+    @Override
+    public void onUpdatedPosition(Vector3D position) {
+        controller.getDrone().setCurrentPosition(position);
     }
 
     public void notifyDefeat() {

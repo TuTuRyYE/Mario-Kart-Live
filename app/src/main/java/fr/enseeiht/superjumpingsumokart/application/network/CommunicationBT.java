@@ -98,6 +98,17 @@ public class CommunicationBT extends Thread implements Serializable, GameListene
                                 listener.onSecondPlayerTouchedItem(itemInfos);
                             }
                             break;
+                        case "raceBegins" :
+                            for (CommunicationBTListener listener : this.COMMUNICATION_BT_LISTENERS) {
+                                listener.onSecondStartedRace();
+                            }
+                            break;
+                        case "updatedPosition" :
+                            for (CommunicationBTListener listener : this.COMMUNICATION_BT_LISTENERS) {
+                                String newPosition = msgSplit[1] + "/" + msgSplit[2] + "/" + msgSplit[3];
+                                listener.onSecondUpdatedPosition(newPosition);
+                            }
+                            break;
                     }
             } catch (IOException e) {
                 Log.d(COMMUNICATION_BT_TAG, "IOException : + " + e.getMessage());
@@ -221,4 +232,28 @@ public class CommunicationBT extends Thread implements Serializable, GameListene
             write(dataBytes);
             Log.d(COMMUNICATION_BT_TAG, "onItemTouched sent to the other phone");
     }
+
+    @Override
+    public void onStartRace() {
+        Log.d(COMMUNICATION_BT_TAG, "onStartRace called");
+        // Create message
+            String dataString = "raceBegins";
+            byte[] dateBytes = dataString.getBytes(Charset.forName("UTF-8"));
+        // Send the message
+            write(dateBytes);
+            Log.d(COMMUNICATION_BT_TAG, "onStartRace sent to the other phone");
+    }
+
+    @Override
+    public void onUpdatedPosition(Vector3D position) {
+        Log.d(COMMUNICATION_BT_TAG, "onUpdatedPosition called");
+        // Create message
+            String dataString = "updatedPosition" + "/" +  position.getX() + "/" + position.getY() + "/" + position.getZ();
+            byte[] dateBytes = dataString.getBytes(Charset.forName("UTF-8"));
+        // Send the message
+            write(dateBytes);
+        Log.d(COMMUNICATION_BT_TAG, "onUpdatedPosition sent to the other phone");
+    }
+
+
 }
