@@ -42,6 +42,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
     private final ArrayList<GameListener> GAME_LISTENERS = new ArrayList<>();
 
     private boolean isStarted;
+    private boolean finished;
     private boolean otherIsReady;
     private boolean otherIsActive;
     private int otherCurrentLap;
@@ -130,7 +131,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
             registerGameListener(comBT);
         }
         this.otherIsReady = false;
-        Log.d(GAME_TAG, "Game created for drone " + guiGame.getController().getDRONE().getName());
+        Log.d(GAME_TAG, "Game created for drone " + guiGame.getController().getDrone().getName());
        // comBT.setHandlerGame(handlerGame);
     }
     /**
@@ -305,7 +306,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
 
     @Override
     public void onSecondPlayerLapFinished() {
-
+        this.otherCurrentLap++;
     }
 
     @Override
@@ -315,7 +316,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
 
     @Override
     public void onSecondPlayerGaveUp() {
-
+        this.otherIsActive = false;
     }
 
 
@@ -364,7 +365,23 @@ public class Game implements CommunicationBTListener, GuiGameListener{
 
     @Override
     public void onSecondPlayerTouchedItem(String msg){
-
+        String[] msgSplit = msg.split("/");
+        double x = Double.parseDouble(msgSplit[1]);
+        double y = Double.parseDouble(msgSplit[2]);
+        double z = Double.parseDouble(msgSplit[3]);
+        Vector3D position = new Vector3D(x, y, z);
+        boolean found = false;
+        int ind = 0;
+        Item currentItem;
+        while (!found && ind <= currentItems.size()) {
+            currentItem = currentItems.get(ind);
+            if (currentItem.getPosition().equals(position)) {
+                found = true;
+                currentItems.remove(ind);
+            } else {
+                ind++;
+            }
+        }
     };
 
     @Override
@@ -386,6 +403,11 @@ public class Game implements CommunicationBTListener, GuiGameListener{
         for(GameListener listener  : this.GAME_LISTENERS) {
             listener.onItemTouched(item);
         }
+
+    }
+
+    @Override
+    public void onPlayerGiveUp() {
 
     }
 }
