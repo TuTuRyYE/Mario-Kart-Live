@@ -25,7 +25,7 @@ public interface CommunicationBTListener {
     /**
      * Notify the game that the second player has given up.
      */
-    void secondPLayerGaveUp();
+    void secondPlayerGaveUp();
 
     /**
      * Notify the game that the second player is using an item.

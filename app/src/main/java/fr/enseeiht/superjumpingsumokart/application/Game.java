@@ -12,12 +12,13 @@ import fr.enseeiht.superjumpingsumokart.application.items.Box;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
 import fr.enseeiht.superjumpingsumokart.application.items.MagicBox;
 import fr.enseeiht.superjumpingsumokart.application.network.CommunicationBT;
+import fr.enseeiht.superjumpingsumokart.application.network.CommunicationBTListener;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 /**
  *  * @author Vivian Guy, Matthieu Michel.
  * This class is used to manage the game.
  */
-public class Game implements CommunicationBTListener,GuiGameListener{
+public class Game implements CommunicationBTListener, GuiGameListener{
 
     /**
      * The logging tag. Useful for debugging.
@@ -113,12 +114,14 @@ public class Game implements CommunicationBTListener,GuiGameListener{
         circuit.addMarker(2, new Vector3D(0,0,0)); // position to change when markers are placed
         circuit.addMarker(3, new Vector3D(0,0,0)); // position to change when markers are placed
         circuit.addMarker(4, new Vector3D(0,0,0)); // position to change when markers are placed
-        this.currentItems = setMagicBoxes();
+        currentItems = setMagicBoxes();
         this.guiGame = guiGame;
+        registerGameListener(guiGame);
         this.isStarted = false;
-        this.comBT = comBT;
         if (comBT != null) {
-            this.comBT.setGame(this);
+            this.comBT = comBT;
+            comBT.setGame(this);
+            registerGameListener(comBT);
         }
         this.otherIsReady = false;
         Log.d(GAME_TAG, "Game created for drone " + guiGame.getController().getDRONE().getName());
@@ -287,7 +290,7 @@ public class Game implements CommunicationBTListener,GuiGameListener{
     }
 
     @Override
-    public void secondPLayerGaveUp() {
+    public void secondPlayerGaveUp() {
 
     }
 
