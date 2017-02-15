@@ -52,7 +52,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
      */
     public DroneController(GUIGame guiGame, ARDiscoveryDevice device) {
         GUI_GAME = guiGame;
-        DRONE = new Drone("JUMPY", new Vector3D(0,0,0),new TestItem(new Vector3D(0,0,0)), new Vector3D(0,0,0));
+        DRONE = new Drone("JUMPY");
         GUI_GAME.addDroneInGame(DRONE);
         try {
             deviceController = new ARDeviceController(device);
@@ -238,6 +238,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
                 running = true;
                 deviceController.getFeatureJumpingSumo().sendMediaStreamingVideoEnable((byte) 1);
                 deviceController.getFeatureJumpingSumo().setPilotingPCMDFlag((byte) 1);
+                GUI_GAME.UPDATER.sendEmptyMessage(GUIGame.CONTROLLER_RUNNING);
                 break;
             case ARCONTROLLER_DEVICE_STATE_STOPPING :
                 deviceController.getFeatureJumpingSumo().sendMediaStreamingVideoEnable((byte) 0);

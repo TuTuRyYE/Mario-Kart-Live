@@ -44,9 +44,10 @@ public class Game implements CommunicationBTListener, GuiGameListener{
 
     private Drone drone, otherDrone;
 
+    private boolean trackInitialised = false, videoStreamAvailable = false, droneControllerReady = false;
+    private boolean ready = false, otherReady = false;
     private boolean isStarted;
     private boolean finished;
-    private boolean otherIsReady;
     private boolean otherIsActive;
     private int otherCurrentLap;
     private CommunicationBT comBT;
@@ -57,6 +58,8 @@ public class Game implements CommunicationBTListener, GuiGameListener{
      */
     public Game(GUIGame guiGame, CommunicationBT comBT) {
         this.circuit = createCircuit();
+        trackInitialised = true;
+        checkReady();
         // Add markers for boxes
         circuit.addMarker(1, new Vector3D(0,0,0)); // position to change when markers are placed
         circuit.addMarker(2, new Vector3D(0,0,0)); // position to change when markers are placed
@@ -72,7 +75,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
             comBT.setGame(this);
             registerGameListener(comBT);
         }
-        this.otherIsReady = false;
+        this.otherReady = false;
         Log.d(GAME_TAG, "Game created for drone " + guiGame.getController().getDrone().getName());
     }
     /**
@@ -237,9 +240,9 @@ public class Game implements CommunicationBTListener, GuiGameListener{
 
     @Override
     public void onSecondPlayerReady() {
-        this.otherIsReady = true;
+        this.otherReady = true;
         this.otherIsActive = true;
-        otherDrone = new Drone("BadJumpy");
+        otherDrone = new Drone("BAD_JUMPY");
     }
 
     @Override
@@ -348,11 +351,45 @@ public class Game implements CommunicationBTListener, GuiGameListener{
 
     }
 
+    private boolean checkReady() {
+        if (trackInitialised && droneControllerReady && videoStreamAvailable) {
+            ready =  true;
+            for (GameListener gl : GAME_LISTENERS) {
+                gl.onPlayerReady();
+            }
+            try {
+            while (!otherReady) {
+                Thread.currentThread().sleep(20);
+            } }
+            catch (InterruptedException ie) {
+                Log.d(GAME_TAG, "InterruptedException : " + ie.getMessage());
+            }
+            for (GameListener gl : GAME_LISTENERS) {
+                gl.onStartedRace();
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     @Override
     public void onPlayerGaveUp() {
         for (GameListener gl : GAME_LISTENERS) {
             gl.onPlayerGaveUp();
         }
+    }
+
+    @Override
+    public void onVideoStreamAvailable() {
+        videoStreamAvailable = true;
+        checkReady();
+    }
+
+    @Override
+    public void onDroneControllerReady() {
+        droneControllerReady = true;
+        checkReady();
     }
 
     public int getLapsNumber() {

@@ -65,6 +65,7 @@ public class GUIGame extends Activity implements GameListener {
     public final static int UPDATE_ITEM_ICON = 1;
     public final static int RENDER_AR = 3;
     public final static int CONTROLLER_STOPPING_ON_ERROR = 4;
+    public final static int CONTROLLER_RUNNING = 5;
 
     private final ArrayList<GuiGameListener> GUI_GAME_LISTENERS = new ArrayList<>();
 
@@ -96,6 +97,11 @@ public class GUIGame extends Activity implements GameListener {
                     break;
                 case RENDER_AR :
                     renderAR();
+                    break;
+                case CONTROLLER_RUNNING :
+                    for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
+                        ggl.onDroneControllerReady();
+                    }
                 default :
                     break;
             }
@@ -397,6 +403,9 @@ public class GUIGame extends Activity implements GameListener {
         if (firstUpdate) {
             renderer.configureARScene();
             firstUpdate = false;
+            for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
+                ggl.onVideoStreamAvailable();
+            }
         }
         currentFrame = frame.getByteData();
         UPDATER.sendEmptyMessage(RECEIVE_FRAME);
