@@ -18,7 +18,7 @@ import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
  *  * @author Vivian Guy, Matthieu Michel.
  * This class is used to manage the game.
  */
-public class Game {
+public class Game implements BluetoothListener{
     /**
      * The logging tag. Useful for debugging.
      */
@@ -257,5 +257,30 @@ public class Game {
     }
     public void setHandlerComBT(Handler handlerComBT) {
         this.handlerComBT = handlerComBT;
+    }
+
+    @Override
+    public void secondPLayerReady() {
+        this.otherIsReady = true;
+    }
+
+    @Override
+    public void secondPlayerLapFinished() {
+
+    }
+
+    @Override
+    public void secondPlayerFinished() {
+
+    }
+
+    @Override
+    public void secondPLayerGaveUp() {
+
+    }
+
+    @Override
+    public void secondPlayerUsesItem(Item item) {
+
     }
 }
