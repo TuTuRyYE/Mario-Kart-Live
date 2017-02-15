@@ -24,6 +24,9 @@ public class Game implements CommunicationBTListener, GuiGameListener{
      * The logging tag. Useful for debugging.
      */
     private final static String GAME_TAG = "GAME";
+    /**
+     * The circuit
+     */
     private Circuit circuit;
     /**
      * {@link GUIGame}, the interface of the Game.
@@ -40,6 +43,8 @@ public class Game implements CommunicationBTListener, GuiGameListener{
 
     private boolean isStarted;
     private boolean otherIsReady;
+    private boolean otherIsActive;
+    private int otherCurrentLap;
     private CommunicationBT comBT;
     public Handler handlerComBT;
     public Handler handlerGame = new Handler() {
@@ -278,6 +283,8 @@ public class Game implements CommunicationBTListener, GuiGameListener{
     @Override
     public void onSecondPLayerReady() {
         this.otherIsReady = true;
+        this.otherIsActive = true;
+        this.otherCurrentLap = 1;
     }
 
     @Override
@@ -290,8 +297,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
 
     }
 
-    @Override
-    public void onSecondPLayerGaveUp() {
+    public void onSecondPlayerGaveUp() {
 
     }
 
@@ -337,6 +343,10 @@ public class Game implements CommunicationBTListener, GuiGameListener{
         }
     }
 
+    @Override
+    public void onSecondPlayerTouchedItem(String msg){
+
+    };
 
     @Override
     public void onPositionUpdated(Vector3D position) {

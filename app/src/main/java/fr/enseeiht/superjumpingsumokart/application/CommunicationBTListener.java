@@ -29,7 +29,13 @@ public interface CommunicationBTListener {
 
     /**
      * Notify the game that the second player is using an item.
-     * @param item used by the second player.
+     * @param msg used by the second player.
      */
     void onSecondPlayerUsesItem(String msg);
+
+    /**
+     * Notify the game that the second player has touched an item.
+     * @param msg touched by the second player.
+     */
+    void onSecondPlayerTouchedItem(String msg);
 }
