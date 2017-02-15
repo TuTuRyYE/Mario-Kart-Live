@@ -32,9 +32,8 @@ public class Banana extends Item {
 
     @Override
     public void useItem(DroneController droneController) {
-        this.setPosition(droneController.getDRONE().getCurrentPosition());
+        this.setPosition(droneController.getDrone().getCurrentPosition());
         droneController.getGUI_GAME().getGame().onItemUsed(this);
-
     }
 
     @Override
