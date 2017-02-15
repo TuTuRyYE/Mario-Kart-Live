@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Arrays;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,6 +21,7 @@ public class CommunicationBT extends Thread implements Serializable {
     private InputStream btInputStream;
     private OutputStream btOutputStream;
     private Game game;
+    private final ArrayList<CommunicationBTListener> COMMUNICATION_BT_LISTENERS = new ArrayList<>();
   //  private Handler handlerGame;
     public CommunicationBT(BluetoothSocket socket) {
         btSocket = socket;
@@ -69,6 +71,14 @@ public class CommunicationBT extends Thread implements Serializable {
     }
     public void setGame(Game game) {
         this.game = game;
+    }
+
+    public void registerCommunicationBTListener(CommunicationBTListener gameListener) {
+        COMMUNICATION_BT_LISTENERS.add(gameListener);
+    }
+
+    public void unregisterGameListener(CommunicationBTListener gameListener) {
+        COMMUNICATION_BT_LISTENERS.remove(gameListener);
     }
 
 }

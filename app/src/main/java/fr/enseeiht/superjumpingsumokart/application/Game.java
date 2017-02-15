@@ -6,8 +6,7 @@ import android.util.Log;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.StringTokenizer;
-import java.util.concurrent.CyclicBarrier;
+
 import fr.enseeiht.superjumpingsumokart.application.items.Banana;
 import fr.enseeiht.superjumpingsumokart.application.items.Box;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
@@ -35,6 +34,8 @@ public class Game {
     /**
      * Boolean to check if the race is started or not.
      */
+    private final ArrayList<GameListener> GAME_LISTENERS = new ArrayList<>();
+
     private boolean isStarted;
     private boolean otherIsReady;
     private CommunicationBT comBT;
@@ -257,5 +258,13 @@ public class Game {
     }
     public void setHandlerComBT(Handler handlerComBT) {
         this.handlerComBT = handlerComBT;
+    }
+
+    public void registerGameListener(GameListener gameListener) {
+        GAME_LISTENERS.add(gameListener);
+    }
+
+    public void unregisterGameListener(GameListener gameListener) {
+        GAME_LISTENERS.remove(gameListener);
     }
 }
