@@ -27,7 +27,6 @@ public class CommunicationBT extends Thread implements Serializable, GameListene
     private Game game;
     private final ArrayList<CommunicationBTListener> COMMUNICATION_BT_LISTENERS = new ArrayList<>();
 
-  //  private Handler handlerGame;
     public CommunicationBT(BluetoothSocket socket) {
         BT_SOCKET = socket;
         // Initialization of the streams
@@ -48,11 +47,12 @@ public class CommunicationBT extends Thread implements Serializable, GameListene
                 byte[] data = new byte[bytes];
                 System.arraycopy(buffer, 0, data, 0, bytes);
                 String receivedMsg = new String(data, Charset.forName("UTF-8"));
-                Log.d(COMMUNICATION_BT_TAG, "Message received");
+
 
                 // Dispatch the message in function of its key
                     String[] msgSplit = receivedMsg.split("/");
                     String key = msgSplit[0];
+                    Log.d(COMMUNICATION_BT_TAG, "Message " + key + " received");
                     switch (key) {
                         case "isReady" :
                             for (CommunicationBTListener listener : this.COMMUNICATION_BT_LISTENERS) {
@@ -141,34 +141,41 @@ public class CommunicationBT extends Thread implements Serializable, GameListene
 
     @Override
     public void onPlayerReady() {
+        Log.d(COMMUNICATION_BT_TAG, "onPlayerReady called");
         // Create message
             String dataString = "isReady";
             byte[] dataBytes = dataString.getBytes(Charset.forName("UTF-8"));
         // Send the message
                 write(dataBytes);
+        Log.d(COMMUNICATION_BT_TAG, "onPlayerReady sent to the other phone");
 
     }
 
     @Override
     public void onPlayerFinished() {
+        Log.d(COMMUNICATION_BT_TAG, "onPlayerFinished called");
         // Create message
             String dataString = "hasFinished";
             byte[] dataBytes = dataString.getBytes(Charset.forName("UTF-8"));
         // Send the message
             write(dataBytes);
+        Log.d(COMMUNICATION_BT_TAG, "onPlayerFinished sent to the other phone");
     }
 
     @Override
     public void onPlayerFinishedLap() {
+        Log.d(COMMUNICATION_BT_TAG, "onPlayerFinishedLap called");
         // Create message
             String dataString = "hasFinishedLap";
             byte[] dataBytes = dataString.getBytes(Charset.forName("UTF-8"));
         // Send the message
             write(dataBytes);
+        Log.d(COMMUNICATION_BT_TAG, "onPlayerFinishedLap sent to the other phone");
     }
 
     @Override
     public void onPlayerUseItem(Item item) {
+        Log.d(COMMUNICATION_BT_TAG, "onPlayerUseItem called");
         // Create message
             String dataString;
             String name = item.getName();
@@ -182,19 +189,23 @@ public class CommunicationBT extends Thread implements Serializable, GameListene
             byte[] dataBytes = dataString.getBytes(Charset.forName("UTF-8"));
         // Send the message
             write(dataBytes);
+        Log.d(COMMUNICATION_BT_TAG, "onPlayerUseItem sent to the other phone");
     }
 
     @Override
     public void onPlayerGaveUp() {
+        Log.d(COMMUNICATION_BT_TAG, "onPlayerGaveUp called");
         // Create message
             String dataString = "hasGiveUp";
             byte[] dataBytes = dataString.getBytes(Charset.forName("UTF-8"));
         // Send the message
             write(dataBytes);
+            Log.d(COMMUNICATION_BT_TAG, "onPlayerGaveUp sent to the other phone");
     }
 
     @Override
     public void onItemTouched(Item item) {
+        Log.d(COMMUNICATION_BT_TAG, "onItemTouched called");
         // Create message
             String dataString;
             String name = item.getName();
@@ -208,5 +219,6 @@ public class CommunicationBT extends Thread implements Serializable, GameListene
         byte[] dataBytes = dataString.getBytes(Charset.forName("UTF-8"));
         // Send the message
             write(dataBytes);
+            Log.d(COMMUNICATION_BT_TAG, "onItemTouched sent to the other phone");
     }
 }
