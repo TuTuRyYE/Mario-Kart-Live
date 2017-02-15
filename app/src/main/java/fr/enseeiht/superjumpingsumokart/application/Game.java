@@ -11,6 +11,7 @@ import fr.enseeiht.superjumpingsumokart.application.items.Banana;
 import fr.enseeiht.superjumpingsumokart.application.items.Box;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
 import fr.enseeiht.superjumpingsumokart.application.items.MagicBox;
+import fr.enseeiht.superjumpingsumokart.application.items.NullItem;
 import fr.enseeiht.superjumpingsumokart.application.network.CommunicationBT;
 import fr.enseeiht.superjumpingsumokart.application.network.CommunicationBTListener;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
@@ -73,7 +74,6 @@ public class Game implements CommunicationBTListener, GuiGameListener{
         }
         this.otherIsReady = false;
         Log.d(GAME_TAG, "Game created for drone " + guiGame.getController().getDrone().getName());
-       // comBT.setHandlerGame(handlerGame);
     }
     /**
      * Generate magic boxes on the circuit (Vivian - 07/02/2017).
@@ -239,26 +239,25 @@ public class Game implements CommunicationBTListener, GuiGameListener{
     public void onSecondPlayerReady() {
         this.otherIsReady = true;
         this.otherIsActive = true;
-        this.otherCurrentLap = 1;
+        otherDrone = new Drone("BadJumpy");
     }
 
     @Override
     public void onSecondPlayerLapFinished() {
-        this.otherCurrentLap++;
+        otherDrone.setCurrentLap(otherDrone.getCurrentLap() + 1);
     }
 
     @Override
     public void onSecondPlayerFinished() {
+        otherIsActive = false;
         guiGame.notifyDefeat();
-
     }
 
     @Override
     public void onSecondPlayerGaveUp() {
         this.otherIsActive = false;
+        guiGame.notifyVictory();
     }
-
-
 
     @Override
     public void onSecondPlayerUsesItem(String msg) {
@@ -321,7 +320,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
                 ind++;
             }
         }
-    }
+    };
 
     @Override
     public void onPositionUpdated(Vector3D position) {
@@ -362,9 +361,5 @@ public class Game implements CommunicationBTListener, GuiGameListener{
 
     public void setDrone(Drone drone) {
         this.drone = drone;
-    }
-
-    public void setOtherDrone(Drone otherDrone) {
-        this.otherDrone = otherDrone;
     }
 }
