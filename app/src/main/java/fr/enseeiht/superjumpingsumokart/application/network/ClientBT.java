@@ -37,7 +37,7 @@ public class ClientBT extends Thread {
             tmp = device.createRfcommSocketToServiceRecord(UUID.fromString("00002415-0000-1000-8000-00805F9B34FB"));
         } catch (IOException e) { }
         btSocket = tmp;
-        btAdapter.cancelDiscovery();
+        this.btAdapter.cancelDiscovery();
     }
     public void run() {
         // On annule la découverte des périphériques (inutile puisqu'on est en train d'essayer de se connecter) TODO

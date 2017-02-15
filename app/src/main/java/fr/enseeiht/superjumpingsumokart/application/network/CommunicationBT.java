@@ -24,7 +24,7 @@ public class CommunicationBT extends Thread implements Serializable, GameListene
     private InputStream btInputStream;
     private OutputStream btOutputStream;
     private Game game;
-  //  private Handler handlerGame;
+
     public CommunicationBT(BluetoothSocket socket) {
         btSocket = socket;
         // Initialization of the streams
@@ -46,6 +46,7 @@ public class CommunicationBT extends Thread implements Serializable, GameListene
                 System.arraycopy(buffer, 0, data, 0, bytes);
                 String receivedMsg = new String(data, Charset.forName("UTF-8"));
                 Log.d("COMMUNICATIONBT", "Message received");
+                Log.d("COMMUNICATIONBT", receivedMsg);
                 //Create message
                 Message mes = new Message();
                 //Create bundle
