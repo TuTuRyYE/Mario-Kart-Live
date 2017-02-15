@@ -9,20 +9,51 @@ import java.util.UUID;
  * Created by Lucas on 07/02/2017.
  */
 public class ClientBT extends Thread {
+    /**
+     * The socket where will be hosted the bluetooth communication.
+     */
     private BluetoothSocket btSocket;
+    /**
+     * The local device.
+     */
     private final BluetoothDevice btDevice;
+    /**
+     * The local bluetooth adapter.
+     */
     private BluetoothAdapter btAdapter;
+    /**
+     * Certify that the bluetooth connexion is established.
+     */
     private boolean isConnected;
+    /**
+     * The bluetooth communication.
+     */
     private CommunicationBT comClient;
+
+    /**
+     * Get the bluetooth communication.
+     * @return the bluetooth communication.
+     */
     public CommunicationBT getComClient() {
         return comClient;
     }
+
+    /**
+     * Get the state of the bluetooth connexion.
+     * @return the state of the bluetooth connexion.
+     */
     public boolean isConnected() {
         return isConnected;
     }
+
+    /**
+     * Create the client for the bluetooth connexion.
+     * @param device the local device.
+     * @param btAdapter the local  bluetooth adapter.
+     */
     public ClientBT(BluetoothDevice device, BluetoothAdapter btAdapter) {
-        // On utilise un objet temporaire car btSocket et btDevice sont "final"
-        BluetoothSocket tmp = null;
+        // We use a temporary object because btSocket is final
+        BluetoothSocket tmpSocket = null;
         btDevice = device;
         this.btAdapter = btAdapter;
         isConnected = false;
@@ -31,16 +62,17 @@ public class ClientBT extends Thread {
             btAdapter.enable();
             Log.d("CLIENT", "BT connected");
         }
-        // On récupère un objet BluetoothSocket grâce à l'objet BluetoothDevice
+        // We get a BluetoothSocket object thanks to the BluetoothDevice.
         try {
-            // MON_UUID est l'UUID (comprenez identifiant serveur) de l'application. Cette valeur est nécessaire côté serveur également !
-            tmp = device.createRfcommSocketToServiceRecord(UUID.fromString("00002415-0000-1000-8000-00805F9B34FB"));
+            // The UUID is the login for the server. It is the same on the server's side.
+            tmpSocket = device.createRfcommSocketToServiceRecord(UUID.fromString("00002415-0000-1000-8000-00805F9B34FB"));
         } catch (IOException e) { }
-        btSocket = tmp;
-        this.btAdapter.cancelDiscovery();
+        btSocket = tmpSocket;
     }
+
+
+    @Override
     public void run() {
-        // On annule la découverte des périphériques (inutile puisqu'on est en train d'essayer de se connecter) TODO
         try {
             // connexion
             Log.d("CLIENT", "trying to connect");
@@ -57,12 +89,17 @@ public class ClientBT extends Thread {
             return;
         }
         isConnected = true;
-        // We launch the BT communication threads
+        // We cancel the bluetooth discovery TODO
+
+        // We launch the BT communication thread
         this.comClient = new CommunicationBT(btSocket);
         comClient.start();
         Log.d("CLIENT", "communication launched");
     }
-    // Annule toute connexion en cours et tue le thread
+
+    /**
+     * Close the connection
+     */
     public void cancel() {
         try {
             btSocket.close();

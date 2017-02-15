@@ -9,56 +9,80 @@ import java.util.UUID;
  * Created by Lucas on 07/02/2017.
  */
 public class ServerBT extends Thread {
+    /**
+     * The server socket where will be hosted the bluetooth communication.
+     */
     private final BluetoothServerSocket btServerSocket;
+    /**
+     * The local bluetooth adapter.
+     */
     private BluetoothAdapter btAdapter;
+    /**
+     * Certify that the bluetooth connexion is established.
+     */
     private boolean isConnected;
+    /**
+     * The bluetooth communication.
+     */
     private CommunicationBT comServer;
+    /**
+     * Get the bluetooth communication.
+     * @return the bluetooth communication.
+     */
     public CommunicationBT getComServer() {
         return comServer;
     }
+    /**
+     * Get the state of the bluetooth connexion.
+     * @return the state of the bluetooth connexion.
+     */
     public boolean isConnected() {
         return isConnected;
     }
-    public ServerBT(BluetoothAdapter BA) {
+    /**
+     * Create the server for the bluetooth connexion.
+     * @param btAdapter the local  bluetooth adapter.
+     */
+    public ServerBT(BluetoothAdapter btAdapter) {
         BluetoothServerSocket tmp;
         tmp = null;
-        btAdapter = BA;
+        this.btAdapter = btAdapter;
         isConnected = false;
         // If the BT is disconnected, we force it to connect
-        if (!btAdapter.isEnabled()) {
-            btAdapter.enable();
+        if (!this.btAdapter.isEnabled()) {
+            this.btAdapter.enable();
             Log.v("SERVER", "BT connected");
         }
-        while (!btAdapter.isEnabled()){}
+        while (!this.btAdapter.isEnabled()){}
         try {
-            tmp = btAdapter.listenUsingRfcommWithServiceRecord("My Server", UUID.fromString("00002415-0000-1000-8000-00805F9B34FB"));
+            tmp = this.btAdapter.listenUsingRfcommWithServiceRecord("My Server", UUID.fromString("00002415-0000-1000-8000-00805F9B34FB"));
         } catch (IOException e) {        }
         btServerSocket = tmp;
     }
+
     @Override
     public void run() {
         BluetoothSocket socket = null;
         Log.v("SERVER", "waiting for connections");
+        // We wait for a client attempting to connect
         while (!isConnected) {
             if (btServerSocket != null) {
-                Log.d("coucou", " server socket initialized");
+                Log.d("SERVER", " server socket initialized");
             }
-            else{Log.d("coucou", "pas connecté");}
-            // On attend que le client se connecte
+            else{Log.d("SERVER", "not connected");}
             try {
-                Log.d("SERVER","On essaye de se connecter...");
+                Log.d("SERVER","trying to connect...");
                 socket = btServerSocket.accept();
             } catch (IOException e) {
                 break;
             }
-            // On vérifie si le client s'est connecté
+            // We verify that the connexion is established
             if (socket != null) {
                 Log.v("SERVER", "connected to client");
                 try {
                     isConnected = true;
-                    // on bloque les autres arrivées sur le socket
+                    // We close the socket
                     btServerSocket.close();
-                    // on créé les threads de communication bluetooth
                 } catch (IOException e) {
                 }
                 break;
@@ -68,10 +92,15 @@ public class ServerBT extends Thread {
         this.comServer = new CommunicationBT(socket);
         comServer.start();
         String test = "coucou";
-        Log.d("envoieMessage",test.getBytes().toString());
+        Log.d("SERVER",test.getBytes().toString());
         comServer.write(test.getBytes());
         Log.v("SERVER", "communication launched");
     }
+
+
+    /**
+     * Close the connection
+     */
     public void cancel() {
         try {
             btServerSocket.close();
