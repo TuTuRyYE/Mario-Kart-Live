@@ -24,6 +24,9 @@ public class Game implements CommunicationBTListener, GuiGameListener{
      * The logging tag. Useful for debugging.
      */
     private final static String GAME_TAG = "GAME";
+    /**
+     * The circuit
+     */
     private Circuit circuit;
     /**
      * {@link GUIGame}, the interface of the Game.
@@ -41,6 +44,8 @@ public class Game implements CommunicationBTListener, GuiGameListener{
     private boolean isStarted;
     private boolean finished;
     private boolean otherIsReady;
+    private boolean otherIsActive;
+    private int otherCurrentLap;
     private CommunicationBT comBT;
     public Handler handlerComBT;
     public Handler handlerGame = new Handler() {
@@ -119,6 +124,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
         this.guiGame = guiGame;
         registerGameListener(guiGame);
         this.isStarted = false;
+        this.comBT = comBT;
         if (comBT != null) {
             this.comBT = comBT;
             comBT.setGame(this);
@@ -276,30 +282,73 @@ public class Game implements CommunicationBTListener, GuiGameListener{
     }
 
     @Override
-    public void secondPLayerReady() {
+    public void onSecondPlayerReady() {
         this.otherIsReady = true;
+        this.otherIsActive = true;
+        this.otherCurrentLap = 1;
     }
 
     @Override
-    public void secondPlayerLapFinished() {
-
-    }
-
-    @Override
-    public void secondPlayerFinished() {
+    public void onSecondPlayerLapFinished() {
 
     }
 
     @Override
-    public void secondPlayerGaveUp() {
+    public void onSecondPlayerFinished() {
 
     }
 
     @Override
-    public void secondPlayerUsesItem(Item item) {
+    public void onSecondPlayerGaveUp() {
 
     }
 
+    @Override
+    public void onSecondPlayerUsesItem(String msg) {
+        String[] msgSplit = msg.split("/");
+        String name = msgSplit[0];
+        switch (name) {
+            case "banana":
+                double xBanana = Double.parseDouble(msgSplit[2]);
+                double yBanana = Double.parseDouble(msgSplit[3]);
+                double zBanana = Double.parseDouble(msgSplit[4]);
+                Banana banana = new Banana();
+                banana.setPosition(new Vector3D(xBanana, yBanana, zBanana));
+                currentItems.add(banana);
+                break;
+            case "box":
+                double xBox = Double.parseDouble(msgSplit[2]);
+                double yBox = Double.parseDouble(msgSplit[3]);
+                double zBox = Double.parseDouble(msgSplit[4]);
+                Box box = new Box();
+                box.setPosition(new Vector3D(xBox, yBox, zBox));
+                currentItems.add(box);
+                break;
+            case "magicbox":
+                double xMagicBox = Double.parseDouble(msgSplit[2]);
+                double yMagicBox = Double.parseDouble(msgSplit[3]);
+                double zMagicBox = Double.parseDouble(msgSplit[4]);
+                Vector3D position = new Vector3D(xMagicBox, yMagicBox, zMagicBox);
+                boolean found = false;
+                int ind = 0;
+                Item currentItem;
+                while (!found && ind <= currentItems.size()) {
+                    currentItem = currentItems.get(ind);
+                    if (currentItem.getPosition().equals(position)) {
+                        found = true;
+                        currentItems.remove(ind);
+                    } else {
+                        ind++;
+                    }
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onSecondPlayerTouchedItem(String msg){
+
+    };
 
     @Override
     public void onPositionUpdated(Vector3D position) {

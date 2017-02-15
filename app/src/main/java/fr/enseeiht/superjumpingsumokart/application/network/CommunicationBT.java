@@ -7,7 +7,6 @@ import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
-import android.os.Message;
 import android.util.Log;
 
 import fr.enseeiht.superjumpingsumokart.application.Game;
@@ -50,15 +49,56 @@ public class CommunicationBT extends Thread implements Serializable, GameListene
                 System.arraycopy(buffer, 0, data, 0, bytes);
                 String receivedMsg = new String(data, Charset.forName("UTF-8"));
                 Log.d(COMMUNICATION_BT_TAG, "Message received");
-                Log.d(COMMUNICATION_BT_TAG, receivedMsg);
-                //Create message
-                Message mes = new Message();
-                //Create bundle
-       /*         Bundle bundle = new Bundle();
-                bundle.putByteArray("0", data);
-                mes.setData(bundle);
-//                handlerGame.sendMessage(mes);
-*/
+
+                // Dispatch the message in function of its key
+                    String[] msgSplit = receivedMsg.split("/");
+                    String key = msgSplit[0];
+                    switch (key) {
+                        case "isReady" :
+                            for (CommunicationBTListener listener : this.COMMUNICATION_BT_LISTENERS) {
+                                listener.onSecondPlayerReady();
+                            }
+                            break;
+                        case "hasFinished" :
+                            for (CommunicationBTListener listener : this.COMMUNICATION_BT_LISTENERS) {
+                                listener.onSecondPlayerFinished();
+                            }
+                            break;
+                        case "hasFinishedLap" :
+                            for (CommunicationBTListener listener : this.COMMUNICATION_BT_LISTENERS) {
+                                listener.onSecondPlayerLapFinished();
+                            }
+                            break;
+                        case "itemUsed" :
+                            for (CommunicationBTListener listener : this.COMMUNICATION_BT_LISTENERS) {
+                                String itemInfos;
+                                if (msgSplit.length == 2) { // if the object hasn't a position
+                                    itemInfos = msgSplit[1];
+                                }
+                                else { // si the object has a position
+                                    itemInfos = msgSplit[1] + "/" + msgSplit[2] + "/" + msgSplit[3] + "/" + msgSplit[4];
+                                }
+                                listener.onSecondPlayerUsesItem(itemInfos);
+                            }
+                            break;
+                        case "hasGiveUp" :
+                            for (CommunicationBTListener listener : this.COMMUNICATION_BT_LISTENERS) {
+                                listener.onSecondPlayerGaveUp();
+                            }
+                            break;
+                        case "hasTouchedItem" :
+                            for (CommunicationBTListener listener : this.COMMUNICATION_BT_LISTENERS) {
+                                String itemInfos;
+                                if (msgSplit.length == 2) { // if the object hasn't a position
+                                    itemInfos = msgSplit[1];
+                                }
+                                else { // si the object has a position
+                                    itemInfos = msgSplit[1] + "/" + msgSplit[2] + "/" + msgSplit[3] + "/" + msgSplit[4];
+                                }
+                                listener.onSecondPlayerTouchedItem(itemInfos);
+                            }
+                            break;
+                    }
             } catch (IOException e) {
                 Log.d(COMMUNICATION_BT_TAG, "IOException : + " + e.getMessage());
                 break;
@@ -119,16 +159,25 @@ public class CommunicationBT extends Thread implements Serializable, GameListene
     }
 
     @Override
+    public void onPlayerFinishedLap() {
+        // Create message
+            String dataString = "hasFinishedLap";
+            byte[] dataBytes = dataString.getBytes(Charset.forName("UTF-8"));
+        // Send the message
+            write(dataBytes);
+    }
+
+    @Override
     public void onPlayerUseItem(Item item) {
         // Create message
             String dataString;
             String name = item.getName();
             Vector3D position = item.getPosition();
             if (position != null) {
-                dataString = "item" + "/" + name + "/" + position.getX() + "/" + position.getY() + "/" + position.getZ();
+                dataString = "itemUsed" + "/" + name + "/" + position.getX() + "/" + position.getY() + "/" + position.getZ();
             }
             else {
-                dataString = "item" + "/" + name;
+                dataString = "itemUsed" + "/" + name;
             }
             byte[] dataBytes = dataString.getBytes(Charset.forName("UTF-8"));
         // Send the message
@@ -136,10 +185,27 @@ public class CommunicationBT extends Thread implements Serializable, GameListene
     }
 
     @Override
-    public void onPlayerGiveUp() {
+    public void onPlayerGaveUp() {
         // Create message
             String dataString = "hasGiveUp";
             byte[] dataBytes = dataString.getBytes(Charset.forName("UTF-8"));
+        // Send the message
+            write(dataBytes);
+    }
+
+    @Override
+    public void onItemTouched(Item item) {
+        // Create message
+            String dataString;
+            String name = item.getName();
+            Vector3D position = item.getPosition();
+            if (position != null) {
+                dataString = "hasTouchedItem" + "/" + name + "/" + position.getX() + "/" + position.getY() + "/" + position.getZ();
+            }
+            else {
+            dataString = "hasTouchedItem" + "/" + name;
+            }
+        byte[] dataBytes = dataString.getBytes(Charset.forName("UTF-8"));
         // Send the message
             write(dataBytes);
     }

@@ -20,13 +20,25 @@ public interface GameListener {
     void onPlayerFinished();
 
     /**
+     * Called when the player has finished a lap
+     */
+
+    void onPlayerFinishedLap();
+
+    /**
      * Called when the player use an {@link Item}.
-     * @param item
+     * @param item the item used
      */
     void onPlayerUseItem(Item item);
 
     /**
      * Called when the player give up the race.
      */
-    void onPlayerGiveUp();
+    void onPlayerGaveUp();
+
+    /**
+     * Called when an {@link Item} is touched on the {@link Circuit}
+     * @param item the item touched
+     */
+    void onItemTouched(Item item);
 }
