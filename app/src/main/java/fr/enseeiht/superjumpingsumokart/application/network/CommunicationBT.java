@@ -12,11 +12,15 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import fr.enseeiht.superjumpingsumokart.application.Game;
+import fr.enseeiht.superjumpingsumokart.application.GameListener;
+import fr.enseeiht.superjumpingsumokart.application.Vector3D;
+import fr.enseeiht.superjumpingsumokart.application.items.Item;
+
 /**
  * Created by Lucas on 07/02/2017.
  */
 /* Manages the bluetooth communication for an appeared device */
-public class CommunicationBT extends Thread implements Serializable {
+public class CommunicationBT extends Thread implements Serializable, GameListener {
     private final BluetoothSocket btSocket;
     private InputStream btInputStream;
     private OutputStream btOutputStream;
@@ -44,6 +48,7 @@ public class CommunicationBT extends Thread implements Serializable {
                 System.arraycopy(buffer, 0, data, 0, bytes);
                 String receivedMsg = new String(data, Charset.forName("UTF-8"));
                 Log.d("COMMUNICATIONBT", "Message received");
+                Log.d("COMMUNICATIONBT", receivedMsg);
                 //Create message
                 Message mes = new Message();
                 //Create bundle
@@ -81,4 +86,48 @@ public class CommunicationBT extends Thread implements Serializable {
         COMMUNICATION_BT_LISTENERS.remove(gameListener);
     }
 
+    @Override
+    public void onPlayerReady() {
+        // Create message
+            String dataString = "isReady";
+            byte[] dataBytes = dataString.getBytes(Charset.forName("UTF-8"));
+        // Send the message
+                write(dataBytes);
+
+    }
+
+    @Override
+    public void onPlayerFinished() {
+        // Create message
+            String dataString = "hasFinished";
+            byte[] dataBytes = dataString.getBytes(Charset.forName("UTF-8"));
+        // Send the message
+            write(dataBytes);
+    }
+
+    @Override
+    public void onPlayerUseItem(Item item) {
+        // Create message
+            String dataString;
+            String name = item.getName();
+            Vector3D position = item.getPosition();
+            if (position != null) {
+                dataString = "item" + "/" + name + "/" + position.getX() + "/" + position.getY() + "/" + position.getZ();
+            }
+            else {
+                dataString = "item" + "/" + name;
+            }
+            byte[] dataBytes = dataString.getBytes(Charset.forName("UTF-8"));
+        // Send the message
+            write(dataBytes);
+    }
+
+    @Override
+    public void onPlayerGiveUp() {
+        // Create message
+            String dataString = "hasGiveUp";
+            byte[] dataBytes = dataString.getBytes(Charset.forName("UTF-8"));
+        // Send the message
+            write(dataBytes);
+    }
 }

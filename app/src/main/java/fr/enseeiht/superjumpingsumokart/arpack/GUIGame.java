@@ -176,7 +176,6 @@ public class GUIGame extends Activity {
 
 
         game = new Game(this,null);
-        game.registerGameListener(this);
 
         // Every players is ready
         // Defines action listener

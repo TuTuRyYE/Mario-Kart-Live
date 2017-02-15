@@ -17,7 +17,8 @@ import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
  *  * @author Vivian Guy, Matthieu Michel.
  * This class is used to manage the game.
  */
-public class Game {
+public class Game implements CommunicationBTListener,GuiGameListener{
+
     /**
      * The logging tag. Useful for debugging.
      */
@@ -89,13 +90,15 @@ public class Game {
                 case "isReady" : // the other drone is ready to start
                     otherIsReady = true;
                     break;
-                case "finished" : // the other drone has finished
+                case "hasFinished" : // the other drone has finished
                     String nameFinished = receivedMsgSplit[1];
                     stop(nameFinished);
                 case "position" : // received the position of the other drone
                     double xMagicBox = Double.parseDouble(receivedMsgSplit[2]);
                     double yMagicBox = Double.parseDouble(receivedMsgSplit[3]);
                     double zMagicBox = Double.parseDouble(receivedMsgSplit[4]);
+                case "hasGiveUp" :
+                    //TODO
             }
         }
     };
@@ -266,5 +269,41 @@ public class Game {
 
     public void unregisterGameListener(GameListener gameListener) {
         GAME_LISTENERS.remove(gameListener);
+    }
+
+    @Override
+    public void secondPLayerReady() {
+        this.otherIsReady = true;
+    }
+
+    @Override
+    public void secondPlayerLapFinished() {
+
+    }
+
+    @Override
+    public void secondPlayerFinished() {
+
+    }
+
+    @Override
+    public void secondPLayerGaveUp() {
+
+    }
+
+    @Override
+    public void secondPlayerUsesItem(Item item) {
+
+    }
+
+
+    @Override
+    public void onPositionUpdated(Vector3D position) {
+
+    }
+
+    @Override
+    public void onItemUsed(Item item) {
+
     }
 }
