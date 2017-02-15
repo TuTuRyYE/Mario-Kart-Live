@@ -430,7 +430,7 @@ public class GUIGame extends Activity implements GameListener {
 
     @Override
     public void onPlayerReady() {
-        // Nothing to do here
+        // Nothing to do here.
     }
 
     @Override
@@ -455,7 +455,7 @@ public class GUIGame extends Activity implements GameListener {
 
     @Override
     public void onItemTouched(Item item) {
-        // Nothing to do
+        // Nothing to do here.
     }
 
     @Override

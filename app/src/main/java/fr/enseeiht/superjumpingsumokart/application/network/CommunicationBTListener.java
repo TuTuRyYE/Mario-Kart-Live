@@ -15,7 +15,7 @@ public interface CommunicationBTListener {
     /**
      * Notify the game that the second player has started the race
      */
-    void onSecondStartedRace();
+    void onSecondStartRace();
 
     /**
      * Notify the game that the second player has finished a lap.
@@ -44,5 +44,5 @@ public interface CommunicationBTListener {
      */
     void onSecondPlayerTouchedItem(String msg);
 
-    void onSecondUpdatedPosition(String msg);
+    void onSecondPlayerUpdatedPosition(String msg);
 }

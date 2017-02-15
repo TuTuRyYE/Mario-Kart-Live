@@ -100,13 +100,13 @@ public class CommunicationBT extends Thread implements Serializable, GameListene
                             break;
                         case "raceBegins" :
                             for (CommunicationBTListener listener : this.COMMUNICATION_BT_LISTENERS) {
-                                listener.onSecondStartedRace();
+                                listener.onSecondStartRace();
                             }
                             break;
                         case "updatedPosition" :
                             for (CommunicationBTListener listener : this.COMMUNICATION_BT_LISTENERS) {
                                 String newPosition = msgSplit[1] + "/" + msgSplit[2] + "/" + msgSplit[3];
-                                listener.onSecondUpdatedPosition(newPosition);
+                                listener.onSecondPlayerUpdatedPosition(newPosition);
                             }
                             break;
                     }

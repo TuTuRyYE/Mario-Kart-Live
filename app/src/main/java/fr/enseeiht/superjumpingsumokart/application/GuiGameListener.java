@@ -32,6 +32,11 @@ public interface GuiGameListener {
     void onPlayerGaveUp();
 
     /**
+     * Method called when the {@link Drone} finishes the race.
+     */
+    void onPlayerFinished();
+
+    /**
      * Notify that the {@link fr.enseeiht.superjumpingsumokart.arpack.GUIGame} is able to display the video stream from the Jumping Sumo's camera.
      */
     void onVideoStreamAvailable();

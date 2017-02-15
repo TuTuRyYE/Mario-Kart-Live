@@ -13,7 +13,7 @@ import fr.enseeiht.superjumpingsumokart.application.network.CommunicationBT;
 import fr.enseeiht.superjumpingsumokart.application.network.CommunicationBTListener;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 /**
- *  * @author Vivian Guy, Matthieu Michel.
+ * @author Vivian Guy, Matthieu Michel, Romain Verset.
  * This class is used to manage the game.
  */
 public class Game implements CommunicationBTListener, GuiGameListener{
@@ -43,10 +43,8 @@ public class Game implements CommunicationBTListener, GuiGameListener{
 
     private boolean trackInitialised = false, videoStreamAvailable = false, droneControllerReady = false;
     private boolean ready = false, otherReady = false;
-    private boolean isStarted;
+    private boolean started;
     private boolean finished;
-    private boolean otherIsActive;
-    private int otherCurrentLap;
     private CommunicationBT comBT;
 
     /**
@@ -56,7 +54,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
     public Game(GUIGame guiGame, CommunicationBT comBT) {
         this.circuit = createCircuit();
         trackInitialised = true;
-        checkReady();
+        checkReadyAndStartRace();
         // Add markers for boxes
         circuit.addMarker(1, new Vector3D(0,0,0)); // position to change when markers are placed
         circuit.addMarker(2, new Vector3D(0,0,0)); // position to change when markers are placed
@@ -65,7 +63,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
         currentItems = setMagicBoxes();
         this.guiGame = guiGame;
         registerGameListener(guiGame);
-        this.isStarted = false;
+        this.started = false;
         this.comBT = comBT;
         if (comBT != null) {
             this.comBT = comBT;
@@ -170,10 +168,10 @@ public class Game implements CommunicationBTListener, GuiGameListener{
      * @return true if the {@link Game} if started otherwise false.
      */
     public boolean isStarted() {
-        return isStarted;
+        return started;
     }
     public void setStarted(boolean started) {
-        isStarted = started;
+        this.started = started;
     }
     /**
      * Create the {@link Circuit} (Vivian - 07/02/2017).
@@ -190,7 +188,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
         Log.d(GAME_TAG, "start function called");
         // TODO wait for every player to be ready
         if (getNumberPlayer() == 1) {
-            this.isStarted =true;
+            this.started =true;
         }
         else {
         }
@@ -238,12 +236,12 @@ public class Game implements CommunicationBTListener, GuiGameListener{
     @Override
     public void onSecondPlayerReady() {
         this.otherReady = true;
-        this.otherIsActive = true;
         otherDrone = new Drone("BAD_JUMPY");
+        checkReadyAndStartRace();
     }
 
     @Override
-    public void onSecondStartedRace() {
+    public void onSecondStartRace() {
         guiGame.onStartRace();
     }
 
@@ -254,14 +252,14 @@ public class Game implements CommunicationBTListener, GuiGameListener{
 
     @Override
     public void onSecondPlayerFinished() {
-        otherIsActive = false;
         guiGame.notifyDefeat();
+        finished = true;
     }
 
     @Override
     public void onSecondPlayerGaveUp() {
-        this.otherIsActive = false;
         guiGame.notifyVictory();
+        finished = true;
     }
 
     @Override
@@ -328,7 +326,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
     }
 
     @Override
-    public void onSecondUpdatedPosition(String msg) {
+    public void onSecondPlayerUpdatedPosition(String msg) {
         String[] msgSplit = msg.split("/");
         double x = Double.parseDouble(msgSplit[0]);
         double y = Double.parseDouble(msgSplit[1]);
@@ -365,25 +363,15 @@ public class Game implements CommunicationBTListener, GuiGameListener{
 
     }
 
-    private boolean checkReady() {
+    private void checkReadyAndStartRace() {
         if (trackInitialised && droneControllerReady && videoStreamAvailable) {
             ready =  true;
+        }
+        if (ready && otherReady) {
+            started = true;
             for (GameListener gl : GAME_LISTENERS) {
-                gl.onPlayerReady();
+                gl.onStartRace();
             }
-            try {
-            while (!otherReady) {
-                Thread.currentThread().sleep(20);
-            } }
-            catch (InterruptedException ie) {
-                Log.d(GAME_TAG, "InterruptedException : " + ie.getMessage());
-            }
-            for (GameListener gl : GAME_LISTENERS) {
-                gl.onStartedRace();
-            }
-            return true;
-        } else {
-            return false;
         }
     }
 
@@ -392,18 +380,27 @@ public class Game implements CommunicationBTListener, GuiGameListener{
         for (GameListener gl : GAME_LISTENERS) {
             gl.onPlayerGaveUp();
         }
+        finished = true;
+    }
+
+    @Override
+    public void onPlayerFinished() {
+        for (GameListener gl : GAME_LISTENERS) {
+            gl.onPlayerFinished();
+        }
+        finished = true;
     }
 
     @Override
     public void onVideoStreamAvailable() {
         videoStreamAvailable = true;
-        checkReady();
+        checkReadyAndStartRace();
     }
 
     @Override
     public void onDroneControllerReady() {
         droneControllerReady = true;
-        checkReady();
+        checkReadyAndStartRace();
     }
 
     public int getLapsNumber() {
