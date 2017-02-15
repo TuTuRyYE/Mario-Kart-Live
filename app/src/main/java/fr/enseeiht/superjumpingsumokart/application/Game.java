@@ -1,9 +1,7 @@
 package fr.enseeiht.superjumpingsumokart.application;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+
 import android.util.Log;
-import java.nio.charset.Charset;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -11,7 +9,6 @@ import fr.enseeiht.superjumpingsumokart.application.items.Banana;
 import fr.enseeiht.superjumpingsumokart.application.items.Box;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
 import fr.enseeiht.superjumpingsumokart.application.items.MagicBox;
-import fr.enseeiht.superjumpingsumokart.application.items.NullItem;
 import fr.enseeiht.superjumpingsumokart.application.network.CommunicationBT;
 import fr.enseeiht.superjumpingsumokart.application.network.CommunicationBTListener;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
@@ -330,7 +327,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
     @Override
     public void onItemUsed(Item item) {
         Log.d(GAME_TAG,"Information received from Item : item has been put on the circuit");
-       addItem(item);
+        addItem(item);
         for(GameListener listener  : this.GAME_LISTENERS) {
             listener.onPlayerUseItem(item);
             Log.d(GAME_TAG,"transmitting the information to the listener");
