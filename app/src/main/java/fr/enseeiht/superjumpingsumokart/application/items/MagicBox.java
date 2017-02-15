@@ -38,7 +38,7 @@ public class MagicBox extends Item {
         else {
             item = null;
         }
-        sender.getDRONE().setCurrentItem(item);
+        sender.getDrone().setCurrentItem(item);
     }
 
     @Override

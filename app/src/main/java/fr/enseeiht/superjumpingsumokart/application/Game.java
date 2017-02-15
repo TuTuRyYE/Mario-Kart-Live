@@ -39,6 +39,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
     private final ArrayList<GameListener> GAME_LISTENERS = new ArrayList<>();
 
     private boolean isStarted;
+    private boolean finished;
     private boolean otherIsReady;
     private CommunicationBT comBT;
     public Handler handlerComBT;
@@ -124,7 +125,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
             registerGameListener(comBT);
         }
         this.otherIsReady = false;
-        Log.d(GAME_TAG, "Game created for drone " + guiGame.getController().getDRONE().getName());
+        Log.d(GAME_TAG, "Game created for drone " + guiGame.getController().getDrone().getName());
        // comBT.setHandlerGame(handlerGame);
     }
     /**
@@ -307,6 +308,11 @@ public class Game implements CommunicationBTListener, GuiGameListener{
 
     @Override
     public void onItemUsed(Item item) {
+
+    }
+
+    @Override
+    public void onPlayerGiveUp() {
 
     }
 }

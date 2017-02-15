@@ -86,6 +86,10 @@ public class GUIGame extends Activity implements GameListener {
                     } catch (InterruptedException e) {
                         Log.d(GUI_GAME_TAG, "Interrupted exception : " + e.getMessage());
                     }
+                    Toast.makeText(GUIGame.this, "YOU LOSE !", Toast.LENGTH_SHORT).show();
+                    for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
+                        ggl.onPlayerGiveUp();
+                    }
                     finish();
                     break;
                 case RENDER_AR :
@@ -294,6 +298,11 @@ public class GUIGame extends Activity implements GameListener {
             controller.stopController();
         }
         super.onStop();
+        for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
+            if (game != null && game.isStarted()) {
+                ggl.onPlayerGiveUp();
+            }
+        }
     }
     @Override
     public void onDestroy() {
@@ -303,7 +312,7 @@ public class GUIGame extends Activity implements GameListener {
      * Method used to display the current trap owned by the player (Matthieu Michel - 30/01/2017).
      */
     private void displayTrap() {
-        Item currentItem = controller.getDRONE().getCurrentItem();
+        Item currentItem = controller.getDrone().getCurrentItem();
         currentItem.assignResource(sendTrapBtn);
     }
     /**
@@ -402,21 +411,29 @@ public class GUIGame extends Activity implements GameListener {
 
     @Override
     public void onPlayerReady() {
-
+        // Nothing to do here
     }
 
     @Override
     public void onPlayerFinished() {
-
+        notifyVictory();
     }
 
     @Override
     public void onPlayerUseItem(Item item) {
-
+        displayTrap();
     }
 
     @Override
     public void onPlayerGiveUp() {
+        notifyDefeat();
+    }
 
+    public void notifyDefeat() {
+        Toast.makeText(this, "YOU LOST !", Toast.LENGTH_SHORT).show();
+    }
+
+    public void notifyVictory() {
+        Toast.makeText(this, "YOU WON !", Toast.LENGTH_SHORT).show();
     }
 }
