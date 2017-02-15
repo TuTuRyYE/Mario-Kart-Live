@@ -18,7 +18,7 @@ import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
  *  * @author Vivian Guy, Matthieu Michel.
  * This class is used to manage the game.
  */
-public class Game {
+public class Game implements GuiGameListener {
     /**
      * The logging tag. Useful for debugging.
      */
@@ -39,6 +39,8 @@ public class Game {
     private boolean otherIsReady;
     private CommunicationBT comBT;
     public Handler handlerComBT;
+
+
     public Handler handlerGame = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -257,5 +259,16 @@ public class Game {
     }
     public void setHandlerComBT(Handler handlerComBT) {
         this.handlerComBT = handlerComBT;
+    }
+
+
+    @Override
+    public void onPositionUpdated(Vector3D position) {
+
+    }
+
+    @Override
+    public void onItemUsed(Item item) {
+
     }
 }
