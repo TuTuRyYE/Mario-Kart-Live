@@ -3,6 +3,7 @@ package fr.enseeiht.superjumpingsumokart.application;
 import java.util.ArrayList;
 
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
+import fr.enseeiht.superjumpingsumokart.application.items.NullItem;
 
 /**
  * Created by Vivian on 27/01/2017.
@@ -26,11 +27,6 @@ public class Drone {
     private Item currentItem;
 
     /**
-     * The current speed of the drone.
-     */
-    private Vector3D currentSpeed;
-
-    /**
      * The current number of lap the drone has done on a given circuit.
      */
     private int currentLap;
@@ -43,15 +39,11 @@ public class Drone {
     /**
      * Constructor for the class {@link Drone}.
      * @param name the name/id of the drone.
-     * @param currentPosition the position of the drone on a given time.
-     * @param currentItem the item the drone have.
-     * @param speed the current speed of the drone.
      */
-    Drone(String name, Vector3D currentPosition, Item currentItem, Vector3D speed) {
+    Drone(String name) {
         this.name = name;
-        this.currentPosition = currentPosition;
-        this.currentItem = currentItem;
-        this.currentSpeed = speed;
+        this.currentPosition = new Vector3D(0, 0 ,0);
+        this.currentItem = new NullItem();
         this.currentLap = 0;
         this.markersSeen = new ArrayList<>();
     }
@@ -105,24 +97,6 @@ public class Drone {
     }
 
     /**
-     * Get the speed of the drone.
-     * @return the speed of the drone.
-     */
-    public Vector3D getSpeed() {
-
-        return currentSpeed;
-    }
-
-    /**
-     * Set the speed of the drone.
-     * @param speed the new speed of the drone.
-     */
-    public void setSpeed(Vector3D speed) {
-
-        this.currentSpeed = speed;
-    }
-
-    /**
      * Get the number of lap the drone has done.
      * @return the number of lap the drone has done.
      */
@@ -146,11 +120,4 @@ public class Drone {
         return markersSeen;
     }
 
-    /**
-     * Set the marker's ids the drone has seen during the current lap.
-     * @param markersSeen the marker's ids the drone has seen during the current lap.
-     */
-    public void setMarkersSeen(ArrayList<Integer> markersSeen) {
-        this.markersSeen = markersSeen;
-    }
 }
