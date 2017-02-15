@@ -41,4 +41,14 @@ public interface GameListener {
      * @param item the item touched
      */
     void onItemTouched(Item item);
+
+    /**
+     * Called when the two players are ready and the start begins
+     */
+    void onStartRace();
+
+    /**
+     * Called when the player update its position
+     */
+    void onUpdatedPosition(Vector3D position);
 }
