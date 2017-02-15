@@ -249,7 +249,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
 
     @Override
     public void onSecondPlayerFinished() {
-        guiGame.notify(defeat);
+        guiGame.notifyDefeat();
 
     }
 
@@ -321,7 +321,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
                 ind++;
             }
         }
-    };
+    }
 
     @Override
     public void onPositionUpdated(Vector3D position) {
