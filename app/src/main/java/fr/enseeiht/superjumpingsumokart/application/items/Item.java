@@ -92,10 +92,14 @@ public abstract class Item {
 
     /**
      * Method used to apply the Effect of an {@link Item} on the device. (Matthieu Michel - 02/02/2017).
-     * @param sender the device sending the trap.
-     * @param receiver the device undergoing the trap.
      */
-    public abstract void applyEffect(DroneController sender, DroneController receiver);
+    public abstract void applyEffect(DroneController droneController);
+
+    /**
+     * Method used to use an {@link Item}. (Matthieu Michel - 15/02/2017)
+     * @param droneController using the {@link Item}.
+     */
+    public abstract void useItem(DroneController droneController);
 
     /**
      * Put the object image on a {@link ImageButton} (Romain Verset - 02/02/2017).

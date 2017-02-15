@@ -207,6 +207,22 @@ public class Game implements CommunicationBTListener, GuiGameListener{
     public void setCurrentItems(ArrayList<Item> currentItems) {
         this.currentItems = currentItems;
     }
+
+    /**
+     * Add an {@link Item} to the list of {@link Item} present on the race (Matthieu Michel - 15/02/2017).
+     * @param item added by the player.
+     */
+    public void addItem(Item item){
+        this.currentItems.add(item);
+    }
+
+    /**
+     * Remove an {@link Item} to the list of {@link Item} present on the race when an {@link Item} as been touched by the {@link Drone}(Matthieu Michel - 15/02/2017).
+     * @param item added by the player.
+     */
+    public void removeItem(Item item){
+        this.currentItems.remove(item);
+    }
     /**
      * Check if the current status of the {@link Game} (Vivian - 07/02/2017).
      * @return true if the {@link Game} if started otherwise false.
@@ -281,7 +297,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
     }
 
     @Override
-    public void onSecondPLayerReady() {
+    public void onSecondPlayerReady() {
         this.otherIsReady = true;
         this.otherIsActive = true;
         this.otherCurrentLap = 1;
@@ -301,6 +317,8 @@ public class Game implements CommunicationBTListener, GuiGameListener{
     public void onSecondPlayerGaveUp() {
         this.otherIsActive = false;
     }
+
+
 
     @Override
     public void onSecondPlayerUsesItem(String msg) {
@@ -372,6 +390,18 @@ public class Game implements CommunicationBTListener, GuiGameListener{
 
     @Override
     public void onItemUsed(Item item) {
+       addItem(item);
+        for(GameListener listener  : this.GAME_LISTENERS) {
+            listener.onPlayerUseItem(item);
+        }
+    }
+
+    @Override
+    public void onItemTouched(Item item) {
+        removeItem(item);
+        for(GameListener listener  : this.GAME_LISTENERS) {
+            listener.onItemTouched(item);
+        }
 
     }
 }

@@ -131,7 +131,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     public void useItem() {
         if (deviceController != null && running) {
             Log.d(DRONE_CONTROLLER_TAG, "USE ITEM order received !");
-            DRONE.getCurrentItem().applyEffect(this, null);
+            DRONE.getCurrentItem().applyEffect(this);
         }
     }
     /**
@@ -332,5 +332,14 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
      */
     public boolean isRunning() {
         return running;
+    }
+
+
+    /**
+     * Getter of current {@link GUIGame}.
+     * @return GUIGame owned by the droneController.
+     */
+    public GUIGame getGUI_GAME() {
+        return GUI_GAME;
     }
 }

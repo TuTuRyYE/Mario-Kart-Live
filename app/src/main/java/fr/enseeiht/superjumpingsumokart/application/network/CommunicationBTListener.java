@@ -10,7 +10,7 @@ public interface CommunicationBTListener {
     /**
      * Notify the game that the second player is ready.
      */
-    void onSecondPLayerReady();
+    void onSecondPlayerReady();
 
     /**
      * Notify the game that the second player has finished a lap.
