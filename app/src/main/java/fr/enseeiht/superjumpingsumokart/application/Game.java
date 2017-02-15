@@ -297,6 +297,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
 
     }
 
+    @Override
     public void onSecondPlayerGaveUp() {
 
     }
