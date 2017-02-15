@@ -4,6 +4,7 @@ import android.widget.ImageButton;
 
 import fr.enseeiht.superjumpingsumokart.R;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
+import fr.enseeiht.superjumpingsumokart.application.Game;
 import fr.enseeiht.superjumpingsumokart.application.Vector3D;
 
 /**
@@ -23,9 +24,16 @@ public class Banana extends Item {
     }
 
     @Override
-    public void applyEffect(DroneController sender, DroneController receiver) {
-        sender.slow();
-        sender.spin();
+    public void applyEffect(DroneController droneController) {
+        droneController.slow();
+        droneController.spin();
+        droneController.getGUI_GAME().getGame().onItemTouched(this);
+    }
+
+    @Override
+    public void useItem(DroneController droneController) {
+        this.setPosition(droneController.getDRONE().getCurrentPosition());
+        droneController.getGUI_GAME().getGame().onItemUsed(this);
 
     }
 
