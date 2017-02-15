@@ -30,21 +30,26 @@ import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
 import org.artoolkit.ar.base.ARToolKit;
 import org.artoolkit.ar.base.AndroidUtils;
 
+import java.util.ArrayList;
 
 import fr.enseeiht.superjumpingsumokart.R;
-import fr.enseeiht.superjumpingsumokart.application.GUIWelcome;
-import fr.enseeiht.superjumpingsumokart.application.Game;
-import fr.enseeiht.superjumpingsumokart.application.items.Item;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
+import fr.enseeiht.superjumpingsumokart.application.Game;
+import fr.enseeiht.superjumpingsumokart.application.GameListener;
+import fr.enseeiht.superjumpingsumokart.application.GuiGameListener;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
-import fr.enseeiht.superjumpingsumokart.application.network.CommunicationBT;
 import fr.enseeiht.superjumpingsumokart.application.network.WifiConnector;
 
+public class GUIGame extends Activity implements GameListener {
 
-
-public class GUIGame extends Activity {
-
+    /**
+     * The width of the frames of the Jumping Sumo Camera.
+     */
     final static int VIDEO_WIDTH = 640;
+
+    /**
+     * The height of the frames of the Jumping Sumo Camera.
+     */
     final static int VIDEO_HEIGHT = 480;
 
     /**
@@ -58,6 +63,8 @@ public class GUIGame extends Activity {
     public final static int UPDATE_ITEM_ICON = 1;
     public final static int RENDER_AR = 3;
     public final static int CONTROLLER_STOPPING_ON_ERROR = 4;
+
+    private final ArrayList<GuiGameListener> GUI_GAME_LISTENERS = new ArrayList<>();
 
     /**
      * Handler to update GUI.
@@ -104,7 +111,16 @@ public class GUIGame extends Activity {
     private ImageButton sendTrapBtn;
     private ImageButton jumpBtn;
 
-    private boolean firstUpdate = true, cameraViewAvailable = false;
+    /**
+     * Boolean variables used to know when to initialise the {@link ARToolKit} markers.
+     */
+    private boolean firstUpdate = true;
+
+    /**
+     * Boolean variable used to know when the camera view is available so that we know when to start
+     * the markers research.
+     */
+    private boolean cameraViewAvailable = false;
 
 
     /**
@@ -115,7 +131,13 @@ public class GUIGame extends Activity {
     private GLSurfaceView glView;
     private ItemRenderer renderer;
 
-    private Game game; // The game associated to the GUIGame
+    /**
+     *  The {@link Game} associated to the current {@link GUIGame}.
+     */
+    private Game game;
+
+    private GuiGameListener guiGameListener;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -154,6 +176,7 @@ public class GUIGame extends Activity {
 
 
         game = new Game(this,null);
+        registerGuiGameListener(game);
 
         // Every players is ready
         // Defines action listener
@@ -368,28 +391,38 @@ public class GUIGame extends Activity {
         UPDATER.sendEmptyMessage(UPDATE_ITEM_ICON);
     }
 
-    public int getDisplayWidth() {
-        return cameraView.getWidth();
-    }
-
-    public int getDisplayHeight() {
-        return cameraView.getHeight();
-    }
-
-    public boolean isFinished(){
-        return controller.isFinished();
-    }
-
     public Game getGame() {
         return game;
-    }
-    public void setGame(Game game) {
-        this.game = game;
     }
     public DroneController getController() {
         return controller;
     }
-    public void setController(DroneController controller) {
-        this.controller = controller;
+
+    public void registerGuiGameListener(GuiGameListener guiGameListener) {
+        GUI_GAME_LISTENERS.add(guiGameListener);
+    }
+
+    public void unregisterGuiGameListener(GuiGameListener guiGameListener) {
+        GUI_GAME_LISTENERS.remove(guiGameListener);
+    }
+
+    @Override
+    public void onPlayerReady() {
+
+    }
+
+    @Override
+    public void onPlayerFinished() {
+
+    }
+
+    @Override
+    public void onPlayerUseItem(Item item) {
+
+    }
+
+    @Override
+    public void onPlayerGiveUp() {
+
     }
 }
