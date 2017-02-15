@@ -1,5 +1,6 @@
 package fr.enseeiht.superjumpingsumokart.application.items;
 
+import android.util.Log;
 import android.widget.ImageButton;
 
 import fr.enseeiht.superjumpingsumokart.R;

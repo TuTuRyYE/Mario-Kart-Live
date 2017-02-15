@@ -1,9 +1,7 @@
 package fr.enseeiht.superjumpingsumokart.application;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+
 import android.util.Log;
-import java.nio.charset.Charset;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -73,7 +71,6 @@ public class Game implements CommunicationBTListener, GuiGameListener{
         }
         this.otherIsReady = false;
         Log.d(GAME_TAG, "Game created for drone " + guiGame.getController().getDrone().getName());
-       // comBT.setHandlerGame(handlerGame);
     }
     /**
      * Generate magic boxes on the circuit (Vivian - 07/02/2017).
@@ -239,7 +236,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
     public void onSecondPlayerReady() {
         this.otherIsReady = true;
         this.otherIsActive = true;
-        this.otherCurrentLap = 1;
+        otherDrone = new Drone("BadJumpy");
     }
 
     @Override
@@ -249,21 +246,20 @@ public class Game implements CommunicationBTListener, GuiGameListener{
 
     @Override
     public void onSecondPlayerLapFinished() {
-        this.otherCurrentLap++;
+        otherDrone.setCurrentLap(otherDrone.getCurrentLap() + 1);
     }
 
     @Override
     public void onSecondPlayerFinished() {
-        guiGame.notify(defeat);
-
+        otherIsActive = false;
+        guiGame.notifyDefeat();
     }
 
     @Override
     public void onSecondPlayerGaveUp() {
         this.otherIsActive = false;
+        guiGame.notifyVictory();
     }
-
-
 
     @Override
     public void onSecondPlayerUsesItem(String msg) {
@@ -348,7 +344,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
     @Override
     public void onItemUsed(Item item) {
         Log.d(GAME_TAG,"Information received from Item : item has been put on the circuit");
-       addItem(item);
+        addItem(item);
         for(GameListener listener  : this.GAME_LISTENERS) {
             listener.onPlayerUseItem(item);
             Log.d(GAME_TAG,"transmitting the information to the listener");
@@ -379,9 +375,5 @@ public class Game implements CommunicationBTListener, GuiGameListener{
 
     public void setDrone(Drone drone) {
         this.drone = drone;
-    }
-
-    public void setOtherDrone(Drone otherDrone) {
-        this.otherDrone = otherDrone;
     }
 }

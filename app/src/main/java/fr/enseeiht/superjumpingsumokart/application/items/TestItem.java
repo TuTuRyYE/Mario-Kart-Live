@@ -15,10 +15,8 @@ public class TestItem extends Item {
     private final static String  NAME = "testItem";
     /**
      * Default constructor of the class {@link Item}. (Matthieu Michel - 02/02/2017).
-     *
-     * @param position position of the Item.
      */
-    public TestItem(Vector3D position) {
+    public TestItem() {
         super(NAME);
     }
 
