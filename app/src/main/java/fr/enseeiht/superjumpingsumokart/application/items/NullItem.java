@@ -20,8 +20,15 @@ public class NullItem extends Item {
         super(NAME);
     }
 
+
+
     @Override
-    public void applyEffect(DroneController sender, DroneController receiver) {
+    public void applyEffect(DroneController droneController) {
+
+    }
+
+    @Override
+    public void useItem(DroneController droneController) {
 
     }
 

@@ -89,43 +89,43 @@ public class Circuit {
         Log.d(CIRCUIT_TAG, "startline and endline markers added");
     }
     /**
-     * Get the {@link startPoint} .
+     * Get the starting Point .
      * @return the startpoint.
      */
     public Vector3D getStartPoint() {
         return startPoint;
     }
     /**
-     * Set the {@link startPoint}
-     * @param startPoint the new startPoint
+     * Set the starting Point.
+     * @param startPoint the new startPoint.
      */
     public void setStartPoint(Vector3D startPoint) {
         this.startPoint = startPoint;
     }
     /**
-     * Get the {@link endPoint}
-     * @return the endPoint
+     * Get the two  end Points.
+     * @return array of 2 end Point.
      */
     public Vector3D[] getEndPoints() {
         return endPoints;
     }
     /**
-     * Set the {@link endPoint}
-     * @param endPoints the new endPoint
+     * Set the array of end  Point.
+     * @param endPoints the new endPoint.
      */
     public void setEndPoints(Vector3D[] endPoints) {
         this.endPoints = endPoints;
     }
     /**
-     * Get the {@link lapsNumber}
-     * @return the number of laps it takes to complete the circuit
+     * Get the number of laps.
+     * @return the number of laps it takes to complete the circuit.
      */
     public int getLaps() {
         return lapsNumber;
     }
     /**
-     * Set the {@link lapsNumber}
-     * @param laps the new number of laps to complete the circuit
+     * Set the lap Number.
+     * @param laps the new number of laps to complete the circuit.
      */
     public void setLaps(int laps) {
         this.lapsNumber = laps;
@@ -146,15 +146,15 @@ public class Circuit {
         this.markersID.remove(markerID);
     }
     /**
-     * Get the list of markers {@link markersID}
-     * @return the list of markers
+     * Get the list of markers.
+     * @return the list of markers.
      */
     public HashMap<Integer, Vector3D> getMarkersID() {
         return markersID;
     }
     /**
-     * Set the list of markers {@link markersID}
-     * @param markersID the new list of markers
+     * Set the list of markers.
+     * @param markersID the new list of markers.
      */
     public void setMarkersID(HashMap<Integer, Vector3D> markersID) {
         this.markersID = markersID;

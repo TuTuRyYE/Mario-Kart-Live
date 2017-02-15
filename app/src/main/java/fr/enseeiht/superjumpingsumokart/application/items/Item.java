@@ -12,6 +12,8 @@ import fr.enseeiht.superjumpingsumokart.application.Vector3D;
 
 public abstract class Item {
 
+
+
     /**
      * Threshold for the distance mesure to know if the object is in contact with the device or not.
      */

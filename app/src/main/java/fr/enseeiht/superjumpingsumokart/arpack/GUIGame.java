@@ -33,11 +33,13 @@ import org.artoolkit.ar.base.AndroidUtils;
 import java.util.ArrayList;
 
 import fr.enseeiht.superjumpingsumokart.R;
+import fr.enseeiht.superjumpingsumokart.application.Drone;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
 import fr.enseeiht.superjumpingsumokart.application.Game;
 import fr.enseeiht.superjumpingsumokart.application.GameListener;
 import fr.enseeiht.superjumpingsumokart.application.GuiGameListener;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
+import fr.enseeiht.superjumpingsumokart.application.network.CommunicationBT;
 import fr.enseeiht.superjumpingsumokart.application.network.WifiConnector;
 
 public class GUIGame extends Activity implements GameListener {
@@ -85,6 +87,10 @@ public class GUIGame extends Activity implements GameListener {
                         wait();
                     } catch (InterruptedException e) {
                         Log.d(GUI_GAME_TAG, "Interrupted exception : " + e.getMessage());
+                    }
+                    Toast.makeText(GUIGame.this, "YOU LOSE !", Toast.LENGTH_SHORT).show();
+                    for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
+                        ggl.onPlayerGaveUp();
                     }
                     finish();
                     break;
@@ -136,9 +142,6 @@ public class GUIGame extends Activity implements GameListener {
      */
     private Game game;
 
-    private GuiGameListener guiGameListener;
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // Initializes the GUI from layout file
@@ -152,6 +155,16 @@ public class GUIGame extends Activity implements GameListener {
         Log.d(GUI_GAME_TAG, "Device created, attempting to create its controller...");
         controller = new DroneController(this, currentDevice);
         Log.d(GUI_GAME_TAG, "Controller of the device created.");
+
+        // Binds with the bluetooth connector
+        CommunicationBT bluetoothConnector = (CommunicationBT) getIntent().getExtras().get("bluetoothCommunication");
+        if (bluetoothConnector != null) {
+            Log.d(GUI_GAME_TAG, "BluetoothConnector not null, multiplayer mode.");
+        }
+
+        // Creation of the game
+        game = new Game(this,bluetoothConnector);
+        registerGuiGameListener(game);
 
         // Sets some graphical settings;
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
@@ -171,12 +184,6 @@ public class GUIGame extends Activity implements GameListener {
         moveForwardBtn = (ImageButton) findViewById(R.id.moveForwardBtn);
         jumpBtn = (ImageButton) findViewById(R.id.jumpBtn);
         sendTrapBtn = (ImageButton) findViewById(R.id.sendTrapBtn);
-
-        // Creation of the game
-
-
-        game = new Game(this,null);
-        registerGuiGameListener(game);
 
         // Every players is ready
         // Defines action listener
@@ -294,6 +301,11 @@ public class GUIGame extends Activity implements GameListener {
             controller.stopController();
         }
         super.onStop();
+        for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
+            if (game != null && game.isStarted()) {
+                ggl.onPlayerGaveUp();
+            }
+        }
     }
     @Override
     public void onDestroy() {
@@ -303,7 +315,7 @@ public class GUIGame extends Activity implements GameListener {
      * Method used to display the current trap owned by the player (Matthieu Michel - 30/01/2017).
      */
     private void displayTrap() {
-        Item currentItem = controller.getDRONE().getCurrentItem();
+        Item currentItem = controller.getDrone().getCurrentItem();
         currentItem.assignResource(sendTrapBtn);
     }
 
@@ -408,21 +420,43 @@ public class GUIGame extends Activity implements GameListener {
 
     @Override
     public void onPlayerReady() {
-
+        // Nothing to do here
     }
 
     @Override
     public void onPlayerFinished() {
+        notifyVictory();
+    }
 
+    @Override
+    public void onPlayerFinishedLap() {
+        Toast.makeText(this, "Lap " + Integer.toString(controller.getDrone().getCurrentLap()) + "/" + Integer.toString(game.getLapsNumber()), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onPlayerUseItem(Item item) {
-
+        displayTrap();
     }
 
     @Override
-    public void onPlayerGiveUp() {
+    public void onPlayerGaveUp() {
+        notifyDefeat();
+    }
 
+    @Override
+    public void onItemTouched(Item item) {
+        // Nothing to do
+    }
+
+    public void notifyDefeat() {
+        Toast.makeText(this, "YOU LOST !", Toast.LENGTH_SHORT).show();
+    }
+
+    public void notifyVictory() {
+        Toast.makeText(this, "YOU WON !", Toast.LENGTH_SHORT).show();
+    }
+
+    public void addDroneInGame(Drone drone) {
+        game.setDrone(drone);
     }
 }

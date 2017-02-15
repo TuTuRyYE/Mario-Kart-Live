@@ -1,13 +1,12 @@
 package fr.enseeiht.superjumpingsumokart.application;
 import android.util.Log;
-import com.parrot.arsdk.arcommands.ARCOMMANDS_COMMON_ANIMATIONS_STARTANIMATION_ANIM_ENUM;
 
 import com.parrot.arsdk.arcommands.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM;
 import com.parrot.arsdk.arcontroller.*;
 import com.parrot.arsdk.ardiscovery.*;
 import com.parrot.arsdk.arcommands.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_ENUM;
 import java.util.ArrayList;
-import java.util.Vector;
+
 import fr.enseeiht.superjumpingsumokart.application.items.TestItem;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 /**
@@ -54,6 +53,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     public DroneController(GUIGame guiGame, ARDiscoveryDevice device) {
         GUI_GAME = guiGame;
         DRONE = new Drone("JUMPY", new Vector3D(0,0,0),new TestItem(new Vector3D(0,0,0)), new Vector3D(0,0,0));
+        GUI_GAME.addDroneInGame(DRONE);
         try {
             deviceController = new ARDeviceController(device);
             deviceController.addListener(this);
@@ -66,7 +66,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
      * Get the {@link Drone} (Matthieu Michel - 30/01/2017).
      * @return the drone.
      */
-    public Drone getDRONE() {
+    public Drone getDrone() {
         return DRONE;
     }
     /**
@@ -173,18 +173,18 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
      * @return true if the drone has finished the race otherwise false.
      */
     public boolean isFinished(){
-        ArrayList<Integer> markersSeen = this.getDRONE().getMarkersSeen();
+        ArrayList<Integer> markersSeen = this.getDrone().getMarkersSeen();
         Boolean result = false;
         if (!markersSeen.isEmpty()) {
             if ((markersSeen.get(markersSeen.size() - 1) == -1) || (markersSeen.get(markersSeen.size() - 1) == -2)) { // if the last marker is on the finished lane
                 if(markersSeen.size() > 2) { // The drone has seen enough markers
                     if (checkPosition()) {
-                        if (this.getDRONE().getCurrentLap() == this.GUI_GAME.getGame().getCircuit().getLaps()) { // if the number of laps is correct
+                        if (this.getDrone().getCurrentLap() == this.GUI_GAME.getGame().getCircuit().getLaps()) { // if the number of laps is correct
                             result = true;
                         }
                         else {
-                            this.getDRONE().setCurrentLap(this.getDRONE().getCurrentLap() + 1);
-                            this.getDRONE().getMarkersSeen().clear();
+                            this.getDrone().setCurrentLap(this.getDrone().getCurrentLap() + 1);
+                            this.getDrone().getMarkersSeen().clear();
                         }
                     }
                 }
@@ -199,7 +199,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     private boolean checkPosition() {
         boolean overpassed;
         //get the current position of the drone
-        Vector3D positionDrone = this.getDRONE().getCurrentPosition();
+        Vector3D positionDrone = this.getDrone().getCurrentPosition();
         //compute the end line equation
         Vector3D endPoint1 = this.GUI_GAME.getGame().getCircuit().getEndPoints()[0];
         Vector3D endPoint2 = this.GUI_GAME.getGame().getCircuit().getEndPoints()[1];

@@ -9,14 +9,14 @@ import fr.enseeiht.superjumpingsumokart.application.items.Item;
 
 public interface GuiGameListener {
     /**
-     * Notify the Game of the new position of the current {@link Drone}.
-     * @param position of the {@link Drone}
+     * Notify the {@link Game} of the new position of the current {@link Drone}.
+     * @param position of the {@link Drone}.
      */
     void onPositionUpdated(Vector3D position);
 
     /**
      * Method used to notify {@link Game} that an {@link Item} as been used by the {@link Drone}.
-     * @param item used by the player
+     * @param item used by the player.
      */
     void onItemUsed(Item item);
 
@@ -25,4 +25,9 @@ public interface GuiGameListener {
      * @param item touched by the player
      */
     void onItemTouched(Item item);
+
+    /**
+     * Method called when the controlled {@link Drone} gives up.
+     */
+    void onPlayerGaveUp();
 }
