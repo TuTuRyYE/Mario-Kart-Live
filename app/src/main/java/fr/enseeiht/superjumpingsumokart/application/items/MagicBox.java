@@ -26,7 +26,7 @@ public class MagicBox extends Item {
     }
 
     @Override
-    public void applyEffect(DroneController sender, DroneController receiver) {
+    public void applyEffect(DroneController droneController) {
         int rand = (int) Math.floor(Math.random()*2);
         Item item;
         if (rand == 1) { //Banana
@@ -38,7 +38,12 @@ public class MagicBox extends Item {
         else {
             item = null;
         }
-        sender.getDrone().setCurrentItem(item);
+        droneController.getDrone().setCurrentItem(item);
+    }
+
+    @Override
+    public void useItem(DroneController droneController) {
+
     }
 
     @Override

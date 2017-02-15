@@ -208,6 +208,22 @@ public class Game implements CommunicationBTListener, GuiGameListener{
     public void setCurrentItems(ArrayList<Item> currentItems) {
         this.currentItems = currentItems;
     }
+
+    /**
+     * Add an {@link Item} to the list of {@link Item} present on the race (Matthieu Michel - 15/02/2017).
+     * @param item added by the player.
+     */
+    public void addItem(Item item){
+        this.currentItems.add(item);
+    }
+
+    /**
+     * Remove an {@link Item} to the list of {@link Item} present on the race when an {@link Item} as been touched by the {@link Drone}(Matthieu Michel - 15/02/2017).
+     * @param item added by the player.
+     */
+    public void removeItem(Item item){
+        this.currentItems.remove(item);
+    }
     /**
      * Check if the current status of the {@link Game} (Vivian - 07/02/2017).
      * @return true if the {@link Game} if started otherwise false.
@@ -290,7 +306,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
 
     @Override
     public void onSecondPlayerLapFinished() {
-
+        this.otherCurrentLap++;
     }
 
     @Override
@@ -300,8 +316,10 @@ public class Game implements CommunicationBTListener, GuiGameListener{
 
     @Override
     public void onSecondPlayerGaveUp() {
-
+        this.otherIsActive = false;
     }
+
+
 
     @Override
     public void onSecondPlayerUsesItem(String msg) {
@@ -347,7 +365,23 @@ public class Game implements CommunicationBTListener, GuiGameListener{
 
     @Override
     public void onSecondPlayerTouchedItem(String msg){
-
+        String[] msgSplit = msg.split("/");
+        double x = Double.parseDouble(msgSplit[1]);
+        double y = Double.parseDouble(msgSplit[2]);
+        double z = Double.parseDouble(msgSplit[3]);
+        Vector3D position = new Vector3D(x, y, z);
+        boolean found = false;
+        int ind = 0;
+        Item currentItem;
+        while (!found && ind <= currentItems.size()) {
+            currentItem = currentItems.get(ind);
+            if (currentItem.getPosition().equals(position)) {
+                found = true;
+                currentItems.remove(ind);
+            } else {
+                ind++;
+            }
+        }
     };
 
     @Override
@@ -357,6 +391,18 @@ public class Game implements CommunicationBTListener, GuiGameListener{
 
     @Override
     public void onItemUsed(Item item) {
+       addItem(item);
+        for(GameListener listener  : this.GAME_LISTENERS) {
+            listener.onPlayerUseItem(item);
+        }
+    }
+
+    @Override
+    public void onItemTouched(Item item) {
+        removeItem(item);
+        for(GameListener listener  : this.GAME_LISTENERS) {
+            listener.onItemTouched(item);
+        }
 
     }
 

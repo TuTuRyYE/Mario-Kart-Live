@@ -20,11 +20,18 @@ public class Box extends Item {
         super(NAME);
     }
 
-    @Override
-    public void applyEffect(DroneController sender, DroneController receiver) {
-        sender.stopMotion();
-        sender.jump();
 
+    @Override
+    public void applyEffect(DroneController droneController) {
+        droneController.stopMotion();
+        droneController.jump();
+        droneController.getGUI_GAME().getGame().onItemTouched(this);
+    }
+
+    @Override
+    public void useItem(DroneController droneController) {
+        this.setPosition(droneController.getDRONE().getCurrentPosition());
+        droneController.getGUI_GAME().getGame().onItemUsed(this);
     }
 
     @Override

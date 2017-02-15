@@ -21,6 +21,12 @@ public interface GuiGameListener {
     void onItemUsed(Item item);
 
     /**
+     * Method used to notify {@link Game} that an {@link Item} as been touched by the {@link Drone}.
+     * @param item touched by the player
+     */
+    void onItemTouched(Item item);
+
+    /**
      * Method called when the controlled {@link Drone} gives up.
      */
     void onPlayerGiveUp();
