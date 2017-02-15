@@ -112,10 +112,10 @@ public class CommunicationBT extends Thread implements Serializable, GameListene
             String name = item.getName();
             Vector3D position = item.getPosition();
             if (position != null) {
-                dataString = "item" + "/" + name + "/" + position.getX() + "/" + position.getY() + "/" + position.getZ();
+                dataString = "itemUsed" + "/" + name + "/" + position.getX() + "/" + position.getY() + "/" + position.getZ();
             }
             else {
-                dataString = "item" + "/" + name;
+                dataString = "itemUsed" + "/" + name;
             }
             byte[] dataBytes = dataString.getBytes(Charset.forName("UTF-8"));
         // Send the message
@@ -127,6 +127,23 @@ public class CommunicationBT extends Thread implements Serializable, GameListene
         // Create message
             String dataString = "hasGiveUp";
             byte[] dataBytes = dataString.getBytes(Charset.forName("UTF-8"));
+        // Send the message
+            write(dataBytes);
+    }
+
+    @Override
+    public void onItemTouched(Item item) {
+        // Create message
+            String dataString;
+            String name = item.getName();
+            Vector3D position = item.getPosition();
+            if (position != null) {
+                dataString = "hasTouchedItem" + "/" + name + "/" + position.getX() + "/" + position.getY() + "/" + position.getZ();
+            }
+            else {
+            dataString = "hasTouchedItem" + "/" + name;
+            }
+        byte[] dataBytes = dataString.getBytes(Charset.forName("UTF-8"));
         // Send the message
             write(dataBytes);
     }

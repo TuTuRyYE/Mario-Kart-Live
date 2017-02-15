@@ -21,7 +21,7 @@ public interface GameListener {
 
     /**
      * Called when the player use an {@link Item}.
-     * @param item
+     * @param item the item used
      */
     void onPlayerUseItem(Item item);
 
@@ -29,4 +29,10 @@ public interface GameListener {
      * Called when the player give up the race.
      */
     void onPlayerGiveUp();
+
+    /**
+     * Called when an {@link Item} is touched on the {@link Circuit}
+     * @param item the item touched
+     */
+    void onItemTouched(Item item);
 }
