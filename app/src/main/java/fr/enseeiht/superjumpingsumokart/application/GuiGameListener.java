@@ -29,5 +29,5 @@ public interface GuiGameListener {
     /**
      * Method called when the controlled {@link Drone} gives up.
      */
-    void onPlayerGiveUp();
+    void onPlayerGaveUp();
 }

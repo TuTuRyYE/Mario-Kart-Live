@@ -388,7 +388,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
 
     @Override
     public void onPositionUpdated(Vector3D position) {
-
+        drone.setCurrentPosition(position);
     }
 
     @Override
@@ -409,8 +409,10 @@ public class Game implements CommunicationBTListener, GuiGameListener{
     }
 
     @Override
-    public void onPlayerGiveUp() {
-
+    public void onPlayerGaveUp() {
+        for (GameListener gl : GAME_LISTENERS) {
+            gl.onPlayerGaveUp();
+        }
     }
 
     public int getLapsNumber() {
