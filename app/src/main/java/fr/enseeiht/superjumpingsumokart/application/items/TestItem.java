@@ -22,9 +22,15 @@ public class TestItem extends Item {
         super(NAME);
     }
 
+
     @Override
-    public void applyEffect(DroneController sender, DroneController receiver) {
-       // sender.testFeature();
+    public void applyEffect(DroneController droneController) {
+
+    }
+
+    @Override
+    public void useItem(DroneController droneController) {
+
     }
 
     @Override
