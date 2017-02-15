@@ -241,7 +241,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
 
     @Override
     public void onSecondStartedRace() {
-        guiGame.getController().setRunning(true);
+        guiGame.onStartRace();
     }
 
     @Override
