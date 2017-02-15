@@ -13,6 +13,11 @@ public interface CommunicationBTListener {
     void onSecondPlayerReady();
 
     /**
+     * Notify the game that the second player has started the race
+     */
+    void onSecondStartedRace();
+
+    /**
      * Notify the game that the second player has finished a lap.
      */
     void onSecondPlayerLapFinished();
@@ -38,4 +43,6 @@ public interface CommunicationBTListener {
      * @param msg touched by the second player.
      */
     void onSecondPlayerTouchedItem(String msg);
+
+    void onSecondUpdatedPosition(String msg);
 }

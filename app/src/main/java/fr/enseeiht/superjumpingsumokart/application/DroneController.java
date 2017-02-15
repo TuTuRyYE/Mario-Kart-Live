@@ -40,6 +40,15 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     private final static byte NEG_FAST_SPEED = (byte) 50;
     // Inner state variables
     private boolean started = false;
+
+    /**
+     * Set the state of the race.
+     * @param running the state of the race.
+     */
+    public void setRunning(boolean running) {
+        this.running = running;
+    }
+
     private boolean running = false;
 
     private int fps_count = 0;

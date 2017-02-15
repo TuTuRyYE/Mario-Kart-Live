@@ -243,6 +243,11 @@ public class Game implements CommunicationBTListener, GuiGameListener{
     }
 
     @Override
+    public void onSecondStartedRace() {
+        guiGame.getController().setRunning(true);
+    }
+
+    @Override
     public void onSecondPlayerLapFinished() {
         this.otherCurrentLap++;
     }
@@ -321,7 +326,19 @@ public class Game implements CommunicationBTListener, GuiGameListener{
                 ind++;
             }
         }
-    };
+    }
+
+    @Override
+    public void onSecondUpdatedPosition(String msg) {
+        String[] msgSplit = msg.split("/");
+        double x = Double.parseDouble(msgSplit[0]);
+        double y = Double.parseDouble(msgSplit[1]);
+        double z = Double.parseDouble(msgSplit[2]);
+        Vector3D position = new Vector3D(x, y, z);
+        otherDrone.setCurrentPosition(position);
+    }
+
+    ;
 
     @Override
     public void onPositionUpdated(Vector3D position) {
