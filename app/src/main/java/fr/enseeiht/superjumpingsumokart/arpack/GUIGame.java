@@ -33,6 +33,7 @@ import org.artoolkit.ar.base.AndroidUtils;
 import java.util.ArrayList;
 
 import fr.enseeiht.superjumpingsumokart.R;
+import fr.enseeiht.superjumpingsumokart.application.Drone;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
 import fr.enseeiht.superjumpingsumokart.application.Game;
 import fr.enseeiht.superjumpingsumokart.application.GameListener;
@@ -426,13 +427,23 @@ public class GUIGame extends Activity implements GameListener {
     }
 
     @Override
+    public void onPlayerFinishedLap() {
+        Toast.makeText(this, "Lap " + Integer.toString(controller.getDrone().getCurrentLap()) + "/" + Integer.toString(game.getLapsNumber()), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void onPlayerUseItem(Item item) {
         displayTrap();
     }
 
     @Override
-    public void onPlayerGiveUp() {
+    public void onPlayerGaveUp() {
         notifyDefeat();
+    }
+
+    @Override
+    public void onItemTouched(Item item) {
+        // Nothing to do
     }
 
     public void notifyDefeat() {
@@ -441,5 +452,9 @@ public class GUIGame extends Activity implements GameListener {
 
     public void notifyVictory() {
         Toast.makeText(this, "YOU WON !", Toast.LENGTH_SHORT).show();
+    }
+
+    public void addDroneInGame(Drone drone) {
+        game.setDrone(drone);
     }
 }

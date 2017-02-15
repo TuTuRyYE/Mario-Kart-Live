@@ -41,6 +41,8 @@ public class Game implements CommunicationBTListener, GuiGameListener{
      */
     private final ArrayList<GameListener> GAME_LISTENERS = new ArrayList<>();
 
+    private Drone drone, otherDrone;
+
     private boolean isStarted;
     private boolean finished;
     private boolean otherIsReady;
@@ -409,5 +411,17 @@ public class Game implements CommunicationBTListener, GuiGameListener{
     @Override
     public void onPlayerGiveUp() {
 
+    }
+
+    public int getLapsNumber() {
+        return circuit.getLaps();
+    }
+
+    public void setDrone(Drone drone) {
+        this.drone = drone;
+    }
+
+    public void setOtherDrone(Drone otherDrone) {
+        this.otherDrone = otherDrone;
     }
 }
