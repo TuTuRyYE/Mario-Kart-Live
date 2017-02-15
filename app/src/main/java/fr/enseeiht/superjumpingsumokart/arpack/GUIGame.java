@@ -35,12 +35,12 @@ import java.util.ArrayList;
 import fr.enseeiht.superjumpingsumokart.R;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
 import fr.enseeiht.superjumpingsumokart.application.Game;
+import fr.enseeiht.superjumpingsumokart.application.GameListener;
+import fr.enseeiht.superjumpingsumokart.application.GuiGameListener;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
 import fr.enseeiht.superjumpingsumokart.application.network.WifiConnector;
 
-
-
-public class GUIGame extends Activity {
+public class GUIGame extends Activity implements GameListener {
 
     /**
      * The width of the frames of the Jumping Sumo Camera.
@@ -136,7 +136,7 @@ public class GUIGame extends Activity {
      */
     private Game game;
 
-    private GUIGameListener;
+    private GuiGameListener guiGameListener;
 
 
     @Override
@@ -176,6 +176,7 @@ public class GUIGame extends Activity {
 
 
         game = new Game(this,null);
+        registerGuiGameListener(game);
 
         // Every players is ready
         // Defines action listener
@@ -391,11 +392,31 @@ public class GUIGame extends Activity {
         return controller;
     }
 
-    public void registerGuiGameListener(GUIGameListener guiGameListener) {
+    public void registerGuiGameListener(GuiGameListener guiGameListener) {
         GUI_GAME_LISTENERS.add(guiGameListener);
     }
 
-    public void unregisterGuiGameListener(GUIGameListener guiGameListener) {
+    public void unregisterGuiGameListener(GuiGameListener guiGameListener) {
         GUI_GAME_LISTENERS.remove(guiGameListener);
+    }
+
+    @Override
+    public void onPlayerReady() {
+
+    }
+
+    @Override
+    public void onPlayerFinished() {
+
+    }
+
+    @Override
+    public void onPlayerUseItem(Item item) {
+
+    }
+
+    @Override
+    public void onPlayerGiveUp() {
+
     }
 }

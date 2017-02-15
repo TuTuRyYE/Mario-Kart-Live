@@ -6,11 +6,10 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Arrays;
-import android.os.Bundle;
-import android.os.Handler;
+
 import android.os.Message;
 import android.util.Log;
+
 import fr.enseeiht.superjumpingsumokart.application.Game;
 import fr.enseeiht.superjumpingsumokart.application.GameListener;
 import fr.enseeiht.superjumpingsumokart.application.Vector3D;
@@ -21,14 +20,17 @@ import fr.enseeiht.superjumpingsumokart.application.items.Item;
  */
 /* Manages the bluetooth communication for an appeared device */
 public class CommunicationBT extends Thread implements Serializable, GameListener {
-    private final BluetoothSocket btSocket;
+
+    private final static String COMMUNICATION_BT_TAG = "CommunicationBT";
+    private final BluetoothSocket BT_SOCKET;
     private InputStream btInputStream;
     private OutputStream btOutputStream;
     private Game game;
     private final ArrayList<CommunicationBTListener> COMMUNICATION_BT_LISTENERS = new ArrayList<>();
+
   //  private Handler handlerGame;
     public CommunicationBT(BluetoothSocket socket) {
-        btSocket = socket;
+        BT_SOCKET = socket;
         // Initialization of the streams
         try {
             btInputStream = socket.getInputStream();
@@ -47,8 +49,8 @@ public class CommunicationBT extends Thread implements Serializable, GameListene
                 byte[] data = new byte[bytes];
                 System.arraycopy(buffer, 0, data, 0, bytes);
                 String receivedMsg = new String(data, Charset.forName("UTF-8"));
-                Log.d("COMMUNICATIONBT", "Message received");
-                Log.d("COMMUNICATIONBT", receivedMsg);
+                Log.d(COMMUNICATION_BT_TAG, "Message received");
+                Log.d(COMMUNICATION_BT_TAG, receivedMsg);
                 //Create message
                 Message mes = new Message();
                 //Create bundle
@@ -58,6 +60,7 @@ public class CommunicationBT extends Thread implements Serializable, GameListene
 //                handlerGame.sendMessage(mes);
 */
             } catch (IOException e) {
+                Log.d(COMMUNICATION_BT_TAG, "IOException : + " + e.getMessage());
                 break;
             }
         }
@@ -66,16 +69,26 @@ public class CommunicationBT extends Thread implements Serializable, GameListene
     public void write(byte[] bytes) {
         try {
             btOutputStream.write(bytes);
-        } catch (IOException e) { }
+        } catch (IOException e) {
+            Log.d(COMMUNICATION_BT_TAG, "IOException : + " + e.getMessage());
+        }
     }
     /* Closes the socket */
     public void cancel() {
         try {
-            btSocket.close();
-        } catch (IOException e) { }
+            BT_SOCKET.close();
+            unregisterGameListener(game);
+        } catch (IOException e) {
+            Log.d(COMMUNICATION_BT_TAG, "IOException : + " + e.getMessage());
+        }
     }
     public void setGame(Game game) {
-        this.game = game;
+        if (game != null) {
+            this.game = game;
+            if (!COMMUNICATION_BT_LISTENERS.contains(game)) {
+                registerCommunicationBTListener(game);
+            }
+        }
     }
 
     public void registerCommunicationBTListener(CommunicationBTListener gameListener) {
