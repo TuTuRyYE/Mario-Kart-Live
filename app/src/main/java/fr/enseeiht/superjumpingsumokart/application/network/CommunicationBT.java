@@ -116,6 +116,7 @@ public class CommunicationBT extends Thread implements Serializable, GameListene
             }
         }
     }
+
     /* Writing on the outputstream */
     public void write(byte[] bytes) {
         try {

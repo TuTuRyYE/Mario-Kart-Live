@@ -26,6 +26,9 @@ import fr.enseeiht.superjumpingsumokart.application.network.CommunicationBT;
 import fr.enseeiht.superjumpingsumokart.application.network.ServerBT;
 import fr.enseeiht.superjumpingsumokart.application.network.WifiConnector;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
+
+import static java.lang.Thread.sleep;
+
 /**
  * @author Romain Verset
  * The activity used as home screen for the application. From there it is possible to connect to a
@@ -149,15 +152,18 @@ public class GUIWelcome extends Activity {
      * This switch requires to have a drone connected with the application.
      */
     private void startRaceBtnAction(){
-        if (currentDeviceService != null) {
+       // if (currentDeviceService != null) {
             Intent i = new Intent(GUIWelcome.this, GUIGame.class);
             i.putExtra("currentDeviceService", currentDeviceService);
+        if (com != null){
+            Log.d(GUI_WELCOME_TAG,"com ok");
+        }
             i.putExtra("bluetoothCommunication", com);
             Log.d(GUI_WELCOME_TAG, "Launching a GUIGame Activity...");
             startActivity(i);
-        } else {
-            Toast.makeText(GUIWelcome.this, R.string.no_drone_connected, Toast.LENGTH_SHORT).show();
-        }
+       // } else {
+         //   Toast.makeText(GUIWelcome.this, R.string.no_drone_connected, Toast.LENGTH_SHORT).show();
+        //}
     }
     /**
      * Enables to connect with a Jumping Sumo drone (Romain Verset - 31/01/2017).
@@ -179,7 +185,7 @@ public class GUIWelcome extends Activity {
     /**
      * //TODO
      */
-    private void btConnectionBtnAction() {
+    private void btConnectionBtnAction(){
         //TODO
         // We verify that the device include BT
         btAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -188,6 +194,9 @@ public class GUIWelcome extends Activity {
         }
         ServerBT server = new ServerBT(btAdapter);
         server.start();
+        if (this.com == null){
+            Log.d(GUI_WELCOME_TAG,"com nullllll");
+        }
         this.com = server.getComServer();
     }
     /**

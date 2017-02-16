@@ -29,7 +29,9 @@ public class ServerBT extends Thread {
      * Get the bluetooth communication.
      * @return the bluetooth communication.
      */
+    private boolean comLaunched = false;
     public CommunicationBT getComServer() {
+        while (!comLaunched){}
         return comServer;
     }
     /**
@@ -91,9 +93,7 @@ public class ServerBT extends Thread {
         // We launch the BT communication threads
         this.comServer = new CommunicationBT(socket);
         comServer.start();
-        String test = "coucou";
-        Log.d("SERVER",test.getBytes().toString());
-        comServer.write(test.getBytes());
+        comLaunched = true;
         Log.v("SERVER", "communication launched");
     }
 
