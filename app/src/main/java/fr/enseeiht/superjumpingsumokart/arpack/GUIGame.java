@@ -392,6 +392,8 @@ public class GUIGame extends Activity implements GameListener {
             glView.onResume();
         }
     }
+
+
     /**
      * Method used by {@link #controller} to send the current frame of its video stream to the GUI (Romain Verset - 01/02/2017).
      * @param frame The frame received from the device
