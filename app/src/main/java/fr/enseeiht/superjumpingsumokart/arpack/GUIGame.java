@@ -326,10 +326,6 @@ public class GUIGame extends Activity implements GameListener {
         currentItem.assignResource(sendTrapBtn);
     }
 
-    public boolean isFirstUpdate() {
-        return firstUpdate;
-    }
-
     /**
      * Method called by {@link #UPDATER} to refresh the view of the GUI and update the displayed
      * frame from the video stream of the device (Romain Verset - 01/02/2017).

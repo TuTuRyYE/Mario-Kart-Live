@@ -43,8 +43,8 @@ public class Game implements CommunicationBTListener, GuiGameListener{
 
     private boolean trackInitialised = false, videoStreamAvailable = false, droneControllerReady = false;
     private boolean ready = false, otherReady = false;
-    private boolean started;
-    private boolean finished;
+    private boolean started = false;
+    private boolean finished = false;
     private CommunicationBT comBT;
 
     /**
@@ -69,10 +69,14 @@ public class Game implements CommunicationBTListener, GuiGameListener{
             this.comBT = comBT;
             comBT.setGame(this);
             registerGameListener(comBT);
+            this.otherReady = false;
+            Log.d(GAME_TAG, "2 players game created.");
+        } else {
+            otherReady = true;
+            Log.d(GAME_TAG, "1 player game created.");
         }
-        this.otherReady = false;
-        Log.d(GAME_TAG, "Game created for drone " + guiGame.getController().getDrone().getName());
     }
+
     /**
      * Generate magic boxes on the circuit (Vivian - 07/02/2017).
      * @return the {@link ArrayList} of {@link MagicBox} generate on the circuit.
