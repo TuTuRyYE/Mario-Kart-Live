@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
+import android.os.Parcelable;
 import android.util.Log;
 
 import fr.enseeiht.superjumpingsumokart.application.Game;
@@ -18,7 +19,7 @@ import fr.enseeiht.superjumpingsumokart.application.items.Item;
  * Created by Lucas on 07/02/2017.
  */
 /* Manages the bluetooth communication for an appeared device */
-public class CommunicationBT extends Thread implements Serializable, GameListener {
+public class CommunicationBT extends Thread implements  GameListener {
 
     private final static String COMMUNICATION_BT_TAG = "CommunicationBT";
     private final BluetoothSocket BT_SOCKET;
@@ -26,6 +27,7 @@ public class CommunicationBT extends Thread implements Serializable, GameListene
     private OutputStream btOutputStream;
     private Game game;
     private final ArrayList<CommunicationBTListener> COMMUNICATION_BT_LISTENERS = new ArrayList<>();
+    private static CommunicationBT comBTInstance;
 
     public CommunicationBT(BluetoothSocket socket) {
         BT_SOCKET = socket;
@@ -35,6 +37,17 @@ public class CommunicationBT extends Thread implements Serializable, GameListene
             btOutputStream = socket.getOutputStream();
         } catch (IOException e) { }
     }
+
+    public static void initInstance(BluetoothSocket bs) {
+        if (comBTInstance != null) {
+            comBTInstance = new CommunicationBT(bs);
+        }
+    }
+
+    public static CommunicationBT getInstance() {
+        return comBTInstance;
+    }
+
     public void run() {
         byte[] buffer = new byte[1024];
         int bytes;

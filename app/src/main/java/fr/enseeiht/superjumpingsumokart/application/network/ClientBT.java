@@ -30,11 +30,16 @@ public class ClientBT extends Thread {
      */
     private CommunicationBT comClient;
 
+    private boolean isComBTCreated = false;
+
     /**
      * Get the bluetooth communication.
      * @return the bluetooth communication.
      */
     public CommunicationBT getComClient() {
+        while (!isComBTCreated){
+
+        }
         return comClient;
     }
 
@@ -92,7 +97,9 @@ public class ClientBT extends Thread {
         // We cancel the bluetooth discovery TODO
 
         // We launch the BT communication thread
-        this.comClient = new CommunicationBT(btSocket);
+        CommunicationBT.initInstance(btSocket);
+        this.comClient = CommunicationBT.getInstance();
+        this.isComBTCreated = true;
         comClient.start();
         Log.d("CLIENT", "communication launched");
     }

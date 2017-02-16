@@ -155,22 +155,22 @@ public class GUIGame extends Activity implements GameListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gui_game);
 
-        // Binds with the drone and creates its controller
+        /*// Binds with the drone and creates its controller
         ARDiscoveryDeviceService currentDeviceService = (ARDiscoveryDeviceService) getIntent().getExtras().get("currentDeviceService");
         Log.d(GUI_GAME_TAG, "Got device service from activity GUIWelcome...");
         ARDiscoveryDevice currentDevice = WifiConnector.createDevice(currentDeviceService);
         Log.d(GUI_GAME_TAG, "Device created, attempting to create its controller...");
         controller = new DroneController(this, currentDevice);
-        Log.d(GUI_GAME_TAG, "Controller of the device created.");
+        Log.d(GUI_GAME_TAG, "Controller of the device created."); */
 
         // Binds with the bluetooth connector
-        CommunicationBT bluetoothConnector = (CommunicationBT) getIntent().getExtras().get("bluetoothCommunication");
+        CommunicationBT bluetoothConnector = CommunicationBT.getInstance();
         if (bluetoothConnector != null) {
             Log.d(GUI_GAME_TAG, "BluetoothConnector not null, multiplayer mode.");
         }
 
         // Creation of the game
-        game = new Game(this,bluetoothConnector);
+        game = new Game(this, bluetoothConnector);
         registerGuiGameListener(game);
 
         // Sets some graphical settings;
@@ -287,7 +287,7 @@ public class GUIGame extends Activity implements GameListener {
         super.onResume();
         Log.d(GUI_GAME_TAG, "Resuming GUIGame activity");
         firstUpdate = true;
-        controller.startController();
+        // controller.startController();
         initCameraSurfaceView();
         initGLSurfaceView();
         ARToolKit.getInstance().initialiseAR(VIDEO_WIDTH, VIDEO_HEIGHT, "Data/camera_para.dat", 0, false);
