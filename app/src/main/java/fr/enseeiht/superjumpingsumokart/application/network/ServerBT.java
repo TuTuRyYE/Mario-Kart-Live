@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.BluetoothLeScanner;
 import android.util.Log;
 import java.io.IOException;
 import java.util.UUID;

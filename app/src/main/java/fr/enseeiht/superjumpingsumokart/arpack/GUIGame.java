@@ -155,6 +155,8 @@ public class GUIGame extends Activity implements GameListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gui_game);
 
+
+
         // Binds with the bluetooth connector
         CommunicationBT bluetoothConnector = CommunicationBT.getInstance();
         if (bluetoothConnector != null) {
