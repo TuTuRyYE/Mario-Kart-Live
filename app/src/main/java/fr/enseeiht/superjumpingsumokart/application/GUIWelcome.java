@@ -26,9 +26,6 @@ import fr.enseeiht.superjumpingsumokart.application.network.CommunicationBT;
 import fr.enseeiht.superjumpingsumokart.application.network.ServerBT;
 import fr.enseeiht.superjumpingsumokart.application.network.WifiConnector;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
-
-import static java.lang.Thread.sleep;
-
 /**
  * @author Romain Verset
  * The activity used as home screen for the application. From there it is possible to connect to a
@@ -154,12 +151,16 @@ public class GUIWelcome extends Activity {
      * This switch requires to have a drone connected with the application.
      */
     private void startRaceBtnAction(){
-        //if (currentDeviceService != null) {
+       // if (currentDeviceService != null) {
             Intent i = new Intent(GUIWelcome.this, GUIGame.class);
             i.putExtra("currentDeviceService", currentDeviceService);
+        if (com != null){
+            Log.d(GUI_WELCOME_TAG,"com ok");
+        }
+            i.putExtra("bluetoothCommunication", com);
             Log.d(GUI_WELCOME_TAG, "Launching a GUIGame Activity...");
             startActivity(i);
-        //} else {
+       // } else {
          //   Toast.makeText(GUIWelcome.this, R.string.no_drone_connected, Toast.LENGTH_SHORT).show();
         //}
     }
@@ -192,7 +193,10 @@ public class GUIWelcome extends Activity {
         }
         ServerBT server = new ServerBT(btAdapter);
         server.start();
-
+        if (this.com == null){
+            Log.d(GUI_WELCOME_TAG,"com nullllll");
+        }
+        this.com = server.getComServer();
     }
     /**
      * //TODO

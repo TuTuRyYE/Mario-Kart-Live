@@ -129,6 +129,7 @@ public class CommunicationBT extends Thread implements  GameListener {
             }
         }
     }
+
     /* Writing on the outputstream */
     public void write(byte[] bytes) {
         try {
