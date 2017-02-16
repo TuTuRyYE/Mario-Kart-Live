@@ -2,6 +2,7 @@ package fr.enseeiht.superjumpingsumokart.application;
 
 import java.util.ArrayList;
 
+import fr.enseeiht.superjumpingsumokart.application.items.Banana;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
 import fr.enseeiht.superjumpingsumokart.application.items.NullItem;
 
@@ -43,7 +44,8 @@ public class Drone {
     Drone(String name) {
         this.name = name;
         this.currentPosition = new Vector3D(0, 0 ,0);
-        this.currentItem = new NullItem();
+        //this.currentItem = new NullItem();
+        this.currentItem = new Banana();
         this.currentLap = 0;
         this.markersSeen = new ArrayList<>();
     }

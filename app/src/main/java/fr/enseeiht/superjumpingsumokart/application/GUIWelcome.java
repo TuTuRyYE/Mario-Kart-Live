@@ -77,13 +77,8 @@ public class GUIWelcome extends Activity {
     private WifiConnector wifiConnector = null;
     private ARDiscoveryDeviceService currentDeviceService = null;
     private List<ARDiscoveryDeviceService> devicesList = new ArrayList<>();
-    private CommunicationBT com;
 
 
-    // à déplacer au besoin...
-    public CommunicationBT getCom() {
-        return com;
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // Initializes the GUI from layout file
@@ -152,9 +147,6 @@ public class GUIWelcome extends Activity {
         if (currentDeviceService != null) {
             Intent i = new Intent(GUIWelcome.this, GUIGame.class);
             i.putExtra("currentDeviceService", currentDeviceService);
-        if (com != null){
-            Log.d(GUI_WELCOME_TAG,"com ok");
-        }
             Log.d(GUI_WELCOME_TAG, "Launching a GUIGame Activity...");
             startActivity(i);
         } else {
@@ -184,7 +176,6 @@ public class GUIWelcome extends Activity {
     private void btConnectionBtnAction() {
         ServerBT server = new ServerBT();
         server.start();
-        this.com = server.getComServer();
     }
     /**
      * //TODO
