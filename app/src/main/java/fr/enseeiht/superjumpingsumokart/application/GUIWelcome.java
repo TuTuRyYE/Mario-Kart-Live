@@ -80,6 +80,8 @@ public class GUIWelcome extends Activity {
     private BluetoothAdapter btAdapter;
     private BluetoothDevice btDevice;
     private CommunicationBT com;
+
+
     // à déplacer au besoin...
     public CommunicationBT getCom() {
         return com;

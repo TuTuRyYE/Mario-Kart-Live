@@ -140,7 +140,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     public void useItem() {
         if (deviceController != null && running) {
             Log.d(DRONE_CONTROLLER_TAG, "USE ITEM order received !");
-            DRONE.getCurrentItem().applyEffect(this);
+            DRONE.getCurrentItem().useItem(this);
         }
     }
     /**
