@@ -5,8 +5,6 @@ import android.widget.ImageButton;
 
 import fr.enseeiht.superjumpingsumokart.R;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
-import fr.enseeiht.superjumpingsumokart.application.Game;
-import fr.enseeiht.superjumpingsumokart.application.Vector3D;
 
 /**
  * Created by michelmatthieu on 02/02/2017.
@@ -37,15 +35,13 @@ public class Banana extends Item {
         Log.d(ITEM_TAG,"A banana has been touched");
         droneController.slow();
         droneController.spin();
-        droneController.getGUI_GAME().getGame().onItemTouched(this);
+        droneController.getGuiGame().getGame().onItemTouched(this);
     }
 
     @Override
     public void useItem(DroneController droneController) {
         this.setPosition(droneController.getDrone().getCurrentPosition());
-        droneController.getGUI_GAME().getGame().onItemUsed(this);
         Log.d(ITEM_TAG,"A banana has been put on the circuit");
-
     }
 
     @Override

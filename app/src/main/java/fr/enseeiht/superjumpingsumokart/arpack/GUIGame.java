@@ -264,7 +264,11 @@ public class GUIGame extends Activity implements GameListener {
             @Override
             public void onClick(View v) {
                 Log.d(GUI_GAME_TAG, "Use item pressed.");
+                Item item = controller.getDrone().getCurrentItem();
                 controller.useItem();
+                for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
+                    ggl.onItemUsed(item);
+                }
             }
         });
         jumpBtn.setOnClickListener(new View.OnClickListener() {

@@ -7,6 +7,7 @@ import com.parrot.arsdk.ardiscovery.*;
 import com.parrot.arsdk.arcommands.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_ENUM;
 import java.util.ArrayList;
 
+import fr.enseeiht.superjumpingsumokart.application.items.NullItem;
 import fr.enseeiht.superjumpingsumokart.application.items.TestItem;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 /**
@@ -141,6 +142,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
         if (deviceController != null && running) {
             Log.d(DRONE_CONTROLLER_TAG, "USE ITEM order received !");
             DRONE.getCurrentItem().useItem(this);
+            DRONE.setCurrentItem(new NullItem());
         }
     }
     /**
@@ -349,7 +351,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
      * Getter of current {@link GUIGame}.
      * @return GUIGame owned by the droneController.
      */
-    public GUIGame getGUI_GAME() {
+    public GUIGame getGuiGame() {
         return GUI_GAME;
     }
 }
