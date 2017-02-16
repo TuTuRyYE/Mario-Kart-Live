@@ -2,6 +2,8 @@ package fr.enseeiht.superjumpingsumokart.application.network;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
+import android.bluetooth.le.BluetoothLeScanner;
+import android.bluetooth.le.ScanCallback;
 import android.util.Log;
 import java.io.IOException;
 import java.util.UUID;
@@ -83,6 +85,7 @@ public class ServerBT extends Thread {
                 Log.v("SERVER", "connected to client");
                 try {
                     isConnected = true;
+                    btAdapter.cancelDiscovery();
                     // We close the socket
                     btServerSocket.close();
                 } catch (IOException e) {

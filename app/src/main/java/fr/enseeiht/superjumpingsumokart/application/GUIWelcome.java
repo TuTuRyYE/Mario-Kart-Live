@@ -32,7 +32,7 @@ import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
  * drone, to launch a race, to edit circuits and to connect with another SuperJumpingSumoKart
  * application using Bluetooth.
  */
-public class GUIWelcome extends Activity implements BluetoothAdapter.LeScanCallback{
+public class GUIWelcome extends Activity {
     // Static block to load libraries (ARToolkit + ParrotSDK3)
 
     public final static int DEVICE_SERVICE_CONNECTED = 0;
@@ -192,7 +192,6 @@ public class GUIWelcome extends Activity implements BluetoothAdapter.LeScanCallb
         }
         ServerBT server = new ServerBT(btAdapter);
         server.start();
-        btAdapter.stopLeScan(this);
         if (this.com == null){
             Log.d(GUI_WELCOME_TAG,"com nullllll");
         }
@@ -253,8 +252,4 @@ public class GUIWelcome extends Activity implements BluetoothAdapter.LeScanCallb
         wifiConnectionBtn.setEnabled(true);
     }
 
-    @Override
-    public void onLeScan(BluetoothDevice device, int rssi, byte[] scanRecord) {
-
-    }
 }
