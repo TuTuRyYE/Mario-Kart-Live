@@ -54,7 +54,6 @@ public class Game implements CommunicationBTListener, GuiGameListener{
     public Game(GUIGame guiGame, CommunicationBT comBT) {
         this.circuit = createCircuit();
         trackInitialised = true;
-        checkReadyAndStartRace();
         // Add markers for boxes
         circuit.addMarker(1, new Vector3D(0,0,0)); // position to change when markers are placed
         circuit.addMarker(2, new Vector3D(0,0,0)); // position to change when markers are placed
@@ -75,6 +74,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
             otherReady = true;
             Log.d(GAME_TAG, "1 player game created.");
         }
+        checkReadyAndStartRace();
     }
 
     /**
@@ -369,15 +369,11 @@ public class Game implements CommunicationBTListener, GuiGameListener{
 
     private void checkReadyAndStartRace() {
         Log.d(GAME_TAG, "checkReadyAndStartRace called");
-/*        if (trackInitialised && droneControllerReady && videoStreamAvailable) {
+        if (trackInitialised && droneControllerReady && videoStreamAvailable) {
             ready =  true;
             for (GameListener gl : GAME_LISTENERS) {
                 gl.onPlayerReady();
             }
-        }*/
-        ready = true;
-        for (GameListener gl : GAME_LISTENERS) {
-            gl.onPlayerReady();
         }
         if (ready && otherReady) {
             Log.d(GAME_TAG, "player and other player are ready to start the race");

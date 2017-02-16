@@ -151,17 +151,14 @@ public class GUIWelcome extends Activity {
      * This switch requires to have a drone connected with the application.
      */
     private void startRaceBtnAction(){
-       // if (currentDeviceService != null) {
+        if (currentDeviceService != null) {
             Intent i = new Intent(GUIWelcome.this, GUIGame.class);
             i.putExtra("currentDeviceService", currentDeviceService);
-        if (com != null){
-            Log.d(GUI_WELCOME_TAG,"com ok");
-        }
             Log.d(GUI_WELCOME_TAG, "Launching a GUIGame Activity...");
             startActivity(i);
-       // } else {
-         //   Toast.makeText(GUIWelcome.this, R.string.no_drone_connected, Toast.LENGTH_SHORT).show();
-        //}
+        } else {
+            Toast.makeText(GUIWelcome.this, R.string.no_drone_connected, Toast.LENGTH_SHORT).show();
+        }
     }
     /**
      * Enables to connect with a Jumping Sumo drone (Romain Verset - 31/01/2017).
@@ -192,10 +189,6 @@ public class GUIWelcome extends Activity {
         }
         ServerBT server = new ServerBT(btAdapter);
         server.start();
-        if (this.com == null){
-            Log.d(GUI_WELCOME_TAG,"com nullllll");
-        }
-        this.com = server.getComServer();
     }
     /**
      * //TODO
@@ -215,9 +208,6 @@ public class GUIWelcome extends Activity {
         }
         ClientBT client = new ClientBT(btDevice,btAdapter);
         client.start();
-        if (com == null) {
-            Log.d(GUI_WELCOME_TAG, "com  null after get");
-        }
     }
     /**
      * //TODO
