@@ -39,7 +39,7 @@ public class CommunicationBT extends Thread implements  GameListener {
     }
 
     public static void initInstance(BluetoothSocket bs) {
-        if (comBTInstance != null) {
+        if (comBTInstance == null) {
             comBTInstance = new CommunicationBT(bs);
         }
     }

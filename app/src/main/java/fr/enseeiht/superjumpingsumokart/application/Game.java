@@ -368,11 +368,19 @@ public class Game implements CommunicationBTListener, GuiGameListener{
     }
 
     private void checkReadyAndStartRace() {
+        Log.d(GAME_TAG, "checkReadyAndStartRace called");
 /*        if (trackInitialised && droneControllerReady && videoStreamAvailable) {
             ready =  true;
+            for (GameListener gl : GAME_LISTENERS) {
+                gl.onPlayerReady();
+            }
         }*/
         ready = true;
+        for (GameListener gl : GAME_LISTENERS) {
+            gl.onPlayerReady();
+        }
         if (ready && otherReady) {
+            Log.d(GAME_TAG, "player and other player are ready to start the race");
             started = true;
             for (GameListener gl : GAME_LISTENERS) {
                 gl.onStartRace();

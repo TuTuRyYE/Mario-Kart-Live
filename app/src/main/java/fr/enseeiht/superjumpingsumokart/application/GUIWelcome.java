@@ -157,7 +157,6 @@ public class GUIWelcome extends Activity {
         if (com != null){
             Log.d(GUI_WELCOME_TAG,"com ok");
         }
-            i.putExtra("bluetoothCommunication", com);
             Log.d(GUI_WELCOME_TAG, "Launching a GUIGame Activity...");
             startActivity(i);
        // } else {
