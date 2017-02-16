@@ -46,12 +46,11 @@ public class ServerBT extends Thread {
     }
     /**
      * Create the server for the bluetooth connexion.
-     * @param btAdapter the local  bluetooth adapter.
      */
-    public ServerBT(BluetoothAdapter btAdapter) {
+    public ServerBT() {
         BluetoothServerSocket tmp;
         tmp = null;
-        this.btAdapter = btAdapter;
+        this.btAdapter = BluetoothAdapter.getDefaultAdapter();
         isConnected = false;
         // If the BT is disconnected, we force it to connect
         if (!this.btAdapter.isEnabled()) {

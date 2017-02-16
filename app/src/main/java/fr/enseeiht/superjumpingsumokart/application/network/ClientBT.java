@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 import java.io.IOException;
+import java.util.Set;
 import java.util.UUID;
 /**
  * Created by Lucas on 07/02/2017.
@@ -16,7 +17,7 @@ public class ClientBT extends Thread {
     /**
      * The local device.
      */
-    private final BluetoothDevice btDevice;
+    private BluetoothDevice btDevice;
     /**
      * The local bluetooth adapter.
      */
@@ -53,15 +54,21 @@ public class ClientBT extends Thread {
 
     /**
      * Create the client for the bluetooth connexion.
-     * @param device the local device.
-     * @param btAdapter the local  bluetooth adapter.
      */
-    public ClientBT(BluetoothDevice device, BluetoothAdapter btAdapter) {
+    public ClientBT() {
         // We use a temporary object because btSocket is final
         BluetoothSocket tmpSocket = null;
-        btDevice = device;
-        this.btAdapter = btAdapter;
+        BluetoothDevice tmpDevice = null;
+        this.btAdapter = BluetoothAdapter.getDefaultAdapter();
         isConnected = false;
+        Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
+        //Seul les deux telephones sont appareillés, le seul device que l'on peut trouver est donc celui qu'on veut
+        if (pairedDevices.size() > 0) {
+            for (BluetoothDevice device : pairedDevices) {
+                tmpDevice = device;
+            }
+            this.btDevice = tmpDevice;
+        }
         // If the BT is disconnected, we force it to connect
         if (!btAdapter.isEnabled()) {
             btAdapter.enable();
@@ -70,7 +77,7 @@ public class ClientBT extends Thread {
         // We get a BluetoothSocket object thanks to the BluetoothDevice.
         try {
             // The UUID is the login for the server. It is the same on the server's side.
-            tmpSocket = device.createRfcommSocketToServiceRecord(UUID.fromString("00002415-0000-1000-8000-00805F9B34FB"));
+            tmpSocket = btDevice.createRfcommSocketToServiceRecord(UUID.fromString("00002415-0000-1000-8000-00805F9B34FB"));
         } catch (IOException e) { }
         btSocket = tmpSocket;
     }

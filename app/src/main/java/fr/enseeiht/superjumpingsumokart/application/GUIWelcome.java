@@ -77,8 +77,6 @@ public class GUIWelcome extends Activity {
     private WifiConnector wifiConnector = null;
     private ARDiscoveryDeviceService currentDeviceService = null;
     private List<ARDiscoveryDeviceService> devicesList = new ArrayList<>();
-    private BluetoothAdapter btAdapter;
-    private BluetoothDevice btDevice;
     private CommunicationBT com;
 
 
@@ -184,17 +182,8 @@ public class GUIWelcome extends Activity {
      * //TODO
      */
     private void btConnectionBtnAction() {
-        //TODO
-        // We verify that the device include BT
-        btAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (btAdapter == null) {
-            // The phone doesn't include bluetooth
-        }
-        ServerBT server = new ServerBT(btAdapter);
+        ServerBT server = new ServerBT();
         server.start();
-        if (this.com == null){
-            Log.d(GUI_WELCOME_TAG,"com nullllll");
-        }
         this.com = server.getComServer();
     }
     /**
@@ -202,18 +191,9 @@ public class GUIWelcome extends Activity {
      */
     private void btJoinBtnAction() {
         //TODO
-        btAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (btAdapter == null) {
-            // The phone doesn't include bluetooth
-        }
-        Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
-        //Seul les deux telephones sont appareillés, le seul device que l'on peut trouver est donc celui qu'on veut
-        if (pairedDevices.size() > 0) {
-            for (BluetoothDevice device : pairedDevices) {
-                btDevice = device;
-            }
-        }
-        ClientBT client = new ClientBT(btDevice,btAdapter);
+
+
+        ClientBT client = new ClientBT();
         client.start();
     }
     /**
