@@ -80,6 +80,7 @@ public class ClientBT extends Thread {
             tmpSocket = btDevice.createRfcommSocketToServiceRecord(UUID.fromString("00002415-0000-1000-8000-00805F9B34FB"));
         } catch (IOException e) { }
         btSocket = tmpSocket;
+        btAdapter.cancelDiscovery();
     }
 
 
@@ -90,7 +91,6 @@ public class ClientBT extends Thread {
             Log.d("CLIENT", "trying to connect");
             btSocket.connect();
             Log.d("CLIENT", "connected to server");
-            btAdapter.cancelDiscovery();
         } catch (IOException connectException) {
             // If impossible to connect, we close the socket and kill the thread
             Log.d("CLIENT",connectException.getMessage());
@@ -98,7 +98,6 @@ public class ClientBT extends Thread {
             try {
                 btSocket =(BluetoothSocket) btDevice.getClass().getMethod("createRfcommSocket", new Class[] {int.class}).invoke(btDevice,1);
                 btSocket.connect();
-                btAdapter.cancelDiscovery();
             } catch (Exception e) { }
             return;
         }
