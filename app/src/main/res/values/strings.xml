@@ -22,4 +22,9 @@
 
     <string name="create_circuit_btn">Create a new Circuit</string>
     <string name="chose_selected_btn">Chose the selected Circuit</string>
+    <string name="hostBTButtonOn">Looking for another player…</string>
+    <string name="hostBTButtonOff">Host a game</string>
+    <string name="joinBTButtonOff">Join a game</string>
+    <string name="joinBTButtonOn">Joined a game</string>
+    <string name="hostBTButtonOnAndPlayerConnected">Other player found</string>
 </resources>

@@ -46,19 +46,23 @@
                 android:textOn="@string/wifiConnectionBtnOn"
                 android:textOff="@string/wifiConnectionBtnOff"/>
 
-            <Button
+            <ToggleButton
                 android:text="@string/connect_bluetooth_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/connectBluetoothBtn"
-                android:width="@dimen/menu_btn_width" />
+                android:width="@dimen/menu_btn_width"
+                android:textOn="@string/hostBTButtonOn"
+                android:textOff="@string/hostBTButtonOff"/>
 
-            <Button
+            <ToggleButton
                 android:text="@string/join_bluetooth_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/joinBluetoothBtn"
-                android:width="@dimen/menu_btn_width" />
+                android:width="@dimen/menu_btn_width"
+                android:textOn="@string/joinBTButtonOn"
+                android:textOff="@string/joinBTButtonOff"/>
         </GridLayout>
 
         <Button
