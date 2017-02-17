@@ -192,7 +192,10 @@ public class GUIWelcome extends Activity {
      */
     private void setCircuitBtnAction() {
         //TODO
-        Toast.makeText(GUIWelcome.this, "TODO", Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(GUIWelcome.this, GUICircuit.class);
+        Log.d(GUI_WELCOME_TAG, "Launching a GUICircuit Activity...");
+        startActivity(i);
+
     }
     /**
      * Default action to do when the exit button is clicked (Romain Verset - 31/01/2017).
