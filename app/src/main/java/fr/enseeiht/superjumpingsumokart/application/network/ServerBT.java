@@ -16,7 +16,7 @@ public class ServerBT extends Thread implements BluetoothAdapter.LeScanCallback 
     /**
      * The server socket where will be hosted the bluetooth communication.
      */
-    private final BluetoothServerSocket btServerSocket;
+    private BluetoothServerSocket btServerSocket;
     /**
      * The local bluetooth adapter.
      */
@@ -49,25 +49,26 @@ public class ServerBT extends Thread implements BluetoothAdapter.LeScanCallback 
      * Create the server for the bluetooth connexion.
      */
     public ServerBT() {
-        BluetoothServerSocket tmp;
-        tmp = null;
-        this.btAdapter = BluetoothAdapter.getDefaultAdapter();
-        isConnected = false;
-        // If the BT is disconnected, we force it to connect
-        if (!this.btAdapter.isEnabled()) {
-            this.btAdapter.enable();
-            Log.v("SERVER", "BT connected");
-        }
-        while (!this.btAdapter.isEnabled()){}
-        try {
-            tmp = this.btAdapter.listenUsingRfcommWithServiceRecord("My Server", UUID.fromString("00002415-0000-1000-8000-00805F9B34FB"));
-        } catch (IOException e) {        }
-        btServerSocket = tmp;
-        btAdapter.cancelDiscovery();
+        this.isConnected = false;
     }
 
     @Override
     public void run() {
+        this.btAdapter = BluetoothAdapter.getDefaultAdapter();
+        // If the BT is disconnected, we force it to connect
+        if (!this.btAdapter.isEnabled()) {
+            this.btAdapter.enable();
+            Log.v("SERVER", "BT connection...");
+        }
+        // We wait until the bluetooth is actually connected
+        while (!this.btAdapter.isEnabled()){}
+        Log.v("SERVER", "BT connected");
+        try {
+            btServerSocket = this.btAdapter.listenUsingRfcommWithServiceRecord("My Server", UUID.fromString("00002415-0000-1000-8000-00805F9B34FB"));
+        } catch (IOException e) {        }
+        // We cancel the bluetooth discovery
+        btAdapter.cancelDiscovery();
+
         BluetoothSocket socket = null;
         Log.v("SERVER", "waiting for connections");
         // We wait for a client attempting to connect
