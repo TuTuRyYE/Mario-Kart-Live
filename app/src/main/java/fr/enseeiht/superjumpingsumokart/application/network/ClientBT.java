@@ -56,11 +56,16 @@ public class ClientBT extends Thread implements BluetoothAdapter.LeScanCallback{
      * Create the client for the bluetooth connexion.
      */
     public ClientBT() {
-        // We use a temporary object because btSocket is final
+        isConnected = false;
+
+    }
+
+
+    @Override
+    public void run() {
         BluetoothSocket tmpSocket = null;
         BluetoothDevice tmpDevice = null;
         this.btAdapter = BluetoothAdapter.getDefaultAdapter();
-        isConnected = false;
         Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
         //Seul les deux telephones sont appareillés, le seul device que l'on peut trouver est donc celui qu'on veut
         if (pairedDevices.size() > 0) {
@@ -81,11 +86,6 @@ public class ClientBT extends Thread implements BluetoothAdapter.LeScanCallback{
         } catch (IOException e) { }
         btSocket = tmpSocket;
         btAdapter.cancelDiscovery();
-    }
-
-
-    @Override
-    public void run() {
         try {
             // connexion
             Log.d("CLIENT", "trying to connect");
@@ -102,8 +102,6 @@ public class ClientBT extends Thread implements BluetoothAdapter.LeScanCallback{
             return;
         }
         isConnected = true;
-        // We cancel the bluetooth discovery TODO
-
         // We launch the BT communication thread
         CommunicationBT.initInstance(btSocket);
         this.comClient = CommunicationBT.getInstance();
