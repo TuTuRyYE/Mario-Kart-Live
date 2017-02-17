@@ -88,7 +88,7 @@ public class CommunicationBT extends Thread implements  GameListener {
                                 if (msgSplit.length == 2) { // if the object hasn't a position
                                     itemInfos = msgSplit[1];
                                 }
-                                else { // si the object has a position
+                                else { // if the object has a position
                                     itemInfos = msgSplit[1] + "/" + msgSplit[2] + "/" + msgSplit[3] + "/" + msgSplit[4];
                                 }
                                 listener.onSecondPlayerUsesItem(itemInfos);
