@@ -31,4 +31,9 @@
     <string name="xDefault">X</string>
     <string name="yDefault">Y</string>
     <string name="zDefault">Z</string>
+    <string name="hostBTButtonOn">Looking for another player…</string>
+    <string name="hostBTButtonOff">Host a game</string>
+    <string name="joinBTButtonOff">Join a game</string>
+    <string name="joinBTButtonOn">Joined a game</string>
+    <string name="hostBTButtonOnAndPlayerConnected">Other player found</string>
 </resources>

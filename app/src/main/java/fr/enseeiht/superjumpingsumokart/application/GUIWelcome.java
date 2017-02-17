@@ -182,8 +182,6 @@ public class GUIWelcome extends Activity {
      */
     private void btJoinBtnAction() {
         //TODO
-
-
         ClientBT client = new ClientBT();
         client.start();
     }
@@ -207,6 +205,7 @@ public class GUIWelcome extends Activity {
             wifiConnector.stop();
             wifiConnector = null;
         }
+
         currentDeviceService = null;
         devicesList = null;
         finish();
