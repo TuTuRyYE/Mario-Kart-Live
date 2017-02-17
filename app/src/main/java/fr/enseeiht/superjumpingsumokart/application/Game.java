@@ -272,6 +272,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
         String name = msgSplit[0];
         switch (name) {
             case "banana":
+                Log.d(GAME_TAG,"A banana has been put on the circuit by second player");
                 double xBanana = Double.parseDouble(msgSplit[1]);
                 double yBanana = Double.parseDouble(msgSplit[2]);
                 double zBanana = Double.parseDouble(msgSplit[3]);
@@ -280,6 +281,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
                 currentItems.add(banana);
                 break;
             case "box":
+                Log.d(GAME_TAG,"A box has been put on the circuit by second player");
                 double xBox = Double.parseDouble(msgSplit[1]);
                 double yBox = Double.parseDouble(msgSplit[2]);
                 double zBox = Double.parseDouble(msgSplit[3]);
@@ -288,6 +290,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
                 currentItems.add(box);
                 break;
             case "magicbox":
+                Log.d(GAME_TAG,"A magicbox has been taken on the circuit by second player");
                 double xMagicBox = Double.parseDouble(msgSplit[1]);
                 double yMagicBox = Double.parseDouble(msgSplit[2]);
                 double zMagicBox = Double.parseDouble(msgSplit[3]);
