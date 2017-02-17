@@ -1,5 +1,6 @@
 package fr.enseeiht.superjumpingsumokart.application.network;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.bluetooth.le.BluetoothLeScanner;
@@ -11,7 +12,7 @@ import java.util.UUID;
 /**
  * Created by Lucas on 07/02/2017.
  */
-public class ServerBT extends Thread {
+public class ServerBT extends Thread implements BluetoothAdapter.LeScanCallback {
     /**
      * The server socket where will be hosted the bluetooth communication.
      */
@@ -110,5 +111,10 @@ public class ServerBT extends Thread {
             btServerSocket.close();
         } catch (IOException e) {
         }
+    }
+
+    @Override
+    public void onLeScan(BluetoothDevice device, int rssi, byte[] scanRecord) {
+        btAdapter.stopLeScan(this);
     }
 }

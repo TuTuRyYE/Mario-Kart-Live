@@ -9,7 +9,7 @@ import java.util.UUID;
 /**
  * Created by Lucas on 07/02/2017.
  */
-public class ClientBT extends Thread {
+public class ClientBT extends Thread implements BluetoothAdapter.LeScanCallback{
     /**
      * The socket where will be hosted the bluetooth communication.
      */
@@ -111,6 +111,13 @@ public class ClientBT extends Thread {
         comClient.start();
         Log.d("CLIENT", "communication launched");
     }
+
+
+    @Override
+    public void onLeScan(BluetoothDevice device, int rssi, byte[] scanRecord) {
+        btAdapter.stopLeScan(this);
+    }
+
 
     /**
      * Close the connection
