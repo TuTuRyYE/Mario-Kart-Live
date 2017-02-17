@@ -272,25 +272,25 @@ public class Game implements CommunicationBTListener, GuiGameListener{
         String name = msgSplit[0];
         switch (name) {
             case "banana":
-                double xBanana = Double.parseDouble(msgSplit[2]);
-                double yBanana = Double.parseDouble(msgSplit[3]);
-                double zBanana = Double.parseDouble(msgSplit[4]);
+                double xBanana = Double.parseDouble(msgSplit[1]);
+                double yBanana = Double.parseDouble(msgSplit[2]);
+                double zBanana = Double.parseDouble(msgSplit[3]);
                 Banana banana = new Banana();
                 banana.setPosition(new Vector3D(xBanana, yBanana, zBanana));
                 currentItems.add(banana);
                 break;
             case "box":
-                double xBox = Double.parseDouble(msgSplit[2]);
-                double yBox = Double.parseDouble(msgSplit[3]);
-                double zBox = Double.parseDouble(msgSplit[4]);
+                double xBox = Double.parseDouble(msgSplit[1]);
+                double yBox = Double.parseDouble(msgSplit[2]);
+                double zBox = Double.parseDouble(msgSplit[3]);
                 Box box = new Box();
                 box.setPosition(new Vector3D(xBox, yBox, zBox));
                 currentItems.add(box);
                 break;
             case "magicbox":
-                double xMagicBox = Double.parseDouble(msgSplit[2]);
-                double yMagicBox = Double.parseDouble(msgSplit[3]);
-                double zMagicBox = Double.parseDouble(msgSplit[4]);
+                double xMagicBox = Double.parseDouble(msgSplit[1]);
+                double yMagicBox = Double.parseDouble(msgSplit[2]);
+                double zMagicBox = Double.parseDouble(msgSplit[3]);
                 Vector3D position = new Vector3D(xMagicBox, yMagicBox, zMagicBox);
                 boolean found = false;
                 int ind = 0;
