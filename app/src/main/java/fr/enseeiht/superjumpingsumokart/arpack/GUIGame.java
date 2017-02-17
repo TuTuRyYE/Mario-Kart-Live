@@ -67,6 +67,8 @@ public class GUIGame extends Activity implements GameListener {
     public final static int RENDER_AR = 3;
     public final static int CONTROLLER_STOPPING_ON_ERROR = 4;
     public final static int CONTROLLER_RUNNING = 5;
+    public final static int VICTORY = 6;
+    public final static int DEFEAT = 7;
 
     private final ArrayList<GuiGameListener> GUI_GAME_LISTENERS = new ArrayList<>();
 
@@ -103,6 +105,13 @@ public class GUIGame extends Activity implements GameListener {
                     for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
                         ggl.onDroneControllerReady();
                     }
+                    break;
+                case VICTORY :
+                    Toast.makeText(GUIGame.this, "YOU WON !", Toast.LENGTH_SHORT).show();
+                    break;
+                case DEFEAT :
+                    Toast.makeText(GUIGame.this, "YOU LOST !", Toast.LENGTH_SHORT).show();
+                    break;
                 default :
                     break;
             }
@@ -473,11 +482,11 @@ public class GUIGame extends Activity implements GameListener {
     }
 
     public void notifyDefeat() {
-        Toast.makeText(this, "YOU LOST !", Toast.LENGTH_SHORT).show();
+        UPDATER.sendEmptyMessage(DEFEAT);
     }
 
     public void notifyVictory() {
-        Toast.makeText(this, "YOU WON !", Toast.LENGTH_SHORT).show();
+        UPDATER.sendEmptyMessage(VICTORY);
     }
 
     public void addDroneInGame(Drone drone) {
