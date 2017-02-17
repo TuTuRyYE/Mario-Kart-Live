@@ -1,6 +1,9 @@
 package fr.enseeiht.superjumpingsumokart.application;
 import android.util.Log;
 import java.util.HashMap;
+
+import fr.enseeiht.superjumpingsumokart.application.network.CommunicationBT;
+
 /**
  * Created by Vivian on 27/01/2017.
  */
@@ -65,6 +68,9 @@ public class Circuit {
      * The coordinates of the startline and endline (for the moment they're written manually here)
      */
     private final static double ENDPOINT2Z = 0;
+
+    private static Circuit circuitInstance;
+
     /**
      * Default Constructor of the class {@link DroneController} .
      * It binds the {@link}
@@ -88,6 +94,17 @@ public class Circuit {
         this.markersID = markers;
         Log.d(CIRCUIT_TAG, "startline and endline markers added");
     }
+
+    public static void initInstance(int laps) {
+        if (circuitInstance == null) {
+            circuitInstance = new Circuit(laps);
+        }
+    }
+
+    public static Circuit getInstance() {
+        return circuitInstance;
+    }
+
     /**
      * Get the starting Point .
      * @return the startpoint.

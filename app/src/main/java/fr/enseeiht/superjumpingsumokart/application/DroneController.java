@@ -190,7 +190,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
             if ((markersSeen.get(markersSeen.size() - 1) == -1) || (markersSeen.get(markersSeen.size() - 1) == -2)) { // if the last marker is on the finished lane
                 if(markersSeen.size() > 2) { // The drone has seen enough markers
                     if (checkPosition()) {
-                        if (this.getDrone().getCurrentLap() == this.GUI_GAME.getGame().getCircuit().getLaps()) { // if the number of laps is correct
+                        if (this.getDrone().getCurrentLap() == Circuit.getInstance().getLaps()) { // if the number of laps is correct
                             result = true;
                         }
                         else {
@@ -212,8 +212,8 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
         //get the current position of the drone
         Vector3D positionDrone = this.getDrone().getCurrentPosition();
         //compute the end line equation
-        Vector3D endPoint1 = this.GUI_GAME.getGame().getCircuit().getEndPoints()[0];
-        Vector3D endPoint2 = this.GUI_GAME.getGame().getCircuit().getEndPoints()[1];
+        Vector3D endPoint1 = Circuit.getInstance().getEndPoints()[0];
+        Vector3D endPoint2 = Circuit.getInstance().getEndPoints()[1];
         double aux = (endPoint1.getX()-endPoint2.getX());
         double relativePosition;
         if(aux !=0) { // if the end line isn't vertical

@@ -23,10 +23,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
      */
     private final static String GAME_TAG = "GAME";
     /**
-     * The circuit
-     */
-    private Circuit circuit;
-    /**
+
      * {@link GUIGame}, the interface of the Game.
      */
     private GUIGame guiGame;
@@ -52,13 +49,13 @@ public class Game implements CommunicationBTListener, GuiGameListener{
      * @param guiGame interface of the {@link Game}
      */
     public Game(GUIGame guiGame, CommunicationBT comBT) {
-        this.circuit = createCircuit();
+        createCircuit();
         trackInitialised = true;
         // Add markers for boxes
-        circuit.addMarker(1, new Vector3D(0,0,0)); // position to change when markers are placed
-        circuit.addMarker(2, new Vector3D(0,0,0)); // position to change when markers are placed
-        circuit.addMarker(3, new Vector3D(0,0,0)); // position to change when markers are placed
-        circuit.addMarker(4, new Vector3D(0,0,0)); // position to change when markers are placed
+        Circuit.getInstance().addMarker(1, new Vector3D(0,0,0)); // position to change when markers are placed
+        Circuit.getInstance().addMarker(2, new Vector3D(0,0,0)); // position to change when markers are placed
+        Circuit.getInstance().addMarker(3, new Vector3D(0,0,0)); // position to change when markers are placed
+        Circuit.getInstance().addMarker(4, new Vector3D(0,0,0)); // position to change when markers are placed
         currentItems = setMagicBoxes();
         this.guiGame = guiGame;
         registerGameListener(guiGame);
@@ -83,7 +80,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
      */
     public ArrayList<Item> setMagicBoxes() {
         ArrayList<Item> result = new ArrayList<>();
-        HashMap<Integer, Vector3D> markersID = this.circuit.getMarkersID();
+        HashMap<Integer, Vector3D> markersID = Circuit.getInstance().getMarkersID();
         Vector3D position1 = markersID.get(1);
         Vector3D position2 = markersID.get(2);
         Vector3D position3 = markersID.get(3);
@@ -123,20 +120,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
     public void setGuiGame(GUIGame guiGame) {
         this.guiGame = guiGame;
     }
-    /**
-     * Get the {@link Circuit} associated to the Game (Vivian - 07/02/2017).
-     * @return the {@link Circuit} of the Game.
-     */
-    public Circuit getCircuit() {
-        return circuit;
-    }
-    /**
-     * Set the {@link Circuit} associated to the Game (Vivian - 07/02/2017).
-     * @param circuit of the {@link Game}.
-     */
-    public void setCircuit(Circuit circuit) {
-        this.circuit = circuit;
-    }
+
     /**
      * Get currentItems {@link ArrayList} present on the circuit (Vivian - 07/02/2017).
      * @return currentItems {@link ArrayList}.
@@ -179,11 +163,10 @@ public class Game implements CommunicationBTListener, GuiGameListener{
     }
     /**
      * Create the {@link Circuit} (Vivian - 07/02/2017).
-     * @return {@link Circuit} created.
      */
-    public Circuit createCircuit () {
+    public void createCircuit () {
         int laps = 1; // Number of laps for the game
-        return new Circuit(laps);
+        Circuit.initInstance(laps);
     }
     /**
      * Start the {@link Game} (Vivian - 07/02/2017).
@@ -202,13 +185,13 @@ public class Game implements CommunicationBTListener, GuiGameListener{
      * @param nameFinished of the {@link Drone} to notify of the end of the race (Vivian - 07/02/2017).
      */
     public void stop(String nameFinished){
-        Log.d(GAME_TAG, "stop fonction called");
+        Log.d(GAME_TAG, "stop function called");
         // Stop the drone
         guiGame.getController().stopMotion();
         // Say the name of the winner
         // TODO Send to each player a message saying that the game in finished
         this.currentItems = null;
-        this.circuit = null;
+        // TODO handle circuit
     }
     /**
      * Get the number of player on the {@link Game} (Vivian - 07/02/2017).
@@ -226,7 +209,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
         return numberOfPlayer;
     }
     public boolean isReady() {
-        return (this.circuit !=null && !this.isStarted());
+        return (Circuit.getInstance() !=null && !this.isStarted());
     }
 
     public void registerGameListener(GameListener gameListener) {
@@ -422,7 +405,7 @@ public class Game implements CommunicationBTListener, GuiGameListener{
     }
 
     public int getLapsNumber() {
-        return circuit.getLaps();
+        return Circuit.getInstance().getLaps();
     }
 
     public void setDrone(Drone drone) {
