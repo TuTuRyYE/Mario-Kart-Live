@@ -176,4 +176,8 @@ public class Circuit {
     public void setMarkersID(HashMap<Integer, Vector3D> markersID) {
         this.markersID = markersID;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

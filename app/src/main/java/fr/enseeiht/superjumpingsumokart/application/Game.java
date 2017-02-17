@@ -9,6 +9,7 @@ import fr.enseeiht.superjumpingsumokart.application.items.Banana;
 import fr.enseeiht.superjumpingsumokart.application.items.Box;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
 import fr.enseeiht.superjumpingsumokart.application.items.MagicBox;
+import fr.enseeiht.superjumpingsumokart.application.items.RedShell;
 import fr.enseeiht.superjumpingsumokart.application.network.CommunicationBT;
 import fr.enseeiht.superjumpingsumokart.application.network.CommunicationBTListener;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
@@ -254,6 +255,15 @@ public class Game implements CommunicationBTListener, GuiGameListener{
         String[] msgSplit = msg.split("/");
         String name = msgSplit[0];
         switch (name) {
+            case "redshell":
+                Log.d(GAME_TAG,"You've been hit by a shell!");
+                double xRedShell = Double.parseDouble(msgSplit[1]);
+                double yRedShell = Double.parseDouble(msgSplit[2]);
+                double zRedShell = Double.parseDouble(msgSplit[3]);
+                RedShell redShell = new RedShell();
+                redShell.setPosition(new Vector3D(xRedShell, yRedShell, zRedShell));
+                currentItems.add(redShell);
+                break;
             case "banana":
                 Log.d(GAME_TAG,"A banana has been put on the circuit by second player");
                 double xBanana = Double.parseDouble(msgSplit[1]);

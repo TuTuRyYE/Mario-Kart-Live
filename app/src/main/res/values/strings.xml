@@ -22,6 +22,15 @@
 
     <string name="create_circuit_btn">Create a new Circuit</string>
     <string name="chose_selected_btn">Chose the selected Circuit</string>
+
+    <string name="add_marker_btn">Add a marker</string>
+    <string name="confirm_btn">Confirm the circuit</string>
+    <string name="circuitNameText">Name of the Circuit</string>
+    <string name="lapsText">Number of laps</string>
+    <string name="idTextDefault">ID</string>
+    <string name="xDefault">X</string>
+    <string name="yDefault">Y</string>
+    <string name="zDefault">Z</string>
     <string name="hostBTButtonOn">Looking for another player…</string>
     <string name="hostBTButtonOff">Host a game</string>
     <string name="joinBTButtonOff">Join a game</string>
