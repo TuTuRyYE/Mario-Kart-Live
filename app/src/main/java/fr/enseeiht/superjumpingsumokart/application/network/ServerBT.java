@@ -9,6 +9,9 @@ import android.bluetooth.le.BluetoothLeScanner;
 import android.util.Log;
 import java.io.IOException;
 import java.util.UUID;
+
+import fr.enseeiht.superjumpingsumokart.application.GUIWelcome;
+
 /**
  * Created by Lucas on 07/02/2017.
  */
@@ -34,6 +37,8 @@ public class ServerBT extends Thread implements BluetoothAdapter.LeScanCallback 
      * @return the bluetooth communication.
      */
     private boolean comLaunched = false;
+
+    private GUIWelcome GUI_WELCOME;
     public CommunicationBT getComServer() {
         while (!comLaunched){}
         return comServer;
@@ -48,8 +53,9 @@ public class ServerBT extends Thread implements BluetoothAdapter.LeScanCallback 
     /**
      * Create the server for the bluetooth connexion.
      */
-    public ServerBT() {
+    public ServerBT(GUIWelcome guiWelcome) {
         this.isConnected = false;
+        GUI_WELCOME = guiWelcome;
     }
 
     @Override
@@ -65,12 +71,14 @@ public class ServerBT extends Thread implements BluetoothAdapter.LeScanCallback 
         Log.v("SERVER", "BT connected");
         try {
             btServerSocket = this.btAdapter.listenUsingRfcommWithServiceRecord("My Server", UUID.fromString("00002415-0000-1000-8000-00805F9B34FB"));
+
         } catch (IOException e) {        }
         // We cancel the bluetooth discovery
         btAdapter.cancelDiscovery();
 
         BluetoothSocket socket = null;
         Log.v("SERVER", "waiting for connections");
+        GUI_WELCOME.GUI_WELCOME_HANDLER.sendEmptyMessage(GUIWelcome.BLUETOOTH_SERVER_READY);
         // We wait for a client attempting to connect
         while (!isConnected) {
             if (btServerSocket != null) {
@@ -90,6 +98,7 @@ public class ServerBT extends Thread implements BluetoothAdapter.LeScanCallback 
                     isConnected = true;
                     // We close the socket
                     btServerSocket.close();
+                    GUI_WELCOME.GUI_WELCOME_HANDLER.sendEmptyMessage(GUIWelcome.BLUETOOTH_SERVER_GOT_CONNECTION);
                 } catch (IOException e) {
                 }
                 break;
@@ -110,6 +119,7 @@ public class ServerBT extends Thread implements BluetoothAdapter.LeScanCallback 
     public void cancel() {
         try {
             btServerSocket.close();
+            GUI_WELCOME.GUI_WELCOME_HANDLER.sendEmptyMessage(GUIWelcome.BLUETOOTH_SERVER_SHUTTED_DOWN);
         } catch (IOException e) {
         }
     }

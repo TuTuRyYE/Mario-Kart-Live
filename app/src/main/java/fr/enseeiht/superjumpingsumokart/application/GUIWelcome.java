@@ -1,14 +1,13 @@
 package fr.enseeiht.superjumpingsumokart.application;
 
 import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -18,11 +17,9 @@ import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import fr.enseeiht.superjumpingsumokart.R;
 import fr.enseeiht.superjumpingsumokart.application.network.ClientBT;
-import fr.enseeiht.superjumpingsumokart.application.network.CommunicationBT;
 import fr.enseeiht.superjumpingsumokart.application.network.ServerBT;
 import fr.enseeiht.superjumpingsumokart.application.network.WifiConnector;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
@@ -37,6 +34,11 @@ public class GUIWelcome extends Activity {
 
     public final static int DEVICE_SERVICE_CONNECTED = 0;
     public final static int DEVICE_SERVICE_DISCONNECTED = 1;
+    public final static int BLUETOOTH_SERVER_READY = 3;
+    public final static int BLUETOOTH_SERVER_GOT_CONNECTION = 4;
+    public final static int BLUETOOTH_CLIENT_JOINED_GAME = 5;
+    public final static int BLUETOOTH_SERVER_SHUTTED_DOWN = 6;
+    public final static int BLUETOOTH_CLIENT_SHUTTED_DOWN = 7;
 
     public final Handler GUI_WELCOME_HANDLER = new Handler() {
         @Override
@@ -52,6 +54,22 @@ public class GUIWelcome extends Activity {
                     break;
                 case DEVICE_SERVICE_DISCONNECTED :
                     disableWifiConnectionBtn();
+                    break;
+                case BLUETOOTH_CLIENT_JOINED_GAME :
+                    onClientConnected();
+                    break;
+                case BLUETOOTH_SERVER_READY :
+                    onServerReady();
+                    break;
+                case BLUETOOTH_SERVER_GOT_CONNECTION :
+                    onServerReceivedConnection();
+                    break;
+                case BLUETOOTH_SERVER_SHUTTED_DOWN:
+                    onServerShuttedDown();
+                break;
+                case BLUETOOTH_CLIENT_SHUTTED_DOWN:
+                    onClientShuttedDown();
+                break;
                 default :
                     break;
             }
@@ -69,12 +87,14 @@ public class GUIWelcome extends Activity {
     // Buttons in the GUI
     private Button startRaceBtn;
     private ToggleButton wifiConnectionBtn;
-    private Button btConnectionBtn;
+    private Button btHostBtn;
     private Button btJoinBtn;
     private Button setCircuitBtn;
     private Button exitBtn;
     // Connection and device variables
     private WifiConnector wifiConnector = null;
+    private ServerBT server = null;
+    private ClientBT client = null;
     private ARDiscoveryDeviceService currentDeviceService = null;
     private List<ARDiscoveryDeviceService> devicesList = new ArrayList<>();
 
@@ -90,7 +110,7 @@ public class GUIWelcome extends Activity {
         startRaceBtn = (Button) findViewById(R.id.startRaceBtn);
         wifiConnectionBtn = (ToggleButton) findViewById(R.id.connectWifiBtn);
         wifiConnectionBtn.setEnabled(false);
-        btConnectionBtn = (Button) findViewById(R.id.connectBluetoothBtn);
+        btHostBtn = (Button) findViewById(R.id.connectBluetoothBtn);
         btJoinBtn = (Button) findViewById(R.id.joinBluetoothBtn);
         setCircuitBtn = (Button) findViewById(R.id.setCircuitBtn);
         exitBtn = (Button) findViewById(R.id.exitBtn);
@@ -107,7 +127,7 @@ public class GUIWelcome extends Activity {
                 wifiConnectionBtnAction();
             }
         });
-        btConnectionBtn.setOnClickListener(new View.OnClickListener() {
+        btHostBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 btConnectionBtnAction();
@@ -174,7 +194,7 @@ public class GUIWelcome extends Activity {
      * //TODO
      */
     private void btConnectionBtnAction() {
-        ServerBT server = new ServerBT();
+        server = new ServerBT(GUIWelcome.this);
         server.start();
     }
     /**
@@ -182,9 +202,7 @@ public class GUIWelcome extends Activity {
      */
     private void btJoinBtnAction() {
         //TODO
-
-
-        ClientBT client = new ClientBT();
+        client = new ClientBT(GUIWelcome.this);
         client.start();
     }
     /**
@@ -214,16 +232,65 @@ public class GUIWelcome extends Activity {
 
     /**
      * Disable the WIFI connection button (Romain Verset - 31/01/2017).
+     * The button is allowed when the phone and the drone are on the same WiFi network.
      */
     private void disableWifiConnectionBtn() {
         wifiConnectionBtn.setEnabled(false);
         wifiConnectionBtn.setChecked(false);
     }
+
     /**
      * Enable the WIFI connection button (Romain Verset - 31/01/2017).
+     * The button is allowed when the phone and the drone are on the same WiFi network.
      */
     private void enableWifiConnectionBtn() {
         wifiConnectionBtn.setEnabled(true);
+    }
+
+    /**
+     * Callback called when the {@link ServerBT} is ready and waiting for a {@link ClientBT} (Romain Verset - 17/02/2017).
+     */
+    private void onServerReady() {
+        this.btHostBtn.setBackgroundColor(getResources().getColor(R.color.waitingForClient));
+        this.btHostBtn.setText(getResources().getString(R.string.hostBTButtonOn));
+    }
+
+    /**
+     * Callback called when a {@link ClientBT} connects to the {@link ServerBT} (Romain Verset - 17/02/2017).
+     */
+    private void onServerReceivedConnection() {
+        btHostBtn.setBackgroundColor(getResources().getColor(R.color.connected));
+        this.btHostBtn.setText(getResources().getString(R.string.hostBTButtonOnAndPlayerConnected));
+    }
+
+    /**
+     * Callback called when the {@link ClientBT} has sucessfully connected to a {@link ServerBT} (Romain Verset - 17/02/2017).
+     */
+    private void onClientConnected() {
+        btJoinBtn.setBackgroundColor(getResources().getColor(R.color.connected));
+        this.btJoinBtn.setText(getResources().getString(R.string.joinBTButtonOn));
+    }
+
+    /**
+     * Callback called when the {@link ClientBT} is no longer available (Romain Verset - 17/02/2017).
+     */
+    private void onClientShuttedDown() {
+        btJoinBtn.setBackgroundColor(getResources().getColor(R.color.notConnected));
+        this.btJoinBtn.setText(getResources().getString(R.string.joinBTButtonOff));
+        if (client != null) {
+            client = null;
+        }
+    }
+
+    /**
+     * Callback called when the {@link ServerBT} is no longer available (Romain Verset - 17/02/2017).
+     */
+    public void onServerShuttedDown() {
+        btHostBtn.setBackgroundColor(getResources().getColor(R.color.notConnected));
+        btHostBtn.setText(getResources().getString(R.string.hostBTButtonOff));
+        if (server != null) {
+            server = null;
+        }
     }
 
 }

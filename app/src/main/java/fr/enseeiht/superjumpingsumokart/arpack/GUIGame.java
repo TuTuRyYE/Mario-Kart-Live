@@ -482,11 +482,15 @@ public class GUIGame extends Activity implements GameListener {
     }
 
     public void notifyDefeat() {
-        UPDATER.sendEmptyMessage(DEFEAT);
+        if (! game.isFinished()) {
+            UPDATER.sendEmptyMessage(DEFEAT);
+        }
     }
 
     public void notifyVictory() {
-        UPDATER.sendEmptyMessage(VICTORY);
+        if (! game.isFinished()) {
+            UPDATER.sendEmptyMessage(VICTORY);
+        }
     }
 
     public void addDroneInGame(Drone drone) {

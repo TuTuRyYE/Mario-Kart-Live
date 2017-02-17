@@ -414,4 +414,8 @@ public class Game implements CommunicationBTListener, GuiGameListener{
     public void setDrone(Drone drone) {
         this.drone = drone;
     }
+
+    public boolean isFinished() {
+        return finished;
+    }
 }

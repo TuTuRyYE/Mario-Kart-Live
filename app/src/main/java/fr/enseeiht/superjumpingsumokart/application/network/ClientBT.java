@@ -3,9 +3,13 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
+
 import java.io.IOException;
 import java.util.Set;
 import java.util.UUID;
+
+import fr.enseeiht.superjumpingsumokart.application.GUIWelcome;
+
 /**
  * Created by Lucas on 07/02/2017.
  */
@@ -31,6 +35,8 @@ public class ClientBT extends Thread implements BluetoothAdapter.LeScanCallback{
      */
     private CommunicationBT comClient;
 
+    private final GUIWelcome GUI_WELCOME;
+
     private boolean isComBTCreated = false;
 
     /**
@@ -55,8 +61,9 @@ public class ClientBT extends Thread implements BluetoothAdapter.LeScanCallback{
     /**
      * Create the client for the bluetooth connexion.
      */
-    public ClientBT() {
+    public ClientBT(GUIWelcome guiWelcome) {
         isConnected = false;
+        GUI_WELCOME = guiWelcome;
 
     }
 
@@ -83,7 +90,8 @@ public class ClientBT extends Thread implements BluetoothAdapter.LeScanCallback{
         try {
             // The UUID is the login for the server. It is the same on the server's side.
             tmpSocket = btDevice.createRfcommSocketToServiceRecord(UUID.fromString("00002415-0000-1000-8000-00805F9B34FB"));
-        } catch (IOException e) { }
+        } catch (IOException e) {
+        }
         btSocket = tmpSocket;
         btAdapter.cancelDiscovery();
         try {
@@ -107,6 +115,7 @@ public class ClientBT extends Thread implements BluetoothAdapter.LeScanCallback{
         this.comClient = CommunicationBT.getInstance();
         this.isComBTCreated = true;
         comClient.start();
+        GUI_WELCOME.GUI_WELCOME_HANDLER.sendEmptyMessage(GUIWelcome.BLUETOOTH_CLIENT_JOINED_GAME);
         Log.d("CLIENT", "communication launched");
     }
 
@@ -124,5 +133,6 @@ public class ClientBT extends Thread implements BluetoothAdapter.LeScanCallback{
         try {
             btSocket.close();
         } catch (IOException e) { }
+        GUI_WELCOME.GUI_WELCOME_HANDLER.sendEmptyMessage(GUIWelcome.BLUETOOTH_CLIENT_SHUTTED_DOWN);
     }
 }
