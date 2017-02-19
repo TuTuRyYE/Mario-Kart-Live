@@ -18,8 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.enseeiht.superjumpingsumokart.R;
-import fr.enseeiht.superjumpingsumokart.application.network.ClientBT;
-import fr.enseeiht.superjumpingsumokart.application.network.ServerBT;
+import fr.enseeiht.superjumpingsumokart.application.network.BluetoothClient;
+import fr.enseeiht.superjumpingsumokart.application.network.BluetoothServer;
 import fr.enseeiht.superjumpingsumokart.application.network.WifiConnector;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 /**
@@ -92,8 +92,8 @@ public class GUIWelcome extends Activity {
     private Button exitBtn;
     // Connection and device variables
     private WifiConnector wifiConnector = null;
-    private ServerBT server = null;
-    private ClientBT client = null;
+    private BluetoothServer server = null;
+    private BluetoothClient client = null;
     private ARDiscoveryDeviceService currentDeviceService = null;
     private List<ARDiscoveryDeviceService> devicesList = new ArrayList<>();
 
@@ -193,7 +193,7 @@ public class GUIWelcome extends Activity {
      * //TODO
      */
     private void btConnectionBtnAction() {
-        server = new ServerBT(GUIWelcome.this);
+        server = new BluetoothServer(GUIWelcome.this);
         server.start();
     }
     /**
@@ -201,7 +201,7 @@ public class GUIWelcome extends Activity {
      */
     private void btJoinBtnAction() {
         //TODO
-        client = new ClientBT(GUIWelcome.this);
+        client = new BluetoothClient(GUIWelcome.this);
         client.start();
     }
     /**
@@ -247,7 +247,7 @@ public class GUIWelcome extends Activity {
     }
 
     /**
-     * Callback called when the {@link ServerBT} is ready and waiting for a {@link ClientBT} (Romain Verset - 17/02/2017).
+     * Callback called when the {@link BluetoothServer} is ready and waiting for a {@link BluetoothClient} (Romain Verset - 17/02/2017).
      */
     private void onServerReady() {
         this.btHostBtn.setBackgroundColor(getResources().getColor(R.color.waitingForClient));
@@ -255,7 +255,7 @@ public class GUIWelcome extends Activity {
     }
 
     /**
-     * Callback called when a {@link ClientBT} connects to the {@link ServerBT} (Romain Verset - 17/02/2017).
+     * Callback called when a {@link BluetoothClient} connects to the {@link BluetoothServer} (Romain Verset - 17/02/2017).
      */
     private void onServerReceivedConnection() {
         btHostBtn.setBackgroundColor(getResources().getColor(R.color.connected));
@@ -263,7 +263,7 @@ public class GUIWelcome extends Activity {
     }
 
     /**
-     * Callback called when the {@link ClientBT} has sucessfully connected to a {@link ServerBT} (Romain Verset - 17/02/2017).
+     * Callback called when the {@link BluetoothClient} has sucessfully connected to a {@link BluetoothServer} (Romain Verset - 17/02/2017).
      */
     private void onClientConnected() {
         btJoinBtn.setBackgroundColor(getResources().getColor(R.color.connected));
@@ -271,7 +271,7 @@ public class GUIWelcome extends Activity {
     }
 
     /**
-     * Callback called when the {@link ClientBT} is no longer available (Romain Verset - 17/02/2017).
+     * Callback called when the {@link BluetoothClient} is no longer available (Romain Verset - 17/02/2017).
      */
     private void onClientShuttedDown() {
         btJoinBtn.setBackgroundColor(getResources().getColor(R.color.notConnected));
@@ -282,7 +282,7 @@ public class GUIWelcome extends Activity {
     }
 
     /**
-     * Callback called when the {@link ServerBT} is no longer available (Romain Verset - 17/02/2017).
+     * Callback called when the {@link BluetoothServer} is no longer available (Romain Verset - 17/02/2017).
      */
     public void onServerShuttedDown() {
         btHostBtn.setBackgroundColor(getResources().getColor(R.color.notConnected));

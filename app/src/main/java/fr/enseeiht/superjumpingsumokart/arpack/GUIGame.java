@@ -40,10 +40,39 @@ import fr.enseeiht.superjumpingsumokart.application.GameListener;
 import fr.enseeiht.superjumpingsumokart.application.GuiGameListener;
 import fr.enseeiht.superjumpingsumokart.application.Vector3D;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
-import fr.enseeiht.superjumpingsumokart.application.network.CommunicationBT;
+import fr.enseeiht.superjumpingsumokart.application.network.BluetoothCommunication;
 import fr.enseeiht.superjumpingsumokart.application.network.WifiConnector;
 
 public class GUIGame extends Activity implements GameListener {
+
+    /**
+     * Message for the {@link Handler} of the {@link GUIGame} activity.
+     */
+    public final static int RECEIVE_FRAME = 0;
+    /**
+     * Message for the {@link Handler} of the {@link GUIGame} activity.
+     */
+    public final static int UPDATE_ITEM_ICON = 1;
+    /**
+     * Message for the {@link Handler} of the {@link GUIGame} activity.
+     */
+    public final static int RENDER_AR = 3;
+    /**
+     * Message for the {@link Handler} of the {@link GUIGame} activity.
+     */
+    public final static int CONTROLLER_STOPPING_ON_ERROR = 4;
+    /**
+     * Message for the {@link Handler} of the {@link GUIGame} activity.
+     */
+    public final static int CONTROLLER_RUNNING = 5;
+    /**
+     * Message for the {@link Handler} of the {@link GUIGame} activity.
+     */
+    public final static int VICTORY = 6;
+    /**
+     * Message for the {@link Handler} of the {@link GUIGame} activity.
+     */
+    public final static int DEFEAT = 7;
 
     /**
      * The width of the frames of the Jumping Sumo Camera.
@@ -59,19 +88,32 @@ public class GUIGame extends Activity implements GameListener {
      * The logging tag. Useful for debugging.
      */
     private static String GUI_GAME_TAG = "GUIGame";
-    /**
-     * Message for the {@link Handler} of the {@link GUIGame} activity.
-     */
-    public final static int RECEIVE_FRAME = 0;
-    public final static int UPDATE_ITEM_ICON = 1;
-    public final static int RENDER_AR = 3;
-    public final static int CONTROLLER_STOPPING_ON_ERROR = 4;
-    public final static int CONTROLLER_RUNNING = 5;
-    public final static int VICTORY = 6;
-    public final static int DEFEAT = 7;
-
     private final ArrayList<GuiGameListener> GUI_GAME_LISTENERS = new ArrayList<>();
-
+    /**
+     * The controller that dispatches commands from the user to the device.
+     */
+    private DroneController controller;
+    /**
+     * The current frame to display.
+     */
+    private byte[] currentFrame;
+    private ImageButton sendTrapBtn;
+    /**
+     * Boolean variables used to know when to initialise the {@link ARToolKit} markers.
+     */
+    private boolean firstUpdate = true;
+    /**
+     * Boolean variable used to know when the camera view is available so that we know when to start
+     * the markers research.
+     */
+    private boolean cameraViewAvailable = false;
+    /**
+     * The area to display the video stream from the device.
+     */
+    private FrameLayout mainLayout;
+    private SurfaceView cameraView;
+    private GLSurfaceView glView;
+    private ItemRenderer renderer;
     /**
      * Handler to update GUI.
      */
@@ -82,7 +124,7 @@ public class GUIGame extends Activity implements GameListener {
                 case RECEIVE_FRAME:
                     new DetectionTask(GUIGame.this).execute(currentFrame);
                     break;
-                case UPDATE_ITEM_ICON :
+                case UPDATE_ITEM_ICON:
                     displayTrap();
                     break;
                 case CONTROLLER_STOPPING_ON_ERROR:
@@ -98,63 +140,27 @@ public class GUIGame extends Activity implements GameListener {
                     }
                     finish();
                     break;
-                case RENDER_AR :
+                case RENDER_AR:
                     renderAR();
                     break;
-                case CONTROLLER_RUNNING :
+                case CONTROLLER_RUNNING:
                     for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
                         ggl.onDroneControllerReady();
                     }
                     break;
-                case VICTORY :
+                case VICTORY:
                     Toast.makeText(GUIGame.this, "YOU WON !", Toast.LENGTH_SHORT).show();
                     break;
-                case DEFEAT :
+                case DEFEAT:
                     Toast.makeText(GUIGame.this, "YOU LOST !", Toast.LENGTH_SHORT).show();
                     break;
-                default :
+                default:
                     break;
             }
         }
     };
     /**
-     * The controller that dispatches commands from the user to the device.
-     */
-    private DroneController controller;
-    /**
-     * The current frame to display.
-     */
-    private byte[] currentFrame;
-
-    private ImageButton turnLeftBtn;
-    private ImageButton turnRightBtn;
-    private ImageButton moveForwardBtn;
-    private ImageButton moveBackwardBtn;
-    private ImageButton sendTrapBtn;
-    private ImageButton jumpBtn;
-
-    /**
-     * Boolean variables used to know when to initialise the {@link ARToolKit} markers.
-     */
-    private boolean firstUpdate = true;
-
-    /**
-     * Boolean variable used to know when the camera view is available so that we know when to start
-     * the markers research.
-     */
-    private boolean cameraViewAvailable = false;
-
-
-    /**
-     * The area to display the video stream from the device.
-     */
-    private FrameLayout mainLayout;
-    private SurfaceView cameraView;
-    private GLSurfaceView glView;
-    private ItemRenderer renderer;
-
-    /**
-     *  The {@link Game} associated to the current {@link GUIGame}.
+     * The {@link Game} associated to the current {@link GUIGame}.
      */
     private Game game;
 
@@ -165,9 +171,8 @@ public class GUIGame extends Activity implements GameListener {
         setContentView(R.layout.activity_gui_game);
 
 
-
         // Binds with the bluetooth connector
-        CommunicationBT bluetoothConnector = CommunicationBT.getInstance();
+        BluetoothCommunication bluetoothConnector = BluetoothCommunication.getInstance();
         if (bluetoothConnector != null) {
             Log.d(GUI_GAME_TAG, "BluetoothConnector not null, multiplayer mode.");
         }
@@ -193,14 +198,14 @@ public class GUIGame extends Activity implements GameListener {
         AndroidUtils.reportDisplayInformation(this);
 
         // Get the BT communication
-        //CommunicationBT comBT = (CommunicationBT) getIntent().getExtras().get("bluetoothCommunication");
+        //BluetoothCommunication comBT = (BluetoothCommunication) getIntent().getExtras().get("bluetoothCommunication");
         // Initializes the views of the GUI
         mainLayout = (FrameLayout) findViewById(R.id.mainLayout);
-        turnLeftBtn = (ImageButton) findViewById(R.id.turnLeftBtn);
-        turnRightBtn = (ImageButton) findViewById(R.id.turnRightBtn);
-        moveBackwardBtn = (ImageButton) findViewById(R.id.moveBackwardBtn);
-        moveForwardBtn = (ImageButton) findViewById(R.id.moveForwardBtn);
-        jumpBtn = (ImageButton) findViewById(R.id.jumpBtn);
+        ImageButton turnLeftBtn = (ImageButton) findViewById(R.id.turnLeftBtn);
+        ImageButton turnRightBtn = (ImageButton) findViewById(R.id.turnRightBtn);
+        ImageButton moveBackwardBtn = (ImageButton) findViewById(R.id.moveBackwardBtn);
+        ImageButton moveForwardBtn = (ImageButton) findViewById(R.id.moveForwardBtn);
+        ImageButton jumpBtn = (ImageButton) findViewById(R.id.jumpBtn);
         sendTrapBtn = (ImageButton) findViewById(R.id.sendTrapBtn);
 
         // Every players is ready
@@ -292,7 +297,7 @@ public class GUIGame extends Activity implements GameListener {
     @Override
     public void onStart() {
         super.onStart();
-        if (! ARToolKit.getInstance().nativeInitialised()) {
+        if (!ARToolKit.getInstance().nativeInitialised()) {
             ARToolKit.getInstance().initialiseNative(getCacheDir().getAbsolutePath());
         }
     }
@@ -317,6 +322,7 @@ public class GUIGame extends Activity implements GameListener {
         }
         mainLayout.removeView(glView);
     }
+
     @Override
     public void onStop() {
         if (controller.isRunning()) {
@@ -326,13 +332,16 @@ public class GUIGame extends Activity implements GameListener {
         for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
             if (game != null && game.isStarted()) {
                 ggl.onPlayerGaveUp();
+                unregisterGuiGameListener(ggl);
             }
         }
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
     }
+
     /**
      * Method used to display the current trap owned by the player (Matthieu Michel - 30/01/2017).
      */
@@ -367,7 +376,7 @@ public class GUIGame extends Activity implements GameListener {
     /**
      * TODO
      */
-    private void initCameraSurfaceView(){
+    private void initCameraSurfaceView() {
         cameraView = (SurfaceView) findViewById(R.id.cameraSurfaceView);
         cameraView.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
@@ -393,17 +402,17 @@ public class GUIGame extends Activity implements GameListener {
     /**
      * TODO
      */
-    private void initGLSurfaceView(){
+    private void initGLSurfaceView() {
         // Create the GL view
         glView = new GLSurfaceView(GUIGame.this);
-        glView.setEGLConfigChooser(8,8,8,8,16,0);
+        glView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
         glView.getHolder().setFormat(PixelFormat.TRANSLUCENT); // Needs to be a translucent surface so the camera preview shows through.
         renderer = new ItemRenderer();
         glView.setRenderer(renderer);
         glView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         glView.setZOrderMediaOverlay(true); // Request that GL view's SurfaceView be on top of other SurfaceViews (including CameraPreview's SurfaceView).
         mainLayout.addView(glView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        if(glView != null) {
+        if (glView != null) {
             glView.onResume();
         }
     }
@@ -411,6 +420,7 @@ public class GUIGame extends Activity implements GameListener {
 
     /**
      * Method used by {@link #controller} to send the current frame of its video stream to the GUI (Romain Verset - 01/02/2017).
+     *
      * @param frame The frame received from the device
      */
     public void receiveFrame(ARFrame frame) {
@@ -429,6 +439,7 @@ public class GUIGame extends Activity implements GameListener {
     public Game getGame() {
         return game;
     }
+
     public DroneController getController() {
         return controller;
     }
@@ -482,13 +493,13 @@ public class GUIGame extends Activity implements GameListener {
     }
 
     public void notifyDefeat() {
-        if (! game.isFinished()) {
+        if (!game.isFinished()) {
             UPDATER.sendEmptyMessage(DEFEAT);
         }
     }
 
     public void notifyVictory() {
-        if (! game.isFinished()) {
+        if (!game.isFinished()) {
             UPDATER.sendEmptyMessage(VICTORY);
         }
     }

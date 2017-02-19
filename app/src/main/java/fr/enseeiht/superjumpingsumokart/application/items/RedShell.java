@@ -7,6 +7,7 @@ import fr.enseeiht.superjumpingsumokart.R;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
 
 /**
+ * Implementation of red shell {@link Item}.
  * Created by Lucas on 17/02/2017.
  */
 
@@ -18,28 +19,28 @@ public class RedShell extends Item {
     /**
      * Name of the {@link Item}.
      */
-    private final static String  NAME = "redshell";
+    private final static String NAME = "redshell";
+
     /**
      * Default constructor of the class {@link Item}. (Lucas Pascal) - 17/02/2017).
-
      */
-    public RedShell () {
+    public RedShell() {
         super(NAME);
 
     }
 
     @Override
-    public void applyEffect(DroneController droneController) {
-        Log.d(ITEM_TAG,"You've been hit by a red shell!");
-        droneController.slow();
-        droneController.spin();
-        droneController.getGuiGame().getGame().onItemTouched(this);
+    public void useItem(DroneController droneController) {
+        this.setPosition(droneController.getDrone().getCurrentPosition());
+        Log.d(ITEM_TAG, "A red shell has been thrown!");
     }
 
     @Override
-    public void useItem(DroneController droneController) {
-        this.setPosition(droneController.getDrone().getCurrentPosition());
-        Log.d(ITEM_TAG,"A red shell has been thrown!");
+    public void applyEffect(DroneController droneController) {
+        Log.d(ITEM_TAG, "You've been hit by a red shell!");
+        droneController.slow();
+        droneController.spin();
+        droneController.getGuiGame().getGame().onItemTouched(this);
     }
 
     @Override

@@ -8,6 +8,7 @@ import fr.enseeiht.superjumpingsumokart.application.DroneController;
 import fr.enseeiht.superjumpingsumokart.application.Vector3D;
 
 /**
+ * Implementation of magic Box {@link Item}.
  * Created by Vivian on 06/02/2017.
  */
 
@@ -34,27 +35,24 @@ public class MagicBox extends Item {
     }
 
     @Override
+    public void useItem(DroneController droneController) {
+    }
+
+    @Override
     public void applyEffect(DroneController droneController) {
-        Log.d(ITEM_TAG,"A magic box has been touched");
-        int rand = (int) Math.floor(Math.random()*2);
+        Log.d(ITEM_TAG, "A magic box has been touched");
+        int rand = (int) Math.floor(Math.random() * 2);
         Item item;
         if (rand == 1) { //Banana
             item = new Banana();
-        }
-        if (rand == 2) { //Box
+        } else if (rand == 2) { //Box
             item = new Box();
-        }
-        else {
+        } else {
             item = null;
         }
 
         droneController.getDrone().setCurrentItem(item);
-        Log.d(ITEM_TAG,"An item has been assigned to the droneController");
-    }
-
-    @Override
-    public void useItem(DroneController droneController) {
-
+        Log.d(ITEM_TAG, "An item has been assigned to the droneController");
     }
 
     @Override

@@ -10,14 +10,14 @@ import fr.enseeiht.superjumpingsumokart.application.items.Box;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
 import fr.enseeiht.superjumpingsumokart.application.items.MagicBox;
 import fr.enseeiht.superjumpingsumokart.application.items.RedShell;
-import fr.enseeiht.superjumpingsumokart.application.network.CommunicationBT;
-import fr.enseeiht.superjumpingsumokart.application.network.CommunicationBTListener;
+import fr.enseeiht.superjumpingsumokart.application.network.BluetoothCommunication;
+import fr.enseeiht.superjumpingsumokart.application.network.BluetoothCommunicationListener;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 /**
  * @author Vivian Guy, Matthieu Michel, Romain Verset.
  * This class is used to manage the game.
  */
-public class Game implements CommunicationBTListener, GuiGameListener{
+public class Game implements BluetoothCommunicationListener, GuiGameListener{
 
     /**
      * The logging tag. Useful for debugging.
@@ -43,13 +43,13 @@ public class Game implements CommunicationBTListener, GuiGameListener{
     private boolean ready = false, otherReady = false;
     private boolean started = false;
     private boolean finished = false;
-    private CommunicationBT comBT;
+    private BluetoothCommunication comBT;
 
     /**
      * Default constructor of the class {@link Game} (Vivian - 07/02/2017).
      * @param guiGame interface of the {@link Game}
      */
-    public Game(GUIGame guiGame, CommunicationBT comBT) {
+    public Game(GUIGame guiGame, BluetoothCommunication comBT) {
         createCircuit();
         trackInitialised = true;
         // Add markers for boxes

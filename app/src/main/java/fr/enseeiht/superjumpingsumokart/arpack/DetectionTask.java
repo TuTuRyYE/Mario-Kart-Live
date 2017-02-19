@@ -16,8 +16,8 @@ import java.io.ByteArrayInputStream;
 
 /**
  * @author Romain Verset, Jorge Enrique Gutierrez
- * Class that implement several image transformations. It extends {@link AsyncTask} to run heavy computation
- * work outside of the UI {@link Thread}. Once the work is done UI {@link Thread} will update its graphical components.
+ *         Class that implement several image transformations. It extends {@link AsyncTask} to run heavy computation
+ *         work outside of the UI {@link Thread}. Once the work is done UI {@link Thread} will update its graphical components.
  */
 class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
 
@@ -30,7 +30,7 @@ class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
      * The {@link RenderScript} context used. It has to be initialised before running any instance of
      * {@link DetectionTask}.
      */
-    public static RenderScript rs;
+    static RenderScript rs;
 
     /**
      * The {@link GUIGame} that launches this {@link DetectionTask}.
@@ -52,12 +52,12 @@ class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
     /**
      * {@link Type} used to represent the NV21 bytes in {@link ScriptC_rbgaToNv21} {@link #script}.
      */
-    private Type.Builder nv21Type = new Type.Builder(rs, Element.U8(rs)).setX(640*480*3/2);
+    private Type.Builder nv21Type = new Type.Builder(rs, Element.U8(rs)).setX(640 * 480 * 3 / 2);
 
     /**
      * {@link Type} used to represent the {@link android.graphics.Bitmap.Config} ARGB_8888 bytes in {@link ScriptC_rbgaToNv21} {@link #script}.
      */
-    private Type.Builder argb888Type = new Type.Builder(rs, Element.I32(rs)).setX(640*480);
+    private Type.Builder argb888Type = new Type.Builder(rs, Element.I32(rs)).setX(640 * 480);
 
     /**
      * {@link Allocation} used to contain and manage the ARGB_8888 bytes in {@link ScriptC_rbgaToNv21} {@link #script}.
@@ -72,6 +72,7 @@ class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
 
     /**
      * Default constructor of {@link DetectionTask} (Romain Verset, Jorge Gutierrez - 08/02/2017).
+     *
      * @param guiGame The {@link GUIGame} activity that launches this {@link DetectionTask}.
      */
     DetectionTask(GUIGame guiGame) {
@@ -83,6 +84,7 @@ class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
      * It converts the bytes from the Jumping Sumo camera stream into a displayable {@link Bitmap}.
      * Then launches the {@link ScriptC_rbgaToNv21} {@link #script} to convert ARGB_8888 bytes into
      * NV21 bytes. Finally it runs the marker detection on the NV21 bytes (Android ARToolkit supports only NV21 encoding).
+     *
      * @param frames The bytes revceived from the Jumping Sumo Camera stream.
      * @return True if a marker has been detected, false otherwise.
      */
@@ -108,7 +110,7 @@ class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
         script.forEach_convertToNV21(argb8888In);
 
         // One pixel is encoded on 1.5 Byte in NV21 format.
-        byte[] nv21Bytes = new byte[GUIGame.VIDEO_WIDTH*GUIGame.VIDEO_HEIGHT*3/2];
+        byte[] nv21Bytes = new byte[GUIGame.VIDEO_WIDTH * GUIGame.VIDEO_HEIGHT * 3 / 2];
         // We copy the bytes from the RenderScript Allocation into a buffer.
         nv21Out.copyTo(nv21Bytes);
 
@@ -135,6 +137,7 @@ class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
     /**
      * Tasks performed on the UI {@link Thread} ONCE the {@link #doInBackground(byte[]...)} method is
      * over.
+     *
      * @param aBoolean .
      */
     @Override

@@ -1,12 +1,11 @@
 package fr.enseeiht.superjumpingsumokart.application.network;
 
-import fr.enseeiht.superjumpingsumokart.application.items.Item;
-
 /**
+ * Defines all notification functions for a class listening for {@link BluetoothCommunication}.
  * Created by Lucas on 15/02/2017.
  */
 
-public interface CommunicationBTListener {
+public interface BluetoothCommunicationListener {
     /**
      * Notify the game that the second player is ready.
      */
@@ -34,15 +33,22 @@ public interface CommunicationBTListener {
 
     /**
      * Notify the game that the second player is using an item.
+     *
      * @param msg used by the second player.
      */
-    void onSecondPlayerUsesItem(String msg);
+    void onSecondPlayerUsesItem(final String msg);
 
     /**
      * Notify the game that the second player has touched an item.
+     *
      * @param msg touched by the second player.
      */
-    void onSecondPlayerTouchedItem(String msg);
+    void onSecondPlayerTouchedItem(final String msg);
 
-    void onSecondPlayerUpdatedPosition(String msg);
+    /**
+     * Notify the game of the second player new position.
+     *
+     * @param msg the second player position.
+     */
+    void onSecondPlayerUpdatedPosition(final String msg);
 }

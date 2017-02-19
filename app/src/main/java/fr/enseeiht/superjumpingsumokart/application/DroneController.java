@@ -8,7 +8,6 @@ import com.parrot.arsdk.arcommands.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_E
 import java.util.ArrayList;
 
 import fr.enseeiht.superjumpingsumokart.application.items.NullItem;
-import fr.enseeiht.superjumpingsumokart.application.items.TestItem;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 /**
  * @author Matthieu Michel, Romain Verset
@@ -34,11 +33,11 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     // Speed constants
     private final static byte NO_SPEED = (byte) 0;
     private final static byte NORMAL_SPEED = (byte) 40;
-    private final static byte NEG_NORMAL_SPEED = (byte) -40;
+    //private final static byte NEG_NORMAL_SPEED = (byte) -40;
     private final static byte SLOW_SPEED = (byte) 30;
     private final static byte NEG_SLOW_SPEED = (byte) -30;
-    private final static byte FAST_SPEED = (byte) 50;
-    private final static byte NEG_FAST_SPEED = (byte) 50;
+    //private final static byte FAST_SPEED = (byte) 50;
+    //private final static byte NEG_FAST_SPEED = (byte) 50;
     // Inner state variables
     private boolean started = false;
 

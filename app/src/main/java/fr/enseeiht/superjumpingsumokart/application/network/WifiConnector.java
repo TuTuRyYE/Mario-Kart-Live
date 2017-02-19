@@ -25,8 +25,8 @@ import fr.enseeiht.superjumpingsumokart.application.GUIWelcome;
 
 /**
  * @author Romain Verset.
- * This class allows the application to remotly connect with a Jumpin Sumo Evo Light Parrot drone.
- * Created by Romain Verset on 30/01/17.
+ *         This class allows the application to remotly connect with a Jumpin Sumo Evo Light Parrot drone.
+ *         Created by Romain Verset on 30/01/17.
  */
 
 public class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedReceiverDelegate {
@@ -61,11 +61,40 @@ public class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedRecei
     /**
      * Default constructor of the class (Romain Verset - 30/01/2017).
      * Sets up the context and starts the discovering service.
+     *
      * @param appContext The context of the android {@link android.app.Activity} running this connector.
      */
     public WifiConnector(Context appContext) {
         APP_CONTEXT = appContext;
         start();
+    }
+
+    /**
+     * Creates a device using a discovery service (Romain Verset - 30/01/2017).
+     *
+     * @param discoveryDeviceService The discovery service used to construct the device.
+     * @return The device corresponding to the given {@link ARDiscoveryDeviceService}.
+     */
+    public static ARDiscoveryDevice createDevice(ARDiscoveryDeviceService discoveryDeviceService) {
+        // Before everything, it is necessary to check the product ID of the device.
+        ARDiscoveryDevice device = null;
+        Log.d(WIFI_CONNECTOR_TAG, "Attempting to create a device with following connection service : ");
+        Log.d(WIFI_CONNECTOR_TAG, "Name : " + discoveryDeviceService.getName());
+        Log.d(WIFI_CONNECTOR_TAG, "Product ID : " + discoveryDeviceService.getProductID());
+        Log.d(WIFI_CONNECTOR_TAG, "Device : " + discoveryDeviceService.getDevice().toString());
+        if (ARDISCOVERY_PRODUCT_ENUM.ARDISCOVERY_PRODUCT_JS_EVO_LIGHT.equals(ARDiscoveryService.getProductFromProductID(discoveryDeviceService.getProductID()))) {
+            Log.d(WIFI_CONNECTOR_TAG, "Jumping Sumo detected, attempting to create the device...");
+            try {
+                // Creates a device and its network service.
+                device = new ARDiscoveryDevice();
+                ARDiscoveryDeviceNetService netService = (ARDiscoveryDeviceNetService) discoveryDeviceService.getDevice();
+                Log.d(WIFI_CONNECTOR_TAG, "Starting the network service of the device : Name = " + netService.getName() + " | IP = " + netService + " | Port = " + netService.getPort());
+                device.initWifi(ARDISCOVERY_PRODUCT_ENUM.ARDISCOVERY_PRODUCT_JS_EVO_LIGHT, netService.getName(), netService.getIp(), netService.getPort());
+            } catch (ARDiscoveryException arde) {
+                Log.e(WIFI_CONNECTOR_TAG, "Unable to create device : " + arde.getMessage());
+            }
+        }
+        return device;
     }
 
     /**
@@ -159,34 +188,9 @@ public class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedRecei
     }
 
     /**
-     * Creates a device using a discovery service (Romain Verset - 30/01/2017).
-     * @param discoveryDeviceService The discovery service used to construct the device.
-     * @return The device corresponding to the given {@link ARDiscoveryDeviceService}.
+     * Describes the action to do when there is an update in the available devices list.
+     * Here send a message to the {@link GUIWelcome} handler. {@link GUIWelcome}.
      */
-    public static ARDiscoveryDevice createDevice(ARDiscoveryDeviceService discoveryDeviceService) {
-        // Before everything, it is necessary to check the product ID of the device.
-        ARDiscoveryDevice device = null;
-        Log.d(WIFI_CONNECTOR_TAG, "Attempting to create a device with following connection service : ");
-        Log.d(WIFI_CONNECTOR_TAG, "Name : " + discoveryDeviceService.getName());
-        Log.d(WIFI_CONNECTOR_TAG, "Product ID : " + discoveryDeviceService.getProductID());
-        Log.d(WIFI_CONNECTOR_TAG, "Device : " + discoveryDeviceService.getDevice().toString());
-        if (ARDISCOVERY_PRODUCT_ENUM.ARDISCOVERY_PRODUCT_JS_EVO_LIGHT.equals(ARDiscoveryService.getProductFromProductID(discoveryDeviceService.getProductID()))) {
-            Log.d(WIFI_CONNECTOR_TAG, "Jumping Sumo detected, attempting to create the device...");
-            try {
-                // Creates a device and its network service.
-                device = new ARDiscoveryDevice();
-                ARDiscoveryDeviceNetService netService = (ARDiscoveryDeviceNetService) discoveryDeviceService.getDevice();
-                Log.d(WIFI_CONNECTOR_TAG, "Starting the network service of the device : Name = " + netService.getName() + " | IP = " + netService + " | Port = " + netService.getPort());
-                device.initWifi(ARDISCOVERY_PRODUCT_ENUM.ARDISCOVERY_PRODUCT_JS_EVO_LIGHT, netService.getName(), netService.getIp(), netService.getPort());
-            } catch (ARDiscoveryException arde) {
-                Log.e(WIFI_CONNECTOR_TAG, "Unable to create device : " + arde.getMessage());
-            }
-        }
-        return device;
-    }
-
-    /** Describes the action to do when there is an update in the available devices list.
-     * Here send a message to the {@link GUIWelcome} handler. {@link GUIWelcome}. */
     @Override
     public void onServicesDevicesListUpdated() {
         List<ARDiscoveryDeviceService> devicesList = discoveryService.getDeviceServicesArray();
@@ -194,10 +198,10 @@ public class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedRecei
         if (devicesList != null && devicesList.size() > 0) {
             msg.what = GUIWelcome.DEVICE_SERVICE_CONNECTED;
             msg.obj = devicesList;
+            Log.d(WIFI_CONNECTOR_TAG, "Devices list updated : " + devicesList.size() + " devices available.");
+            ((GUIWelcome) APP_CONTEXT).GUI_WELCOME_HANDLER.sendMessage(msg);
         } else {
             msg.what = GUIWelcome.DEVICE_SERVICE_DISCONNECTED;
         }
-        Log.d(WIFI_CONNECTOR_TAG, "Devices list updated : " + devicesList.size() + " devices available.");
-        ((GUIWelcome) APP_CONTEXT).GUI_WELCOME_HANDLER.sendMessage(msg);
     }
 }

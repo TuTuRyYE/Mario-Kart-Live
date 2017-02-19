@@ -1,21 +1,19 @@
 package fr.enseeiht.superjumpingsumokart.arpack;
 
-import android.opengl.GLSurfaceView;
 import android.util.Log;
 
 import org.artoolkit.ar.base.ARToolKit;
 import org.artoolkit.ar.base.rendering.ARRenderer;
 import org.artoolkit.ar.base.rendering.Cube;
 
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
+ * Renderer to render on the {@link GUIGame} {@link android.opengl.GLSurfaceView}.
  * Created by JorgeEnrique on 2/02/2017.
  */
 
-public class ItemRenderer extends ARRenderer {
+class ItemRenderer extends ARRenderer {
 
     private final static String ITEM_RENDERER_TAG = "ItemRenderer";
 
@@ -34,7 +32,7 @@ public class ItemRenderer extends ARRenderer {
 
     @Override
     public void onDrawFrame(GL10 gl) {
-        if (ARToolKit.getInstance().getProjectionMatrix() != null){
+        if (ARToolKit.getInstance().getProjectionMatrix() != null) {
             Log.d(ITEM_RENDERER_TAG, "onDrawFrame() called.");
             draw(gl);
         }

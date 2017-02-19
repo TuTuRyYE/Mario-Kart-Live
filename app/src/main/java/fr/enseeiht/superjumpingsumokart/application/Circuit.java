@@ -2,7 +2,7 @@ package fr.enseeiht.superjumpingsumokart.application;
 import android.util.Log;
 import java.util.HashMap;
 
-import fr.enseeiht.superjumpingsumokart.application.network.CommunicationBT;
+import fr.enseeiht.superjumpingsumokart.application.network.BluetoothCommunication;
 
 /**
  * Created by Vivian on 27/01/2017.

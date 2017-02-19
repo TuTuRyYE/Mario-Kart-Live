@@ -5,6 +5,7 @@ import android.app.Application;
 import org.artoolkit.ar.base.assets.AssetHelper;
 
 /**
+ *
  * Created by JorgeEnrique on 1/02/2017.
  */
 
