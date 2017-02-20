@@ -170,15 +170,17 @@ public class GUIGame extends Activity implements GameListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gui_game);
 
-
         // Binds with the bluetooth connector
         BluetoothCommunication bluetoothConnector = BluetoothCommunication.getInstance();
         if (bluetoothConnector != null) {
             Log.d(GUI_GAME_TAG, "BluetoothConnector not null, multiplayer mode.");
         }
 
+        // Checks if the activity is a server or a client
+        boolean isServer = (boolean) getIntent().getExtras().get("isServer");
+
         // Creation of the game
-        game = new Game(this, bluetoothConnector);
+        game = new Game(this, bluetoothConnector, isServer);
         registerGuiGameListener(game);
 
         // Binds with the drone and creates its controller

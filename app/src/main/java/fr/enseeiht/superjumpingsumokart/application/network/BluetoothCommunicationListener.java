@@ -51,4 +51,9 @@ public interface BluetoothCommunicationListener {
      * @param msg the second player position.
      */
     void onSecondPlayerUpdatedPosition(final String msg);
+
+    /**
+     * Notify a circuit has been received from bluetooth communication
+     */
+    void onCircuitReceived();
 }
