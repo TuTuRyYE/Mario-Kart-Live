@@ -3,12 +3,16 @@ package fr.enseeiht.superjumpingsumokart.application.network;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 
+import com.google.android.gms.common.server.converter.StringToIntConverter;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import fr.enseeiht.superjumpingsumokart.application.Circuit;
 import fr.enseeiht.superjumpingsumokart.application.Game;
 import fr.enseeiht.superjumpingsumokart.application.GameListener;
 import fr.enseeiht.superjumpingsumokart.application.Vector3D;
@@ -149,7 +153,46 @@ public final class BluetoothCommunication extends Thread implements GameListener
                     listener.onSecondPlayerUsesItem(itemInfos);
                 }
                 break;
-            case "hasGiveUp":
+            case "circuit":
+                for (BluetoothCommunicationListener listener : this.COMMUNICATION_BT_LISTENERS) {
+                    // We create a new circuit and assign its parameters
+                    Circuit circuit = new Circuit(Integer.parseInt(msgSplit[1]));
+
+                    circuit.setName(msgSplit[2]);
+
+                    String[] posStart = msgSplit[3].split(":");
+                    String[] posEnd1 = msgSplit[4].split(":");
+                    String[] posEnd2 = msgSplit[5].split(":");
+
+                    Vector3D startPoint = new Vector3D(Double.parseDouble(posStart[0]),
+                    Double.parseDouble(posStart[1]),Double.parseDouble(posStart[2]));
+                    Vector3D endPoint1 = new Vector3D(Double.parseDouble(posEnd1[0]),
+                            Double.parseDouble(posEnd1[1]),Double.parseDouble(posEnd1[2]));
+                    Vector3D endPoint2 = new Vector3D(Double.parseDouble(posEnd2[0]),
+                            Double.parseDouble(posEnd2[1]),Double.parseDouble(posEnd2[2]));
+
+                    circuit.setStartPoint(startPoint);
+                    circuit.setEndPoints(new Vector3D[]{endPoint1, endPoint2});
+
+                    HashMap<Integer, Vector3D> markers = new HashMap<>();
+                    int i;
+                    for (i=6; i<=msgSplit.length; i++){
+                        String[] hashSplit = msgSplit[i].split(":");
+                        int id = Integer.parseInt(hashSplit[0]);
+                        double x = Double.parseDouble(hashSplit[1]);
+                        double y = Double.parseDouble(hashSplit[2]);
+                        double z = Double.parseDouble(hashSplit[3]);
+                        markers.put(id,new Vector3D(x,y,z));
+                    }
+                    circuit.setMarkersID(markers);
+
+                    // We add the circuit to the game
+                    circuit.setInstance(circuit);
+                    for (BluetoothCommunicationListener listener : this.COMMUNICATION_BT_LISTENERS) {
+                        listener.onCircuitReceived();
+                    }
+                }
+                    case "hasGiveUp":
                 for (BluetoothCommunicationListener listener : this.COMMUNICATION_BT_LISTENERS) {
                     listener.onSecondPlayerGaveUp();
                 }
@@ -176,6 +219,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
                     listener.onSecondPlayerUpdatedPosition(newPosition);
                 }
                 break;
+
         }
     }
 
@@ -315,6 +359,8 @@ public final class BluetoothCommunication extends Thread implements GameListener
         write(dateBytes);
         Log.d(BLUETOOTH_COMMUNICATION_TAG, "onUpdatedPosition sent to the other phone");
     }
+
+
 
     /**
      * @param game The game to listen events from.
