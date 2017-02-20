@@ -2,7 +2,6 @@ package fr.enseeiht.superjumpingsumokart.application;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -33,10 +32,6 @@ public class GUICircuit extends Activity {
             this.createNewCircuitBtn = (Button) findViewById(R.id.createCircuitButton);
             this.choseSelectedBtn = (Button) findViewById(R.id.choseSelectedButton);
             this.existingCircuitsList = (ListView) findViewById(R.id.existingCircuitsList);
-
-            if (createNewCircuitBtn == null) {
-                Log.d(GUI_CIRCUIT_TAG, "createNewCircuitBtn null");
-            }
 
         // Set the existing circuits list
             setExistingCircuitsList();

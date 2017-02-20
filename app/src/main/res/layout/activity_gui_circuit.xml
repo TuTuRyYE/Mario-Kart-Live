@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="fr.enseeiht.superjumpingsumokart.application.GUIWelcome">
+    tools:context="fr.enseeiht.superjumpingsumokart.application.GUICircuit">
+
+
 
     <RelativeLayout
         android:id="@+id/content_menu"
@@ -15,9 +18,7 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         tools:context="fr.enseeiht.superjumpingsumokart.application.GUIWelcome"
-        tools:showIn="@layout/activity_gui_welcome"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+        tools:showIn="@layout/activity_gui_circuit">
 
         <GridLayout
             android:layout_width="wrap_content"
@@ -39,23 +40,28 @@
                 android:id="@+id/setCircuitBtn"
                 android:width="@dimen/menu_btn_width" />
 
+            <ToggleButton
+                android:text="@string/connect_wifi_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/connectWifiBtn"
+                android:width="@dimen/menu_btn_width"
+                android:textOn="@string/wifiConnectionBtnOn"
+                android:textOff="@string/wifiConnectionBtnOff"/>
+
             <Button
-                android:text="@string/hostBTButtonOff"
+                android:text="@string/connect_bluetooth_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/connectBluetoothBtn"
-                android:width="@dimen/menu_btn_width"
-                android:textOn="@string/hostBTButtonOn"
-                android:textOff="@string/hostBTButtonOff"/>
+                android:width="@dimen/menu_btn_width" />
 
             <Button
-                android:text="@string/joinBTButtonOff"
+                android:text="@string/join_bluetooth_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/joinBluetoothBtn"
-                android:width="@dimen/menu_btn_width"
-                android:textOn="@string/joinBTButtonOn"
-                android:textOff="@string/joinBTButtonOff"/>
+                android:width="@dimen/menu_btn_width" />
         </GridLayout>
 
         <Button
@@ -73,16 +79,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:id="@+id/textView"/>
-
-        <ToggleButton
-            android:text="@string/connect_wifi_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/connectWifiBtn"
-            android:width="@dimen/menu_btn_width"
-            android:textOn="@string/wifiConnectionBtnOn"
-            android:textOff="@string/wifiConnectionBtnOff"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true" />
     </RelativeLayout>
-</RelativeLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>

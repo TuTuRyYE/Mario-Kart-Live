@@ -246,6 +246,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
                 RedShell redShell = new RedShell();
                 redShell.setPosition(new Vector3D(xRedShell, yRedShell, zRedShell));
                 currentItems.add(redShell);
+                redShell.applyEffect(guiGame.getController());
                 break;
             case "banana":
                 Log.d(GAME_TAG,"A banana has been put on the circuit by second player");
