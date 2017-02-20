@@ -1,10 +1,13 @@
 package fr.enseeiht.superjumpingsumokart.application;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -16,6 +19,8 @@ import fr.enseeiht.superjumpingsumokart.R;
  */
 
 public class MarkerAdapter extends ArrayAdapter<String[]> {
+
+
 
     public MarkerAdapter(Context context, ArrayList<String[]> markers) {
         super(context, 0, markers);
@@ -35,6 +40,7 @@ public class MarkerAdapter extends ArrayAdapter<String[]> {
             viewHolder.x = (TextView) convertView.findViewById(R.id.x);
             viewHolder.y = (TextView) convertView.findViewById(R.id.y);
             viewHolder.z = (TextView) convertView.findViewById(R.id.z);
+
             convertView.setTag(viewHolder);
         }
 
@@ -46,6 +52,8 @@ public class MarkerAdapter extends ArrayAdapter<String[]> {
         viewHolder.x.setText(st[1]);
         viewHolder.y.setText(st[2]);
         viewHolder.z.setText(st[3]);
+
+
 
         return convertView;
     }

@@ -44,12 +44,14 @@
             android:layout_width="match_parent"
             android:layout_height="115dp"
             android:layout_marginBottom="10dp"
-            android:layout_weight="1.57">
+            android:layout_weight="1.14">
 
             <ListView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/listMarkers" />
+                android:layout_height="289dp"
+                android:id="@+id/listMarkers"
+                android:clickable="true"
+                android:drawSelectorOnTop="true" />
         </FrameLayout>
 
         <LinearLayout
@@ -113,6 +115,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/confirmBtn" />
+
+            <Button
+                android:text="@string/deleteMarker"
+                android:layout_width="193dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/deleteMarkerBtn" />
         </LinearLayout>
 
     </LinearLayout>

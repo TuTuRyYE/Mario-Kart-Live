@@ -33,10 +33,6 @@ public class GUICircuit extends Activity {
             this.choseSelectedBtn = (Button) findViewById(R.id.choseSelectedButton);
             this.existingCircuitsList = (ListView) findViewById(R.id.existingCircuitsList);
 
-            if (createNewCircuitBtn == null) {
-                Log.d(GUI_CIRCUIT_TAG, "createNewCircuitBtn null");
-            }
-
         // Set the existing circuits list
             setExistingCircuitsList();
 

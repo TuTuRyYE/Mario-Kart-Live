@@ -36,4 +36,6 @@
     <string name="joinBTButtonOff">Join a game</string>
     <string name="joinBTButtonOn">Joined a game</string>
     <string name="hostBTButtonOnAndPlayerConnected">Other player found</string>
+
+    <string name="deleteMarker">Delete marker</string>
 </resources>
