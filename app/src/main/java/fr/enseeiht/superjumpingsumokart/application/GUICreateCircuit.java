@@ -3,8 +3,11 @@ package fr.enseeiht.superjumpingsumokart.application;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,8 +34,11 @@ public class GUICreateCircuit extends Activity {
     private EditText zText;
     private Button addMarkerBtn;
     private Button confirmBtn;
+    private Button deleteMarkerBtn;
 
-    private ArrayList<String[]> markers;
+    private Integer itemSelected;
+
+    private static ArrayList<String[]> markers;
 
 
     @Override
@@ -50,13 +56,22 @@ public class GUICreateCircuit extends Activity {
         zText = (EditText) findViewById(R.id.zText);
         addMarkerBtn = (Button) findViewById(R.id.addMarkerBtn);
         confirmBtn = (Button) findViewById(R.id.confirmBtn);
+        deleteMarkerBtn = (Button) findViewById(R.id.deleteMarkerBtn);
+
 
 
         markers = new ArrayList<>();
 
         // Adapter for the listView
         final ArrayAdapter adapter = new MarkerAdapter(GUICreateCircuit.this, markers);
+        LayoutInflater inflater = getLayoutInflater();
+        ViewGroup header = (ViewGroup)inflater.inflate(R.layout.header_markers, listMarkers, false);
+        listMarkers.addHeaderView(header, null, false);
         listMarkers.setAdapter(adapter);
+
+        // Default marker
+        adapter.add(new String[]{"0", "0", "0", "0"});
+
 
         Log.d(GUI_CREATE_CIRCUIT_TAG, getFilesDir().getAbsolutePath());
 
@@ -67,23 +82,25 @@ public class GUICreateCircuit extends Activity {
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        // Add the marker to markers list
                         Log.d(GUI_CREATE_CIRCUIT_TAG, "addMarkerBtn pressed");
                         String x = xText.getText().toString();
                         String y = yText.getText().toString();
                         String z = zText.getText().toString();
                         String id = idText.getText().toString();
-                        //markers.add(new String[]{id,x,y,z});
-                        adapter.add(new String[]{id, x, y, z});
-                        Log.d(GUI_CREATE_CIRCUIT_TAG, "marker added to the list");
-                        xText.setText("X");
-                        yText.setText("Y");
-                        zText.setText("Z");
-                        idText.setText("ID");
-                        Log.d(GUI_CREATE_CIRCUIT_TAG, "EditTexts reset");
-                        Toast.makeText(GUICreateCircuit.this, "Marker added", Toast.LENGTH_SHORT).show();
-
-                        // TODO Add the marker to the listView
+                        if (!x.equals("") && !y.equals("") && !z.equals("") && !id.equals("")) {
+                            // Add the marker to markers list
+                            adapter.add(new String[]{id, x, y, z});
+                            Log.d(GUI_CREATE_CIRCUIT_TAG, "marker added to the list");
+                            xText.setText("");
+                            yText.setText("");
+                            zText.setText("");
+                            idText.setText("");
+                            Log.d(GUI_CREATE_CIRCUIT_TAG, "EditTexts reset");
+                            Toast.makeText(GUICreateCircuit.this, "Marker added", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Toast.makeText(GUICreateCircuit.this, "You must enter marker's setting first", Toast.LENGTH_SHORT).show();
+                        }
                         break;
                 }
                 return true;
@@ -103,6 +120,39 @@ public class GUICreateCircuit extends Activity {
             }
         });
 
+        deleteMarkerBtn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        Log.d(GUI_CREATE_CIRCUIT_TAG, "deleteMarker pressed");
+                        if (itemSelected != null) {
+                            if (itemSelected == 0) {
+                                Toast.makeText(GUICreateCircuit.this, "You can't delete this marker !", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                adapter.remove(markers.get(itemSelected));
+                                itemSelected = null;
+                            }
+                        }
+                        else {
+                            Toast.makeText(GUICreateCircuit.this, "You must select a marker first", Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                }
+                return true;
+            }
+        });
+
+
+        listMarkers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                itemSelected = i;
+                adapterView.setSelection(i);
+            }
+        });
+
     }
 
     protected void createCircuitFile() {
@@ -112,30 +162,36 @@ public class GUICreateCircuit extends Activity {
         String lapDefault = getResources().getString(R.string.lapsText);
         if (!txtName.equals(defaultName) && !txtName.isEmpty() && !lapTxt.equals(lapDefault) && !lapTxt.equals("0") && !lapTxt.isEmpty()) { // if the user has put a circuit name and a number of lap
             File circuitFile = new File(GUICreateCircuit.this.getFilesDir(), circuitNameText.getText().toString());
-            FileOutputStream outputStream;
-            String stringToWrite;
+            if (!circuitFile.exists()) { // if a file with the same name doesn't exist
+                FileOutputStream outputStream;
+                String stringToWrite;
 
-            try {
-                // Creating the file and the instance of the circuit
-                Circuit.initInstance(Integer.parseInt(lapTxt));
-                outputStream = openFileOutput(circuitNameText.getText().toString(), MODE_APPEND);
-                String firstLine = txtName + "/" + lapTxt + "\n";
-                Circuit.getInstance().setName(txtName);
-                outputStream.write(firstLine.getBytes());
-                for (String[] s : markers) {
-                    stringToWrite = s[0] + " " + s[1] + " " + s[2] + " " + s[3] + "\n";
-                    outputStream.write(stringToWrite.getBytes());
-                    int markerID = Integer.parseInt(s[0]);
-                    double x = Double.parseDouble(s[1]);
-                    double y = Double.parseDouble(s[2]);
-                    double z = Double.parseDouble(s[3]);
-                    Circuit.getInstance().addMarker(markerID, new Vector3D(x, y, z));
+                try {
+                    // Creating the file and the instance of the circuit
+                    Circuit.initInstance(Integer.parseInt(lapTxt));
+                    outputStream = openFileOutput(circuitNameText.getText().toString(), MODE_APPEND);
+                    String firstLine = txtName + "/" + lapTxt + "\n";
+                    Circuit.getInstance().setName(txtName);
+                    outputStream.write(firstLine.getBytes());
+                    for (String[] s : markers) {
+                        stringToWrite = s[0] + " " + s[1] + " " + s[2] + " " + s[3] + "\n";
+                        outputStream.write(stringToWrite.getBytes());
+                        int markerID = Integer.parseInt(s[0]);
+                        double x = Double.parseDouble(s[1]);
+                        double y = Double.parseDouble(s[2]);
+                        double z = Double.parseDouble(s[3]);
+                        Circuit.getInstance().addMarker(markerID, new Vector3D(x, y, z));
+                    }
+                    outputStream.close();
+                    Log.d(GUI_CREATE_CIRCUIT_TAG, "Circuit file created");
+
+                    // Go back to GUIWelcome
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                outputStream.close();
-
-                // Go back to GUIWelcome
-            } catch (Exception e) {
-                e.printStackTrace();
+            }
+            else { // A circuit with the same name already exists
+                Toast.makeText(GUICreateCircuit.this, "A circuit with this name already exists !", Toast.LENGTH_SHORT).show();
             }
         } else {
             if (lapTxt.equals("0")) {
@@ -145,5 +201,13 @@ public class GUICreateCircuit extends Activity {
             }
         }
 
+    }
+
+    static public ArrayList<String[]> getMarkers() {
+        return markers;
+    }
+
+    public void setMarkers(ArrayList<String[]> markers) {
+        this.markers = markers;
     }
 }
