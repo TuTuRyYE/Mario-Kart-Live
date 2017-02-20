@@ -49,14 +49,18 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
      * Default constructor of the class {@link Game} (Vivian - 07/02/2017).
      * @param guiGame interface of the {@link Game}
      */
-    public Game(GUIGame guiGame, BluetoothCommunication comBT) {
-        createCircuit();
-        trackInitialised = true;
+    public Game(GUIGame guiGame, BluetoothCommunication comBT, boolean isServer) {
         // Add markers for boxes
-        Circuit.getInstance().addMarker(1, new Vector3D(0,0,0)); // position to change when markers are placed
-        Circuit.getInstance().addMarker(2, new Vector3D(0,0,0)); // position to change when markers are placed
-        Circuit.getInstance().addMarker(3, new Vector3D(0,0,0)); // position to change when markers are placed
-        Circuit.getInstance().addMarker(4, new Vector3D(0,0,0)); // position to change when markers are placed
+        if (isServer) {
+            createCircuit();
+            trackInitialised = true;
+            Circuit.getInstance().addMarker(1, new Vector3D(0,0,0)); // position to change when markers are placed
+            Circuit.getInstance().addMarker(2, new Vector3D(0,0,0)); // position to change when markers are placed
+            Circuit.getInstance().addMarker(3, new Vector3D(0,0,0)); // position to change when markers are placed
+            Circuit.getInstance().addMarker(4, new Vector3D(0,0,0)); // position to change when markers are
+            //TODO
+            comBT.sendCircuit();
+        }
         currentItems = setMagicBoxes();
         this.guiGame = guiGame;
         registerGameListener(guiGame);
@@ -153,7 +157,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
         this.currentItems.remove(item);
     }
     /**
-     * Check if the current status of the {@link Game} (Vivian - 07/02/2017).
+     * Check the current status of the {@link Game} (Vivian - 07/02/2017).
      * @return true if the {@link Game} if started otherwise false.
      */
     public boolean isStarted() {
@@ -169,31 +173,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
         int laps = 1; // Number of laps for the game
         Circuit.initInstance(laps);
     }
-    /**
-     * Start the {@link Game} (Vivian - 07/02/2017).
-     */
-    public void start() {
-        Log.d(GAME_TAG, "start function called");
-        // TODO wait for every player to be ready
-        if (getNumberPlayer() == 1) {
-            this.started =true;
-        }
-        else {
-        }
-    }
-    /**
-     * Stop the Game
-     * @param nameFinished of the {@link Drone} to notify of the end of the race (Vivian - 07/02/2017).
-     */
-    public void stop(String nameFinished){
-        Log.d(GAME_TAG, "stop function called");
-        // Stop the drone
-        guiGame.getController().stopMotion();
-        // Say the name of the winner
-        // TODO Send to each player a message saying that the game in finished
-        this.currentItems = null;
-        // TODO handle circuit
-    }
+
     /**
      * Get the number of player on the {@link Game} (Vivian - 07/02/2017).
      * @return number of Player.
@@ -210,7 +190,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
         return numberOfPlayer;
     }
     public boolean isReady() {
-        return (Circuit.getInstance() !=null && !this.isStarted());
+        return (Circuit.getInstance() !=null && !started);
     }
 
     public void registerGameListener(GameListener gameListener) {
@@ -241,6 +221,9 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
     @Override
     public void onSecondPlayerFinished() {
         guiGame.notifyDefeat();
+        for (GameListener gl : GAME_LISTENERS) {
+            unregisterGameListener(gl);
+        }
         finished = true;
     }
 
@@ -335,7 +318,11 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
         otherDrone.setCurrentPosition(position);
     }
 
-    ;
+    @Override
+    public void onCircuitReceived() {
+        trackInitialised = true;
+        checkReadyAndStartRace();
+    }
 
     @Override
     public void onPositionUpdated(Vector3D position) {
@@ -403,6 +390,9 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
             gl.onPlayerFinished();
         }
         finished = true;
+        for (GameListener gl : GAME_LISTENERS) {
+            unregisterGameListener(gl);
+        }
     }
 
     @Override

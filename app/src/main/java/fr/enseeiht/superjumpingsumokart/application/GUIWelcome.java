@@ -29,7 +29,11 @@ import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
  * application using Bluetooth.
  */
 public class GUIWelcome extends Activity {
-    // Static block to load libraries (ARToolkit + ParrotSDK3)
+
+    // Static block to load libraries ParrotSDK3
+    static {
+        ARSDK.loadSDKLibs();
+    }
 
     public final static int DEVICE_SERVICE_CONNECTED = 0;
     public final static int DEVICE_SERVICE_DISCONNECTED = 1;
@@ -37,6 +41,7 @@ public class GUIWelcome extends Activity {
     public final static int BLUETOOTH_SERVER_GOT_CONNECTION = 4;
     public final static int BLUETOOTH_CLIENT_JOINED_GAME = 5;
     public final static int BLUETOOTH_SERVER_SHUTTED_DOWN = 6;
+
     public final static int BLUETOOTH_CLIENT_SHUTTED_DOWN = 7;
 
     public final Handler GUI_WELCOME_HANDLER = new Handler() {
@@ -74,15 +79,11 @@ public class GUIWelcome extends Activity {
             }
         }
     };
-
-    // Static block to load libraries ParrotSDK3
-    static {
-        ARSDK.loadSDKLibs();
-    }
     /**
      * The logging tag. Useful for debugging.
      */
     private final static String GUI_WELCOME_TAG = "GUIWelcome";
+
     // Buttons in the GUI
     private Button startRaceBtn;
     private ToggleButton wifiConnectionBtn;
@@ -97,6 +98,7 @@ public class GUIWelcome extends Activity {
     private ARDiscoveryDeviceService currentDeviceService = null;
     private List<ARDiscoveryDeviceService> devicesList = new ArrayList<>();
 
+    private boolean isServer = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,7 +131,7 @@ public class GUIWelcome extends Activity {
         btHostBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btConnectionBtnAction();
+                btHostBtnAction();
             }
         });
         btJoinBtn.setOnClickListener(new View.OnClickListener() {
@@ -166,6 +168,7 @@ public class GUIWelcome extends Activity {
         if (currentDeviceService != null) {
             Intent i = new Intent(GUIWelcome.this, GUIGame.class);
             i.putExtra("currentDeviceService", currentDeviceService);
+            i.putExtra("isServer", isServer);
             Log.d(GUI_WELCOME_TAG, "Launching a GUIGame Activity...");
             startActivity(i);
         } else {
@@ -192,7 +195,7 @@ public class GUIWelcome extends Activity {
     /**
      * //TODO
      */
-    private void btConnectionBtnAction() {
+    private void btHostBtnAction() {
         server = new BluetoothServer(GUIWelcome.this);
         server.start();
     }
@@ -200,7 +203,7 @@ public class GUIWelcome extends Activity {
      * //TODO
      */
     private void btJoinBtnAction() {
-        //TODO
+        isServer = false;
         client = new BluetoothClient(GUIWelcome.this);
         client.start();
     }

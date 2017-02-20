@@ -1,10 +1,15 @@
 package fr.enseeiht.superjumpingsumokart.application;
 import android.util.Log;
+
+import java.io.Serializable;
 import java.util.HashMap;
 
 import fr.enseeiht.superjumpingsumokart.application.network.BluetoothCommunication;
 
 /**
+ * Modelises a circuit in Super Jumping Sumo Kart.
+ * Borders of the track are materialised by ARToolkit markers. The first point of the start line is
+ * always (0, 0, 0).
  * Created by Vivian on 27/01/2017.
  */
 public class Circuit {
@@ -77,7 +82,7 @@ public class Circuit {
      * By default, there are the markers of the start (id 0) and end lines (id -1 and -2)
      * @param laps number of laps a player have to do to complete the circuit
      */
-    public Circuit(int laps) {
+    private Circuit(int laps) {
         // Number of laps
         this.lapsNumber = laps;
         // startline and endline
@@ -95,12 +100,46 @@ public class Circuit {
         Log.d(CIRCUIT_TAG, "startline and endline markers added");
     }
 
-    public static void initInstance(int laps) {
+    /**
+     * Constructor used by the client once the bluetooth message corresponding to a circuit is
+     * received and parsed.
+     *
+     * @param name The name of the circuit.
+     * @param lapsNumber The number of laps of the circuit.
+     * @param startPoint The start point of the circuit.
+     * @param endPoints The end points of the circuit.
+     * @param markersID An association between the ID and the position of the markers.
+     */
+    public Circuit(String name, int lapsNumber, Vector3D startPoint, Vector3D[] endPoints, HashMap<Integer, Vector3D> markersID) {
+        this.name = name;
+        this.lapsNumber = lapsNumber;
+        this.startPoint = startPoint;
+        this.endPoints = endPoints;
+        this.markersID = markersID;
+    }
+
+    /**
+     * Set the singleton instance of {@link Circuit}.
+     * @param circuit
+     */
+    static void setInstance(Circuit circuit) {
+        circuitInstance = circuit;
+    }
+
+    /**
+     * Initialises the singleton instance of {@link Circuit}.
+     * @param laps The number of laps for the circuit.
+     */
+    static void initInstance(int laps) {
         if (circuitInstance == null) {
             circuitInstance = new Circuit(laps);
         }
     }
 
+    /**
+     *
+     * @return The singleton instance of {@link Circuit}.
+     */
     public static Circuit getInstance() {
         return circuitInstance;
     }
@@ -179,5 +218,9 @@ public class Circuit {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 }

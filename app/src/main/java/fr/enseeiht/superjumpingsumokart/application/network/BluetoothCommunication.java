@@ -3,12 +3,17 @@ package fr.enseeiht.superjumpingsumokart.application.network;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Objects;
 
+import fr.enseeiht.superjumpingsumokart.application.Circuit;
 import fr.enseeiht.superjumpingsumokart.application.Game;
 import fr.enseeiht.superjumpingsumokart.application.GameListener;
 import fr.enseeiht.superjumpingsumokart.application.Vector3D;
@@ -184,7 +189,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
      *
      * @param bytes The bytes of the message.
      */
-    private void write(byte[] bytes) {
+    public void write(byte[] bytes) {
         try {
             btOutputStream.write(bytes);
         } catch (IOException e) {
@@ -203,6 +208,34 @@ public final class BluetoothCommunication extends Thread implements GameListener
         } catch (IOException e) {
             Log.d(BLUETOOTH_COMMUNICATION_TAG, "IOException while closing socket : + " + e.getMessage());
         }
+    }
+
+    public void sendCircuit() {
+        Circuit c = Circuit.getInstance();
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(btOutputStream);
+        } catch (IOException e) {
+            Log.e(BLUETOOTH_COMMUNICATION_TAG, "IOException while sending circuit");
+        }
+        String dataMsg = "circuit/" + Integer.toString(c.getLaps()) + "/" + c.getName();
+        String x, y;
+        x = Double.toString(c.getStartPoint().getX());
+        y = Double.toString(c.getStartPoint().getY());
+        dataMsg.concat("/" + x + ":" + y + ":" + 0);
+        x = Double.toString(c.getEndPoints()[0].getX());
+        y = Double.toString(c.getEndPoints()[0].getY());
+        dataMsg.concat("/" + x + ":" + y + ":" + 0);
+        x = Double.toString(c.getEndPoints()[0].getX());
+        y = Double.toString(c.getEndPoints()[0].getY());
+        dataMsg.concat("/" + x + ":" + y + ":" + 0);
+        for (Integer i : c.getMarkersID().keySet()) {
+            x = Double.toString(c.getMarkersID().get(i).getX());
+            y = Double.toString(c.getMarkersID().get(i).getY());
+            dataMsg.concat("/"+ Integer.toString(i) + ":" + x + ":" + y + ":" + 0);
+        }
+        byte[] dataMsgBytes = dataMsg.getBytes(Charset.forName("UTF-8"));
+        write(dataMsgBytes);
+        Log.d(BLUETOOTH_COMMUNICATION_TAG, "Circuit send to client, string : " + dataMsg);
     }
 
     private void registerCommunicationBTListener(BluetoothCommunicationListener gameListener) {
