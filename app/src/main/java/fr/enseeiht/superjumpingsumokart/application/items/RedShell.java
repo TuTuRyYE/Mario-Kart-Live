@@ -38,7 +38,6 @@ public class RedShell extends Item {
     @Override
     public void applyEffect(DroneController droneController) {
         Log.d(ITEM_TAG, "You've been hit by a red shell!");
-        droneController.slow();
         droneController.spin();
         droneController.getGuiGame().getGame().onItemTouched(this);
     }
