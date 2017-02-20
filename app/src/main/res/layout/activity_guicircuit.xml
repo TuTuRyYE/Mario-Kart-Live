@@ -22,13 +22,15 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="244dp"
-            android:layout_weight="1.90">
+            android:layout_weight="0.98">
 
             <ListView
                 android:layout_width="match_parent"
                 android:id="@+id/existingCircuitsList"
                 android:layout_marginBottom="20dp"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:contextClickable="true" />
         </FrameLayout>
 
         <LinearLayout
@@ -41,6 +43,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="63dp"
                 android:id="@+id/createCircuitButton"
+                android:layout_weight="1" />
+
+            <Button
+                android:text="@string/modifyCircuit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/modifyCircuitBtn"
+                android:layout_weight="1" />
+
+            <Button
+                android:text="@string/deleteCircuit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/deleteCircuitBtn"
                 android:layout_weight="1" />
 
             <Button

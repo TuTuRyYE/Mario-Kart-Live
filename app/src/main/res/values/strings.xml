@@ -38,4 +38,7 @@
     <string name="hostBTButtonOnAndPlayerConnected">Other player found</string>
 
     <string name="deleteMarker">Delete marker</string>
+
+    <string name="modifyCircuit">Modify selected circuit</string>
+    <string name="deleteCircuit">Delete selected circuit</string>
 </resources>
