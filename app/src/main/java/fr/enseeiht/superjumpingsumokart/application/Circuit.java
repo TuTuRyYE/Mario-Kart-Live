@@ -122,7 +122,7 @@ public class Circuit {
      * Set the singleton instance of {@link Circuit}.
      * @param circuit
      */
-    static void setInstance(Circuit circuit) {
+    public static void setInstance(Circuit circuit) {
         circuitInstance = circuit;
     }
 

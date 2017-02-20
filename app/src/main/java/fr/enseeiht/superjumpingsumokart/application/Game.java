@@ -53,13 +53,12 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
         // Add markers for boxes
         if (isServer) {
             createCircuit();
-            trackInitialised = true;
             Circuit.getInstance().addMarker(1, new Vector3D(0,0,0)); // position to change when markers are placed
             Circuit.getInstance().addMarker(2, new Vector3D(0,0,0)); // position to change when markers are placed
             Circuit.getInstance().addMarker(3, new Vector3D(0,0,0)); // position to change when markers are placed
             Circuit.getInstance().addMarker(4, new Vector3D(0,0,0)); // position to change when markers are
             //TODO
-            comBT.sendCircuit();
+            trackInitialised = true;
         }
         currentItems = setMagicBoxes();
         this.guiGame = guiGame;
@@ -70,8 +69,8 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
             this.comBT = comBT;
             comBT.setGame(this);
             registerGameListener(comBT);
-            this.otherReady = false;
             Log.d(GAME_TAG, "2 players game created.");
+            comBT.sendCircuit();
         } else {
             otherReady = true;
             Log.d(GAME_TAG, "1 player game created.");
@@ -79,11 +78,37 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
         checkReadyAndStartRace();
     }
 
+    private void checkReadyAndStartRace() {
+        Log.d(GAME_TAG, "checkReadyAndStartRace called");
+        if (trackInitialised) {
+            Log.d(GAME_TAG, "trackInitialised");
+        }
+        if (droneControllerReady) {
+            Log.d(GAME_TAG, "droneControllerReady");
+        }
+        if (videoStreamAvailable) {
+            Log.d(GAME_TAG, "videoStreamAvailable");
+        }
+        if (trackInitialised && droneControllerReady && videoStreamAvailable) {
+            ready =  true;
+            for (GameListener gl : GAME_LISTENERS) {
+                gl.onPlayerReady();
+            }
+        }
+        if (ready && otherReady) {
+            Log.d(GAME_TAG, "player and other player are ready to start the race");
+            started = true;
+            for (GameListener gl : GAME_LISTENERS) {
+                gl.onStartRace();
+            }
+        }
+    }
+
     /**
      * Generate magic boxes on the circuit (Vivian - 07/02/2017).
      * @return the {@link ArrayList} of {@link MagicBox} generate on the circuit.
      */
-    public ArrayList<Item> setMagicBoxes() {
+    private ArrayList<Item> setMagicBoxes() {
         ArrayList<Item> result = new ArrayList<>();
         HashMap<Integer, Vector3D> markersID = Circuit.getInstance().getMarkersID();
         Vector3D position1 = markersID.get(1);
@@ -118,6 +143,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
     public GUIGame getGuiGame() {
         return guiGame;
     }
+
     /**
      * Set the {@link GUIGame} associated to the Game (Vivian - 07/02/2017).
      * @param guiGame of the {@link Game}.
@@ -125,7 +151,6 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
     public void setGuiGame(GUIGame guiGame) {
         this.guiGame = guiGame;
     }
-
     /**
      * Get currentItems {@link ArrayList} present on the circuit (Vivian - 07/02/2017).
      * @return currentItems {@link ArrayList}.
@@ -133,6 +158,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
     public ArrayList<Item> getCurrentItems() {
         return currentItems;
     }
+
     /**
      * Set Items present on {@link Circuit} (Vivian - 07/02/2017).
      * @param currentItems present
@@ -145,15 +171,14 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
      * Add an {@link Item} to the list of {@link Item} present on the race (Matthieu Michel - 15/02/2017).
      * @param item added by the player.
      */
-    public void addItem(Item item){
+    private void addItem(Item item){
         this.currentItems.add(item);
     }
-
     /**
      * Remove an {@link Item} to the list of {@link Item} present on the race when an {@link Item} as been touched by the {@link Drone}(Matthieu Michel - 15/02/2017).
      * @param item added by the player.
      */
-    public void removeItem(Item item){
+    private void removeItem(Item item){
         this.currentItems.remove(item);
     }
     /**
@@ -163,17 +188,14 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
     public boolean isStarted() {
         return started;
     }
-    public void setStarted(boolean started) {
-        this.started = started;
-    }
+
     /**
      * Create the {@link Circuit} (Vivian - 07/02/2017).
      */
-    public void createCircuit () {
+    private void createCircuit () {
         int laps = 1; // Number of laps for the game
         Circuit.initInstance(laps);
     }
-
     /**
      * Get the number of player on the {@link Game} (Vivian - 07/02/2017).
      * @return number of Player.
@@ -189,8 +211,22 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
         Log.d(GAME_TAG, "Number of players: " + numberOfPlayer);
         return numberOfPlayer;
     }
+
+
     public boolean isReady() {
         return (Circuit.getInstance() !=null && !started);
+    }
+
+    public int getLapsNumber() {
+        return Circuit.getInstance().getLaps();
+    }
+
+    public void setDrone(Drone drone) {
+        this.drone = drone;
+    }
+
+    public boolean isFinished() {
+        return finished;
     }
 
     public void registerGameListener(GameListener gameListener) {
@@ -216,21 +252,6 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
     @Override
     public void onSecondPlayerLapFinished() {
         otherDrone.setCurrentLap(otherDrone.getCurrentLap() + 1);
-    }
-
-    @Override
-    public void onSecondPlayerFinished() {
-        guiGame.notifyDefeat();
-        for (GameListener gl : GAME_LISTENERS) {
-            unregisterGameListener(gl);
-        }
-        finished = true;
-    }
-
-    @Override
-    public void onSecondPlayerGaveUp() {
-        guiGame.notifyVictory();
-        finished = true;
     }
 
     @Override
@@ -320,12 +341,6 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
     }
 
     @Override
-    public void onCircuitReceived() {
-        trackInitialised = true;
-        checkReadyAndStartRace();
-    }
-
-    @Override
     public void onPositionUpdated(Vector3D position) {
         drone.setCurrentPosition(position);
     }
@@ -350,55 +365,53 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
         }
 
     }
-
-    private void checkReadyAndStartRace() {
-        Log.d(GAME_TAG, "checkReadyAndStartRace called");
-        if (trackInitialised) {
-            Log.d(GAME_TAG, "trackInitialised");
+    @Override
+    public void onSecondPlayerFinished() {
+        guiGame.notifyDefeat();
+        for (GameListener gl : GAME_LISTENERS) {
+            unregisterGameListener(gl);
         }
-        if (droneControllerReady) {
-            Log.d(GAME_TAG, "droneControllerReady");
-        }
-        if (videoStreamAvailable) {
-            Log.d(GAME_TAG, "videoStreamAvailable");
-        }
-        if (trackInitialised && droneControllerReady && videoStreamAvailable) {
-            ready =  true;
-            for (GameListener gl : GAME_LISTENERS) {
-                gl.onPlayerReady();
-            }
-        }
-        if (ready && otherReady) {
-            Log.d(GAME_TAG, "player and other player are ready to start the race");
-            started = true;
-            for (GameListener gl : GAME_LISTENERS) {
-                gl.onStartRace();
-            }
-        }
+        finished = true;
     }
 
     @Override
-    public void onPlayerGaveUp() {
+    public void onSecondPlayerGaveUp() {
+        guiGame.notifyVictory();
         for (GameListener gl : GAME_LISTENERS) {
-            gl.onPlayerGaveUp();
+            unregisterGameListener(gl);
         }
         finished = true;
     }
 
     @Override
     public void onPlayerFinished() {
-        for (GameListener gl : GAME_LISTENERS) {
-            gl.onPlayerFinished();
+        if (comBT != null) {
+            for (GameListener gl : GAME_LISTENERS) {
+                gl.onPlayerFinished();
+            }
         }
-        finished = true;
         for (GameListener gl : GAME_LISTENERS) {
             unregisterGameListener(gl);
         }
+        finished = true;
     }
 
     @Override
-    public void onVideoStreamAvailable() {
-        videoStreamAvailable = true;
+    public void onPlayerGaveUp() {
+        if (comBT != null) {
+            for (GameListener gl : GAME_LISTENERS) {
+                gl.onPlayerGaveUp();
+            }
+        }
+        for (GameListener gl : GAME_LISTENERS) {
+            unregisterGameListener(gl);
+        }
+        finished = true;
+    }
+
+    @Override
+    public void onCircuitReceived() {
+        trackInitialised = true;
         checkReadyAndStartRace();
     }
 
@@ -408,15 +421,9 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
         checkReadyAndStartRace();
     }
 
-    public int getLapsNumber() {
-        return Circuit.getInstance().getLaps();
-    }
-
-    public void setDrone(Drone drone) {
-        this.drone = drone;
-    }
-
-    public boolean isFinished() {
-        return finished;
+    @Override
+    public void onVideoStreamAvailable() {
+        videoStreamAvailable = true;
+        checkReadyAndStartRace();
     }
 }

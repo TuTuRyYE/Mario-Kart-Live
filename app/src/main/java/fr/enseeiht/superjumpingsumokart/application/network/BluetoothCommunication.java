@@ -3,18 +3,12 @@ package fr.enseeiht.superjumpingsumokart.application.network;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 
-import java.io.ByteArrayOutputStream;
-import com.google.android.gms.common.server.converter.StringToIntConverter;
-
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
 import fr.enseeiht.superjumpingsumokart.application.Circuit;
 import fr.enseeiht.superjumpingsumokart.application.Game;
@@ -99,10 +93,10 @@ public final class BluetoothCommunication extends Thread implements GameListener
     public void run() {
         byte[] buffer = new byte[1024];
         int bytes;
-        // Permanent listening on the inputstream
+        // Permanent listening on the input stream.
         while (true) {
             try {
-                // Reading on the inputstream.
+                // Reading on the input stream.
                 bytes = btInputStream.read(buffer);
 
                 // Copies it.
@@ -158,44 +152,45 @@ public final class BluetoothCommunication extends Thread implements GameListener
                 }
                 break;
             case "circuit":
-                for (BluetoothCommunicationListener listener : this.COMMUNICATION_BT_LISTENERS) {
-                    // We create a new circuit and assign its parameters
-                    Circuit circuit = new Circuit(Integer.parseInt(msgSplit[1]));
+                // We create a new circuit and assign its parameters
 
-                    circuit.setName(msgSplit[2]);
+                Log.d(BLUETOOTH_COMMUNICATION_TAG, "Circuit string received : " + receivedMsg);
 
-                    String[] posStart = msgSplit[3].split(":");
-                    String[] posEnd1 = msgSplit[4].split(":");
-                    String[] posEnd2 = msgSplit[5].split(":");
+                int lapsNumber = Integer.parseInt(msgSplit[1]);
+                String name = msgSplit[2];
 
-                    Vector3D startPoint = new Vector3D(Double.parseDouble(posStart[0]),
-                    Double.parseDouble(posStart[1]),Double.parseDouble(posStart[2]));
-                    Vector3D endPoint1 = new Vector3D(Double.parseDouble(posEnd1[0]),
-                            Double.parseDouble(posEnd1[1]),Double.parseDouble(posEnd1[2]));
-                    Vector3D endPoint2 = new Vector3D(Double.parseDouble(posEnd2[0]),
-                            Double.parseDouble(posEnd2[1]),Double.parseDouble(posEnd2[2]));
+                String[] posStart = msgSplit[3].split(":");
+                String[] posEnd1 = msgSplit[4].split(":");
+                String[] posEnd2 = msgSplit[5].split(":");
 
-                    circuit.setStartPoint(startPoint);
-                    circuit.setEndPoints(new Vector3D[]{endPoint1, endPoint2});
+                Vector3D startPoint = new Vector3D(Double.parseDouble(posStart[0]),
+                Double.parseDouble(posStart[1]),Double.parseDouble(posStart[2]));
+                Vector3D endPoint1 = new Vector3D(Double.parseDouble(posEnd1[0]),
+                Double.parseDouble(posEnd1[1]),Double.parseDouble(posEnd1[2]));
+                Vector3D endPoint2 = new Vector3D(Double.parseDouble(posEnd2[0]),
+                        Double.parseDouble(posEnd2[1]),Double.parseDouble(posEnd2[2]));
 
-                    HashMap<Integer, Vector3D> markers = new HashMap<>();
-                    int i;
-                    for (i=6; i<=msgSplit.length; i++){
-                        String[] hashSplit = msgSplit[i].split(":");
-                        int id = Integer.parseInt(hashSplit[0]);
-                        double x = Double.parseDouble(hashSplit[1]);
-                        double y = Double.parseDouble(hashSplit[2]);
-                        double z = Double.parseDouble(hashSplit[3]);
-                        markers.put(id,new Vector3D(x,y,z));
-                    }
-                    circuit.setMarkersID(markers);
-
-                    // We add the circuit to the game
-                    circuit.setInstance(circuit);
-                    for (BluetoothCommunicationListener listener : this.COMMUNICATION_BT_LISTENERS) {
-                        listener.onCircuitReceived();
-                    }
+                HashMap<Integer, Vector3D> markers = new HashMap<>();
+                int i;
+                for (i=6; i<=msgSplit.length; i++){
+                    String[] hashSplit = msgSplit[i].split(":");
+                    int id = Integer.parseInt(hashSplit[0]);
+                    double x = Double.parseDouble(hashSplit[1]);
+                    double y = Double.parseDouble(hashSplit[2]);
+                    double z = Double.parseDouble(hashSplit[3]);
+                    markers.put(id,new Vector3D(x,y,z));
                 }
+
+                Vector3D[] endPoints = {endPoint1, endPoint2};
+
+                Circuit c = new Circuit(name, lapsNumber, startPoint, endPoints, markers);
+
+                // We add the circuit to the game
+                Circuit.setInstance(c);
+                for (BluetoothCommunicationListener bcl : COMMUNICATION_BT_LISTENERS) {
+                    bcl.onCircuitReceived();
+                }
+                break;
                     case "hasGiveUp":
                 for (BluetoothCommunicationListener listener : this.COMMUNICATION_BT_LISTENERS) {
                     listener.onSecondPlayerGaveUp();
@@ -254,26 +249,21 @@ public final class BluetoothCommunication extends Thread implements GameListener
 
     public void sendCircuit() {
         Circuit c = Circuit.getInstance();
-        try {
-            ObjectOutputStream oos = new ObjectOutputStream(btOutputStream);
-        } catch (IOException e) {
-            Log.e(BLUETOOTH_COMMUNICATION_TAG, "IOException while sending circuit");
-        }
         String dataMsg = "circuit/" + Integer.toString(c.getLaps()) + "/" + c.getName();
         String x, y;
         x = Double.toString(c.getStartPoint().getX());
         y = Double.toString(c.getStartPoint().getY());
-        dataMsg.concat("/" + x + ":" + y + ":" + 0);
+        dataMsg = dataMsg.concat("/" + x + ":" + y + ":" + 0);
         x = Double.toString(c.getEndPoints()[0].getX());
         y = Double.toString(c.getEndPoints()[0].getY());
-        dataMsg.concat("/" + x + ":" + y + ":" + 0);
+        dataMsg = dataMsg.concat("/" + x + ":" + y + ":" + 0);
         x = Double.toString(c.getEndPoints()[0].getX());
         y = Double.toString(c.getEndPoints()[0].getY());
-        dataMsg.concat("/" + x + ":" + y + ":" + 0);
+        dataMsg = dataMsg.concat("/" + x + ":" + y + ":" + 0);
         for (Integer i : c.getMarkersID().keySet()) {
             x = Double.toString(c.getMarkersID().get(i).getX());
             y = Double.toString(c.getMarkersID().get(i).getY());
-            dataMsg.concat("/"+ Integer.toString(i) + ":" + x + ":" + y + ":" + 0);
+            dataMsg = dataMsg.concat("/"+ Integer.toString(i) + ":" + x + ":" + y + ":" + 0);
         }
         byte[] dataMsgBytes = dataMsg.getBytes(Charset.forName("UTF-8"));
         write(dataMsgBytes);
@@ -390,8 +380,6 @@ public final class BluetoothCommunication extends Thread implements GameListener
         write(dateBytes);
         Log.d(BLUETOOTH_COMMUNICATION_TAG, "onUpdatedPosition sent to the other phone");
     }
-
-
 
     /**
      * @param game The game to listen events from.
