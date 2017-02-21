@@ -49,9 +49,6 @@ public class CircuitAdapter extends ArrayAdapter<String[]> {
         //il ne reste plus qu'à remplir notre vue
         viewHolder.circuitName.setText(currentCircuit[0]);
         viewHolder.numberLaps.setText(currentCircuit[1]);
-        if (position + 1 == selectedPos) {
-            convertView.setBackgroundColor(Color.BLUE);
-        }
         return convertView;
     }
 
