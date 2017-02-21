@@ -56,4 +56,9 @@ public interface BluetoothCommunicationListener {
      * Notify a circuit has been received from bluetooth communication
      */
     void onCircuitReceived();
+
+    /**
+     * Notify the bluetooth communication has been closed on the other side.
+     */
+    void onBluetoothCommunicationClosed();
 }

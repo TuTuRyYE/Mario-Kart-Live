@@ -93,11 +93,11 @@ public class GUICircuit extends Activity {
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        existingCircuitsListView.getChildAt(selectedPos).setBackgroundColor(Color.BLUE);
                         if (CircuitAdapter.selectedPos >=  0) {
                             existingCircuitsListView.getChildAt(CircuitAdapter.selectedPos).setBackgroundColor(Color.TRANSPARENT);
                         }
-                        CircuitAdapter.selectedPos = selectedPos;
+                        existingCircuitsListView.getChildAt(selectedPos).setBackgroundColor(Color.BLUE);
+                        CircuitAdapter.selectedPos = selectedPos - 1;
                         Log.d(GUI_CIRCUIT_TAG, "Chose selected circuit pressed");
                         // Get the selected circuit
                         String[] circuitSelected = (String[]) existingCircuitsListView.getItemAtPosition(itemSelected);
@@ -140,12 +140,10 @@ public class GUICircuit extends Activity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedPos = i;
-                if (oldSelectedPos != selectedPos && oldSelectedPos != CircuitAdapter.selectedPos && oldSelectedPos >= 0) {
+                if (oldSelectedPos != CircuitAdapter.selectedPos && oldSelectedPos >= 0) {
                     existingCircuitsListView.getChildAt(oldSelectedPos).setBackgroundColor(Color.TRANSPARENT);
                 }
-                if (selectedPos != CircuitAdapter.selectedPos) {
-                    view.setBackgroundColor(Color.RED);
-                }
+                view.setBackgroundColor(Color.RED);
                 oldSelectedPos = selectedPos;
 //                if (itemSelected != null) {
 //                    if (itemSelected == i) {
