@@ -46,6 +46,7 @@ public class GUICircuit extends Activity {
     private ArrayAdapter adapter;
 
     private Integer itemSelected;
+    private int selectedPos = -1, oldSelectedPos = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +93,11 @@ public class GUICircuit extends Activity {
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
+                        existingCircuitsListView.getChildAt(selectedPos).setBackgroundColor(Color.BLUE);
+                        if (CircuitAdapter.selectedPos != selectedPos) {
+                            existingCircuitsListView.getChildAt(CircuitAdapter.selectedPos).setBackgroundColor(Color.TRANSPARENT);
+                        }
+                        CircuitAdapter.selectedPos = selectedPos;
                         Log.d(GUI_CIRCUIT_TAG, "Chose selected circuit pressed");
                         // Get the selected circuit
                         String[] circuitSelected = (String[]) existingCircuitsListView.getItemAtPosition(itemSelected);
@@ -133,30 +139,35 @@ public class GUICircuit extends Activity {
         existingCircuitsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (itemSelected != null) {
-                    if (itemSelected == i) {
-                        if (!(existingCircuitsListView.getChildAt(i).getDrawingCacheBackgroundColor() == Color.BLUE)) {
-                            Log.d(GUI_CIRCUIT_TAG, "yolo1");
-                        existingCircuitsListView.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
-                        itemSelected = null;
-                        }
-                        else {
-                            itemSelected = null;
-                        }
-                    } else {
-                        if (!(existingCircuitsListView.getChildAt(i).getDrawingCacheBackgroundColor() == Color.BLUE)) {
-                            existingCircuitsListView.getChildAt(itemSelected).setBackgroundColor(Color.TRANSPARENT);
-                        }
-                        itemSelected = i;
-                        existingCircuitsListView.getChildAt(i).setBackgroundColor(Color.RED);
-                    }
-                } else {
-                    itemSelected = i;
-                    Log.d(GUI_CIRCUIT_TAG, "item selected: " + itemSelected);
-                    existingCircuitsListView.getChildAt(i).setBackgroundColor(Color.RED);
+                selectedPos = i;
+                if (selectedPos != oldSelectedPos && selectedPos != CircuitAdapter.selectedPos && oldSelectedPos >= 0) {
+                    existingCircuitsListView.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
                 }
-
-
+                if (selectedPos != CircuitAdapter.selectedPos) {
+                    view.setBackgroundColor(Color.RED);
+                }
+//                if (itemSelected != null) {
+//                    if (itemSelected == i) {
+//                        if (!(existingCircuitsListView.getChildAt(i).getDrawingCacheBackgroundColor() == Color.BLUE)) {
+//                            Log.d(GUI_CIRCUIT_TAG, "yolo1");
+//                        existingCircuitsListView.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
+//                        itemSelected = null;
+//                        }
+//                        else {
+//                            itemSelected = null;
+//                        }
+//                    } else {
+//                        if (!(existingCircuitsListView.getChildAt(i).getDrawingCacheBackgroundColor() == Color.BLUE)) {
+//                            existingCircuitsListView.getChildAt(itemSelected).setBackgroundColor(Color.TRANSPARENT);
+//                        }
+//                        itemSelected = i;
+//                        existingCircuitsListView.getChildAt(i).setBackgroundColor(Color.RED);
+//                    }
+//                } else {
+//                    itemSelected = i;
+//                    Log.d(GUI_CIRCUIT_TAG, "item selected: " + itemSelected);
+//                    existingCircuitsListView.getChildAt(i).setBackgroundColor(Color.RED);
+//                }
             }
         });
 

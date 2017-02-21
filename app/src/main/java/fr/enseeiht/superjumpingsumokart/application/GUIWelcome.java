@@ -300,7 +300,7 @@ public class GUIWelcome extends Activity {
      * Callback called when the {@link BluetoothServer} is no longer available (Romain Verset - 17/02/2017).
      */
     public void onServerShutDown() {
-        btHostBtn.setBackgroundColor(getResources().getColor(R.color.notConnected));
+        btHostBtn.setBackgroundResource(android.R.drawable.btn_default);
         btHostBtn.setText(getResources().getString(R.string.hostBTButtonOff));
         if (server != null) {
             server = null;

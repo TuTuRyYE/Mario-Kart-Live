@@ -330,15 +330,15 @@ public class GUIGame extends Activity implements GameListener {
 
     @Override
     public void onStop() {
+        super.onStop();
         if (controller.isRunning()) {
             controller.stopController();
         }
-        super.onStop();
         for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
             if (game != null && game.isStarted()) {
                 ggl.onPlayerGaveUp();
-                unregisterGuiGameListener(ggl);
             }
+            unregisterGuiGameListener(ggl);
         }
     }
 
