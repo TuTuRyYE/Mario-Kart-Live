@@ -9,31 +9,17 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:text="@string/idTextDefault"
+            android:text="nameCircuit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView5"
+            android:id="@+id/nameCircuitView"
             android:layout_weight="1" />
 
         <TextView
-            android:text="@string/xDefault"
+            android:text="Laps"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView4"
-            android:layout_weight="1" />
-
-        <TextView
-            android:text="@string/yDefault"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView3"
-            android:layout_weight="1" />
-
-        <TextView
-            android:text="@string/zDefault"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView2"
+            android:id="@+id/numberLapsView"
             android:layout_weight="1" />
     </LinearLayout>
 </LinearLayout>

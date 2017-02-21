@@ -1,6 +1,7 @@
 package fr.enseeiht.superjumpingsumokart.application;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -72,8 +73,6 @@ public class GUICreateCircuit extends Activity {
         // Default marker
         adapter.add(new String[]{"0", "0", "0", "0"});
 
-
-        Log.d(GUI_CREATE_CIRCUIT_TAG, getFilesDir().getAbsolutePath());
 
 
         // Set buttons listener
@@ -156,12 +155,19 @@ public class GUICreateCircuit extends Activity {
     }
 
     protected void createCircuitFile() {
+        // Create the directory
+        String directoryName = "Circuits";
+        File CircuitsDir = new File(GUICreateCircuit.this.getFilesDir() + "/" + directoryName);
+        if (!CircuitsDir.exists()) { // create the folder if it doesn't exist
+            CircuitsDir.mkdir();
+        }
+        String path = GUICreateCircuit.this.getFilesDir() + "/" + directoryName;
         String txtName = circuitNameText.getText().toString();
         String defaultName = getResources().getString(R.string.confirm_btn);
         String lapTxt = lapsText.getText().toString();
         String lapDefault = getResources().getString(R.string.lapsText);
         if (!txtName.equals(defaultName) && !txtName.isEmpty() && !lapTxt.equals(lapDefault) && !lapTxt.equals("0") && !lapTxt.isEmpty()) { // if the user has put a circuit name and a number of lap
-            File circuitFile = new File(GUICreateCircuit.this.getFilesDir(), circuitNameText.getText().toString());
+            File circuitFile = new File(path, circuitNameText.getText().toString());
             if (!circuitFile.exists()) { // if a file with the same name doesn't exist
                 FileOutputStream outputStream;
                 String stringToWrite;
@@ -169,7 +175,7 @@ public class GUICreateCircuit extends Activity {
                 try {
                     // Creating the file and the instance of the circuit
                     Circuit.initInstance(Integer.parseInt(lapTxt));
-                    outputStream = openFileOutput(circuitNameText.getText().toString(), MODE_APPEND);
+                    outputStream = new FileOutputStream(circuitFile);
                     String firstLine = txtName + "/" + lapTxt + "\n";
                     Circuit.getInstance().setName(txtName);
                     outputStream.write(firstLine.getBytes());
@@ -184,8 +190,12 @@ public class GUICreateCircuit extends Activity {
                     }
                     outputStream.close();
                     Log.d(GUI_CREATE_CIRCUIT_TAG, "Circuit file created");
-
+                    Toast.makeText(GUICreateCircuit.this, "Circuit created!", Toast.LENGTH_SHORT).show();
                     // Go back to GUIWelcome
+                    Intent i = new Intent(GUICreateCircuit.this, GUIWelcome.class);
+                    Log.d(GUI_CREATE_CIRCUIT_TAG, "Launching a GUIWelcom Activity...");
+                    startActivity(i);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
