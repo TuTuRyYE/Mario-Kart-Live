@@ -176,7 +176,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
 
                 HashMap<Integer, Vector3D> markers = new HashMap<>();
                 int i;
-                for (i=6; i<=msgSplit.length; i++){
+                for (i=6; i<msgSplit.length; i++){
                     String[] hashSplit = msgSplit[i].split(":");
                     int id = Integer.parseInt(hashSplit[0]);
                     double x = Double.parseDouble(hashSplit[1]);
@@ -263,17 +263,17 @@ public final class BluetoothCommunication extends Thread implements GameListener
         String x, y;
         x = Double.toString(c.getStartPoint().getX());
         y = Double.toString(c.getStartPoint().getY());
-        dataMsg = dataMsg.concat("/" + x + ":" + y + ":" + 0);
+        dataMsg = dataMsg.concat("/" + x + ":" + y + ":" + "0.0");
         x = Double.toString(c.getEndPoints()[0].getX());
         y = Double.toString(c.getEndPoints()[0].getY());
-        dataMsg = dataMsg.concat("/" + x + ":" + y + ":" + 0);
-        x = Double.toString(c.getEndPoints()[0].getX());
-        y = Double.toString(c.getEndPoints()[0].getY());
-        dataMsg = dataMsg.concat("/" + x + ":" + y + ":" + 0);
+        dataMsg = dataMsg.concat("/" + x + ":" + y + ":" + "0.0");
+        x = Double.toString(c.getEndPoints()[1].getX());
+        y = Double.toString(c.getEndPoints()[1].getY());
+        dataMsg = dataMsg.concat("/" + x + ":" + y + ":" + "0.0");
         for (Integer i : c.getMarkersID().keySet()) {
             x = Double.toString(c.getMarkersID().get(i).getX());
             y = Double.toString(c.getMarkersID().get(i).getY());
-            dataMsg = dataMsg.concat("/"+ Integer.toString(i) + ":" + x + ":" + y + ":" + 0);
+            dataMsg = dataMsg.concat("/"+ Integer.toString(i) + ":" + x + ":" + y + ":" + "0.0");
         }
         byte[] dataMsgBytes = dataMsg.getBytes(Charset.forName("UTF-8"));
         write(dataMsgBytes);

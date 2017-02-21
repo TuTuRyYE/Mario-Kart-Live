@@ -95,7 +95,6 @@ public class BluetoothServer extends Thread {
                     isConnected = true;
                     // We close the server socket as it is no longer useful.
                     btSocket.close();
-                    GUI_WELCOME.GUI_WELCOME_HANDLER.sendEmptyMessage(GUIWelcome.BLUETOOTH_SERVER_GOT_CONNECTION);
                 } catch (IOException e) {
                     Log.e(BLUETOOTH_SERVER_TAG, "IOException while getting a socket : " + e.getMessage());
                     cancel();
@@ -103,6 +102,7 @@ public class BluetoothServer extends Thread {
                 break;
             }
         }
+        GUI_WELCOME.GUI_WELCOME_HANDLER.sendEmptyMessage(GUIWelcome.BLUETOOTH_SERVER_GOT_CONNECTION);
         // We launch the BT communication threads.
         BluetoothCommunication.initInstance(socket);
         //The bluetooth communication.

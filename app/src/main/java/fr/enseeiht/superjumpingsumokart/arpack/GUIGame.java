@@ -69,16 +69,21 @@ public class GUIGame extends Activity implements GameListener {
      * Message for the {@link Handler} of the {@link GUIGame} activity.
      */
     public final static int VICTORY = 6;
+
     /**
      * Message for the {@link Handler} of the {@link GUIGame} activity.
      */
     public final static int DEFEAT = 7;
 
     /**
+     *
+     */
+    private static final int LAP_COUNT_UPDATE = 8;
+
+    /**
      * The width of the frames of the Jumping Sumo Camera.
      */
     final static int VIDEO_WIDTH = 640;
-
     /**
      * The height of the frames of the Jumping Sumo Camera.
      */
@@ -129,14 +134,9 @@ public class GUIGame extends Activity implements GameListener {
                     break;
                 case CONTROLLER_STOPPING_ON_ERROR:
                     Toast.makeText(GUIGame.this, "Loosing controller connection", Toast.LENGTH_LONG).show();
-                    try {
-                        wait();
-                    } catch (InterruptedException e) {
-                        Log.d(GUI_GAME_TAG, "Interrupted exception : " + e.getMessage());
-                    }
-                    Toast.makeText(GUIGame.this, "YOU LOSE !", Toast.LENGTH_SHORT).show();
                     for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
                         ggl.onPlayerGaveUp();
+                        unregisterGuiGameListener(ggl);
                     }
                     finish();
                     break;
@@ -153,6 +153,9 @@ public class GUIGame extends Activity implements GameListener {
                     break;
                 case DEFEAT:
                     Toast.makeText(GUIGame.this, "YOU LOST !", Toast.LENGTH_SHORT).show();
+                    break;
+                case LAP_COUNT_UPDATE:
+                    Toast.makeText(GUIGame.this, "Lap " + Integer.toString(controller.getDrone().getCurrentLap()) + "/" + Integer.toString(game.getLapsNumber()), Toast.LENGTH_SHORT).show();
                     break;
                 default:
                     break;
@@ -466,7 +469,7 @@ public class GUIGame extends Activity implements GameListener {
 
     @Override
     public void onPlayerFinishedLap() {
-        Toast.makeText(this, "Lap " + Integer.toString(controller.getDrone().getCurrentLap()) + "/" + Integer.toString(game.getLapsNumber()), Toast.LENGTH_SHORT).show();
+        UPDATER.sendEmptyMessage(GUIGame.LAP_COUNT_UPDATE);
     }
 
     @Override
