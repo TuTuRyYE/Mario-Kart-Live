@@ -15,7 +15,7 @@ import fr.enseeiht.superjumpingsumokart.application.GUIWelcome;
  * Defines the bluetooth client used to communicate with another paired phone.
  * Created by Lucas on 07/02/2017.
  */
-public class BluetoothClient extends Thread implements BluetoothAdapter.LeScanCallback {
+public class BluetoothClient extends Thread {
 
     /**
      * Logging tag. Useful for debugging.
@@ -93,7 +93,6 @@ public class BluetoothClient extends Thread implements BluetoothAdapter.LeScanCa
                 btSocket.connect();
             } catch (Exception ex) {
                 Log.e(BLUETOOTH_CLIENT_TAG, "Failed to connect : " + e.getMessage());
-            } finally {
                 cancel();
             }
             return;
@@ -111,19 +110,14 @@ public class BluetoothClient extends Thread implements BluetoothAdapter.LeScanCa
      * Closes the connection.
      */
     private void cancel() {
+        Log.d(BLUETOOTH_CLIENT_TAG, "Cancel called.");
         try {
             if (btSocket != null) {
                 btSocket.close();
+                GUI_WELCOME.GUI_WELCOME_HANDLER.sendEmptyMessage(GUIWelcome.BLUETOOTH_CLIENT_SHUTTED_DOWN);
             }
         } catch (IOException e) {
             Log.e(BLUETOOTH_CLIENT_TAG, "IOException while closing socket : " + e.getMessage());
         }
-        GUI_WELCOME.GUI_WELCOME_HANDLER.sendEmptyMessage(GUIWelcome.BLUETOOTH_CLIENT_SHUTTED_DOWN);
-    }
-
-    // Performed every times a LE scan occurs.
-    @Override
-    public void onLeScan(BluetoothDevice device, int rssi, byte[] scanRecord) {
-        btAdapter.stopLeScan(this);
     }
 }
