@@ -19,9 +19,9 @@ import fr.enseeiht.superjumpingsumokart.R;
 public class CircuitAdapter extends ArrayAdapter<String[]> {
 
     /**
-     * Position of the last selected circuit.
+     * Position of the current circuit.
      */
-    public static int selectedPos = 0;
+    public static int selectedPos = -1;
 
 
     public CircuitAdapter(Context context, ArrayList<String[]> circuits) {

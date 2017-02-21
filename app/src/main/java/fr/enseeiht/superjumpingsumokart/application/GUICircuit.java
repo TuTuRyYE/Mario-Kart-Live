@@ -94,7 +94,7 @@ public class GUICircuit extends Activity {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         existingCircuitsListView.getChildAt(selectedPos).setBackgroundColor(Color.BLUE);
-                        if (CircuitAdapter.selectedPos != selectedPos) {
+                        if (CircuitAdapter.selectedPos >=  0) {
                             existingCircuitsListView.getChildAt(CircuitAdapter.selectedPos).setBackgroundColor(Color.TRANSPARENT);
                         }
                         CircuitAdapter.selectedPos = selectedPos;
@@ -140,12 +140,13 @@ public class GUICircuit extends Activity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedPos = i;
-                if (selectedPos != oldSelectedPos && selectedPos != CircuitAdapter.selectedPos && oldSelectedPos >= 0) {
-                    existingCircuitsListView.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
+                if (oldSelectedPos != selectedPos && oldSelectedPos != CircuitAdapter.selectedPos && oldSelectedPos >= 0) {
+                    existingCircuitsListView.getChildAt(oldSelectedPos).setBackgroundColor(Color.TRANSPARENT);
                 }
                 if (selectedPos != CircuitAdapter.selectedPos) {
                     view.setBackgroundColor(Color.RED);
                 }
+                oldSelectedPos = selectedPos;
 //                if (itemSelected != null) {
 //                    if (itemSelected == i) {
 //                        if (!(existingCircuitsListView.getChildAt(i).getDrawingCacheBackgroundColor() == Color.BLUE)) {
