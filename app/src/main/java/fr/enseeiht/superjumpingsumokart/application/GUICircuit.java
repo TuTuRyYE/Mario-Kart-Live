@@ -2,6 +2,7 @@ package fr.enseeiht.superjumpingsumokart.application;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -58,6 +59,7 @@ public class GUICircuit extends Activity {
 
             existingCircuits = new ArrayList<>();
 
+
         // Adapter for the listView
         adapter = new CircuitAdapter(GUICircuit.this, existingCircuits);
         LayoutInflater inflater = getLayoutInflater();
@@ -90,7 +92,37 @@ public class GUICircuit extends Activity {
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
                             Log.d(GUI_CIRCUIT_TAG, "Chose selected circuit pressed");
-                            //TODO create the instance of circuit according to the selected circuit
+                            // Get the selected circuit
+                            String[] circuitSelected = (String[]) existingCircuitsListView.getItemAtPosition(itemSelected);
+                            String circuitName = circuitSelected[0];
+                            Log.d(GUI_CIRCUIT_TAG, "Name circuit selected: " + circuitName);
+                            Circuit.initInstance(Integer.parseInt(circuitSelected[1]));
+                            Circuit.getInstance().setName(circuitName);
+                            // Get the corresponding file
+                            String filePath = GUICircuit.this.getFilesDir() + "/Circuits/" + circuitName;
+                            File circuitFile = new File(filePath);
+                            try {
+                                FileInputStream fis = new FileInputStream(circuitFile);
+                                InputStreamReader isr = new InputStreamReader(fis);
+                                BufferedReader bufferedReader = new BufferedReader(isr);
+                                String line;
+                                String[] lineSplit;
+                                Double x,y,z;
+                                line = bufferedReader.readLine(); // skip the first line
+                                while ((line = bufferedReader.readLine()) != null) {
+                                    lineSplit = line.split(" ");
+                                    x = Double.parseDouble(lineSplit[1]);
+                                    y = Double.parseDouble(lineSplit[2]);
+                                    z = Double.parseDouble(lineSplit[3]);
+                                    Circuit.getInstance().addMarker(Integer.parseInt(lineSplit[0]), new Vector3D(x,y,z) );
+                                    Log.d(GUI_CIRCUIT_TAG, "Marker " + lineSplit[0] + ":" + x + " " + y + " " + z +" added");
+                            }
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
                             break;
                     }
                     return true;
@@ -100,8 +132,25 @@ public class GUICircuit extends Activity {
         existingCircuitsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                itemSelected = i;
-                adapterView.setSelection(i);
+                if (itemSelected != null) {
+                    if (itemSelected == i) {
+                        existingCircuitsListView.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
+                        itemSelected = null;
+                    }
+                    else {
+                        existingCircuitsListView.getChildAt(itemSelected).setBackgroundColor(Color.TRANSPARENT);
+                        itemSelected = i;
+                        existingCircuitsListView.getChildAt(i).setBackgroundColor(Color.RED);
+                    }
+                }
+                else {
+                    itemSelected = i;
+                    Log.d(GUI_CIRCUIT_TAG, "item selected: " + itemSelected);
+                    existingCircuitsListView.getChildAt(i).setBackgroundColor(Color.RED);
+                }
+
+
+
             }
         });
 
@@ -147,19 +196,36 @@ public class GUICircuit extends Activity {
                 BufferedReader bufferedReader = new BufferedReader(isr);
                 StringBuilder sb = new StringBuilder();
                 String line;
-                //TODO
                 line = bufferedReader.readLine();
                 String[] lineSplit = line.split("/");
                 adapter.add(new String[]{lineSplit[0], lineSplit[1]});
-
-                while ((line = bufferedReader.readLine()) != null) {
-                    sb.append(line);
-                }
-                Log.d(GUI_CIRCUIT_TAG, sb.toString());
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
         }
+
+        // Highlight the current circuit instance if it exists
+
+        /*Log.d(GUI_CIRCUIT_TAG,"Size: " +  existingCircuits.size());
+        if (Circuit.getInstance() != null) {
+            String name = Circuit.getInstance().getName();
+            boolean found = false;
+            int i= 0;
+            while (!found && i<existingCircuits.size()) {
+                Log.d(GUI_CIRCUIT_TAG, "Circuit name: " + name);
+                Log.d(GUI_CIRCUIT_TAG, "Name in the list: " + existingCircuits.get(i)[0]);
+                if (existingCircuits.get(i)[0].equals(name)) {
+                    Log.d(GUI_CIRCUIT_TAG, "circuit found");
+                    found = true;
+                    //TODO correct it
+                    if (existingCircuitsListView.getChildAt(i+1) == null) {
+                        Log.d(GUI_CIRCUIT_TAG, "listview null");
+                    }
+                    existingCircuitsListView.getChildAt(i+1).setBackgroundColor(Color.BLUE);
+                }
+                i++;
+            }
+        }*/
     }
 }

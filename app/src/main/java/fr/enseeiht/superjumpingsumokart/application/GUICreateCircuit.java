@@ -2,6 +2,7 @@ package fr.enseeiht.superjumpingsumokart.application;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -147,8 +148,21 @@ public class GUICreateCircuit extends Activity {
         listMarkers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                itemSelected = i;
-                adapterView.setSelection(i);
+                if (itemSelected != null) {
+                    if (itemSelected == i) {
+                        listMarkers.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
+                        itemSelected = null;
+                    }
+                    else {
+                        listMarkers.getChildAt(itemSelected).setBackgroundColor(Color.TRANSPARENT);
+                        itemSelected = i;
+                        listMarkers.getChildAt(i).setBackgroundColor(Color.RED);
+                    }
+                }
+                else {
+                    itemSelected = i;
+                    listMarkers.getChildAt(i).setBackgroundColor(Color.RED);
+                }
             }
         });
 
