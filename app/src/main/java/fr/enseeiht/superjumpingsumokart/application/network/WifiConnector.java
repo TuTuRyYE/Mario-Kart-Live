@@ -114,6 +114,8 @@ public class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedRecei
                     public void onServiceConnected(ComponentName name, IBinder service) {
                         discoveryService = ((ARDiscoveryService.LocalBinder) service).getService();
                         discoveryService.start();
+                        discoveryService.stopBLEDiscovering();
+                        discoveryService.stopUsbDiscovering();
                     }
 
                     // When the connection is closed or lost, stops the discovery service if it exists
