@@ -97,7 +97,7 @@ public class GUICircuit extends Activity {
                             existingCircuitsListView.getChildAt(CircuitAdapter.selectedPos).setBackgroundColor(Color.TRANSPARENT);
                         }
                         existingCircuitsListView.getChildAt(selectedPos).setBackgroundColor(Color.BLUE);
-                        CircuitAdapter.selectedPos = selectedPos - 1;
+                        CircuitAdapter.selectedPos = selectedPos;
                         Log.d(GUI_CIRCUIT_TAG, "Chose selected circuit pressed");
                         // Get the selected circuit
                         String[] circuitSelected = (String[]) existingCircuitsListView.getItemAtPosition(itemSelected);

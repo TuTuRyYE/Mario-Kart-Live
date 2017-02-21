@@ -416,6 +416,11 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
     }
 
     @Override
+    public void onBluetoothCommunicationClosed() {
+
+    }
+
+    @Override
     public void onDroneControllerReady() {
         droneControllerReady = true;
         checkReadyAndStartRace();
