@@ -85,6 +85,7 @@ public class Circuit {
     private Circuit(int laps) {
         // Number of laps
         this.lapsNumber = laps;
+        name = "yolo";
         // startline and endline
         Vector3D startPosition = new Vector3D(STARTPOINTX, STARTPOINTY, STARTPOINTZ);
         Vector3D endPoint1 = new Vector3D(ENDPOINT1X, ENDPOINT1Y, ENDPOINT1Z);

@@ -40,7 +40,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
     /**
      * List of instances listening to the singleton of {@link BluetoothCommunication}.
      */
-    private final ArrayList<BluetoothCommunicationListener> COMMUNICATION_BT_LISTENERS = new ArrayList<>();
+    private final ArrayList<BluetoothCommunicationListener> BLUETOOTH_COMMUNICATION_LISTENERS = new ArrayList<>();
     /**
      * The {@link InputStream} on which messages are received.
      */
@@ -55,6 +55,8 @@ public final class BluetoothCommunication extends Thread implements GameListener
      * A reference to a {@link Game} instance.
      */
     private Game game;
+
+    private boolean isRunning;
 
     /**
      * Default constructor of {@link BluetoothCommunication}.
@@ -93,8 +95,9 @@ public final class BluetoothCommunication extends Thread implements GameListener
     public void run() {
         byte[] buffer = new byte[1024];
         int bytes;
+        isRunning = true;
         // Permanent listening on the input stream.
-        while (true) {
+        while (isRunning) {
             try {
                 // Reading on the input stream.
                 bytes = btInputStream.read(buffer);
@@ -116,7 +119,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
     }
 
     /**
-     * Parse a message and then dispatch notifications to listeners in {@link BluetoothCommunication#COMMUNICATION_BT_LISTENERS}.
+     * Parse a message and then dispatch notifications to listeners in {@link BluetoothCommunication#BLUETOOTH_COMMUNICATION_LISTENERS}.
      *
      * @param receivedMsg The received message to parse.
      */
@@ -126,22 +129,23 @@ public final class BluetoothCommunication extends Thread implements GameListener
         Log.d(BLUETOOTH_COMMUNICATION_TAG, "Message " + key + " received");
         switch (key) {
             case "isReady":
-                for (BluetoothCommunicationListener listener : this.COMMUNICATION_BT_LISTENERS) {
+                for (BluetoothCommunicationListener listener : this.BLUETOOTH_COMMUNICATION_LISTENERS) {
                     listener.onSecondPlayerReady();
                 }
                 break;
             case "hasFinished":
-                for (BluetoothCommunicationListener listener : this.COMMUNICATION_BT_LISTENERS) {
+                for (BluetoothCommunicationListener listener : this.BLUETOOTH_COMMUNICATION_LISTENERS) {
                     listener.onSecondPlayerFinished();
                 }
+                cancel();
                 break;
             case "hasFinishedLap":
-                for (BluetoothCommunicationListener listener : this.COMMUNICATION_BT_LISTENERS) {
+                for (BluetoothCommunicationListener listener : this.BLUETOOTH_COMMUNICATION_LISTENERS) {
                     listener.onSecondPlayerLapFinished();
                 }
                 break;
             case "itemUsed":
-                for (BluetoothCommunicationListener listener : this.COMMUNICATION_BT_LISTENERS) {
+                for (BluetoothCommunicationListener listener : this.BLUETOOTH_COMMUNICATION_LISTENERS) {
                     String itemInfos;
                     if (msgSplit.length == 2) { // if the object hasn't a position
                         itemInfos = msgSplit[1];
@@ -172,7 +176,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
 
                 HashMap<Integer, Vector3D> markers = new HashMap<>();
                 int i;
-                for (i=6; i<=msgSplit.length; i++){
+                for (i=6; i<msgSplit.length; i++){
                     String[] hashSplit = msgSplit[i].split(":");
                     int id = Integer.parseInt(hashSplit[0]);
                     double x = Double.parseDouble(hashSplit[1]);
@@ -187,17 +191,18 @@ public final class BluetoothCommunication extends Thread implements GameListener
 
                 // We add the circuit to the game
                 Circuit.setInstance(c);
-                for (BluetoothCommunicationListener bcl : COMMUNICATION_BT_LISTENERS) {
+                for (BluetoothCommunicationListener bcl : BLUETOOTH_COMMUNICATION_LISTENERS) {
                     bcl.onCircuitReceived();
                 }
                 break;
-                    case "hasGiveUp":
-                for (BluetoothCommunicationListener listener : this.COMMUNICATION_BT_LISTENERS) {
+            case "hasGiveUp":
+                for (BluetoothCommunicationListener listener : this.BLUETOOTH_COMMUNICATION_LISTENERS) {
                     listener.onSecondPlayerGaveUp();
                 }
+                cancel();
                 break;
             case "hasTouchedItem":
-                for (BluetoothCommunicationListener listener : this.COMMUNICATION_BT_LISTENERS) {
+                for (BluetoothCommunicationListener listener : this.BLUETOOTH_COMMUNICATION_LISTENERS) {
                     String itemInfos;
                     if (msgSplit.length == 2) { // if the object hasn't a position
                         itemInfos = msgSplit[1];
@@ -208,12 +213,12 @@ public final class BluetoothCommunication extends Thread implements GameListener
                 }
                 break;
             case "raceBegins":
-                for (BluetoothCommunicationListener listener : this.COMMUNICATION_BT_LISTENERS) {
+                for (BluetoothCommunicationListener listener : this.BLUETOOTH_COMMUNICATION_LISTENERS) {
                     listener.onSecondStartRace();
                 }
                 break;
             case "updatedPosition":
-                for (BluetoothCommunicationListener listener : this.COMMUNICATION_BT_LISTENERS) {
+                for (BluetoothCommunicationListener listener : this.BLUETOOTH_COMMUNICATION_LISTENERS) {
                     String newPosition = msgSplit[1] + "/" + msgSplit[2] + "/" + msgSplit[3];
                     listener.onSecondPlayerUpdatedPosition(newPosition);
                 }
@@ -240,8 +245,13 @@ public final class BluetoothCommunication extends Thread implements GameListener
      */
     private void cancel() {
         try {
-            BT_SOCKET.close();
-            unregisterGameListener(game);
+            isRunning = false;
+            if (BT_SOCKET != null) {
+                BT_SOCKET.close();
+            }
+            for (BluetoothCommunicationListener bcl : BLUETOOTH_COMMUNICATION_LISTENERS) {
+                unregisterBluetoothCommunicationListener(bcl);
+            }
         } catch (IOException e) {
             Log.d(BLUETOOTH_COMMUNICATION_TAG, "IOException while closing socket : + " + e.getMessage());
         }
@@ -253,17 +263,17 @@ public final class BluetoothCommunication extends Thread implements GameListener
         String x, y;
         x = Double.toString(c.getStartPoint().getX());
         y = Double.toString(c.getStartPoint().getY());
-        dataMsg = dataMsg.concat("/" + x + ":" + y + ":" + 0);
+        dataMsg = dataMsg.concat("/" + x + ":" + y + ":" + "0.0");
         x = Double.toString(c.getEndPoints()[0].getX());
         y = Double.toString(c.getEndPoints()[0].getY());
-        dataMsg = dataMsg.concat("/" + x + ":" + y + ":" + 0);
-        x = Double.toString(c.getEndPoints()[0].getX());
-        y = Double.toString(c.getEndPoints()[0].getY());
-        dataMsg = dataMsg.concat("/" + x + ":" + y + ":" + 0);
+        dataMsg = dataMsg.concat("/" + x + ":" + y + ":" + "0.0");
+        x = Double.toString(c.getEndPoints()[1].getX());
+        y = Double.toString(c.getEndPoints()[1].getY());
+        dataMsg = dataMsg.concat("/" + x + ":" + y + ":" + "0.0");
         for (Integer i : c.getMarkersID().keySet()) {
             x = Double.toString(c.getMarkersID().get(i).getX());
             y = Double.toString(c.getMarkersID().get(i).getY());
-            dataMsg = dataMsg.concat("/"+ Integer.toString(i) + ":" + x + ":" + y + ":" + 0);
+            dataMsg = dataMsg.concat("/"+ Integer.toString(i) + ":" + x + ":" + y + ":" + "0.0");
         }
         byte[] dataMsgBytes = dataMsg.getBytes(Charset.forName("UTF-8"));
         write(dataMsgBytes);
@@ -271,11 +281,11 @@ public final class BluetoothCommunication extends Thread implements GameListener
     }
 
     private void registerCommunicationBTListener(BluetoothCommunicationListener gameListener) {
-        COMMUNICATION_BT_LISTENERS.add(gameListener);
+        BLUETOOTH_COMMUNICATION_LISTENERS.add(gameListener);
     }
 
-    private void unregisterGameListener(BluetoothCommunicationListener gameListener) {
-        COMMUNICATION_BT_LISTENERS.remove(gameListener);
+    private void unregisterBluetoothCommunicationListener(BluetoothCommunicationListener gameListener) {
+        BLUETOOTH_COMMUNICATION_LISTENERS.remove(gameListener);
     }
 
     @Override
@@ -299,6 +309,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
         // Send the message
         write(dataBytes);
         Log.d(BLUETOOTH_COMMUNICATION_TAG, "onPlayerFinished sent to the other phone");
+        cancel();
     }
 
     @Override
@@ -339,6 +350,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
         // Send the message
         write(dataBytes);
         Log.d(BLUETOOTH_COMMUNICATION_TAG, "onPlayerGaveUp sent to the other phone");
+        cancel();
     }
 
     @Override
@@ -387,7 +399,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
     public void setGame(Game game) {
         if (game != null) {
             this.game = game;
-            if (!COMMUNICATION_BT_LISTENERS.contains(game)) {
+            if (!BLUETOOTH_COMMUNICATION_LISTENERS.contains(game)) {
                 registerCommunicationBTListener(game);
             }
         }

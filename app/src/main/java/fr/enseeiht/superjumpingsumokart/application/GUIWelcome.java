@@ -69,10 +69,10 @@ public class GUIWelcome extends Activity {
                     onServerReceivedConnection();
                     break;
                 case BLUETOOTH_SERVER_SHUTTED_DOWN:
-                    onServerShuttedDown();
+                    onServerShutDown();
                 break;
                 case BLUETOOTH_CLIENT_SHUTTED_DOWN:
-                    onClientShuttedDown();
+                    onClientShutDown();
                 break;
                 default :
                     break;
@@ -99,6 +99,7 @@ public class GUIWelcome extends Activity {
     private List<ARDiscoveryDeviceService> devicesList = new ArrayList<>();
 
     private boolean isServer = true;
+    private boolean serverHosting, clientConnected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,16 +197,25 @@ public class GUIWelcome extends Activity {
      * //TODO
      */
     private void btHostBtnAction() {
-        server = new BluetoothServer(GUIWelcome.this);
-        server.start();
+        if (!serverHosting) {
+            server = new BluetoothServer(GUIWelcome.this);
+            server.start();
+            serverHosting = true;
+        } else {
+            onServerShutDown();
+        }
     }
     /**
      * //TODO
      */
     private void btJoinBtnAction() {
-        isServer = false;
-        client = new BluetoothClient(GUIWelcome.this);
-        client.start();
+        if (!clientConnected) {
+            isServer = false;
+            client = new BluetoothClient(GUIWelcome.this);
+            client.start();
+        } else {
+            onClientShutDown();
+        }
     }
     /**
      * //TODO
@@ -271,28 +281,31 @@ public class GUIWelcome extends Activity {
     private void onClientConnected() {
         btJoinBtn.setBackgroundColor(getResources().getColor(R.color.connected));
         this.btJoinBtn.setText(getResources().getString(R.string.joinBTButtonOn));
+        clientConnected = true;
     }
 
     /**
      * Callback called when the {@link BluetoothClient} is no longer available (Romain Verset - 17/02/2017).
      */
-    private void onClientShuttedDown() {
+    private void onClientShutDown() {
         btJoinBtn.setBackgroundColor(getResources().getColor(R.color.notConnected));
         this.btJoinBtn.setText(getResources().getString(R.string.joinBTButtonOff));
         if (client != null) {
             client = null;
         }
+        clientConnected = false;
     }
 
     /**
      * Callback called when the {@link BluetoothServer} is no longer available (Romain Verset - 17/02/2017).
      */
-    public void onServerShuttedDown() {
+    public void onServerShutDown() {
         btHostBtn.setBackgroundColor(getResources().getColor(R.color.notConnected));
         btHostBtn.setText(getResources().getString(R.string.hostBTButtonOff));
         if (server != null) {
             server = null;
         }
+        serverHosting = false;
     }
 
 }
