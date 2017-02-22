@@ -44,7 +44,8 @@
                 android:value="fr.enseeiht.superjumpingsumokart.application.GUIWelcome" />
         </activity>
         <activity android:name=".application.GUICircuit" />
-        <activity android:name=".application.GUICreateCircuit"></activity>
+        <activity android:name=".application.GUICreateCircuit" />
+        <activity android:name=".application.GUIModifyCircuit"></activity>
     </application>
 
 </manifest>

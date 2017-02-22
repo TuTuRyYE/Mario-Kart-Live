@@ -2,6 +2,7 @@ package fr.enseeiht.superjumpingsumokart.application;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,7 @@ public class CircuitAdapter extends ArrayAdapter<String[]> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
+
         if(convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_circuit,parent, false);
         }
@@ -49,7 +51,9 @@ public class CircuitAdapter extends ArrayAdapter<String[]> {
         //il ne reste plus qu'à remplir notre vue
         viewHolder.circuitName.setText(currentCircuit[0]);
         viewHolder.numberLaps.setText(currentCircuit[1]);
+
         return convertView;
+
     }
 
     private class CircuitViewHolder{

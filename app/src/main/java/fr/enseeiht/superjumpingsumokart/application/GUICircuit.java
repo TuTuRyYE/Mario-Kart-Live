@@ -3,7 +3,6 @@ package fr.enseeiht.superjumpingsumokart.application;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,8 +12,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -26,7 +25,7 @@ import java.util.ArrayList;
 
 import fr.enseeiht.superjumpingsumokart.R;
 
-import static java.lang.Thread.sleep;
+
 
 public class GUICircuit extends Activity {
 
@@ -100,7 +99,7 @@ public class GUICircuit extends Activity {
                         CircuitAdapter.selectedPos = selectedPos;
                         Log.d(GUI_CIRCUIT_TAG, "Chose selected circuit pressed");
                         // Get the selected circuit
-                        String[] circuitSelected = (String[]) existingCircuitsListView.getItemAtPosition(itemSelected);
+                        String[] circuitSelected = (String[]) existingCircuitsListView.getItemAtPosition(selectedPos);
                         String circuitName = circuitSelected[0];
                         Log.d(GUI_CIRCUIT_TAG, "Name circuit selected: " + circuitName);
                         Circuit.initInstance(Integer.parseInt(circuitSelected[1]));
@@ -129,7 +128,13 @@ public class GUICircuit extends Activity {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        HighLightCircuit();
+                        Toast.makeText(GUICircuit.this, "Circuit selected", Toast.LENGTH_SHORT).show();
+                        // Go Back to GUIWelcome
+                        Intent i = new Intent(GUICircuit.this, GUIWelcome.class);
+                        Log.d(GUI_CIRCUIT_TAG, "Launching a GUIWelcome Activity...");
+                        startActivity(i);
+
+
                         break;
                 }
                 return true;
@@ -145,28 +150,9 @@ public class GUICircuit extends Activity {
                 }
                 view.setBackgroundColor(Color.RED);
                 oldSelectedPos = selectedPos;
-//                if (itemSelected != null) {
-//                    if (itemSelected == i) {
-//                        if (!(existingCircuitsListView.getChildAt(i).getDrawingCacheBackgroundColor() == Color.BLUE)) {
-//                            Log.d(GUI_CIRCUIT_TAG, "yolo1");
-//                        existingCircuitsListView.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
-//                        itemSelected = null;
-//                        }
-//                        else {
-//                            itemSelected = null;
-//                        }
-//                    } else {
-//                        if (!(existingCircuitsListView.getChildAt(i).getDrawingCacheBackgroundColor() == Color.BLUE)) {
-//                            existingCircuitsListView.getChildAt(itemSelected).setBackgroundColor(Color.TRANSPARENT);
-//                        }
-//                        itemSelected = i;
-//                        existingCircuitsListView.getChildAt(i).setBackgroundColor(Color.RED);
-//                    }
-//                } else {
-//                    itemSelected = i;
-//                    Log.d(GUI_CIRCUIT_TAG, "item selected: " + itemSelected);
-//                    existingCircuitsListView.getChildAt(i).setBackgroundColor(Color.RED);
-//                }
+                if (CircuitAdapter.selectedPos >= 0) {
+                    existingCircuitsListView.getChildAt(CircuitAdapter.selectedPos).setBackgroundColor(Color.BLUE);
+                }
             }
         });
 
@@ -176,7 +162,18 @@ public class GUICircuit extends Activity {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         Log.d(GUI_CIRCUIT_TAG, "deleteCircuit pressed");
-                        //TODO delete the circuit
+                        // Get the circuit
+                        String[] circuitSelected = (String[]) existingCircuitsListView.getItemAtPosition(selectedPos);
+                        String circuitName = circuitSelected[0];
+                        // Get the corresponding file
+                        String filePath = GUICircuit.this.getFilesDir() + "/Circuits/" + circuitName;
+                        File circuitFile = new File(filePath);
+                        boolean isDeleted = circuitFile.delete();
+                        if (isDeleted) {
+                            adapter.remove(circuitSelected);
+                            adapter.notifyDataSetChanged();
+                            Log.d(GUI_CIRCUIT_TAG, "Circuit " + circuitName + " deleted");
+                        }
                         break;
                 }
                 return true;
@@ -189,7 +186,12 @@ public class GUICircuit extends Activity {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         Log.d(GUI_CIRCUIT_TAG, "modifyCircuit pressed");
-                        //TODO sent to an activity to modify the circuit
+                        Intent i = new Intent(GUICircuit.this, GUIModifyCircuit.class);
+                        String[] circuitSelected = (String[]) existingCircuitsListView.getItemAtPosition(selectedPos);
+                        String circuitName = circuitSelected[0];
+                        i.putExtra("circuitName", circuitName);
+                        Log.d(GUI_CIRCUIT_TAG, "Launching a GUIModifyCircuit Activity...");
+                        startActivity(i);
                         break;
                 }
                 return true;
@@ -212,8 +214,20 @@ public class GUICircuit extends Activity {
                 String line;
                 line = bufferedReader.readLine();
                 String[] lineSplit = line.split("/");
-                adapter.add(new String[]{lineSplit[0], lineSplit[1]});
-                Log.d(GUI_CIRCUIT_TAG, "circuit add to the list");
+                // Check if the file is not in the list
+                boolean found = false;
+                int k = 0;
+                while (!found && k<existingCircuits.size()) {
+                    if (files[i].getName().equals(existingCircuits.get(k)[0])) {
+                        found = true;
+                    }
+                    k++;
+                }
+                if (!found) {
+                    adapter.add(new String[]{lineSplit[0], lineSplit[1]});
+                    Log.d(GUI_CIRCUIT_TAG, "circuit add to the list");
+                }
+                //adapter.add(new String[]{lineSplit[0], lineSplit[1]});
                 fis.close();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -222,41 +236,12 @@ public class GUICircuit extends Activity {
         }
     }
 
-    protected void HighLightCircuit() {
-        // Highlight the current circuit instance if it exists
-
-        Log.d(GUI_CIRCUIT_TAG, "Size: " + existingCircuits.size());
-        if (Circuit.getInstance() != null) {
-            String name = Circuit.getInstance().getName();
-            boolean found = false;
-            int i = 0;
-            Log.d(GUI_CIRCUIT_TAG, "Child count: " + existingCircuitsListView.getChildCount());
-            while (!found && i < existingCircuits.size()) {
-                Log.d(GUI_CIRCUIT_TAG, "Circuit name: " + name);
-                Log.d(GUI_CIRCUIT_TAG, "Name in the list: " + existingCircuits.get(i)[0]);
-                if (existingCircuits.get(i)[0].equals(name)) {
-                    Log.d(GUI_CIRCUIT_TAG, "i :" + i);
-                    Log.d(GUI_CIRCUIT_TAG, "circuit found");
-                    found = true;
-                    if (existingCircuitsListView .getChildAt(1)== null) {
-                        Log.d(GUI_CIRCUIT_TAG, "listview null 1");
-                    }
-                    if (existingCircuitsListView .getChildAt(0)== null) {
-                        Log.d(GUI_CIRCUIT_TAG, "listview null 0");
-                    }
-                    existingCircuitsListView.getChildAt(i+1).setBackgroundColor(Color.BLUE);
-
-                }
-                i++;
-            }
-        }
-    }
 
     @Override
     protected void onResume(){
         super.onResume();
         existingCircuitsListView.setAdapter(adapter);
         setExistingCircuitsList();
-        HighLightCircuit();
+        // HighLightCircuit();
     }
 }
