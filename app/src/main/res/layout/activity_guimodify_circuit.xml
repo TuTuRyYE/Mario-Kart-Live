@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_guimodifycircuit"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="fr.enseeiht.superjumpingsumokart.application.GUIModifyCircuit">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="61dp">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text|textPersonName"
+                android:ems="10"
+                android:id="@+id/circuitNameText"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:hint="@string/circuitNameText" />
+
+            <EditText
+                android:layout_width="163dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:id="@+id/lapsText"
+                android:inputType="number"
+                android:hint="@string/lapsText" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="115dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1.14">
+
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="289dp"
+                android:id="@+id/listMarkers"
+                android:clickable="true"
+                android:drawSelectorOnTop="true" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/form">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:id="@+id/idText"
+                android:inputType="number"
+                android:layout_weight="1"
+                android:hint="@string/idTextDefault" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:id="@+id/xText"
+                android:inputType="number"
+                android:layout_weight="1"
+                android:hint="@string/xDefault" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:id="@+id/yText"
+                android:inputType="number"
+                android:layout_weight="1"
+                android:hint="@string/yDefault" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/zText"
+                android:layout_weight="1"
+                android:hint="@string/zDefault" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="81dp"
+            android:weightSum="1">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/addMarkerBtn"
+                android:text="@string/add_marker_btn"
+                android:layout_weight="0.79" />
+
+            <Button
+                android:text="@string/confirm_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/confirmBtn" />
+
+            <Button
+                android:text="@string/deleteMarker"
+                android:layout_width="193dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/deleteMarkerBtn" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
