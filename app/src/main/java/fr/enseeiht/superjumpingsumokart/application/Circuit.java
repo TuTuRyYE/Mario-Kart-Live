@@ -4,7 +4,9 @@ import android.util.Log;
 import java.io.Serializable;
 import java.util.HashMap;
 
+import fr.enseeiht.superjumpingsumokart.application.items.Item;
 import fr.enseeiht.superjumpingsumokart.application.network.BluetoothCommunication;
+import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
  * Modelises a circuit in Super Jumping Sumo Kart.
@@ -18,65 +20,70 @@ public class Circuit {
      */
     private final static String CIRCUIT_TAG = "CIRCUIT";
     /**
-     * The name of the circuit
+     * The name of the circuit.
      */
-    private String name;
+    private String name = "yolo";
     /**
-     * The coordinates of the end point of the start line. The other point of the line is (0,0,0)
+     * The coordinates of the end point of the start line. The other point of the line is (0,0,0).
      */
     private Vector3D startPoint;
     /**
-     * A table of the coordinates of the two points of the end line. The first point must be the most left and if it is not possible the highest up possible
+     * A table of the coordinates of the two points of the end line. The first point must be the most left and if it is not possible the highest up possible.
      */
     private Vector3D[] endPoints = new Vector3D[2];
     /**
-     * The markers present on the circuit. Each marker is defined by one unique id and its position
+     * The markers present on the circuit. Each marker is defined by one unique id and its position.
      */
     private HashMap<Integer,Vector3D> markersID;
     /**
-     * The number of laps a player has to do to complete the circuit
+     * The number of laps a player has to do to complete the circuit.
      */
     private int lapsNumber;
 
     /**
-     * The number of checkPoint to check to complete a circuit's lap
+     * The markers containing an item on the circuit.
+     */
+    private HashMap<DetectionTask.symbols,Item> objects;
+
+    /**
+     * The number of checkPoint to check to complete a circuit's lap.
      */
     private int checkPointToCheck;
 
     /**
-     * The coordinates of the startline and endline (for the moment they're written manually here)
+     * The coordinates of the startline and endline (for the moment they're written manually here).
      */
     private final static double STARTPOINTX = 2.0;
     /**
-     * The coordinates of the startline and endline (for the moment they're written manually here)
+     * The coordinates of the startline and endline (for the moment they're written manually here).
      */
     private final static double STARTPOINTY = 0;
     /**
-     * The coordinates of the startline and endline (for the moment they're written manually here)
+     * The coordinates of the startline and endline (for the moment they're written manually here).
      */
     private final static double STARTPOINTZ = 0;
     /**
-     * The coordinates of the startline and endline (for the moment they're written manually here)
+     * The coordinates of the startline and endline (for the moment they're written manually here).
      */
     private final static double ENDPOINT1X = 10;
     /**
-     * The coordinates of the startline and endline (for the moment they're written manually here)
+     * The coordinates of the startline and endline (for the moment they're written manually here).
      */
     private final static double ENDPOINT1Y = 10;
     /**
-     * The coordinates of the startline and endline (for the moment they're written manually here)
+     * The coordinates of the startline and endline (for the moment they're written manually here).
      */
     private final static double ENDPOINT1Z = 0;
     /**
-     * The coordinates of the startline and endline (for the moment they're written manually here)
+     * The coordinates of the startline and endline (for the moment they're written manually here).
      */
     private final static double ENDPOINT2X = 20;
     /**
-     * The coordinates of the startline and endline (for the moment they're written manually here)
+     * The coordinates of the startline and endline (for the moment they're written manually here).
      */
     private final static double ENDPOINT2Y = 10;
     /**
-     * The coordinates of the startline and endline (for the moment they're written manually here)
+     * The coordinates of the startline and endline (for the moment they're written manually here).
      */
     private final static double ENDPOINT2Z = 0;
 
@@ -117,12 +124,13 @@ public class Circuit {
      * @param endPoints The end points of the circuit.
      * @param markersID An association between the ID and the position of the markers.
      */
-    public Circuit(String name, int lapsNumber, Vector3D startPoint, Vector3D[] endPoints, HashMap<Integer, Vector3D> markersID) {
+    public Circuit(String name, int lapsNumber, Vector3D startPoint, Vector3D[] endPoints, HashMap<Integer, Vector3D> markersID, HashMap<DetectionTask.symbols,Item> objects) {
         this.name = name;
         this.lapsNumber = lapsNumber;
         this.startPoint = startPoint;
         this.endPoints = endPoints;
         this.markersID = markersID;
+        this.objects = objects;
     }
 
     /**
@@ -201,6 +209,16 @@ public class Circuit {
     public void addMarker(int markerID, Vector3D position) {
         this.markersID.put(markerID, position);
     }
+
+    /**
+     * Add an object to the list of objects present on the circuit.
+     * @param symbol the symbol of the marker.
+     * @param item the object.
+     */
+    public void addObject(DetectionTask.symbols symbol,Item item){
+        this.objects.put(symbol,item);
+    }
+
     /**
      * Remove a marker from the list of markers present on the circuit
      * @param markerID the id of the marker to be removed
@@ -208,6 +226,12 @@ public class Circuit {
     public void removeMarker(int markerID){
         this.markersID.remove(markerID);
     }
+
+    /**
+     * Remove an object of the circuit.
+     * @param symbol the symbol of the marker associated to the object.
+     */
+    public void removeObject(DetectionTask.symbols symbol){ this.objects.remove(symbol); }
     /**
      * Get the list of markers.
      * @return the list of markers.
