@@ -24,6 +24,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import fr.enseeiht.superjumpingsumokart.R;
+import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
  * @author Vivian GUY
@@ -127,9 +128,7 @@ public class GUICircuit extends Activity {
                                         String[] circuitSelected = (String[]) existingCircuitsListView.getItemAtPosition(selectedItem);
                                         String circuitName = circuitSelected[0];
                                         Log.d(GUI_CIRCUIT_TAG, "Name circuit selected: " + circuitName);
-                                        int laps = Integer.parseInt(circuitSelected[1]);
-                                        Circuit.initInstance(laps);
-                                        Circuit.getInstance().setName(circuitName);
+
 
                                     // Get the corresponding file
                                         String filePath = GUICircuit.this.getFilesDir() + "/Circuits/" + circuitName;
@@ -140,19 +139,15 @@ public class GUICircuit extends Activity {
                                                 InputStreamReader isr = new InputStreamReader(fis);
                                                 BufferedReader bufferedReader = new BufferedReader(isr);
                                                 String line;
-                                                String[] lineSplit;
-                                                Double x, y, z;
-                                                int id;
-                                                bufferedReader.readLine(); // skip the first line because it contains name and laps of the circuit
+                                                line = bufferedReader.readLine(); // Get the number of checkpoint to complete a lap and the number of lap
+                                                String[] lineSplit = line.split("/");
+                                                int laps = Integer.parseInt(circuitSelected[1]);
+                                                int nbChecKPoint = Integer.parseInt(lineSplit[2]);
+                                                Circuit.initInstance(laps, nbChecKPoint);
+                                                Circuit.getInstance().setName(circuitName);
                                                 while ((line = bufferedReader.readLine()) != null) {
-                                                    // Each line has the following format: id x y z
-                                                        lineSplit = line.split(" ");
-                                                        id = Integer.parseInt(lineSplit[0]);
-                                                        x = Double.parseDouble(lineSplit[1]);
-                                                        y = Double.parseDouble(lineSplit[2]);
-                                                        z = Double.parseDouble(lineSplit[3]);
-                                                        Circuit.getInstance().addMarker(id, new Vector3D(x, y, z));
-                                                        Log.d(GUI_CIRCUIT_TAG, "Marker " + lineSplit[0] + ":" + x + " " + y + " " + z + " added");
+                                                        Circuit.getInstance().addMarker(DetectionTask.Symbol.valueOf(line));
+                                                        Log.d(GUI_CIRCUIT_TAG, "Marker " + line + " added");
                                                 }
                                         } catch (FileNotFoundException e) {
                                             e.printStackTrace();
