@@ -173,10 +173,21 @@ public class Circuit {
     public void setStartPoint(Vector3D startPoint) {
         this.startPoint = startPoint;
     }
+
+
+    /**
+     * Get the hashmap of the object associated to a marker
+     * @return the hashmap
+     */
+    public HashMap<DetectionTask.symbols, Item> getObjects() {
+        return objects;
+    }
+
     /**
      * Get the two  end Points.
      * @return array of 2 end Point.
      */
+
     public Vector3D[] getEndPoints() {
         return endPoints;
     }

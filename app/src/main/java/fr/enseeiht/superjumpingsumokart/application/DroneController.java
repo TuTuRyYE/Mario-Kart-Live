@@ -8,6 +8,7 @@ import com.parrot.arsdk.arcommands.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_E
 import java.util.ArrayList;
 
 import fr.enseeiht.superjumpingsumokart.application.items.NullItem;
+import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 /**
  * @author Matthieu Michel, Romain Verset
@@ -140,10 +141,17 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     public void useItem() {
         if (deviceController != null && running) {
             Log.d(DRONE_CONTROLLER_TAG, "USE ITEM order received !");
-            DRONE.getCurrentItem().useItem(this);
-            DRONE.setCurrentItem(new NullItem());
+            DetectionTask.symbols lastMarkerSeen = DRONE.getLastMarkerSeen();
+            if( (Circuit.getInstance().getObjects().get(lastMarkerSeen))!=null) {
+                DRONE.getCurrentItem().useItem(this);
+                DRONE.setCurrentItem(new NullItem());
+            }
+            else {
+                Log.d(DRONE_CONTROLLER_TAG," USE ITEM can't be used because there is allready an object on the marker. Please Try again");
+            }
+            }
         }
-    }
+
     /**
      * Makes the drone jump (Matthieu Michel - 30/01/2017).
      */

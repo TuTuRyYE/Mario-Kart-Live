@@ -32,7 +32,7 @@ public class Banana extends Item {
 
     @Override
     public void useItem(DroneController droneController) {
-        this.setPosition(droneController.getDrone().getCurrentPosition());
+
         Log.d(ITEM_TAG, "A banana has been put on the circuit");
     }
 

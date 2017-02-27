@@ -27,11 +27,9 @@ public class MagicBox extends Item {
     /**
      * Default constructor of the class {@link Item}. (Matthieu Michel - 02/02/2017).
      *
-     * @param position position of the magic box on the circuit
      */
-    public MagicBox(Vector3D position) {
+    public MagicBox() {
         super(NAME);
-        this.setPosition(position);
     }
 
     @Override
