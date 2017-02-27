@@ -27,13 +27,13 @@ public class Circuit {
     /**
      * The markers present on the circuit. Each marker is defined by its order in the circuit and its symbol
      */
-    private HashMap<Integer ,DetectionTask.symbols> markers;
+    private HashMap<Integer ,DetectionTask.Symbol> markers;
 
     /**
      * Get the list of markers.
      * @return the list.
      */
-    public HashMap<Integer, DetectionTask.symbols> getMarkers() {
+    public HashMap<Integer, DetectionTask.Symbol> getMarkers() {
         return markers;
     }
 
@@ -45,14 +45,14 @@ public class Circuit {
     /**
      * The markers containing an item on the circuit.
      */
-    private HashMap<DetectionTask.symbols,Item> objects;
+    private HashMap<DetectionTask.Symbol,Item> objects;
 
     /**
      * The number of checkPoint to check to complete a circuit's lap.
      */
     private int checkPointToCheck;
 
-    public HashMap<DetectionTask.symbols, Item> getObjects() {
+    public HashMap<DetectionTask.Symbol, Item> getObjects() {
         return objects;
     }
 
@@ -114,12 +114,12 @@ public class Circuit {
      * Add markers to the list of markers present on the circuit
      * @param symbol the symbol of the marker
      */
-    public void addMarker(DetectionTask.symbols symbol) {
+    public void addMarker(DetectionTask.Symbol symbol) {
         this.markers.put(this.markers.size() + 1, symbol);
     }
 
     public void removeMarker(int position) {
-        DetectionTask.symbols symbol;
+        DetectionTask.Symbol symbol;
         // remove the marker
             this.markers.remove(position);
         // Adapt the position of others markers
@@ -136,7 +136,7 @@ public class Circuit {
      * @param symbol the symbol of the marker.
      * @param item the object.
      */
-    public void addObject(DetectionTask.symbols symbol,Item item){
+    public void addObject(DetectionTask.Symbol symbol,Item item){
         this.objects.put(symbol,item);
     }
 
@@ -144,12 +144,12 @@ public class Circuit {
      * Remove an object of the circuit.
      * @param symbol the symbol of the marker associated to the object.
      */
-    public void removeObject(DetectionTask.symbols symbol){ this.objects.remove(symbol); }
+    public void removeObject(DetectionTask.Symbol symbol){ this.objects.remove(symbol); }
     /**
      * Get the list of markers.
      * @return the list of markers.
      */
-    public HashMap<Integer, DetectionTask.symbols> getMarkersID() {
+    public HashMap<Integer, DetectionTask.Symbol> getMarkersID() {
         return markers;
     }
 

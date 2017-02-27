@@ -97,7 +97,6 @@ public class GUICreateCircuit extends Activity {
             listSymbols.add("D");
             listSymbols.add("F");
             listSymbols.add("G");
-            listSymbols.add("HIRO");
             listSymbols.add("KANJI");
 
         // Adapter for the spinner
@@ -123,7 +122,7 @@ public class GUICreateCircuit extends Activity {
                                     String symbol = symbolText.getSelectedItem().toString();
                                     if (!symbol.isEmpty()) { // if the Spinner is not empty
                                         // Add the marker to markers list
-                                            adapter.add(new String(symbol));
+                                            adapter.add(symbol);
                                             // Remove the symbol from the list if it isn't "KANJI" (others symbol can appear only one time in the circuit)
                                             if (!symbol.equals("KANJI")) {
                                                 listSymbols.remove(symbol);
@@ -263,7 +262,7 @@ public class GUICreateCircuit extends Activity {
                             for (String s : markers) {
                                 stringToWrite = s + "\n";
                                 outputStream.write(stringToWrite.getBytes());
-                                Circuit.getInstance().addMarker(DetectionTask.symbols.valueOf(s));
+                                Circuit.getInstance().addMarker(DetectionTask.Symbol.valueOf(s));
                             }
                             String lastLines = "HIRO" + "\n" + "HIRO";
                             outputStream.write(lastLines.getBytes());
