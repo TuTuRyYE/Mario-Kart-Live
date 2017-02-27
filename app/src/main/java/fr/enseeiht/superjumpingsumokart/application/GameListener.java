@@ -41,7 +41,7 @@ public interface GameListener {
      * Called when an {@link Item} is touched on the {@link Circuit}
      * @param item the item touched
      */
-    void onItemTouched(Item item, DetectionTask.Symbol itemSymbol);
+    void onItemTouched(Item item, DetectionTask.Symbol symbol);
 
     /**
      * Called when the two players are ready and the start begins

@@ -31,7 +31,6 @@ import org.artoolkit.ar.base.ARToolKit;
 import org.artoolkit.ar.base.AndroidUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import fr.enseeiht.superjumpingsumokart.R;
 import fr.enseeiht.superjumpingsumokart.application.Circuit;
@@ -292,44 +291,6 @@ public class GUIGame extends Activity implements GameListener {
                 }
             }
         });
-        sendTrapBtn.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_BUTTON_RELEASE) {
-                    Log.d(GUI_GAME_TAG, "ACTION_BUTTON_RELEASE");
-                    if (motionEvent.getDownTime() > 500) {
-                        Item item  = controller.getDrone().getCurrentItem();
-                        controller.useItem();
-                        for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
-                            DetectionTask.Symbol lastMarkerSeen = controller.getDrone().getLastMarkerSeen();
-                            HashMap<Integer, DetectionTask.Symbol> markersCircuit = Circuit.getInstance().getMarkers();
-                            // Get the following marker of lastMarkerSeen in markersCircuit
-                                Boolean found = false;
-                                DetectionTask.Symbol nextSymbol = lastMarkerSeen;
-                                int i=0;
-                                while (!found && i<markersCircuit.size()) {
-                                    if (markersCircuit.get(i).name().equals(lastMarkerSeen.name())) {
-                                        found = true;
-                                    }
-                                    nextSymbol = markersCircuit.get(i+1);
-                                    i++;
-                                }
-                                ggl.onItemUsed(nextSymbol, item);
-                        }
-                    }
-                    else {
-                        Item item = controller.getDrone().getCurrentItem();
-                        controller.useItem();
-                        for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
-                            ggl.onItemUsed(controller.getDrone().getLastMarkerSeen(), item);
-                        }
-                    }
-                }
-                return true;
-            }
-
-        });
-
         jumpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -524,15 +485,14 @@ public class GUIGame extends Activity implements GameListener {
     }
 
     @Override
-    public void onItemTouched(Item item, DetectionTask.Symbol itemSymbol) {
-
+    public void onItemTouched(Item item, DetectionTask.Symbol symbol) {
+        item.applyEffect(controller);
     }
 
     @Override
     public void onStartRace() {
         controller.setRunning(true);
     }
-
 
 
     public void notifyDefeat() {
@@ -551,6 +511,10 @@ public class GUIGame extends Activity implements GameListener {
         for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
             ggl.onSymbolTouched(symbol);
         }
+    }
+
+    public ItemRenderer getRenderer() {
+        return renderer;
     }
 
     public void addDroneInGame(Drone drone) {
