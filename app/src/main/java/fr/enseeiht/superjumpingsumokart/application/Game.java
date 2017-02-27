@@ -203,12 +203,15 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
                 itemMarker = DetectionTask.Symbol.valueOf(msgSplit[1]);
                 Banana banana = new Banana();
                 Circuit.getInstance().addObject(itemMarker,banana);
+                guiGame.getRenderer().defineModelAtSymbol(banana, itemMarker);
+
                 break;
             case "box":
                 Log.d(GAME_TAG,"A box has been put on the circuit by second player");
                 itemMarker = DetectionTask.Symbol.valueOf(msgSplit[1]);
                 Box box = new Box();
                 Circuit.getInstance().addObject(itemMarker,box);
+                guiGame.getRenderer().defineModelAtSymbol(box, itemMarker);
                 break;
         }
     }
@@ -218,6 +221,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
         String[] msgSplit = msg.split("/");
         DetectionTask.Symbol symbol = DetectionTask.Symbol.valueOf(msgSplit[1]);
         Circuit.getInstance().removeObject(symbol);
+        guiGame.getRenderer().deleteModelAtSymbole(symbol);
     }
 
 
@@ -225,6 +229,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
     public void onItemUsed(DetectionTask.Symbol symbol, Item item) {
         Log.d(GAME_TAG,"Information received from Item : item has been put on the circuit");
         Circuit.getInstance().addObject(symbol, item);
+
         for(GameListener listener  : this.GAME_LISTENERS) {
             listener.onPlayerUseItem(item,symbol);
         }
@@ -235,8 +240,10 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
         Item item = Circuit.getInstance().getObjects().get(symbol);
         if (item != null) {
             for (GameListener listener : this.GAME_LISTENERS) {
-                listener.onItemTouched(item, symbol);
+                listener.onItemTouched(item);
             }
+            Circuit.getInstance().removeObject(symbol);
+            guiGame.getRenderer().deleteModelAtSymbole(symbol);
         }
 
     }

@@ -494,11 +494,6 @@ public class GUIGame extends Activity implements GameListener {
         controller.setRunning(true);
     }
 
-    @Override
-    public void onUpdatedPosition(Vector3D position) {
-        controller.getDrone().setCurrentPosition(position);
-    }
-
     public void notifyDefeat() {
         if (!game.isFinished()) {
             UPDATER.sendEmptyMessage(DEFEAT);
@@ -515,6 +510,10 @@ public class GUIGame extends Activity implements GameListener {
         for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
             ggl.onSymbolTouched(symbol);
         }
+    }
+
+    public ItemRenderer getRenderer() {
+        return renderer;
     }
 
     public void addDroneInGame(Drone drone) {

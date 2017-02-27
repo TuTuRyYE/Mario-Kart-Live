@@ -20,7 +20,8 @@ public interface GuiGameListener {
     /**
      * Method used to notify {@link Game} that an {@link Item} as been touched by the {@link Drone}.
      * Actually it does not provide directly a reference on the touched {@link Item} but on the
-     * ARToolkit marker hit by the drone. The item is then retrieved according to the marker.
+     * ARToolkit marker hit by the drone. The item is then retrieved according to the marker if it
+     * exists.
      * @param symbol the symbole touched by the player
      */
     void onSymbolTouched(DetectionTask.Symbol symbol);

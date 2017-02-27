@@ -17,7 +17,7 @@ import fr.enseeiht.superjumpingsumokart.application.items.Item;
  * Created by JorgeEnrique on 2/02/2017.
  */
 
-final class ItemRenderer extends ARRenderer {
+public final class ItemRenderer extends ARRenderer {
 
     final static HashMap<DetectionTask.Symbol, Integer> SYMBOLS_HASH_MAP = new HashMap<>();
 
@@ -54,6 +54,12 @@ final class ItemRenderer extends ARRenderer {
 
     }
 
+    public void deleteModelAtSymbole(DetectionTask.Symbol symbol) {
+        String symbolString = symbol.name().toLowerCase();
+        int id = SYMBOLS_HASH_MAP.get(symbol);
+        ARToolKit.getInstance().addModel("Data/models/void.obj", "single;Dara/patt.".concat(symbolString).concat(";80"), id, .0f, false);
+    }
+
     @Override
     public void onDrawFrame(GL10 gl) {
         if (ARToolKit.getInstance().getProjectionMatrix() != null) {
@@ -69,5 +75,4 @@ final class ItemRenderer extends ARRenderer {
     public void draw(GL10 gl) {
         ARToolKit.getInstance().drawModels();
     }
-
 }
