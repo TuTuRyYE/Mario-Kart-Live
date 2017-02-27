@@ -41,15 +41,11 @@ public interface GameListener {
      * Called when an {@link Item} is touched on the {@link Circuit}
      * @param item the item touched
      */
-    void onItemTouched(Item item);
+    void onItemTouched(Item item, DetectionTask.symbols itemSymbol);
 
     /**
      * Called when the two players are ready and the start begins
      */
     void onStartRace();
 
-    /**
-     * Called when the player update its position
-     */
-    void onUpdatedPosition(Vector3D position);
 }

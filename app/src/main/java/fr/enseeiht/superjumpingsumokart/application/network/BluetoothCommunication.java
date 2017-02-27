@@ -162,63 +162,17 @@ public final class BluetoothCommunication extends Thread implements GameListener
                 Log.d(BLUETOOTH_COMMUNICATION_TAG, "Circuit string received : " + receivedMsg);
 
                 int lapsNumber = Integer.parseInt(msgSplit[1]);
-                int checkPointtoCkeck = Integer.parseInt(msgSplit[2]);
+                int checkPointToCkeck = Integer.parseInt(msgSplit[2]);
 
-              /*  String[] posStart = msgSplit[3].split(":");
-                String[] posEnd1 = msgSplit[4].split(":");
-                String[] posEnd2 = msgSplit[5].split(":");
-
-                Vector3D startPoint = new Vector3D(Double.parseDouble(posStart[0]),
-                Double.parseDouble(posStart[1]),Double.parseDouble(posStart[2]));
-                Vector3D endPoint1 = new Vector3D(Double.parseDouble(posEnd1[0]),
-                Double.parseDouble(posEnd1[1]),Double.parseDouble(posEnd1[2]));
-                Vector3D endPoint2 = new Vector3D(Double.parseDouble(posEnd2[0]),
-                        Double.parseDouble(posEnd2[1]),Double.parseDouble(posEnd2[2]));
-
-
-             */
-
-                Circuit.initInstance(lapsNumber,checkPointtoCkeck);
-
+                Circuit.initInstance(lapsNumber,checkPointToCkeck);
                 int i;
                 for (i=3; i<msgSplit.length; i++){
                     String[] hashSplit = msgSplit[i].split(":");
                     int id = Integer.parseInt(hashSplit[0]);
                     String symbolsType = hashSplit[1];
-                    DetectionTask.symbols symbol = null;
-                    switch (symbolsType) {
-                        case("HIRO") :
-                            symbol = DetectionTask.symbols.HIRO;
-                            break;
-                        case("KANJI") :
-                            symbol = DetectionTask.symbols.KANJI;
-                            break;
-                        case("A") :
-                            symbol = DetectionTask.symbols.A;
-                            break;
-                        case("B") :
-                            symbol = DetectionTask.symbols.B;
-                            break;
-                        case("C") :
-                            symbol = DetectionTask.symbols.C;
-                            break;
-                        case("D") :
-                            symbol = DetectionTask.symbols.D;
-                            break;
-                        case("E") :
-                            symbol = DetectionTask.symbols.E;
-                            break;
-                        case("F") :
-                            symbol = DetectionTask.symbols.F;
-                            break;
-                        case("G") :
-                            symbol = DetectionTask.symbols.G;
-                            break;
-                    }
-
+                    DetectionTask.symbols symbol = DetectionTask.symbols.valueOf(symbolsType);
                     Circuit.getInstance().addMarker(symbol);
-
-                }
+                    }
 
                 for (BluetoothCommunicationListener bcl : BLUETOOTH_COMMUNICATION_LISTENERS) {
                     bcl.onCircuitReceived();
@@ -282,21 +236,10 @@ public final class BluetoothCommunication extends Thread implements GameListener
 
     public void sendCircuit() {
         Circuit c = Circuit.getInstance();
-        String dataMsg = "circuit/" + Integer.toString(c.getLaps()) + "/" + c.getName();
-        String x, y;
-        x = Double.toString(c.getStartPoint().getX());
-        y = Double.toString(c.getStartPoint().getY());
-        dataMsg = dataMsg.concat("/" + x + ":" + y + ":" + "0.0");
-        x = Double.toString(c.getEndPoints()[0].getX());
-        y = Double.toString(c.getEndPoints()[0].getY());
-        dataMsg = dataMsg.concat("/" + x + ":" + y + ":" + "0.0");
-        x = Double.toString(c.getEndPoints()[1].getX());
-        y = Double.toString(c.getEndPoints()[1].getY());
-        dataMsg = dataMsg.concat("/" + x + ":" + y + ":" + "0.0");
-        for (Integer i : c.getMarkersID().keySet()) {
-            x = Double.toString(c.getMarkersID().get(i).getX());
-            y = Double.toString(c.getMarkersID().get(i).getY());
-            dataMsg = dataMsg.concat("/"+ Integer.toString(i) + ":" + x + ":" + y + ":" + "0.0");
+        String dataMsg = "circuit/" + Integer.toString(c.getLaps()) + "/" + c.getCheckPointToCheck();
+        for (int i : c.getMarkers().keySet()) {
+            DetectionTask.symbols symbol = c.getMarkers().get(i);
+            dataMsg = dataMsg.concat("/"+ Integer.toString(i) + ":" + symbol.name());
         }
         byte[] dataMsgBytes = dataMsg.getBytes(Charset.forName("UTF-8"));
         write(dataMsgBytes);
@@ -347,15 +290,15 @@ public final class BluetoothCommunication extends Thread implements GameListener
     }
 
     @Override
-    public void onPlayerUseItem(final Item item, final DetectionTask.symbols lastMarkerSeen) {
+    public void onPlayerUseItem(final Item item, final DetectionTask.symbols itemSymbol) {
         Log.d(BLUETOOTH_COMMUNICATION_TAG, "onPlayerUseItem called");
         // Creates message
         String dataString;
         String name = item.getName();
-        Vector3D position = item.getPosition();
-        String nameMarker = lastMarkerSeen.name();
-        if (position != null) {
-            dataString = "itemUsed" + "/" + name + "/" + position.getX() + "/" + position.getY() + "/" + position.getZ()+"/"+ nameMarker;
+
+        if (itemSymbol != null) {
+            String nameMarker = itemSymbol.name();
+            dataString = "itemUsed" + "/" + name + "/" + nameMarker;
         } else {
             dataString = "itemUsed" + "/" + name;
         }
@@ -378,14 +321,14 @@ public final class BluetoothCommunication extends Thread implements GameListener
     }
 
     @Override
-    public void onItemTouched(final Item item) {
+    public void onItemTouched(final Item item, final DetectionTask.symbols itemSymbol) {
         Log.d(BLUETOOTH_COMMUNICATION_TAG, "onItemTouched called");
         // Create message
         String dataString;
         String name = item.getName();
-        Vector3D position = item.getPosition();
-        if (position != null) {
-            dataString = "hasTouchedItem" + "/" + name + "/" + position.getX() + "/" + position.getY() + "/" + position.getZ();
+
+        if (itemSymbol != null) {
+            dataString = "hasTouchedItem" + "/" + name + "/" + itemSymbol.name();
         } else {
             dataString = "hasTouchedItem" + "/" + name;
         }
@@ -406,16 +349,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
         Log.d(BLUETOOTH_COMMUNICATION_TAG, "onStartRace sent to the other phone");
     }
 
-    @Override
-    public void onUpdatedPosition(final Vector3D position) {
-        Log.d(BLUETOOTH_COMMUNICATION_TAG, "onUpdatedPosition called");
-        // Create message
-        String dataString = "updatedPosition" + "/" + position.getX() + "/" + position.getY() + "/" + position.getZ();
-        byte[] dateBytes = dataString.getBytes(Charset.forName("UTF-8"));
-        // Send the message
-        write(dateBytes);
-        Log.d(BLUETOOTH_COMMUNICATION_TAG, "onUpdatedPosition sent to the other phone");
-    }
+
 
     /**
      * @param game The game to listen events from.

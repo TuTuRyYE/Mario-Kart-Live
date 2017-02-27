@@ -45,12 +45,7 @@ public interface BluetoothCommunicationListener {
      */
     void onSecondPlayerTouchedItem(final String msg);
 
-    /**
-     * Notify the game of the second player new position.
-     *
-     * @param msg the second player position.
-     */
-    void onSecondPlayerUpdatedPosition(final String msg);
+
 
     /**
      * Notify a circuit has been received from bluetooth communication

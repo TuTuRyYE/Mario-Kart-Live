@@ -33,6 +33,10 @@ public class Circuit {
      */
     private int lapsNumber;
 
+    public int getCheckPointToCheck() {
+        return checkPointToCheck;
+    }
+
     /**
      * The markers containing an item on the circuit.
      */
@@ -140,7 +144,7 @@ public class Circuit {
      * Get the list of markers.
      * @return the list of markers.
      */
-    public HashMap<Integer, DetectionTask.symbols> getMarkersID() {
+    public HashMap<Integer, DetectionTask.symbols> getMarkers() {
         return markers;
     }
 
