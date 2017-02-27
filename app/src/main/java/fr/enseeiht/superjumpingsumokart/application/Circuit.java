@@ -52,6 +52,9 @@ public class Circuit {
      */
     private int checkPointToCheck;
 
+    public HashMap<DetectionTask.symbols, Item> getObjects() {
+        return objects;
+    }
 
     private static Circuit circuitInstance;
 
@@ -60,7 +63,7 @@ public class Circuit {
      * @param laps
      * @param checkPointToCheck
      */
-    public Circuit(int laps, int checkPointToCheck) {
+   private Circuit(int laps, int checkPointToCheck) {
         this.lapsNumber = laps;
         this.checkPointToCheck = checkPointToCheck;
         this.markers = new HashMap<>();
@@ -78,7 +81,7 @@ public class Circuit {
      * Initialises the singleton instance of {@link Circuit}.
      * @param laps The number of laps for the circuit.
      */
-    static void initInstance(int laps, int checkPointToCheck) {
+    public static void initInstance(int laps, int checkPointToCheck) {
         if (circuitInstance == null) {
             circuitInstance = new Circuit(laps, checkPointToCheck);
         }

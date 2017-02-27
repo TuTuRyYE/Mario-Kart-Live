@@ -148,10 +148,10 @@ public final class BluetoothCommunication extends Thread implements GameListener
             case "itemUsed":
                 for (BluetoothCommunicationListener listener : this.BLUETOOTH_COMMUNICATION_LISTENERS) {
                     String itemInfos;
-                    if (msgSplit.length == 2) { // if the object hasn't a position
+                    if (msgSplit.length == 2) { // if the object isn't on a marker
                         itemInfos = msgSplit[1];
-                    } else { // if the object has a position
-                        itemInfos = msgSplit[1] + "/" + msgSplit[2] + "/" + msgSplit[3] + "/" + msgSplit[4] + "/" + msgSplit[5];
+                    } else { // if the object is on a marker
+                        itemInfos = msgSplit[1]+ "/" + msgSplit[2];
                     }
                     listener.onSecondPlayerUsesItem(itemInfos);
                 }
@@ -162,9 +162,9 @@ public final class BluetoothCommunication extends Thread implements GameListener
                 Log.d(BLUETOOTH_COMMUNICATION_TAG, "Circuit string received : " + receivedMsg);
 
                 int lapsNumber = Integer.parseInt(msgSplit[1]);
-                String name = msgSplit[2];
+                int checkPointtoCkeck = Integer.parseInt(msgSplit[2]);
 
-                String[] posStart = msgSplit[3].split(":");
+              /*  String[] posStart = msgSplit[3].split(":");
                 String[] posEnd1 = msgSplit[4].split(":");
                 String[] posEnd2 = msgSplit[5].split(":");
 
@@ -175,23 +175,51 @@ public final class BluetoothCommunication extends Thread implements GameListener
                 Vector3D endPoint2 = new Vector3D(Double.parseDouble(posEnd2[0]),
                         Double.parseDouble(posEnd2[1]),Double.parseDouble(posEnd2[2]));
 
-                HashMap<Integer, Vector3D> markers = new HashMap<>();
+
+             */
+
+                Circuit.initInstance(lapsNumber,checkPointtoCkeck);
+
                 int i;
-                for (i=6; i<msgSplit.length; i++){
+                for (i=3; i<msgSplit.length; i++){
                     String[] hashSplit = msgSplit[i].split(":");
                     int id = Integer.parseInt(hashSplit[0]);
-                    double x = Double.parseDouble(hashSplit[1]);
-                    double y = Double.parseDouble(hashSplit[2]);
-                    double z = Double.parseDouble(hashSplit[3]);
-                    markers.put(id,new Vector3D(x,y,z));
+                    String symbolsType = hashSplit[1];
+                    DetectionTask.symbols symbol = null;
+                    switch (symbolsType) {
+                        case("HIRO") :
+                            symbol = DetectionTask.symbols.HIRO;
+                            break;
+                        case("KANJI") :
+                            symbol = DetectionTask.symbols.KANJI;
+                            break;
+                        case("A") :
+                            symbol = DetectionTask.symbols.A;
+                            break;
+                        case("B") :
+                            symbol = DetectionTask.symbols.B;
+                            break;
+                        case("C") :
+                            symbol = DetectionTask.symbols.C;
+                            break;
+                        case("D") :
+                            symbol = DetectionTask.symbols.D;
+                            break;
+                        case("E") :
+                            symbol = DetectionTask.symbols.E;
+                            break;
+                        case("F") :
+                            symbol = DetectionTask.symbols.F;
+                            break;
+                        case("G") :
+                            symbol = DetectionTask.symbols.G;
+                            break;
+                    }
+
+                    Circuit.getInstance().addMarker(symbol);
+
                 }
 
-                Vector3D[] endPoints = {endPoint1, endPoint2};
-
-                Circuit c = new Circuit(name, lapsNumber, startPoint, endPoints, markers);
-
-                // We add the circuit to the game
-                Circuit.setInstance(c);
                 for (BluetoothCommunicationListener bcl : BLUETOOTH_COMMUNICATION_LISTENERS) {
                     bcl.onCircuitReceived();
                 }
@@ -205,10 +233,10 @@ public final class BluetoothCommunication extends Thread implements GameListener
             case "hasTouchedItem":
                 for (BluetoothCommunicationListener listener : this.BLUETOOTH_COMMUNICATION_LISTENERS) {
                     String itemInfos;
-                    if (msgSplit.length == 2) { // if the object hasn't a position
+                    if (msgSplit.length == 2) { // if the object hasn't assigned to a marker
                         itemInfos = msgSplit[1];
-                    } else { // si the object has a position
-                        itemInfos = msgSplit[1] + "/" + msgSplit[2] + "/" + msgSplit[3] + "/" + msgSplit[4];
+                    } else { // if the object was on a marker
+                        itemInfos = msgSplit[1] + "/" + msgSplit[2];
                     }
                     listener.onSecondPlayerTouchedItem(itemInfos);
                 }
@@ -216,12 +244,6 @@ public final class BluetoothCommunication extends Thread implements GameListener
             case "raceBegins":
                 for (BluetoothCommunicationListener listener : this.BLUETOOTH_COMMUNICATION_LISTENERS) {
                     listener.onSecondStartRace();
-                }
-                break;
-            case "updatedPosition":
-                for (BluetoothCommunicationListener listener : this.BLUETOOTH_COMMUNICATION_LISTENERS) {
-                    String newPosition = msgSplit[1] + "/" + msgSplit[2] + "/" + msgSplit[3];
-                    listener.onSecondPlayerUpdatedPosition(newPosition);
                 }
                 break;
         }
