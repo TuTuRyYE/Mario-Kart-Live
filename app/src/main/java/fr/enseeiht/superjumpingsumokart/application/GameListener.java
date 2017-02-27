@@ -1,6 +1,7 @@
 package fr.enseeiht.superjumpingsumokart.application;
 
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
+import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
  * Created by Vivian on 15/02/2017.
@@ -29,7 +30,7 @@ public interface GameListener {
      * Called when the player use an {@link Item}.
      * @param item the item used
      */
-    void onPlayerUseItem(Item item);
+    void onPlayerUseItem(Item item, DetectionTask.symbols lastMarkerSeen);
 
     /**
      * Called when the player give up the race.

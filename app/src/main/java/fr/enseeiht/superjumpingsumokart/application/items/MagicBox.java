@@ -41,13 +41,16 @@ public class MagicBox extends Item {
     @Override
     public void applyEffect(DroneController droneController) {
         Log.d(ITEM_TAG, "A magic box has been touched");
-        int rand = (int) Math.floor(Math.random() * 2);
+        int rand = (int) Math.floor(Math.random() * 3);
         Item item;
         if (rand == 1) { //Banana
             item = new Banana();
         } else if (rand == 2) { //Box
             item = new Box();
-        } else {
+        } else if (rand ==3) { //Shell
+            item = new RedShell();
+        }
+        else {
             item = null;
         }
 

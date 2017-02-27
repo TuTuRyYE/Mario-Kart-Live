@@ -15,6 +15,7 @@ import fr.enseeiht.superjumpingsumokart.application.Game;
 import fr.enseeiht.superjumpingsumokart.application.GameListener;
 import fr.enseeiht.superjumpingsumokart.application.Vector3D;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
+import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
  * Bluetooth communication channel used in the application so that to phones can send messages to
@@ -150,7 +151,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
                     if (msgSplit.length == 2) { // if the object hasn't a position
                         itemInfos = msgSplit[1];
                     } else { // if the object has a position
-                        itemInfos = msgSplit[1] + "/" + msgSplit[2] + "/" + msgSplit[3] + "/" + msgSplit[4];
+                        itemInfos = msgSplit[1] + "/" + msgSplit[2] + "/" + msgSplit[3] + "/" + msgSplit[4] + "/" + msgSplit[5];
                     }
                     listener.onSecondPlayerUsesItem(itemInfos);
                 }
@@ -324,14 +325,15 @@ public final class BluetoothCommunication extends Thread implements GameListener
     }
 
     @Override
-    public void onPlayerUseItem(final Item item) {
+    public void onPlayerUseItem(final Item item, final DetectionTask.symbols lastMarkerSeen) {
         Log.d(BLUETOOTH_COMMUNICATION_TAG, "onPlayerUseItem called");
         // Creates message
         String dataString;
         String name = item.getName();
         Vector3D position = item.getPosition();
+        String nameMarker = lastMarkerSeen.name();
         if (position != null) {
-            dataString = "itemUsed" + "/" + name + "/" + position.getX() + "/" + position.getY() + "/" + position.getZ();
+            dataString = "itemUsed" + "/" + name + "/" + position.getX() + "/" + position.getY() + "/" + position.getZ()+"/"+ nameMarker;
         } else {
             dataString = "itemUsed" + "/" + name;
         }
