@@ -6,6 +6,7 @@ import fr.enseeiht.superjumpingsumokart.application.items.Banana;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
 import fr.enseeiht.superjumpingsumokart.application.items.NullItem;
 import fr.enseeiht.superjumpingsumokart.application.items.RedShell;
+import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
  * Created by Vivian on 27/01/2017.
@@ -37,6 +38,27 @@ public class Drone {
      *  Marker's id the drone has seen during the lap.
      */
     private ArrayList<Integer> markersSeen;
+
+    /**
+     * Get the last marker seen
+     * @return the marker
+     */
+    public DetectionTask.symbols getLastMarkerSeen() {
+        return lastMarkerSeen;
+    }
+
+    /**
+     * Set the last marker seen
+     * @param lastMarkerSeen the marker
+     */
+    public void setLastMarkerSeen(DetectionTask.symbols lastMarkerSeen) {
+        this.lastMarkerSeen = lastMarkerSeen;
+    }
+
+    /**
+     * The last marker detected
+     */
+    private DetectionTask.symbols lastMarkerSeen;
 
     /**
      * Constructor for the class {@link Drone}.
