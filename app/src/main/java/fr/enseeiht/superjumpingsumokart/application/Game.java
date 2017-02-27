@@ -240,7 +240,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
         Item item = Circuit.getInstance().getObjects().get(symbol);
         if (item != null) {
             for (GameListener listener : this.GAME_LISTENERS) {
-                listener.onItemTouched(item);
+                listener.onItemTouched(item, symbol);
             }
             Circuit.getInstance().removeObject(symbol);
             guiGame.getRenderer().deleteModelAtSymbole(symbol);

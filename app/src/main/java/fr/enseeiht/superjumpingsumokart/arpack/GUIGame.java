@@ -485,7 +485,7 @@ public class GUIGame extends Activity implements GameListener {
     }
 
     @Override
-    public void onItemTouched(Item item) {
+    public void onItemTouched(Item item, DetectionTask.Symbol symbol) {
         item.applyEffect(controller);
     }
 
