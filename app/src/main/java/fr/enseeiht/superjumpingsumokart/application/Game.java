@@ -224,7 +224,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
     public void onSecondPlayerUsesItem(String msg) {
         String[] msgSplit = msg.split("/");
         String name = msgSplit[0];
-        DetectionTask.symbols itemMarker = null;
+        DetectionTask.symbols itemMarker;
         switch (name) {
             case "redshell":
                 Log.d(GAME_TAG,"You've been hit by a shell!");
@@ -234,70 +234,14 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
                 break;
             case "banana":
                 Log.d(GAME_TAG,"A banana has been put on the circuit by second player");
-                switch (msgSplit[1]) {
-                    case "A":
-                        itemMarker = DetectionTask.symbols.A;
-                        break;
-                    case "B":
-                        itemMarker = DetectionTask.symbols.B;
-                        break;
-                    case "C":
-                        itemMarker = DetectionTask.symbols.C;
-                        break;
-                    case "D":
-                        itemMarker = DetectionTask.symbols.D;
-                        break;
-                    case "E":
-                        itemMarker = DetectionTask.symbols.E;
-                        break;
-                    case "F":
-                        itemMarker = DetectionTask.symbols.F;
-                        break;
-                    case "G":
-                        itemMarker = DetectionTask.symbols.G;
-                        break;
-                    case "HIRO":
-                        itemMarker = DetectionTask.symbols.HIRO;
-                        break;
-                    case "KANJI":
-                        itemMarker = DetectionTask.symbols.KANJI;
-                        break;
-                }
+                itemMarker = DetectionTask.symbols.valueOf(msgSplit[1]);
                 Banana banana = new Banana();
                 currentItems.add(banana);
                 Circuit.getInstance().addObject(itemMarker,banana);
                 break;
             case "box":
                 Log.d(GAME_TAG,"A box has been put on the circuit by second player");
-                switch (msgSplit[1]) {
-                    case "A":
-                        itemMarker = DetectionTask.symbols.A;
-                        break;
-                    case "B":
-                        itemMarker = DetectionTask.symbols.B;
-                        break;
-                    case "C":
-                        itemMarker = DetectionTask.symbols.C;
-                        break;
-                    case "D":
-                        itemMarker = DetectionTask.symbols.D;
-                        break;
-                    case "E":
-                        itemMarker = DetectionTask.symbols.E;
-                        break;
-                    case "F":
-                        itemMarker = DetectionTask.symbols.F;
-                        break;
-                    case "G":
-                        itemMarker = DetectionTask.symbols.G;
-                        break;
-                    case "HIRO":
-                        itemMarker = DetectionTask.symbols.HIRO;
-                        break;
-                    case "KANJI":
-                        itemMarker = DetectionTask.symbols.KANJI;
-                        break;
-                }
+                itemMarker = DetectionTask.symbols.valueOf(msgSplit[1]);
                 Box box = new Box();
                 currentItems.add(box);
                 Circuit.getInstance().addObject(itemMarker,box);
@@ -309,36 +253,8 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
     public void onSecondPlayerTouchedItem(String msg){
         String[] msgSplit = msg.split("/");
         boolean found = false;
-        DetectionTask.symbols itemMarker = null;
-        switch (msgSplit[1]) {
-            case "A":
-                itemMarker = DetectionTask.symbols.A;
-                break;
-            case "B":
-                itemMarker = DetectionTask.symbols.B;
-                break;
-            case "C":
-                itemMarker = DetectionTask.symbols.C;
-                break;
-            case "D":
-                itemMarker = DetectionTask.symbols.D;
-                break;
-            case "E":
-                itemMarker = DetectionTask.symbols.E;
-                break;
-            case "F":
-                itemMarker = DetectionTask.symbols.F;
-                break;
-            case "G":
-                itemMarker = DetectionTask.symbols.G;
-                break;
-            case "HIRO":
-                itemMarker = DetectionTask.symbols.HIRO;
-                break;
-            case "KANJI":
-                itemMarker = DetectionTask.symbols.KANJI;
-                break;
-        }
+        DetectionTask.symbols itemMarker;
+        itemMarker = DetectionTask.symbols.valueOf(msgSplit[1]);
         int ind = 0;
         Item currentItem;
         while (!found && ind <= currentItems.size()) {
