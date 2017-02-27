@@ -1,6 +1,7 @@
 package fr.enseeiht.superjumpingsumokart.application;
 
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
+import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
  * Created by michelmatthieu on 15/02/2017.
@@ -8,17 +9,21 @@ import fr.enseeiht.superjumpingsumokart.application.items.Item;
  */
 
 public interface GuiGameListener {
+
     /**
      * Method used to notify {@link Game} that an {@link Item} as been used by the {@link Drone}.
-     * @param item used by the player.
+     * @param symbol The symbol (ARToolkit marker) holding the item.
+     * @param item The item used by the player.
      */
-    void onItemUsed(Item item);
+    void onItemUsed(DetectionTask.Symbol symbol, Item item);
 
     /**
      * Method used to notify {@link Game} that an {@link Item} as been touched by the {@link Drone}.
-     * @param item touched by the player
+     * Actually it does not provide directly a reference on the touched {@link Item} but on the
+     * ARToolkit marker hit by the drone. The item is then retrieved according to the marker.
+     * @param symbol the symbole touched by the player
      */
-    void onItemTouched(Item item);
+    void onSymbolTouched(DetectionTask.Symbol symbol);
 
     /**
      * Method called when the controlled {@link Drone} gives up.

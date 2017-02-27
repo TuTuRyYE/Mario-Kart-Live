@@ -281,7 +281,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
     }
 
     public void sendCircuit() {
-        Circuit c = Circuit.getInstance();
+/*        Circuit c = Circuit.getInstance();
         String dataMsg = "circuit/" + Integer.toString(c.getLaps()) + "/" + c.getName();
         String x, y;
         x = Double.toString(c.getStartPoint().getX());
@@ -300,7 +300,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
         }
         byte[] dataMsgBytes = dataMsg.getBytes(Charset.forName("UTF-8"));
         write(dataMsgBytes);
-        Log.d(BLUETOOTH_COMMUNICATION_TAG, "Circuit send to client, string : " + dataMsg);
+        Log.d(BLUETOOTH_COMMUNICATION_TAG, "Circuit send to client, string : " + dataMsg);*/
     }
 
     private void registerCommunicationBTListener(BluetoothCommunicationListener gameListener) {
@@ -347,7 +347,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
     }
 
     @Override
-    public void onPlayerUseItem(final Item item, final DetectionTask.symbols lastMarkerSeen) {
+    public void onPlayerUseItem(final Item item, final DetectionTask.Symbol lastMarkerSeen) {
         Log.d(BLUETOOTH_COMMUNICATION_TAG, "onPlayerUseItem called");
         // Creates message
         String dataString;

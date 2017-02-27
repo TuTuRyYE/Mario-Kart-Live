@@ -275,17 +275,16 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
         addItem(item);
         for(GameListener listener  : this.GAME_LISTENERS) {
             listener.onPlayerUseItem(item,drone.getLastMarkerSeen());
-            Log.d(GAME_TAG,"transmitting the information to the listener");
         }
     }
 
     @Override
-    public void onItemTouched(Item item) {
-        Log.d(GAME_TAG,"Information received from Item : item has been touched");
-        removeItem(item);
-        for(GameListener listener  : this.GAME_LISTENERS) {
-            listener.onItemTouched(item);
-            Log.d(GAME_TAG,"transmitting the information to the listener");
+    public void onSymbolTouched(DetectionTask.Symbol symbol) {
+        Item item = Circuit.getInstance().getObjects().get(symbol);
+        if (item != null) {
+            for (GameListener listener : this.GAME_LISTENERS) {
+                listener.onItemTouched(item);
+            }
         }
 
     }
