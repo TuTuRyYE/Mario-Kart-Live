@@ -4,7 +4,9 @@ import android.util.Log;
 import android.widget.ImageButton;
 
 import fr.enseeiht.superjumpingsumokart.R;
+import fr.enseeiht.superjumpingsumokart.application.Circuit;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
+import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
  * Implementation of trap Box {@link Item}.
@@ -32,8 +34,11 @@ public class Box extends Item {
 
     @Override
     public void useItem(DroneController droneController) {
-        this.setPosition(droneController.getDrone().getCurrentPosition());
-        Log.d(ITEM_TAG, "A TNT box has been put on the circuit");
+        DetectionTask.symbols lastMarkerSeen = droneController.getDrone().getLastMarkerSeen();
+
+            Circuit.getInstance().addObject(lastMarkerSeen, this);
+            Log.d(ITEM_TAG, "A TNT box has been put on the circuit");
+
     }
 
     @Override
