@@ -29,13 +29,13 @@ public abstract class Item {
     /**
      * The marker's symbol that the item will be associated with.
      */
-    private DetectionTask.symbols symbol;
+    private DetectionTask.Symbol symbol;
 
     /**
      * Get the marker that the item is associated with.
      * @return the marker's symbol.
      */
-    public DetectionTask.symbols getSymbol() {
+    public DetectionTask.Symbol getSymbol() {
         return symbol;
     }
 
@@ -43,7 +43,7 @@ public abstract class Item {
      * Associate a symbol to the item.
      * @param symbol the symbol
      */
-    public void setSymbol(DetectionTask.symbols symbol) {
+    public void setSymbol(DetectionTask.Symbol symbol) {
         this.symbol = symbol;
     }
     // TODO - Add 3D model
