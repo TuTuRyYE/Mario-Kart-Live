@@ -21,6 +21,8 @@ import java.io.ByteArrayInputStream;
  */
 class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
 
+    public static enum symbols {HIRO, KANJI, A, B, C, D, E, F, G};
+
     /**
      * Logging tag. Useful for debugging.
      */
@@ -114,7 +116,7 @@ class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
         // We copy the bytes from the RenderScript Allocation into a buffer.
         nv21Out.copyTo(nv21Bytes);
 
-        //DECOMMENT TO DISPLAY THE YUV IMAGE (DEBUGGING). Considerably decreases the framerate.
+        //DECOMMENT TO DISPLAY THE YUV IMAGE (DEBUGGING). Considerably decreases the frame rate.
         /*
         YuvImage yuvImage = new YuvImage(yuvBytes, ImageFormat.NV21, 640, 480, null);
         ByteArrayOutputStream o = new ByteArrayOutputStream(640*480*3/2);
