@@ -9,12 +9,6 @@ import fr.enseeiht.superjumpingsumokart.application.items.Item;
 
 public interface GuiGameListener {
     /**
-     * Notify the {@link Game} of the new position of the current {@link Drone}.
-     * @param position of the {@link Drone}.
-     */
-    void onPositionUpdated(Vector3D position);
-
-    /**
      * Method used to notify {@link Game} that an {@link Item} as been used by the {@link Drone}.
      * @param item used by the player.
      */

@@ -28,6 +28,15 @@ public class Circuit {
      * The markers present on the circuit. Each marker is defined by its order in the circuit and its symbol
      */
     private HashMap<Integer ,DetectionTask.symbols> markers;
+
+    /**
+     * Get the list of markers.
+     * @return the list.
+     */
+    public HashMap<Integer, DetectionTask.symbols> getMarkers() {
+        return markers;
+    }
+
     /**
      * The number of laps a player has to do to complete the circuit.
      */
