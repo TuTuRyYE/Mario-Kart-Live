@@ -41,11 +41,11 @@
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"
                 android:ems="10"
                 android:layout_weight="1"
                 android:id="@+id/nbCheckPointTxt"
-                android:hint="@string/checkPointTxt" />
+                android:hint="@string/checkPointTxt"
+                android:inputType="number" />
         </LinearLayout>
 
         <FrameLayout
@@ -56,7 +56,7 @@
 
             <ListView
                 android:layout_width="match_parent"
-                android:layout_height="289dp"
+                android:layout_height="wrap_content"
                 android:id="@+id/listMarkers"
                 android:clickable="true"
                 android:drawSelectorOnTop="true" />
@@ -74,32 +74,6 @@
                 android:id="@+id/symbolText"
                 android:layout_weight="1" />
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:id="@+id/xText"
-                android:inputType="number"
-                android:layout_weight="1"
-                android:hint="@string/xDefault" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:id="@+id/yText"
-                android:inputType="number"
-                android:layout_weight="1"
-                android:hint="@string/yDefault" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:ems="10"
-                android:id="@+id/zText"
-                android:layout_weight="1"
-                android:hint="@string/zDefault" />
         </LinearLayout>
 
         <LinearLayout

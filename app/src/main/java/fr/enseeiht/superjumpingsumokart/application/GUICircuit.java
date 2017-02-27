@@ -265,6 +265,16 @@ public class GUICircuit extends Activity {
      * Set the existingCircuit list with the files in the Circuits folder
      */
     private void setExistingCircuitsList() {
+
+        // Create the directory if it doesn't exist
+        File CircuitsDir = new File(GUICircuit.this.getFilesDir() + "/Circuits");
+        if (!CircuitsDir.exists()) { // create the folder if it doesn't exist
+            boolean isCreated = CircuitsDir.mkdir();
+            if (isCreated) {
+                Log.d(GUI_CIRCUIT_TAG, "file created");
+            }
+        }
+
         // Get the files of the folder Circuits in the internal storage
             String path = GUICircuit.this.getFilesDir() + "/Circuits";
             File directory = new File(path);

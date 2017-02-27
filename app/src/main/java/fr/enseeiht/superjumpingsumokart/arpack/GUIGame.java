@@ -494,6 +494,7 @@ public class GUIGame extends Activity implements GameListener {
         controller.setRunning(true);
     }
 
+
     public void notifyDefeat() {
         if (!game.isFinished()) {
             UPDATER.sendEmptyMessage(DEFEAT);
