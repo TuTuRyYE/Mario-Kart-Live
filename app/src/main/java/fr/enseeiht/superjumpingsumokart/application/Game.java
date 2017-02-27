@@ -54,14 +54,10 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
         // Add markers for boxes
         if (isServer) {
             createCircuit();
-            Circuit.getInstance().addMarker(1, new Vector3D(0,0,0)); // position to change when markers are placed
-            Circuit.getInstance().addMarker(2, new Vector3D(0,0,0)); // position to change when markers are placed
-            Circuit.getInstance().addMarker(3, new Vector3D(0,0,0)); // position to change when markers are placed
-            Circuit.getInstance().addMarker(4, new Vector3D(0,0,0)); // position to change when markers are
             //TODO
             trackInitialised = true;
         }
-        currentItems = setMagicBoxes();
+        currentItems = null;
         this.guiGame = guiGame;
         registerGameListener(guiGame);
         this.started = false;
@@ -105,38 +101,6 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
         }
     }
 
-    /**
-     * Generate magic boxes on the circuit (Vivian - 07/02/2017).
-     * @return the {@link ArrayList} of {@link MagicBox} generate on the circuit.
-     */
-    private ArrayList<Item> setMagicBoxes() {
-        ArrayList<Item> result = new ArrayList<>();
-        HashMap<Integer, Vector3D> markersID = Circuit.getInstance().getMarkersID();
-        Vector3D position1 = markersID.get(1);
-        Vector3D position2 = markersID.get(2);
-        Vector3D position3 = markersID.get(3);
-        Vector3D position4 = markersID.get(4);
-        int numberOfBoxesPerLine = 2;
-        double x,y, distanceX, distanceY;
-        // For the first line of boxes
-        distanceX = Math.abs(position1.getX() - position2.getX());
-        distanceY = Math.abs(position1.getY() - position2.getY());
-        for(int i=1; i<=numberOfBoxesPerLine; i++) {
-            x =  position2.getX() - i*distanceX/numberOfBoxesPerLine;
-            y = position2.getY() + i*distanceY/numberOfBoxesPerLine;
-            result.add(new MagicBox(new Vector3D(x, y, 0)));
-        }
-        // For the second line of boxes
-        distanceX = Math.abs(position3.getX() - position4.getX());
-        distanceY = Math.abs(position3.getY() - position4.getY());
-        for(int i=1; i<=numberOfBoxesPerLine; i++) {
-            x =  position4.getX() - i*distanceX/numberOfBoxesPerLine;
-            y = position4.getY() + i*distanceY/numberOfBoxesPerLine;
-            result.add(new MagicBox(new Vector3D(x, y, 0)));
-        }
-        Log.d(GAME_TAG, numberOfBoxesPerLine + "lines of boxes set");
-        return result;
-    }
     /**
      * Get the {@link GUIGame} associated to the Game (Vivian - 07/02/2017).
      * @return the {@link GUIGame} of the {@link Game}.
@@ -195,7 +159,8 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
      */
     private void createCircuit () {
         int laps = 1; // Number of laps for the game
-        Circuit.initInstance(laps);
+        int checkPointToCheck = 1;
+        Circuit.initInstance(laps,checkPointToCheck);
     }
     /**
      * Get the number of player on the {@link Game} (Vivian - 07/02/2017).
@@ -259,55 +224,83 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
     public void onSecondPlayerUsesItem(String msg) {
         String[] msgSplit = msg.split("/");
         String name = msgSplit[0];
+        DetectionTask.symbols itemMarker = null;
         switch (name) {
             case "redshell":
                 Log.d(GAME_TAG,"You've been hit by a shell!");
-                double xRedShell = Double.parseDouble(msgSplit[1]);
-                double yRedShell = Double.parseDouble(msgSplit[2]);
-                double zRedShell = Double.parseDouble(msgSplit[3]);
                 RedShell redShell = new RedShell();
-                redShell.setPosition(new Vector3D(xRedShell, yRedShell, zRedShell));
                 currentItems.add(redShell);
                 redShell.applyEffect(guiGame.getController());
                 break;
             case "banana":
                 Log.d(GAME_TAG,"A banana has been put on the circuit by second player");
-                double xBanana = Double.parseDouble(msgSplit[1]);
-                double yBanana = Double.parseDouble(msgSplit[2]);
-                double zBanana = Double.parseDouble(msgSplit[3]);
-
+                switch (msgSplit[1]) {
+                    case "A":
+                        itemMarker = DetectionTask.symbols.A;
+                        break;
+                    case "B":
+                        itemMarker = DetectionTask.symbols.B;
+                        break;
+                    case "C":
+                        itemMarker = DetectionTask.symbols.C;
+                        break;
+                    case "D":
+                        itemMarker = DetectionTask.symbols.D;
+                        break;
+                    case "E":
+                        itemMarker = DetectionTask.symbols.E;
+                        break;
+                    case "F":
+                        itemMarker = DetectionTask.symbols.F;
+                        break;
+                    case "G":
+                        itemMarker = DetectionTask.symbols.G;
+                        break;
+                    case "HIRO":
+                        itemMarker = DetectionTask.symbols.HIRO;
+                        break;
+                    case "KANJI":
+                        itemMarker = DetectionTask.symbols.KANJI;
+                        break;
+                }
                 Banana banana = new Banana();
-
-                banana.setPosition(new Vector3D(xBanana, yBanana, zBanana));
                 currentItems.add(banana);
+                Circuit.getInstance().addObject(itemMarker,banana);
                 break;
             case "box":
                 Log.d(GAME_TAG,"A box has been put on the circuit by second player");
-                double xBox = Double.parseDouble(msgSplit[1]);
-                double yBox = Double.parseDouble(msgSplit[2]);
-                double zBox = Double.parseDouble(msgSplit[3]);
-                Box box = new Box();
-                box.setPosition(new Vector3D(xBox, yBox, zBox));
-                currentItems.add(box);
-                break;
-            case "magicbox":
-                Log.d(GAME_TAG,"A magicbox has been taken on the circuit by second player");
-                double xMagicBox = Double.parseDouble(msgSplit[1]);
-                double yMagicBox = Double.parseDouble(msgSplit[2]);
-                double zMagicBox = Double.parseDouble(msgSplit[3]);
-                Vector3D position = new Vector3D(xMagicBox, yMagicBox, zMagicBox);
-                boolean found = false;
-                int ind = 0;
-                Item currentItem;
-                while (!found && ind <= currentItems.size()) {
-                    currentItem = currentItems.get(ind);
-                    if (currentItem.getPosition().equals(position)) {
-                        found = true;
-                        currentItems.remove(ind);
-                    } else {
-                        ind++;
-                    }
+                switch (msgSplit[1]) {
+                    case "A":
+                        itemMarker = DetectionTask.symbols.A;
+                        break;
+                    case "B":
+                        itemMarker = DetectionTask.symbols.B;
+                        break;
+                    case "C":
+                        itemMarker = DetectionTask.symbols.C;
+                        break;
+                    case "D":
+                        itemMarker = DetectionTask.symbols.D;
+                        break;
+                    case "E":
+                        itemMarker = DetectionTask.symbols.E;
+                        break;
+                    case "F":
+                        itemMarker = DetectionTask.symbols.F;
+                        break;
+                    case "G":
+                        itemMarker = DetectionTask.symbols.G;
+                        break;
+                    case "HIRO":
+                        itemMarker = DetectionTask.symbols.HIRO;
+                        break;
+                    case "KANJI":
+                        itemMarker = DetectionTask.symbols.KANJI;
+                        break;
                 }
+                Box box = new Box();
+                currentItems.add(box);
+                Circuit.getInstance().addObject(itemMarker,box);
                 break;
         }
     }
@@ -315,16 +308,42 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
     @Override
     public void onSecondPlayerTouchedItem(String msg){
         String[] msgSplit = msg.split("/");
-        double x = Double.parseDouble(msgSplit[1]);
-        double y = Double.parseDouble(msgSplit[2]);
-        double z = Double.parseDouble(msgSplit[3]);
-        Vector3D position = new Vector3D(x, y, z);
         boolean found = false;
+        DetectionTask.symbols itemMarker = null;
+        switch (msgSplit[1]) {
+            case "A":
+                itemMarker = DetectionTask.symbols.A;
+                break;
+            case "B":
+                itemMarker = DetectionTask.symbols.B;
+                break;
+            case "C":
+                itemMarker = DetectionTask.symbols.C;
+                break;
+            case "D":
+                itemMarker = DetectionTask.symbols.D;
+                break;
+            case "E":
+                itemMarker = DetectionTask.symbols.E;
+                break;
+            case "F":
+                itemMarker = DetectionTask.symbols.F;
+                break;
+            case "G":
+                itemMarker = DetectionTask.symbols.G;
+                break;
+            case "HIRO":
+                itemMarker = DetectionTask.symbols.HIRO;
+                break;
+            case "KANJI":
+                itemMarker = DetectionTask.symbols.KANJI;
+                break;
+        }
         int ind = 0;
         Item currentItem;
         while (!found && ind <= currentItems.size()) {
             currentItem = currentItems.get(ind);
-            if (currentItem.getPosition().equals(position)) {
+            if (currentItem.getSymbol().name().equals(itemMarker.name())) {
                 found = true;
                 currentItems.remove(ind);
             } else {
@@ -333,18 +352,9 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
         }
     }
 
-    @Override
-    public void onSecondPlayerUpdatedPosition(String msg) {
-        String[] msgSplit = msg.split("/");
-        double x = Double.parseDouble(msgSplit[0]);
-        double y = Double.parseDouble(msgSplit[1]);
-        double z = Double.parseDouble(msgSplit[2]);
-        Vector3D position = new Vector3D(x, y, z);
-        otherDrone.setCurrentPosition(position);
-    }
 
     @Override
-    public void onItemUsed(DetectionTask.Symbol symbol, Item item) {
+    public void onItemUsed(Item item) {
         Log.d(GAME_TAG,"Information received from Item : item has been put on the circuit");
         addItem(item);
         for(GameListener listener  : this.GAME_LISTENERS) {
