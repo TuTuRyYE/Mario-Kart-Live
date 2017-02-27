@@ -485,7 +485,7 @@ public class GUIGame extends Activity implements GameListener {
     }
 
     @Override
-    public void onItemTouched(Item item) {
+    public void onItemTouched(Item item,  DetectionTask.Symbol itemSymbol) {
         item.applyEffect(controller);
     }
 
@@ -494,10 +494,6 @@ public class GUIGame extends Activity implements GameListener {
         controller.setRunning(true);
     }
 
-    @Override
-    public void onUpdatedPosition(Vector3D position) {
-        controller.getDrone().setCurrentPosition(position);
-    }
 
     public void notifyDefeat() {
         if (!game.isFinished()) {
