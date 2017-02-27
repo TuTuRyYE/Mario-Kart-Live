@@ -69,6 +69,11 @@ public class GUIModifyCircuit extends Activity {
      */
     private ArrayAdapter adapter;
 
+    /**
+     * List of symbols for the Spinner
+     */
+    private ArrayList<String> listSymbols;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +94,7 @@ public class GUIModifyCircuit extends Activity {
         // List of markers for the circuit
             markers = new ArrayList<>();
 
+
         // Adapter for the listView
             adapter = new MarkerAdapter(GUIModifyCircuit.this, markers);
             LayoutInflater inflater = getLayoutInflater();
@@ -101,14 +107,13 @@ public class GUIModifyCircuit extends Activity {
             setMarkersList(circuitName);
 
         // List of symbols for the spinner
-            ArrayList<String> listSymbols = new ArrayList();
+            listSymbols = new ArrayList();
             listSymbols.add("A");
             listSymbols.add("B");
             listSymbols.add("C");
             listSymbols.add("D");
             listSymbols.add("F");
             listSymbols.add("G");
-            listSymbols.add("Hiro");
             listSymbols.add("Kanji");
 
         // Adapter for the spinner
@@ -135,6 +140,10 @@ public class GUIModifyCircuit extends Activity {
                                 if (!symbol.isEmpty()) { // if the EditTexts are not empty
                                     // Add the marker to markers list
                                         adapter.add(new String[]{symbol});
+                                    // Remove the symbol from the list if it isn't "KANJI" (others symbol can appear only one time in the circuit)
+                                        if (!symbol.equals("KANJI")) {
+                                            listSymbols.remove(symbol);
+                                        }
                                         Log.d(GUI_MODIFY_CIRCUIT_TAG, "marker added to the list");
 
                                     // Reset the Spinner
@@ -184,8 +193,13 @@ public class GUIModifyCircuit extends Activity {
                                     Toast.makeText(GUIModifyCircuit.this, "You can't delete this marker !", Toast.LENGTH_SHORT).show();
                                 }
                                 else {
+                                    // Add it to the list of symbol if it isn't "KANJI"
+                                    if (!markers.get(itemSelected).equals("KANJI")){
+                                        listSymbols.add(markers.get(itemSelected));
+                                    }
                                     // Remove the selected item
                                         adapter.remove(markers.get(itemSelected));
+
                                     // Reset the item selected
                                         itemSelected = null;
                                 }
@@ -262,6 +276,8 @@ public class GUIModifyCircuit extends Activity {
                                 stringToWrite = s + "\n";
                                 outputStream.write(stringToWrite.getBytes());
                             }
+                            String lastLines = "HIRO" + "\n" + "HIRO";
+                            outputStream.write(lastLines.getBytes());
                             outputStream.close();
                             Log.d(GUI_MODIFY_CIRCUIT_TAG, "Circuit file created");
 
@@ -316,10 +332,13 @@ public class GUIModifyCircuit extends Activity {
                     lapsText.setText(lineSplit[1]);
                     checkPointToCheckTxt.setText(lineSplit[2]);
 
-                // Other line (markers) with the following format: id x y z
+                // Other line (markers)
                     while ((line = bufferedReader.readLine()) != null) {
                         // Add the marker to markers list
-                            adapter.add(new String[]{line});
+                            adapter.add(line);
+                            if (!line.equals("KANJI")) {
+                                listSymbols.remove(line);
+                            }
                             Log.d(GUI_MODIFY_CIRCUIT_TAG, "Marker " + line + "added");
                     }
         } catch (FileNotFoundException e) {
