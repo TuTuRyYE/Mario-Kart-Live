@@ -102,24 +102,26 @@ public class GUIModifyCircuit extends Activity {
             listMarkers.addHeaderView(header, null, false);
             listMarkers.setAdapter(adapter);
 
+        // List of symbols for the spinner
+        listSymbols = new ArrayList();
+        listSymbols.add("A");
+        listSymbols.add("B");
+        listSymbols.add("C");
+        listSymbols.add("D");
+        listSymbols.add("F");
+        listSymbols.add("G");
+        listSymbols.add("Kanji");
+
+        // Adapter for the spinner
+        ArrayAdapter spinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listSymbols);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        symbolText.setAdapter(spinnerAdapter);
+
+
         // Set the circuit's markers
             final String circuitName = (String) getIntent().getExtras().get("circuitName");
             setMarkersList(circuitName);
 
-        // List of symbols for the spinner
-            listSymbols = new ArrayList();
-            listSymbols.add("A");
-            listSymbols.add("B");
-            listSymbols.add("C");
-            listSymbols.add("D");
-            listSymbols.add("F");
-            listSymbols.add("G");
-            listSymbols.add("Kanji");
-
-        // Adapter for the spinner
-            ArrayAdapter spinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listSymbols);
-            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            symbolText.setAdapter(spinnerAdapter);
 
 
 

@@ -123,10 +123,14 @@ public class GUICreateCircuit extends Activity {
                                     if (!symbol.isEmpty()) { // if the Spinner is not empty
                                         // Add the marker to markers list
                                             adapter.add(symbol);
+                                            if (symbol.equals("KANJI")) { // if it is KANJI, it is a checkpoint so there are two markers
+                                                adapter.add(symbol);
+                                            }
                                             // Remove the symbol from the list if it isn't "KANJI" (others symbol can appear only one time in the circuit)
                                             if (!symbol.equals("KANJI")) {
                                                 listSymbols.remove(symbol);
                                             }
+
                                             Log.d(GUI_CREATE_CIRCUIT_TAG, "marker " + symbol + " added to the list");
 
                                         // Reset the EditTexts
