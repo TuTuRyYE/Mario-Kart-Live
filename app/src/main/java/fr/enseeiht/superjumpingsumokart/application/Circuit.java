@@ -37,6 +37,12 @@ public class Circuit {
      * The number of laps a player has to do to complete the circuit
      */
     private int lapsNumber;
+
+    /**
+     * The number of checkPoint to check to complete a circuit's lap
+     */
+    private int checkPointToCheck;
+
     /**
      * The coordinates of the startline and endline (for the moment they're written manually here)
      */

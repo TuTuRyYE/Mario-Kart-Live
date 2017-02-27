@@ -27,6 +27,7 @@
     <string name="confirm_btn">Confirm the circuit</string>
     <string name="circuitNameText">Name of the Circuit</string>
     <string name="lapsText">Number of laps</string>
+    <string name="checkPointTxt">Number of checkpoint to check</string>
     <string name="idTextDefault">ID</string>
     <string name="xDefault">X</string>
     <string name="yDefault">Y</string>

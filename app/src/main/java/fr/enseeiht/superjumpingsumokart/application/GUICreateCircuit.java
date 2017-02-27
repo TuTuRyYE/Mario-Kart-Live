@@ -39,6 +39,7 @@ public class GUICreateCircuit extends Activity {
      */
         private EditText circuitNameText;
         private EditText lapsText;
+        private EditText checkPointToCheckText;
         private ListView listMarkers;
         private EditText idText;
         private EditText xText;
@@ -67,6 +68,7 @@ public class GUICreateCircuit extends Activity {
         // Get the objects from the layout
             circuitNameText = (EditText) findViewById(R.id.circuitNameText);
             lapsText = (EditText) findViewById(R.id.lapsText);
+            checkPointToCheckText = (EditText) findViewById(R.id.nbCheckPointTxt);
             listMarkers = (ListView) findViewById(R.id.listMarkers);
             idText = (EditText) findViewById(R.id.idText);
             xText = (EditText) findViewById(R.id.xText);
@@ -228,9 +230,10 @@ public class GUICreateCircuit extends Activity {
         // Get the info about the circuit
             String txtName = circuitNameText.getText().toString();
             String lapTxt = lapsText.getText().toString();
+            String checkPointTxt = checkPointToCheckText.getText().toString();
 
         // Create the file
-        if (!txtName.isEmpty() && !lapTxt.equals("0") && !lapTxt.isEmpty()) { // if the user has put a circuit name and a number of lap different from 0
+        if (!txtName.isEmpty() && !lapTxt.equals("0") && !lapTxt.isEmpty() && !checkPointTxt.equals("0") && !checkPointTxt.isEmpty()) { // if the user has put a circuit name and a number of lap different from 0
 
             // Create the file
                 File circuitFile = new File(path, circuitNameText.getText().toString());
@@ -241,8 +244,9 @@ public class GUICreateCircuit extends Activity {
                         // Creating the file and the instance of the circuit
                             Circuit.initInstance(Integer.parseInt(lapTxt));
                             outputStream = new FileOutputStream(circuitFile);
-                            String firstLine = txtName + "/" + lapTxt + "\n";
+                            String firstLine = txtName + "/" + lapTxt + "/" + checkPointTxt + "\n";
                             Circuit.getInstance().setName(txtName);
+
                             outputStream.write(firstLine.getBytes());
                             for (String[] s : markers) {
                                 stringToWrite = s[0] + " " + s[1] + " " + s[2] + " " + s[3] + "\n";
