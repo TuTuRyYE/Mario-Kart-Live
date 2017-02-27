@@ -22,6 +22,7 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 import fr.enseeiht.superjumpingsumokart.R;
+import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
  * @author Vivian GUY
@@ -43,9 +44,6 @@ public class GUICreateCircuit extends Activity {
         private EditText checkPointToCheckText;
         private ListView listMarkers;
         private Spinner symbolText;
-        private EditText xText;
-        private EditText yText;
-        private EditText zText;
         private Button addMarkerBtn;
         private Button confirmBtn;
         private Button deleteMarkerBtn;
@@ -72,9 +70,6 @@ public class GUICreateCircuit extends Activity {
             checkPointToCheckText = (EditText) findViewById(R.id.nbCheckPointTxt);
             listMarkers = (ListView) findViewById(R.id.listMarkers);
             symbolText = (Spinner) findViewById(R.id.symbolText);
-            xText = (EditText) findViewById(R.id.xText);
-            yText = (EditText) findViewById(R.id.yText);
-            zText = (EditText) findViewById(R.id.zText);
             addMarkerBtn = (Button) findViewById(R.id.addMarkerBtn);
             confirmBtn = (Button) findViewById(R.id.confirmBtn);
             deleteMarkerBtn = (Button) findViewById(R.id.deleteMarkerBtn);
@@ -91,18 +86,19 @@ public class GUICreateCircuit extends Activity {
             listMarkers.setAdapter(adapter);
 
         // Default marker for the circuit (start line)
-            adapter.add(new String[]{"0", "0", "0", "0"});
+            adapter.add("HIRO");
+            adapter.add("HIRO");
 
         // List of symbols for the spinner
-            ArrayList<String> listSymbols = new ArrayList();
+            final ArrayList<String> listSymbols = new ArrayList();
             listSymbols.add("A");
             listSymbols.add("B");
             listSymbols.add("C");
             listSymbols.add("D");
             listSymbols.add("F");
             listSymbols.add("G");
-            listSymbols.add("Hiro");
-            listSymbols.add("Kanji");
+            listSymbols.add("HIRO");
+            listSymbols.add("KANJI");
 
         // Adapter for the spinner
             ArrayAdapter spinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listSymbols);
@@ -124,21 +120,19 @@ public class GUICreateCircuit extends Activity {
                         switch (event.getAction()) {
                             case MotionEvent.ACTION_DOWN:
                                 // Get the texts from the EditTexts objects
-                                    String x = xText.getText().toString();
-                                    String y = yText.getText().toString();
-                                    String z = zText.getText().toString();
                                     String symbol = symbolText.getSelectedItem().toString();
-                                    if (!x.equals("") && !y.equals("") && !z.equals("") && !symbol.equals("")) { // if the EditTexts are not empty
+                                    if (!symbol.isEmpty()) { // if the Spinner is not empty
                                         // Add the marker to markers list
-                                            adapter.add(new String[]{symbol, x, y, z});
+                                            adapter.add(new String(symbol));
+                                            // Remove the symbol from the list if it isn't "KANJI" (others symbol can appear only one time in the circuit)
+                                            if (!symbol.equals("KANJI")) {
+                                                listSymbols.remove(symbol);
+                                            }
                                             Log.d(GUI_CREATE_CIRCUIT_TAG, "marker " + symbol + " added to the list");
 
                                         // Reset the EditTexts
-                                            xText.setText("");
-                                            yText.setText("");
-                                            zText.setText("");
                                             symbolText.setSelection(0);
-                                            Log.d(GUI_CREATE_CIRCUIT_TAG, "EditTexts reset");
+                                            Log.d(GUI_CREATE_CIRCUIT_TAG, "Spinner reset");
 
                                         // Inform the user that the marker is added
                                             Toast.makeText(GUICreateCircuit.this, "Marker added", Toast.LENGTH_SHORT).show();
@@ -260,21 +254,19 @@ public class GUICreateCircuit extends Activity {
                     String stringToWrite;
                     try {
                         // Creating the file and the instance of the circuit
-                            Circuit.initInstance(Integer.parseInt(lapTxt));
+                            Circuit.initInstance(Integer.parseInt(lapTxt), Integer.parseInt(checkPointTxt));
                             outputStream = new FileOutputStream(circuitFile);
                             String firstLine = txtName + "/" + lapTxt + "/" + checkPointTxt + "\n";
                             Circuit.getInstance().setName(txtName);
                             Circuit.getInstance().setCheckPointToCheck(Integer.parseInt(checkPointTxt));
                             outputStream.write(firstLine.getBytes());
-                            for (String[] s : markers) {
-                                stringToWrite = s[0] + " " + s[1] + " " + s[2] + " " + s[3] + "\n";
+                            for (String s : markers) {
+                                stringToWrite = s + "\n";
                                 outputStream.write(stringToWrite.getBytes());
-                                int markerID = Integer.parseInt(s[0]);
-                                double x = Double.parseDouble(s[1]);
-                                double y = Double.parseDouble(s[2]);
-                                double z = Double.parseDouble(s[3]);
-                                Circuit.getInstance().addMarker(markerID, new Vector3D(x, y, z));
+                                Circuit.getInstance().addMarker(DetectionTask.symbols.valueOf(s));
                             }
+                            String lastLines = "HIRO" + "\n" + "HIRO";
+                            outputStream.write(lastLines.getBytes());
                             outputStream.close();
                             Log.d(GUI_CREATE_CIRCUIT_TAG, "Circuit file created");
 
@@ -283,7 +275,7 @@ public class GUICreateCircuit extends Activity {
 
                         // Go back to GUIWelcome Activity
                             Intent i = new Intent(GUICreateCircuit.this, GUIWelcome.class);
-                            Log.d(GUI_CREATE_CIRCUIT_TAG, "Launching a GUIWelcom Activity...");
+                            Log.d(GUI_CREATE_CIRCUIT_TAG, "Launching a GUIWelcome Activity...");
                             startActivity(i);
                     } catch (Exception e) {
                         e.printStackTrace();
