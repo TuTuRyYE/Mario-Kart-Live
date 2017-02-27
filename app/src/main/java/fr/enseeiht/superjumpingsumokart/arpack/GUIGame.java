@@ -473,7 +473,7 @@ public class GUIGame extends Activity implements GameListener {
     }
 
     @Override
-    public void onPlayerUseItem(Item item) {
+    public void onPlayerUseItem(Item item, DetectionTask.symbols symbol) {
         displayTrap();
     }
 

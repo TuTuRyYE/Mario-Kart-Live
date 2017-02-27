@@ -274,7 +274,9 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
                 double xBanana = Double.parseDouble(msgSplit[1]);
                 double yBanana = Double.parseDouble(msgSplit[2]);
                 double zBanana = Double.parseDouble(msgSplit[3]);
+
                 Banana banana = new Banana();
+
                 banana.setPosition(new Vector3D(xBanana, yBanana, zBanana));
                 currentItems.add(banana);
                 break;
@@ -350,7 +352,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
         Log.d(GAME_TAG,"Information received from Item : item has been put on the circuit");
         addItem(item);
         for(GameListener listener  : this.GAME_LISTENERS) {
-            listener.onPlayerUseItem(item);
+            listener.onPlayerUseItem(item,drone.getLastMarkerSeen());
             Log.d(GAME_TAG,"transmitting the information to the listener");
         }
     }

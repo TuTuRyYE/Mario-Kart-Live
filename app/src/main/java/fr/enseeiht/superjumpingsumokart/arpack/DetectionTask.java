@@ -19,7 +19,7 @@ import java.io.ByteArrayInputStream;
  *         Class that implement several image transformations. It extends {@link AsyncTask} to run heavy computation
  *         work outside of the UI {@link Thread}. Once the work is done UI {@link Thread} will update its graphical components.
  */
-class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
+public class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
 
     public static enum symbols {HIRO, KANJI, A, B, C, D, E, F, G};
 
