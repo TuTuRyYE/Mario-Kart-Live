@@ -32,7 +32,6 @@ public class Banana extends Item {
 
     @Override
     public void useItem(DroneController droneController) {
-
         Log.d(ITEM_TAG, "A banana has been put on the circuit");
     }
 
@@ -41,7 +40,7 @@ public class Banana extends Item {
         Log.d(ITEM_TAG, "A banana has been touched");
         droneController.slow();
         droneController.spin();
-        droneController.getGuiGame().getGame().onItemTouched(this);
+
     }
 
     @Override

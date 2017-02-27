@@ -226,7 +226,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
         Log.d(GAME_TAG,"Information received from Item : item has been put on the circuit");
         Circuit.getInstance().addObject(symbol, item);
         for(GameListener listener  : this.GAME_LISTENERS) {
-            listener.onPlayerUseItem(item,drone.getLastMarkerSeen());
+            listener.onPlayerUseItem(item,symbol);
         }
     }
 

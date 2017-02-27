@@ -142,6 +142,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
         if (deviceController != null && running) {
             Log.d(DRONE_CONTROLLER_TAG, "USE ITEM order received !");
             DetectionTask.Symbol lastMarkerSeen = DRONE.getLastMarkerSeen();
+            //check if there is an object of the marker
             if( (Circuit.getInstance().getObjects().get(lastMarkerSeen))!=null) {
                 DRONE.getCurrentItem().useItem(this);
                 DRONE.setCurrentItem(new NullItem());

@@ -34,11 +34,7 @@ public class Box extends Item {
 
     @Override
     public void useItem(DroneController droneController) {
-        DetectionTask.symbols lastMarkerSeen = droneController.getDrone().getLastMarkerSeen();
-
-            Circuit.getInstance().addObject(lastMarkerSeen, this);
             Log.d(ITEM_TAG, "A TNT box has been put on the circuit");
-
     }
 
     @Override
@@ -46,7 +42,6 @@ public class Box extends Item {
         Log.d(ITEM_TAG, "A TNT box has been touched");
         droneController.stopMotion();
         droneController.jump();
-        droneController.getGuiGame().getGame().onItemTouched(this);
     }
 
     @Override

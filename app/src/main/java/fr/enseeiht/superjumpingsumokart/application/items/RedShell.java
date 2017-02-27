@@ -31,7 +31,7 @@ public class RedShell extends Item {
 
     @Override
     public void useItem(DroneController droneController) {
-        this.setPosition(droneController.getDrone().getCurrentPosition());
+
         Log.d(ITEM_TAG, "A red shell has been thrown!");
     }
 
@@ -39,7 +39,6 @@ public class RedShell extends Item {
     public void applyEffect(DroneController droneController) {
         Log.d(ITEM_TAG, "You've been hit by a red shell!");
         droneController.spin();
-        droneController.getGuiGame().getGame().onItemTouched(this);
     }
 
     @Override
