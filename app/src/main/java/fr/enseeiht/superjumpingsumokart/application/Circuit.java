@@ -29,13 +29,6 @@ public class Circuit {
      */
     private HashMap<Integer ,DetectionTask.Symbol> markers;
 
-    /**
-     * Get the list of markers.
-     * @return the list.
-     */
-    public HashMap<Integer, DetectionTask.Symbol> getMarkers() {
-        return markers;
-    }
 
     /**
      * The number of laps a player has to do to complete the circuit.
@@ -153,7 +146,7 @@ public class Circuit {
      * Get the list of markers.
      * @return the list of markers.
      */
-    public HashMap<Integer, DetectionTask.symbols> getMarkers() {
+    public HashMap<Integer, DetectionTask.Symbol> getMarkers() {
         return markers;
     }
 

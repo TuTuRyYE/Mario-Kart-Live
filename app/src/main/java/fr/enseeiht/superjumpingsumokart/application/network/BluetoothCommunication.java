@@ -170,7 +170,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
                     String[] hashSplit = msgSplit[i].split(":");
                     int id = Integer.parseInt(hashSplit[0]);
                     String symbolsType = hashSplit[1];
-                    DetectionTask.symbols symbol = DetectionTask.symbols.valueOf(symbolsType);
+                    DetectionTask.Symbol symbol = DetectionTask.Symbol.valueOf(symbolsType);
                     Circuit.getInstance().addMarker(symbol);
                     }
 
@@ -238,7 +238,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
         Circuit c = Circuit.getInstance();
         String dataMsg = "circuit/" + Integer.toString(c.getLaps()) + "/" + c.getCheckPointToCheck();
         for (int i : c.getMarkers().keySet()) {
-            DetectionTask.symbols symbol = c.getMarkers().get(i);
+            DetectionTask.Symbol symbol = c.getMarkers().get(i);
             dataMsg = dataMsg.concat("/"+ Integer.toString(i) + ":" + symbol.name());
         }
         byte[] dataMsgBytes = dataMsg.getBytes(Charset.forName("UTF-8"));
@@ -290,7 +290,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
     }
 
     @Override
-    public void onPlayerUseItem(final Item item, final DetectionTask.symbols itemSymbol) {
+    public void onPlayerUseItem(final Item item, final DetectionTask.Symbol itemSymbol) {
         Log.d(BLUETOOTH_COMMUNICATION_TAG, "onPlayerUseItem called");
         // Creates message
         String dataString;
@@ -321,7 +321,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
     }
 
     @Override
-    public void onItemTouched(final Item item, final DetectionTask.symbols itemSymbol) {
+    public void onItemTouched(final Item item, final DetectionTask.Symbol itemSymbol) {
         Log.d(BLUETOOTH_COMMUNICATION_TAG, "onItemTouched called");
         // Create message
         String dataString;
