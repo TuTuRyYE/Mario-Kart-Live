@@ -85,7 +85,9 @@ public class GUICreateCircuit extends Activity {
             listMarkers.addHeaderView(header, null, false);
             listMarkers.setAdapter(adapter);
 
-        // Default marker for the circuit (start line)
+        // Default marker for the circuit (start line and end line)
+            adapter.add("HIRO");
+            adapter.add("HIRO");
             adapter.add("HIRO");
             adapter.add("HIRO");
 
@@ -126,11 +128,8 @@ public class GUICreateCircuit extends Activity {
                                 // Get the texts from the EditTexts objects
                                     String symbol = symbolText.getSelectedItem().toString();
                                     if (!symbol.equals("Select a type of marker")) { // if a symbol is selected
-                                        // Add the marker to markers list
-                                            adapter.add(symbol);
-                                            if (symbol.equals("KANJI")) { // if it is KANJI, it is a checkpoint so there are two markers
-                                                adapter.add(symbol);
-                                            }
+                                        // Add the marker to the end of markers list (before 2 end markers)
+                                            adapter.insert(symbol, markers.size()-2);
                                             // Remove the symbol from the list if it isn't "KANJI" (others symbol can appear only one time in the circuit)
                                             if (!symbol.equals("KANJI")) {
                                                 spinnerAdapter.remove(symbol);
@@ -181,12 +180,16 @@ public class GUICreateCircuit extends Activity {
                         switch (event.getAction()) {
                             case MotionEvent.ACTION_DOWN:
                                 if (itemSelected != null) { // if an item is selected
-                                    if (itemSelected == 0 || itemSelected == 1) { // if the user tries to delete the default markers (start line)
+                                    if (itemSelected == 1 || itemSelected == 2 || itemSelected==markers.size() || itemSelected == markers.size() -1 ) { // if the user tries to delete the default markers (start line)
                                         Toast.makeText(GUICreateCircuit.this, "You can't delete this marker !", Toast.LENGTH_SHORT).show();
                                     }
                                     else {
                                         // Remove the selected marker
-                                            adapter.remove(markers.get(itemSelected));
+                                            adapter.remove(markers.get(itemSelected-1));
+                                        // Add it to the list of symbol if it isn't "KANJI"
+                                        if (!markers.get(itemSelected-1).equals("KANJI")){
+                                            spinnerAdapter.add(markers.get(itemSelected-1));
+                                        }
                                         // Reset itemSelected
                                             itemSelected = null;
                                     }
@@ -273,8 +276,6 @@ public class GUICreateCircuit extends Activity {
                                 outputStream.write(stringToWrite.getBytes());
                                 Circuit.getInstance().addMarker(DetectionTask.Symbol.valueOf(s));
                             }
-                            String lastLines = "HIRO" + "\n" + "HIRO";
-                            outputStream.write(lastLines.getBytes());
                             outputStream.close();
                             Log.d(GUI_CREATE_CIRCUIT_TAG, "Circuit file created");
 
