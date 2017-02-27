@@ -141,7 +141,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     public void useItem() {
         if (deviceController != null && running) {
             Log.d(DRONE_CONTROLLER_TAG, "USE ITEM order received !");
-            DetectionTask.symbols lastMarkerSeen = DRONE.getLastMarkerSeen();
+            DetectionTask.Symbol lastMarkerSeen = DRONE.getLastMarkerSeen();
             if( (Circuit.getInstance().getObjects().get(lastMarkerSeen))!=null) {
                 DRONE.getCurrentItem().useItem(this);
                 DRONE.setCurrentItem(new NullItem());
@@ -186,59 +186,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
             deviceController.getFeatureJumpingSumo().setPilotingPCMDSpeed(SLOW_SPEED);
         }
     }
-    /**
-     * Test if the drone finished the race  (Matthieu Michel - 07/02/2017).
-     * @return true if the drone has finished the race otherwise false.
-     */
-    public boolean isFinished(){
-        ArrayList<Integer> markersSeen = this.getDrone().getMarkersSeen();
-        Boolean result = false;
-        if (!markersSeen.isEmpty()) {
-            if ((markersSeen.get(markersSeen.size() - 1) == -1) || (markersSeen.get(markersSeen.size() - 1) == -2)) { // if the last marker is on the finished lane
-                if(markersSeen.size() > 2) { // The drone has seen enough markers
-                    if (checkPosition()) {
-                        if (this.getDrone().getCurrentLap() == Circuit.getInstance().getLaps()) { // if the number of laps is correct
-                            result = true;
-                        }
-                        else {
-                            this.getDrone().setCurrentLap(this.getDrone().getCurrentLap() + 1);
-                            this.getDrone().getMarkersSeen().clear();
-                        }
-                    }
-                }
-            }
-        }
-        return result;
-    }
-    /**
-     * Check if the drone has passed the end line (Matthieu Michel - 07/02/2017).
-     * @return true if the drone has passed the end line/lap line otherwise return false.
-     */
-    private boolean checkPosition() {
-        boolean overpassed;
-        //get the current position of the drone
-        Vector3D positionDrone = this.getDrone().getCurrentPosition();
-        //compute the end line equation
-        Vector3D endPoint1 = Circuit.getInstance().getEndPoints()[0];
-        Vector3D endPoint2 = Circuit.getInstance().getEndPoints()[1];
-        double aux = (endPoint1.getX()-endPoint2.getX());
-        double relativePosition;
-        if(aux !=0) { // if the end line isn't vertical
-            double a = (endPoint1.getY()-endPoint2.getY())/aux;
-            double b = (endPoint1.getX()*endPoint2.getY()-endPoint2.getX()*endPoint1.getY())/(endPoint1.getX()-endPoint2.getX());
-            relativePosition = positionDrone.getY()-(a*positionDrone.getX())-b;
-        }
-        else { // if the end line is vertical
-            relativePosition = positionDrone.getX()-endPoint1.getX();
-        }
-        if(relativePosition>0) {
-            overpassed = true;
-        }
-        else {
-            overpassed = false;
-        }
-        return overpassed;
-    }
+
     /**
      * Notify the user when there is a switch of state for the device (Matthieu Michel - 30/01/2017).
      * @param deviceController controller associated to the device.

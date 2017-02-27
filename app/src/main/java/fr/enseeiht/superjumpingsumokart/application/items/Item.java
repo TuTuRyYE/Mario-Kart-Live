@@ -5,6 +5,7 @@ import android.widget.ImageButton;
 import fr.enseeiht.superjumpingsumokart.application.Drone;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
 import fr.enseeiht.superjumpingsumokart.application.Vector3D;
+import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
  * Interface for items used in the game {@link Item}.
@@ -26,11 +27,25 @@ public abstract class Item {
     private final String NAME;
 
     /**
-     * Item position.
-     * Initialised at (0, 0, 0) and then set, if necessary when the {@link Item} is used.
+     * The marker's symbol that the item will be associated with.
      */
-    private Vector3D position;
+    private DetectionTask.Symbol symbol;
 
+    /**
+     * Get the marker that the item is associated with.
+     * @return the marker's symbol.
+     */
+    public DetectionTask.Symbol getSymbol() {
+        return symbol;
+    }
+
+    /**
+     * Associate a symbol to the item.
+     * @param symbol the symbol
+     */
+    public void setSymbol(DetectionTask.Symbol symbol) {
+        this.symbol = symbol;
+    }
     // TODO - Add 3D model
 
     /**

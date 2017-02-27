@@ -14,6 +14,9 @@ import org.artoolkit.ar.base.ARToolKit;
 
 import java.io.ByteArrayInputStream;
 
+import fr.enseeiht.superjumpingsumokart.application.items.MagicBox;
+import fr.enseeiht.superjumpingsumokart.application.items.NullItem;
+
 /**
  * @author Romain Verset, Jorge Enrique Gutierrez
  *         Class that implement several image transformations. It extends {@link AsyncTask} to run heavy computation
@@ -21,7 +24,7 @@ import java.io.ByteArrayInputStream;
  */
 public class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
 
-    public static enum symbols {HIRO, KANJI, A, B, C, D, E, F, G};
+    public enum Symbol {HIRO, KANJI, A, B, C, D, E, F, G};
 
     /**
      * Logging tag. Useful for debugging.
@@ -70,6 +73,10 @@ public class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
      * {@link Allocation} used to contain and manage the NV21 bytes in {@link ScriptC_rbgaToNv21} {@link #script}.
      */
     private Allocation nv21Out = Allocation.createTyped(rs, nv21Type.create(), Allocation.USAGE_SCRIPT);
+
+    private static long timeSinceLastHiro;
+    private static long timeSinceLastKanji;
+    private static long timeSinceLastA;
 
 
     /**
@@ -124,21 +131,51 @@ public class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
         bitmapToDisplay = BitmapFactory.decodeStream(new ByteArrayInputStream(o.toByteArray()));
         */
 
-        boolean markerDetected;
         ARToolKit.getInstance().convertAndDetect(nv21Bytes);
-        if (ARToolKit.getInstance().queryMarkerVisible(0)) {
-            markerDetected = true;
-            Log.d(DETECTION_TASK_TAG, "Marker detected, distance to the camera = " + ARToolKit.getInstance().queryMarkerTransformation(0)[14]);
-        } else {
-            markerDetected = false;
+
+        for (Symbol s : Symbol.values()) {
+            int id = ItemRenderer.SYMBOLS_HASH_MAP.get(s);
+            if (ARToolKit.getInstance().queryMarkerVisible(id)) {
+                switch (s) {
+                    case HIRO:
+                        Log.d(DETECTION_TASK_TAG, "Distance to marker HIRO : " + Float.toString(-ARToolKit.getInstance().queryMarkerTransformation(id)[14]));
+                        if (-ARToolKit.getInstance().queryMarkerTransformation(id)[14] < 100 && (SystemClock.elapsedRealtime() - timeSinceLastHiro) > 5000) {
+                            timeSinceLastHiro = SystemClock.elapsedRealtime();
+                            Log.d(DETECTION_TASK_TAG, "Lap validated");
+                        }
+                        break;
+                    case KANJI:
+                        Log.d(DETECTION_TASK_TAG, "Distance to marker KANJI : " + Float.toString(-ARToolKit.getInstance().queryMarkerTransformation(id)[14]));
+                        if (-ARToolKit.getInstance().queryMarkerTransformation(id)[14] < 100 && (SystemClock.elapsedRealtime() - timeSinceLastKanji) > 3000) {
+                            timeSinceLastKanji = SystemClock.elapsedRealtime();
+                            Log.d(DETECTION_TASK_TAG, "Lap validated");
+                        }
+                        break;
+                    case A :
+                        Log.d(DETECTION_TASK_TAG, "Distance to marker A : " + Float.toString(-ARToolKit.getInstance().queryMarkerTransformation(id)[14]));
+                        if (GUI_GAME.getController().getDrone().getCurrentItem() instanceof NullItem && -ARToolKit.getInstance().queryMarkerTransformation(id)[14] < 75 && (SystemClock.elapsedRealtime() - timeSinceLastA) > 5000) {
+                            timeSinceLastA = SystemClock.elapsedRealtime();
+                            new MagicBox().applyEffect(GUI_GAME.getController());
+                            Log.d(DETECTION_TASK_TAG, "Got a Magic Box");
+                        }
+                        break;
+                    default:
+                        if (-ARToolKit.getInstance().queryMarkerTransformation(id)[14] < 75) {
+                            GUI_GAME.touchedSymbol(s);
+                            Log.d(DETECTION_TASK_TAG, "Touched symbol " + s.name());
+                        }
+                        GUI_GAME.getController().getDrone().setLastMarkerSeen(s);
+                        break;
+                }
+            }
         }
-        Log.d(DETECTION_TASK_TAG, "Detection task time : " + Long.toString((SystemClock.currentThreadTimeMillis() - startTime)));
-        return markerDetected;
+        Log.d(DETECTION_TASK_TAG, "Detection task time : " + Long.toString(SystemClock.currentThreadTimeMillis() - startTime));
+        return true;
     }
 
     /**
      * Tasks performed on the UI {@link Thread} ONCE the {@link #doInBackground(byte[]...)} method is
-     * over.
+     * over (Romain Verset - 08/02/2017).
      *
      * @param aBoolean .
      */
