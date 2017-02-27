@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.io.File;
@@ -41,7 +42,7 @@ public class GUICreateCircuit extends Activity {
         private EditText lapsText;
         private EditText checkPointToCheckText;
         private ListView listMarkers;
-        private EditText idText;
+        private Spinner symbolText;
         private EditText xText;
         private EditText yText;
         private EditText zText;
@@ -57,7 +58,7 @@ public class GUICreateCircuit extends Activity {
     /**
      * The list of markers for the circuit
      */
-        private static ArrayList<String[]> markers;
+        private static ArrayList<String> markers;
 
 
     @Override
@@ -70,7 +71,7 @@ public class GUICreateCircuit extends Activity {
             lapsText = (EditText) findViewById(R.id.lapsText);
             checkPointToCheckText = (EditText) findViewById(R.id.nbCheckPointTxt);
             listMarkers = (ListView) findViewById(R.id.listMarkers);
-            idText = (EditText) findViewById(R.id.idText);
+            symbolText = (Spinner) findViewById(R.id.symbolText);
             xText = (EditText) findViewById(R.id.xText);
             yText = (EditText) findViewById(R.id.yText);
             zText = (EditText) findViewById(R.id.zText);
@@ -92,6 +93,23 @@ public class GUICreateCircuit extends Activity {
         // Default marker for the circuit (start line)
             adapter.add(new String[]{"0", "0", "0", "0"});
 
+        // List of symbols for the spinner
+            ArrayList<String> listSymbols = new ArrayList();
+            listSymbols.add("A");
+            listSymbols.add("B");
+            listSymbols.add("C");
+            listSymbols.add("D");
+            listSymbols.add("F");
+            listSymbols.add("G");
+            listSymbols.add("Hiro");
+            listSymbols.add("Kanji");
+
+        // Adapter for the spinner
+            ArrayAdapter spinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listSymbols);
+            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            symbolText.setAdapter(spinnerAdapter);
+
+
 
 
         // Set buttons listener
@@ -109,17 +127,17 @@ public class GUICreateCircuit extends Activity {
                                     String x = xText.getText().toString();
                                     String y = yText.getText().toString();
                                     String z = zText.getText().toString();
-                                    String id = idText.getText().toString();
-                                    if (!x.equals("") && !y.equals("") && !z.equals("") && !id.equals("")) { // if the EditTexts are not empty
+                                    String symbol = symbolText.getSelectedItem().toString();
+                                    if (!x.equals("") && !y.equals("") && !z.equals("") && !symbol.equals("")) { // if the EditTexts are not empty
                                         // Add the marker to markers list
-                                            adapter.add(new String[]{id, x, y, z});
-                                            Log.d(GUI_CREATE_CIRCUIT_TAG, "marker " + id + " added to the list");
+                                            adapter.add(new String[]{symbol, x, y, z});
+                                            Log.d(GUI_CREATE_CIRCUIT_TAG, "marker " + symbol + " added to the list");
 
                                         // Reset the EditTexts
                                             xText.setText("");
                                             yText.setText("");
                                             zText.setText("");
-                                            idText.setText("");
+                                            symbolText.setSelection(0);
                                             Log.d(GUI_CREATE_CIRCUIT_TAG, "EditTexts reset");
 
                                         // Inform the user that the marker is added
@@ -246,7 +264,7 @@ public class GUICreateCircuit extends Activity {
                             outputStream = new FileOutputStream(circuitFile);
                             String firstLine = txtName + "/" + lapTxt + "/" + checkPointTxt + "\n";
                             Circuit.getInstance().setName(txtName);
-
+                            Circuit.getInstance().setCheckPointToCheck(Integer.parseInt(checkPointTxt));
                             outputStream.write(firstLine.getBytes());
                             for (String[] s : markers) {
                                 stringToWrite = s[0] + " " + s[1] + " " + s[2] + " " + s[3] + "\n";

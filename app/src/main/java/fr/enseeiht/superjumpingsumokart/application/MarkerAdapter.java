@@ -18,11 +18,11 @@ import fr.enseeiht.superjumpingsumokart.R;
  * Adapter for the ListView of GUICreateCircuit and GUIModifyCircuit
  */
 
-public class MarkerAdapter extends ArrayAdapter<String[]> {
+public class MarkerAdapter extends ArrayAdapter<String> {
 
 
 
-    public MarkerAdapter(Context context, ArrayList<String[]> markers) {
+    public MarkerAdapter(Context context, ArrayList<String> markers) {
         super(context, 0, markers);
     }
 
@@ -39,20 +39,14 @@ public class MarkerAdapter extends ArrayAdapter<String[]> {
             if(viewHolder == null){
                 viewHolder = new MarkerViewHolder();
                 viewHolder.id = (TextView) convertView.findViewById(R.id.id);
-                viewHolder.x = (TextView) convertView.findViewById(R.id.x);
-                viewHolder.y = (TextView) convertView.findViewById(R.id.y);
-                viewHolder.z = (TextView) convertView.findViewById(R.id.z);
                 convertView.setTag(viewHolder);
             }
 
         // Get the item [position] of the listView
-            String[] st = getItem(position);
+            String st = getItem(position);
 
         // Fill the View
-            viewHolder.id.setText(st[0]);
-            viewHolder.x.setText(st[1]);
-            viewHolder.y.setText(st[2]);
-            viewHolder.z.setText(st[3]);
+            viewHolder.id.setText(st);
 
         return convertView;
     }
@@ -62,8 +56,6 @@ public class MarkerAdapter extends ArrayAdapter<String[]> {
      */
     private class MarkerViewHolder{
         public TextView id;
-        public TextView x;
-        public TextView y;
-        public TextView z;
+
     }
 }

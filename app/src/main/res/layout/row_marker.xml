@@ -15,26 +15,5 @@
             android:id="@+id/id"
             android:layout_weight="1" />
 
-        <TextView
-            android:text="X"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/x"
-            android:layout_weight="1" />
-
-        <TextView
-            android:text="Y"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/y"
-            android:layout_weight="1" />
-
-        <TextView
-        android:text="Z"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/z"
-        android:layout_weight="1" />
-
     </LinearLayout>
 </LinearLayout>

@@ -22,13 +22,12 @@
             android:layout_height="61dp">
 
             <EditText
-                android:layout_width="match_parent"
+                android:layout_width="274dp"
                 android:layout_height="wrap_content"
                 android:inputType="text|textPersonName"
                 android:ems="10"
                 android:id="@+id/circuitNameText"
                 android:layout_marginBottom="10dp"
-                android:layout_weight="1"
                 android:hint="@string/circuitNameText" />
 
             <EditText
@@ -38,6 +37,15 @@
                 android:id="@+id/lapsText"
                 android:inputType="number"
                 android:hint="@string/lapsText" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:layout_weight="1"
+                android:id="@+id/nbCheckPointTxt"
+                android:hint="@string/checkPointTxt" />
         </LinearLayout>
 
         <FrameLayout
@@ -60,41 +68,12 @@
             android:layout_height="wrap_content"
             android:id="@+id/form">
 
-            <EditText
+            <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:id="@+id/idText"
-                android:inputType="number"
-                android:layout_weight="1"
-                android:hint="@string/idTextDefault" />
+                android:id="@+id/symbolText"
+                android:layout_weight="1" />
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:id="@+id/xText"
-                android:inputType="number"
-                android:layout_weight="1"
-                android:hint="@string/xDefault" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:id="@+id/yText"
-                android:inputType="number"
-                android:layout_weight="1"
-                android:hint="@string/yDefault" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:ems="10"
-                android:id="@+id/zText"
-                android:layout_weight="1"
-                android:hint="@string/zDefault" />
         </LinearLayout>
 
         <LinearLayout
