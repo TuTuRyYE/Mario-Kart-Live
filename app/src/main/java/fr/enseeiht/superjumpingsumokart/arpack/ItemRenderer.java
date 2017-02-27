@@ -12,7 +12,8 @@ import javax.microedition.khronos.opengles.GL10;
  * Created by JorgeEnrique on 2/02/2017.
  */
 
-class ItemRenderer extends ARRenderer {
+final class ItemRenderer extends ARRenderer {
+
 
     private final static String ITEM_RENDERER_TAG = "ItemRenderer";
 
@@ -21,7 +22,9 @@ class ItemRenderer extends ARRenderer {
      */
     public boolean configureARScene() {
         Log.d(ITEM_RENDERER_TAG, "configureARScene() called.");
-        //markerID = ARToolKit.getInstance().addMarker("single;Data/hiro.patt;80");
+        ARToolKit.getInstance().addMarker("multiple;Data/patt.hiro;80");
+        ARToolKit.getInstance().addMarker("multiple;Data/kanji.patt;80");
+
         ARToolKit.getInstance().addModel("Data/models/giantbanana.obj", "single;Data/hiro.patt;80", 0, 20f, true);
         //ARToolKit.getInstance().addModel("Data/models/Ferrari_Modena_Spider.obj", "single;Data/patt.kanji;80", 1);
         return true;
