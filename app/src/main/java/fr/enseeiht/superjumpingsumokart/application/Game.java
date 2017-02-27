@@ -12,6 +12,7 @@ import fr.enseeiht.superjumpingsumokart.application.items.MagicBox;
 import fr.enseeiht.superjumpingsumokart.application.items.RedShell;
 import fr.enseeiht.superjumpingsumokart.application.network.BluetoothCommunication;
 import fr.enseeiht.superjumpingsumokart.application.network.BluetoothCommunicationListener;
+import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 /**
  * @author Vivian Guy, Matthieu Michel, Romain Verset.
@@ -343,27 +344,21 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
     }
 
     @Override
-    public void onPositionUpdated(Vector3D position) {
-        drone.setCurrentPosition(position);
-    }
-
-    @Override
-    public void onItemUsed(Item item) {
+    public void onItemUsed(DetectionTask.Symbol symbol, Item item) {
         Log.d(GAME_TAG,"Information received from Item : item has been put on the circuit");
         addItem(item);
         for(GameListener listener  : this.GAME_LISTENERS) {
             listener.onPlayerUseItem(item,drone.getLastMarkerSeen());
-            Log.d(GAME_TAG,"transmitting the information to the listener");
         }
     }
 
     @Override
-    public void onItemTouched(Item item) {
-        Log.d(GAME_TAG,"Information received from Item : item has been touched");
-        removeItem(item);
-        for(GameListener listener  : this.GAME_LISTENERS) {
-            listener.onItemTouched(item);
-            Log.d(GAME_TAG,"transmitting the information to the listener");
+    public void onSymbolTouched(DetectionTask.Symbol symbol) {
+        Item item = Circuit.getInstance().getObjects().get(symbol);
+        if (item != null) {
+            for (GameListener listener : this.GAME_LISTENERS) {
+                listener.onItemTouched(item);
+            }
         }
 
     }

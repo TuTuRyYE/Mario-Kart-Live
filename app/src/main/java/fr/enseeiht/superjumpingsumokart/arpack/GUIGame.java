@@ -33,6 +33,7 @@ import org.artoolkit.ar.base.AndroidUtils;
 import java.util.ArrayList;
 
 import fr.enseeiht.superjumpingsumokart.R;
+import fr.enseeiht.superjumpingsumokart.application.Circuit;
 import fr.enseeiht.superjumpingsumokart.application.Drone;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
 import fr.enseeiht.superjumpingsumokart.application.Game;
@@ -286,7 +287,7 @@ public class GUIGame extends Activity implements GameListener {
                 Item item = controller.getDrone().getCurrentItem();
                 controller.useItem();
                 for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
-                    ggl.onItemUsed(item);
+                    ggl.onItemUsed(controller.getDrone().getLastMarkerSeen(), item);
                 }
             }
         });
@@ -473,7 +474,8 @@ public class GUIGame extends Activity implements GameListener {
     }
 
     @Override
-    public void onPlayerUseItem(Item item, DetectionTask.symbols symbol) {
+    public void onPlayerUseItem(Item item, DetectionTask.Symbol symbol) {
+        renderer.defineModelAtSymbol(item, symbol);
         displayTrap();
     }
 
@@ -484,7 +486,7 @@ public class GUIGame extends Activity implements GameListener {
 
     @Override
     public void onItemTouched(Item item) {
-        // Nothing to do here.
+        item.applyEffect(controller);
     }
 
     @Override
@@ -506,6 +508,12 @@ public class GUIGame extends Activity implements GameListener {
     public void notifyVictory() {
         if (!game.isFinished()) {
             UPDATER.sendEmptyMessage(VICTORY);
+        }
+    }
+
+    public void touchedSymbol(DetectionTask.Symbol symbol) {
+        for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
+            ggl.onSymbolTouched(symbol);
         }
     }
 

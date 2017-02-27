@@ -2,9 +2,7 @@ package fr.enseeiht.superjumpingsumokart.application;
 
 import java.util.ArrayList;
 
-import fr.enseeiht.superjumpingsumokart.application.items.Banana;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
-import fr.enseeiht.superjumpingsumokart.application.items.NullItem;
 import fr.enseeiht.superjumpingsumokart.application.items.RedShell;
 import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
@@ -35,15 +33,10 @@ public class Drone {
     private int currentLap;
 
     /**
-     *  Marker's id the drone has seen during the lap.
-     */
-    private ArrayList<Integer> markersSeen;
-
-    /**
      * Get the last marker seen
      * @return the marker
      */
-    public DetectionTask.symbols getLastMarkerSeen() {
+    public DetectionTask.Symbol getLastMarkerSeen() {
         return lastMarkerSeen;
     }
 
@@ -51,14 +44,14 @@ public class Drone {
      * Set the last marker seen
      * @param lastMarkerSeen the marker
      */
-    public void setLastMarkerSeen(DetectionTask.symbols lastMarkerSeen) {
+    public void setLastMarkerSeen(DetectionTask.Symbol lastMarkerSeen) {
         this.lastMarkerSeen = lastMarkerSeen;
     }
 
     /**
      * The last marker detected
      */
-    private DetectionTask.symbols lastMarkerSeen;
+    private DetectionTask.Symbol lastMarkerSeen;
 
     /**
      * Constructor for the class {@link Drone}.
@@ -70,7 +63,6 @@ public class Drone {
         //this.currentItem = new NullItem();
         this.currentItem = new RedShell();
         this.currentLap = 0;
-        this.markersSeen = new ArrayList<>();
     }
 
     /**
@@ -136,13 +128,4 @@ public class Drone {
     public void setCurrentLap(int currentLap) {
         this.currentLap = currentLap;
     }
-
-    /**
-     * Get the marker's ids the drone has seen during the current lap.
-     * @return the ids of the markers the drone has seen during the current lap.
-     */
-    public ArrayList<Integer> getMarkersSeen() {
-        return markersSeen;
-    }
-
 }

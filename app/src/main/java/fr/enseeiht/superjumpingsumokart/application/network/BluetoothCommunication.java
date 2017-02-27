@@ -325,7 +325,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
     }
 
     @Override
-    public void onPlayerUseItem(final Item item, final DetectionTask.symbols lastMarkerSeen) {
+    public void onPlayerUseItem(final Item item, final DetectionTask.Symbol lastMarkerSeen) {
         Log.d(BLUETOOTH_COMMUNICATION_TAG, "onPlayerUseItem called");
         // Creates message
         String dataString;

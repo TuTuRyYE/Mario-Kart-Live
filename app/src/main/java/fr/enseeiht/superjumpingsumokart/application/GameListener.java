@@ -30,7 +30,7 @@ public interface GameListener {
      * Called when the player use an {@link Item}.
      * @param item the item used
      */
-    void onPlayerUseItem(Item item, DetectionTask.symbols lastMarkerSeen);
+    void onPlayerUseItem(Item item, DetectionTask.Symbol lastMarkerSeen);
 
     /**
      * Called when the player give up the race.
