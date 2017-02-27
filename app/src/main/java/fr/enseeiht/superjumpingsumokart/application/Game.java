@@ -29,10 +29,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
      * {@link GUIGame}, the interface of the Game.
      */
     private GUIGame guiGame;
-    /**
-     * {@link ArrayList} of {@link Item} present on the circuit.
-     */
-    private ArrayList<Item> currentItems;
+
     /**
      * Boolean to check if the race is started or not.
      */
@@ -57,7 +54,6 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
             //TODO
             trackInitialised = true;
         }
-        currentItems = null;
         this.guiGame = guiGame;
         registerGameListener(guiGame);
         this.started = false;
@@ -116,36 +112,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
     public void setGuiGame(GUIGame guiGame) {
         this.guiGame = guiGame;
     }
-    /**
-     * Get currentItems {@link ArrayList} present on the circuit (Vivian - 07/02/2017).
-     * @return currentItems {@link ArrayList}.
-     */
-    public ArrayList<Item> getCurrentItems() {
-        return currentItems;
-    }
 
-    /**
-     * Set Items present on {@link Circuit} (Vivian - 07/02/2017).
-     * @param currentItems present
-     */
-    public void setCurrentItems(ArrayList<Item> currentItems) {
-        this.currentItems = currentItems;
-    }
-
-    /**
-     * Add an {@link Item} to the list of {@link Item} present on the race (Matthieu Michel - 15/02/2017).
-     * @param item added by the player.
-     */
-    private void addItem(Item item){
-        this.currentItems.add(item);
-    }
-    /**
-     * Remove an {@link Item} to the list of {@link Item} present on the race when an {@link Item} as been touched by the {@link Drone}(Matthieu Michel - 15/02/2017).
-     * @param item added by the player.
-     */
-    private void removeItem(Item item){
-        this.currentItems.remove(item);
-    }
     /**
      * Check the current status of the {@link Game} (Vivian - 07/02/2017).
      * @return true if the {@link Game} if started otherwise false.
@@ -224,26 +191,23 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
     public void onSecondPlayerUsesItem(String msg) {
         String[] msgSplit = msg.split("/");
         String name = msgSplit[0];
-        DetectionTask.symbols itemMarker;
+        DetectionTask.Symbol itemMarker;
         switch (name) {
             case "redshell":
                 Log.d(GAME_TAG,"You've been hit by a shell!");
                 RedShell redShell = new RedShell();
-                currentItems.add(redShell);
                 redShell.applyEffect(guiGame.getController());
                 break;
             case "banana":
                 Log.d(GAME_TAG,"A banana has been put on the circuit by second player");
-                itemMarker = DetectionTask.symbols.valueOf(msgSplit[1]);
+                itemMarker = DetectionTask.Symbol.valueOf(msgSplit[1]);
                 Banana banana = new Banana();
-                currentItems.add(banana);
                 Circuit.getInstance().addObject(itemMarker,banana);
                 break;
             case "box":
                 Log.d(GAME_TAG,"A box has been put on the circuit by second player");
-                itemMarker = DetectionTask.symbols.valueOf(msgSplit[1]);
+                itemMarker = DetectionTask.Symbol.valueOf(msgSplit[1]);
                 Box box = new Box();
-                currentItems.add(box);
                 Circuit.getInstance().addObject(itemMarker,box);
                 break;
         }
@@ -252,27 +216,15 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
     @Override
     public void onSecondPlayerTouchedItem(String msg){
         String[] msgSplit = msg.split("/");
-        boolean found = false;
-        DetectionTask.symbols itemMarker;
-        itemMarker = DetectionTask.symbols.valueOf(msgSplit[1]);
-        int ind = 0;
-        Item currentItem;
-        while (!found && ind <= currentItems.size()) {
-            currentItem = currentItems.get(ind);
-            if (currentItem.getSymbol().name().equals(itemMarker.name())) {
-                found = true;
-                currentItems.remove(ind);
-            } else {
-                ind++;
-            }
-        }
+        DetectionTask.Symbol symbol = DetectionTask.Symbol.valueOf(msgSplit[1]);
+        Circuit.getInstance().removeObject(symbol);
     }
 
 
     @Override
-    public void onItemUsed(Item item) {
+    public void onItemUsed(DetectionTask.Symbol symbol, Item item) {
         Log.d(GAME_TAG,"Information received from Item : item has been put on the circuit");
-        addItem(item);
+        Circuit.getInstance().addObject(symbol, item);
         for(GameListener listener  : this.GAME_LISTENERS) {
             listener.onPlayerUseItem(item,drone.getLastMarkerSeen());
         }
@@ -283,7 +235,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
         Item item = Circuit.getInstance().getObjects().get(symbol);
         if (item != null) {
             for (GameListener listener : this.GAME_LISTENERS) {
-                listener.onItemTouched(item);
+                listener.onItemTouched(item, symbol);
             }
         }
 
