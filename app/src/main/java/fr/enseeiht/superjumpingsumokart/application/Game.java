@@ -35,7 +35,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
 
     private Drone drone, otherDrone;
 
-    private boolean trackInitialised = false, videoStreamAvailable = false, droneControllerReady = false;
+    boolean videoStreamAvailable = false, droneControllerReady = false;
     private boolean ready = false, otherReady = false;
     private boolean started = false;
     private boolean finished = false;
@@ -57,7 +57,6 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
             registerGameListener(comBT);
             Log.d(GAME_TAG, "2 players game created.");
             if (isServer) {
-                trackInitialised = true;
                 comBT.sendCircuit();
             }
         } else {
@@ -69,16 +68,13 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
 
     private void checkReadyAndStartRace() {
         Log.d(GAME_TAG, "checkReadyAndStartRace called");
-        if (trackInitialised) {
-            Log.d(GAME_TAG, "trackInitialised");
-        }
         if (droneControllerReady) {
             Log.d(GAME_TAG, "droneControllerReady");
         }
         if (videoStreamAvailable) {
             Log.d(GAME_TAG, "videoStreamAvailable");
         }
-        if (trackInitialised && droneControllerReady && videoStreamAvailable) {
+        if (droneControllerReady && videoStreamAvailable) {
             ready =  true;
             for (GameListener gl : GAME_LISTENERS) {
                 gl.onPlayerReady();
@@ -280,15 +276,14 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
                 gl.onPlayerGaveUp();
             }
         }
-       /* for (GameListener gl : GAME_LISTENERS) {
+        for (GameListener gl : GAME_LISTENERS) {
             unregisterGameListener(gl);
-        }*/
+        }
         finished = true;
     }
 
     @Override
     public void onCircuitReceived() {
-        trackInitialised = true;
         checkReadyAndStartRace();
     }
 
