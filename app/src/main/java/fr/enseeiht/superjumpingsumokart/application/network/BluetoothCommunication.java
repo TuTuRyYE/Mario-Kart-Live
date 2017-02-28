@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import fr.enseeiht.superjumpingsumokart.application.Circuit;
+import fr.enseeiht.superjumpingsumokart.application.GUIWelcome;
 import fr.enseeiht.superjumpingsumokart.application.Game;
 import fr.enseeiht.superjumpingsumokart.application.GameListener;
 import fr.enseeiht.superjumpingsumokart.application.Vector3D;
@@ -30,6 +31,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
      * Logging tag. Useful for debugging.
      */
     private final static String BLUETOOTH_COMMUNICATION_TAG = "BluetoothCommunication";
+    private final GUIWelcome GUI_WELCOME;
     /**
      * The singleton instance of {@link BluetoothCommunication}.
      */
@@ -64,8 +66,9 @@ public final class BluetoothCommunication extends Thread implements GameListener
      *
      * @param socket Socket used for communications.
      */
-    private BluetoothCommunication(BluetoothSocket socket) {
+    private BluetoothCommunication(BluetoothSocket socket, GUIWelcome guiWelcome) {
         BT_SOCKET = socket;
+        GUI_WELCOME = guiWelcome;
         // Initialisation of the streams
         try {
             btInputStream = socket.getInputStream();
@@ -80,9 +83,9 @@ public final class BluetoothCommunication extends Thread implements GameListener
      *
      * @param socket Socket used for communications.
      */
-    static void initInstance(BluetoothSocket socket) {
+    static void initInstance(BluetoothSocket socket, GUIWelcome guiWelcome) {
         if (btComInstance == null) {
-            btComInstance = new BluetoothCommunication(socket);
+            btComInstance = new BluetoothCommunication(socket, guiWelcome);
         }
     }
 
@@ -173,7 +176,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
                     DetectionTask.Symbol symbol = DetectionTask.Symbol.valueOf(symbolsType);
                     Circuit.getInstance().addMarker(symbol);
                     }
-
+                GUI_WELCOME.enableStartARaceButton();
                 for (BluetoothCommunicationListener bcl : BLUETOOTH_COMMUNICATION_LISTENERS) {
                     bcl.onCircuitReceived();
                 }

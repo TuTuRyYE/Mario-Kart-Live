@@ -212,6 +212,7 @@ public class GUIWelcome extends Activity {
      */
     private void btJoinBtnAction() {
         if (!clientConnected) {
+            startRaceBtn.setEnabled(false);
             isServer = false;
             client = new BluetoothClient(GUIWelcome.this);
             client.start();
@@ -310,4 +311,7 @@ public class GUIWelcome extends Activity {
         serverHosting = false;
     }
 
+    public void enableStartARaceButton() {
+        startRaceBtn.setEnabled(true);
+    }
 }

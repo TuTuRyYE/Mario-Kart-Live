@@ -39,7 +39,6 @@ public final class ItemRenderer extends ARRenderer {
         SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.G, ARToolKit.getInstance().addMarker("single;Data/patt.g;80"));
         int magicBoxId = SYMBOLS_HASH_MAP.get(DetectionTask.Symbol.A);
         ARToolKit.getInstance().addModel("Data/models/box.obj", "single;Data/patt.a;80", magicBoxId, 100.0f, true);
-
         return true;
     }
 
@@ -54,7 +53,7 @@ public final class ItemRenderer extends ARRenderer {
 
     }
 
-    public void deleteModelAtSymbole(DetectionTask.Symbol symbol) {
+    public void deleteModelAtSymbol(DetectionTask.Symbol symbol) {
         String symbolString = symbol.name().toLowerCase();
         int id = SYMBOLS_HASH_MAP.get(symbol);
         ARToolKit.getInstance().addModel("Data/models/void.obj", "single;Dara/patt.".concat(symbolString).concat(";80"), id, .0f, false);
@@ -63,7 +62,6 @@ public final class ItemRenderer extends ARRenderer {
     @Override
     public void onDrawFrame(GL10 gl) {
         if (ARToolKit.getInstance().getProjectionMatrix() != null) {
-            Log.d(ITEM_RENDERER_TAG, "onDrawFrame() called.");
             draw(gl);
         }
     }

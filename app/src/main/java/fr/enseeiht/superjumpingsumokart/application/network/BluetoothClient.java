@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import fr.enseeiht.superjumpingsumokart.application.GUIWelcome;
+import fr.enseeiht.superjumpingsumokart.application.GuiGameListener;
 
 /**
  * Defines the bluetooth client used to communicate with another paired phone.
@@ -98,7 +99,7 @@ public class BluetoothClient extends Thread {
             return;
         }
         // Launches the Bluetooth communication thread
-        BluetoothCommunication.initInstance(btSocket);
+        BluetoothCommunication.initInstance(btSocket, GUI_WELCOME);
         //The bluetooth communication channel.
         BluetoothCommunication comClient = BluetoothCommunication.getInstance();
         comClient.start();

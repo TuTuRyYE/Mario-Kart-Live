@@ -3,12 +3,10 @@ package fr.enseeiht.superjumpingsumokart.application;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import fr.enseeiht.superjumpingsumokart.application.items.Banana;
 import fr.enseeiht.superjumpingsumokart.application.items.Box;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
-import fr.enseeiht.superjumpingsumokart.application.items.MagicBox;
 import fr.enseeiht.superjumpingsumokart.application.items.RedShell;
 import fr.enseeiht.superjumpingsumokart.application.network.BluetoothCommunication;
 import fr.enseeiht.superjumpingsumokart.application.network.BluetoothCommunicationListener;
@@ -221,7 +219,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
         String[] msgSplit = msg.split("/");
         DetectionTask.Symbol symbol = DetectionTask.Symbol.valueOf(msgSplit[1]);
         Circuit.getInstance().removeObject(symbol);
-        guiGame.getRenderer().deleteModelAtSymbole(symbol);
+        guiGame.getRenderer().deleteModelAtSymbol(symbol);
     }
 
 
@@ -243,7 +241,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
                 listener.onItemTouched(item, symbol);
             }
             Circuit.getInstance().removeObject(symbol);
-            guiGame.getRenderer().deleteModelAtSymbole(symbol);
+            guiGame.getRenderer().deleteModelAtSymbol(symbol);
         }
 
     }
