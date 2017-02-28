@@ -55,7 +55,7 @@ public final class ItemRenderer extends ARRenderer {
         String symbolString = symbol.name().toLowerCase();
         int id = SYMBOLS_HASH_MAP.get(symbol);
         if (item instanceof Banana) {
-            ARToolKit.getInstance().addModel("Data/models/giantbanana.obj", "single;Dara/patt.".concat(symbolString).concat(";80"), id, 20.0f, true);
+            ARToolKit.getInstance().addModel("Data/models/giantbanana.obj", "single;Data/patt.".concat(symbolString).concat(";80"), id, 20.0f, true);
         } /*else if (item instanceof FakeBox) {
             ARToolKit.getInstance().addModel("Data/models/box.obj", "single;Data/patt.".concat(symbolString).concat(";80"), id, 20.0f, false);
         }*/
@@ -66,7 +66,7 @@ public final class ItemRenderer extends ARRenderer {
         Log.d(ITEM_RENDERER_TAG, "Deleted model for symbol : " + symbol.name());
         String symbolString = symbol.name().toLowerCase();
         int id = SYMBOLS_HASH_MAP.get(symbol);
-        ARToolKit.getInstance().addModel("Data/models/void.obj", "single;Dara/patt.".concat(symbolString).concat(";80"), id, .0f, false);
+        ARToolKit.getInstance().addModel("Data/models/void.obj", "single;Data/patt.".concat(symbolString).concat(";80"), id, .0f, false);
     }
 
     @Override
