@@ -313,7 +313,9 @@ public class GUIGame extends Activity implements GameListener {
         super.onResume();
         Log.d(GUI_GAME_TAG, "Resuming GUIGame activity");
         firstUpdate = true;
-        controller.startController();
+        if (controller != null) {
+            controller.startController();
+        }
         initCameraSurfaceView();
         initGLSurfaceView();
         ARToolKit.getInstance().initialiseAR(VIDEO_WIDTH, VIDEO_HEIGHT, "Data/camera_para.dat", 0, false);

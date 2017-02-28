@@ -158,7 +158,9 @@ public class GUIWelcome extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        disableWifiConnectionBtn();
+        if (currentDeviceService == null) {
+            disableWifiConnectionBtn();
+        }
     }
 
     /**

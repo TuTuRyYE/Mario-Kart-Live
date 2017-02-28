@@ -24,7 +24,7 @@ import fr.enseeiht.superjumpingsumokart.application.items.NullItem;
  */
 public class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
 
-    public enum Symbol {HIRO, KANJI, A, B, C, D, E, F, G};
+    public enum Symbol {HIRO, KANJI, A, B, C, D, F, G};
 
     /**
      * Logging tag. Useful for debugging.

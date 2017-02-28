@@ -313,4 +313,4 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
         videoStreamAvailable = true;
         checkReadyAndStartRace();
     }
-}
+}// c'est jorge qui va gagner la course

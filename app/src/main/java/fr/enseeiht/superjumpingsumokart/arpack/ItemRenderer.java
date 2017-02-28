@@ -29,16 +29,16 @@ public final class ItemRenderer extends ARRenderer {
      */
     public boolean configureARScene() {
         Log.d(ITEM_RENDERER_TAG, "configureARScene() called.");
-        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.HIRO,ARToolKit.getInstance().addMarker("multiple;Data/patt.hiro;80"));
-        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.KANJI, ARToolKit.getInstance().addMarker("multiple;Data/patt.kanji;80"));
-        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.KANJI, ARToolKit.getInstance().addMarker("single;Data/patt.a;80"));
-        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.KANJI, ARToolKit.getInstance().addMarker("single;Data/patt.b;80"));
-        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.KANJI, ARToolKit.getInstance().addMarker("single;Data/patt.c;80"));
-        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.KANJI, ARToolKit.getInstance().addMarker("single;Data/patt.d;80"));
-        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.KANJI, ARToolKit.getInstance().addMarker("single;Data/patt.f;80"));
-        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.KANJI, ARToolKit.getInstance().addMarker("single;Data/patt.g;80"));
+        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.HIRO,ARToolKit.getInstance().addMarker("multi;Data/patt.hiro;80"));
+        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.KANJI, ARToolKit.getInstance().addMarker("multi;Data/patt.kanji;80"));
+        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.A, ARToolKit.getInstance().addMarker("single;Data/patt.a;80"));
+        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.B, ARToolKit.getInstance().addMarker("single;Data/patt.b;80"));
+        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.C, ARToolKit.getInstance().addMarker("single;Data/patt.c;80"));
+        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.D, ARToolKit.getInstance().addMarker("single;Data/patt.d;80"));
+        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.F, ARToolKit.getInstance().addMarker("single;Data/patt.f;80"));
+        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.G, ARToolKit.getInstance().addMarker("single;Data/patt.g;80"));
         int magicBoxId = SYMBOLS_HASH_MAP.get(DetectionTask.Symbol.A);
-        ARToolKit.getInstance().addModel("Data/models/box.obj", "single;Data/patt.a;80", 0, 20.0f, true);
+        ARToolKit.getInstance().addModel("Data/models/box.obj", "single;Data/patt.a;80", magicBoxId, 100.0f, true);
 
         return true;
     }
