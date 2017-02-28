@@ -477,7 +477,9 @@ public class GUIGame extends Activity implements GameListener {
 
     @Override
     public void onPlayerUseItem(Item item, DetectionTask.Symbol symbol) {
-        renderer.defineModelAtSymbol(item, symbol);
+        if (symbol != null) {
+            renderer.defineModelAtSymbol(item, symbol);
+        }
         displayTrap();
     }
 
