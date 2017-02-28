@@ -33,7 +33,7 @@ public final class ItemRenderer extends ARRenderer {
         Log.d(ITEM_RENDERER_TAG,Integer.toString(SYMBOLS_HASH_MAP.get(DetectionTask.Symbol.HIRO)));
         SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.KANJI, ARToolKit.getInstance().addMarker("single;Data/patt.kanji;80"));
         Log.d(ITEM_RENDERER_TAG,Integer.toString(SYMBOLS_HASH_MAP.get(DetectionTask.Symbol.KANJI)));
-        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.A, ARToolKit.getInstance().addModel("Data/models/box.obj", "single;Data/patt.hiro;80", DetectionTask.Symbol.A.ordinal(), 20.0f, true));
+        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.A, ARToolKit.getInstance().addModel("Data/models/box.obj", "single;Data/patt.a;80", DetectionTask.Symbol.A.ordinal(), 20.0f, true));
         return true;
     }
 
