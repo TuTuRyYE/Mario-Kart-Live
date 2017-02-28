@@ -64,6 +64,7 @@ public class Circuit {
         this.lapsNumber = laps;
         this.checkPointToCheck = checkPointToCheck;
         this.markers = new HashMap<>();
+       this.objects = new HashMap<>();
     }
 
     /**

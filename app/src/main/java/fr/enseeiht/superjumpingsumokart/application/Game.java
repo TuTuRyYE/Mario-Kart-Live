@@ -272,14 +272,16 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
 
     @Override
     public void onPlayerGaveUp() {
+        Log.d(GAME_TAG,"Player gives up");
         if (comBT != null) {
             for (GameListener gl : GAME_LISTENERS) {
+                Log.d(GAME_TAG,"Player gives up notify the listener");
                 gl.onPlayerGaveUp();
             }
         }
-        for (GameListener gl : GAME_LISTENERS) {
+       /* for (GameListener gl : GAME_LISTENERS) {
             unregisterGameListener(gl);
-        }
+        }*/
         finished = true;
     }
 
@@ -305,4 +307,4 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
         videoStreamAvailable = true;
         checkReadyAndStartRace();
     }
-}// c'est jorge qui va gagner la course
+}

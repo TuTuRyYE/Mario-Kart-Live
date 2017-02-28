@@ -110,7 +110,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
                 byte[] data = new byte[bytes];
                 System.arraycopy(buffer, 0, data, 0, bytes);
                 String receivedMsg = new String(data, Charset.forName("UTF-8"));
-
+                Log.d(BLUETOOTH_COMMUNICATION_TAG,"Message"+ receivedMsg +" received");
                 // Dispatches the message according to its key.
                 dispatchMessage(receivedMsg);
 
@@ -133,11 +133,14 @@ public final class BluetoothCommunication extends Thread implements GameListener
         Log.d(BLUETOOTH_COMMUNICATION_TAG, "Message " + key + " received");
         switch (key) {
             case "isReady":
+                Log.d(BLUETOOTH_COMMUNICATION_TAG,"other Player is ready received");
                 for (BluetoothCommunicationListener listener : this.BLUETOOTH_COMMUNICATION_LISTENERS) {
                     listener.onSecondPlayerReady();
+                    Log.d(BLUETOOTH_COMMUNICATION_TAG,"other Player is ready dispatched");
                 }
                 break;
             case "hasFinished":
+                Log.d(BLUETOOTH_COMMUNICATION_TAG,"other Player has finished received");
                 for (BluetoothCommunicationListener listener : this.BLUETOOTH_COMMUNICATION_LISTENERS) {
                     listener.onSecondPlayerFinished();
                 }
@@ -149,6 +152,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
                 }
                 break;
             case "itemUsed":
+                Log.d(BLUETOOTH_COMMUNICATION_TAG,"other Player used an item");
                 for (BluetoothCommunicationListener listener : this.BLUETOOTH_COMMUNICATION_LISTENERS) {
                     String itemInfos;
                     if (msgSplit.length == 2) { // if the object isn't on a marker
