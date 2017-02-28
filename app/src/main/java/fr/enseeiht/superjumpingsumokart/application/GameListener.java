@@ -5,7 +5,7 @@ import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
  * Created by Vivian on 15/02/2017.
- * Inteface for the communication between BT and Game
+ * Inteface for the communication between BT and Game.
  */
 
 public interface GameListener {
@@ -21,14 +21,14 @@ public interface GameListener {
     void onPlayerFinished();
 
     /**
-     * Called when the player has finished a lap
+     * Called when the player has finished a lap.
      */
 
     void onPlayerFinishedLap();
 
     /**
      * Called when the player use an {@link Item}.
-     * @param item the item used
+     * @param item the item used.
      */
     void onPlayerUseItem(Item item, DetectionTask.Symbol lastMarkerSeen);
 
@@ -38,13 +38,13 @@ public interface GameListener {
     void onPlayerGaveUp();
 
     /**
-     * Called when an {@link Item} is touched on the {@link Circuit}
-     * @param item the item touched
+     * Called when an {@link Item} is touched on the {@link Circuit}.
+     * @param item the item touched.
      */
     void onItemTouched(Item item, DetectionTask.Symbol symbol);
 
     /**
-     * Called when the two players are ready and the start begins
+     * Called when the two players are ready and the start begins.
      */
     void onStartRace();
 

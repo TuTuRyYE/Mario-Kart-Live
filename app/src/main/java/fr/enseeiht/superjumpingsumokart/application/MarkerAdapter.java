@@ -15,7 +15,7 @@ import fr.enseeiht.superjumpingsumokart.R;
 
 /**
  * Created by Vivian on 17/02/2017.
- * Adapter for the ListView of GUICreateCircuit and GUIModifyCircuit
+ * Adapter for the ListView of GUICreateCircuit and GUIModifyCircuit.
  */
 
 public class MarkerAdapter extends ArrayAdapter<String> {
@@ -52,7 +52,7 @@ public class MarkerAdapter extends ArrayAdapter<String> {
     }
 
     /**
-     * ViewHolder for the MarkerAdapter
+     * ViewHolder for the MarkerAdapter.
      */
     private class MarkerViewHolder{
         public TextView id;

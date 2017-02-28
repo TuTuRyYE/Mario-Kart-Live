@@ -7,25 +7,25 @@ package fr.enseeiht.superjumpingsumokart.application;
 
 public class Vector3D {
     /**
-     * The x position in the 3D space
+     * The x position in the 3D space.
      */
     private double x;
 
     /**
-     * The y position in the 3D space
+     * The y position in the 3D space.
      */
     private double y;
 
     /**
-     * The z position in the 3D space
+     * The z position in the 3D space.
      */
     private double z;
 
     /**
-     * The constructor for the class {@link Vector3D}
-     * @param x
-     * @param y
-     * @param z
+     * The constructor for the class {@link Vector3D}.
+     * @param x .
+     * @param y .
+     * @param z .
      */
     public Vector3D (double x, double y, double z) {
         this.x = x;
@@ -34,57 +34,57 @@ public class Vector3D {
     }
 
     /**
-     * Get the x position
-     * @return x
+     * Get the x position.
+     * @return x .
      */
     public double getX() {
         return x;
     }
 
     /**
-     * Set the x position
-     * @param x the new x position
+     * Set the x position.
+     * @param x the new x position.
      */
     public void setX(double x) {
         this.x = x;
     }
 
     /**
-     * Get the y position
-     * @return y
+     * Get the y position.
+     * @return y .
      */
     public double getY() {
         return y;
     }
 
     /**
-     * Set the y position
-     * @param y the new y position
+     * Set the y position.
+     * @param y the new y position.
      */
     public void setY(double y) {
         this.y = y;
     }
 
     /**
-     * Get the z position
-     * @return z
+     * Get the z position.
+     * @return z .
      */
     public double getZ() {
         return z;
     }
 
     /**
-     * Set the z position
-     * @param z the new z position
+     * Set the z position.
+     * @param z the new z position.
      */
     public void setZ(double z) {
         this.z = z;
     }
 
     /**
-     * Check if the {@link Vector3D} is equal to an other one
-     * @param v on other {@link Vector3D}
-     * @return true if the {@link Vector3D} is equal to v, false if not
+     * Check if the {@link Vector3D} is equal to an other one.
+     * @param v on other {@link Vector3D}.
+     * @return true if the {@link Vector3D} is equal to v, false if not.
      */
     @Override
     public boolean equals(Object v ) {

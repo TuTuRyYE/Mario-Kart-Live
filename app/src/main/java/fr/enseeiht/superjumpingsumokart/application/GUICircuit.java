@@ -27,7 +27,7 @@ import fr.enseeiht.superjumpingsumokart.R;
 import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
- * @author Vivian GUY
+ * @author Vivian GUY.
  * The activity used for handling circuits. From this activity, the user can chose/modify/delete
  * a existing circuit or create a new one.
  */
@@ -41,7 +41,7 @@ public class GUICircuit extends Activity {
         private static String GUI_CIRCUIT_TAG = "GUICircuit";
 
     /**
-     * Buttons in the GUI
+     * Buttons in the GUI.
      */
         private Button createNewCircuitBtn;
         private Button choseSelectedBtn;
@@ -60,7 +60,7 @@ public class GUICircuit extends Activity {
         private ArrayAdapter adapter;
 
     /**
-     * The item on the existingCircuitsListView selected by the user and the one previously selected
+     * The item on the existingCircuitsListView selected by the user and the one previously selected.
      */
         private int selectedItem = -1;
         private int oldSelectedItem = -1;
@@ -90,7 +90,7 @@ public class GUICircuit extends Activity {
 
         // Set Buttons Listener
             /**
-             * Button to launch the activity allowing the user to create a new circuit
+             * Button to launch the activity allowing the user to create a new circuit.
              */
             createNewCircuitBtn.setOnTouchListener(new View.OnTouchListener() {
                     @Override
@@ -108,7 +108,7 @@ public class GUICircuit extends Activity {
                 });
 
             /**
-             *  Button to select and instanced the selected circuit
+             *  Button to select and instanced the selected circuit.
              */
             choseSelectedBtn.setOnTouchListener(new View.OnTouchListener() {
                     @Override
@@ -175,7 +175,7 @@ public class GUICircuit extends Activity {
                 });
 
         /**
-         * Listener to select an item on the existingCircuitsListView
+         * Listener to select an item on the existingCircuitsListView.
          */
         existingCircuitsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -200,7 +200,7 @@ public class GUICircuit extends Activity {
         });
 
         /**
-         * Button to delete the selected circuit
+         * Button to delete the selected circuit.
          */
         deleteCircuitBtn.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -235,7 +235,7 @@ public class GUICircuit extends Activity {
         });
 
         /**
-         * Button to modify the selected circuit. Launch a GUIModifyCircuit Activity
+         * Button to modify the selected circuit. Launch a GUIModifyCircuit Activity.
          */
         modifyCircuitBtn.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -264,7 +264,7 @@ public class GUICircuit extends Activity {
     }
 
     /**
-     * Set the existingCircuit list with the files in the Circuits folder
+     * Set the existingCircuit list with the files in the Circuits folder.
      */
     private void setExistingCircuitsList() {
 

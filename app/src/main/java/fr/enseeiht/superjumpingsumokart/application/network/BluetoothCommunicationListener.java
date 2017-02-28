@@ -12,7 +12,7 @@ public interface BluetoothCommunicationListener {
     void onSecondPlayerReady();
 
     /**
-     * Notify the game that the second player has started the race
+     * Notify the game that the second player has started the race.
      */
     void onSecondStartRace();
 
@@ -48,7 +48,7 @@ public interface BluetoothCommunicationListener {
 
 
     /**
-     * Notify a circuit has been received from bluetooth communication
+     * Notify a circuit has been received from bluetooth communication.
      */
     void onCircuitReceived();
 
