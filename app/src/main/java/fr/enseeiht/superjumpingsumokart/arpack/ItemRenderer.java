@@ -46,7 +46,7 @@ public final class ItemRenderer extends ARRenderer {
         SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.G, ARToolKit.getInstance().addMarker("single;Data/patt.g;80"));
         Log.d(ITEM_RENDERER_TAG,Integer.toString(SYMBOLS_HASH_MAP.get(DetectionTask.Symbol.G)));
         int magicBoxId = SYMBOLS_HASH_MAP.get(DetectionTask.Symbol.A);
-        ARToolKit.getInstance().addModel("Data/models/box.obj", "single;Data/patt.a;80", magicBoxId, 100.0f, true);
+        ARToolKit.getInstance().addModel("Data/models/box.obj", "single;Data/patt.hiro;80", magicBoxId, 100.0f, true);
         return true;
     }
 

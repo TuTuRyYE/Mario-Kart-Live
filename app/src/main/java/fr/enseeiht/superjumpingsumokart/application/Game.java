@@ -225,9 +225,6 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
 
     @Override
     public void onItemUsed(DetectionTask.Symbol symbol, Item item) {
-        Log.d(GAME_TAG,"Information received from Item : item has been put on the circuit");
-        Circuit.getInstance().addObject(symbol, item);
-
         for(GameListener listener  : this.GAME_LISTENERS) {
             listener.onPlayerUseItem(item,symbol);
         }
