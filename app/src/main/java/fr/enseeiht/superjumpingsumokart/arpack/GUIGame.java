@@ -333,12 +333,15 @@ public class GUIGame extends Activity implements GameListener {
 
     @Override
     public void onStop() {
+        Log.d(GUI_GAME_TAG,"calling on stop");
         super.onStop();
         if (controller.isRunning()) {
             controller.stopController();
         }
         for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
+            Log.d(GUI_GAME_TAG,"In boucle fo");
             if (game != null && game.isStarted()) {
+                Log.d(GUI_GAME_TAG,"In the if");
                 ggl.onPlayerGaveUp();
             }
             unregisterGuiGameListener(ggl);
