@@ -54,7 +54,7 @@ public abstract class Item {
     /**
      * Put the object image on a {@link ImageButton} (Romain Verset - 02/02/2017).
      *
-     * @param ib The {@link ImageButton} on which the image has to be displayed;
+     * @param ib The {@link ImageButton} on which the image has to be displayed.
      */
     public abstract void assignResource(ImageButton ib);
 

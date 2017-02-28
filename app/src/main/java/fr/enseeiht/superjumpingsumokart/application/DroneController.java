@@ -11,7 +11,7 @@ import fr.enseeiht.superjumpingsumokart.application.items.NullItem;
 import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 /**
- * @author Matthieu Michel, Romain Verset
+ * @author Matthieu Michel, Romain Verset.
  * This class is used as a controller of a Jumping Sumo device.
  */
 public class DroneController implements ARDeviceControllerListener, ARDeviceControllerStreamListener {
@@ -56,7 +56,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
 
     /**
      * Default Constructor of the class {@link DroneController} (Matthieu Michel - 30/01/2017).
-     * It binds the {@link}
+     * It binds the {@link}.
      * @param guiGame interface of the Game.
      * @param device the device to create the controller for.
      */

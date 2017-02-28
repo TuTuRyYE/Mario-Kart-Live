@@ -43,7 +43,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
 
     /**
      * Default constructor of the class {@link Game} (Vivian - 07/02/2017).
-     * @param guiGame interface of the {@link Game}
+     * @param guiGame interface of the {@link Game}.
      */
     public Game(GUIGame guiGame, BluetoothCommunication comBT, boolean isServer) {
         // Add markers for boxes

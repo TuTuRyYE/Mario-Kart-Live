@@ -25,7 +25,7 @@ public class Circuit {
     private String name;
 
     /**
-     * The markers present on the circuit. Each marker is defined by its order in the circuit and its symbol
+     * The markers present on the circuit. Each marker is defined by its order in the circuit and its symbol.
      */
     private HashMap<Integer ,DetectionTask.Symbol> markers;
 
@@ -56,9 +56,9 @@ public class Circuit {
     private static Circuit circuitInstance;
 
     /**
-     * Constructor for singleton circuit
-     * @param laps
-     * @param checkPointToCheck
+     * Constructor for singleton circuit.
+     * @param laps .
+     * @param checkPointToCheck .
      */
    private Circuit(int laps, int checkPointToCheck) {
         this.lapsNumber = laps;
@@ -108,8 +108,8 @@ public class Circuit {
     }
 
     /**
-     * Add markers to the list of markers present on the circuit
-     * @param symbol the symbol of the marker
+     * Add markers to the list of markers present on the circuit.
+     * @param symbol the symbol of the marker.
      */
     public void addMarker(DetectionTask.Symbol symbol) {
         this.markers.put(this.markers.size() + 1, symbol);

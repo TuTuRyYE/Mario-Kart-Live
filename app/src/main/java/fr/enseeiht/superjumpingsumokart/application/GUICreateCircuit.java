@@ -25,8 +25,8 @@ import fr.enseeiht.superjumpingsumokart.R;
 import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
- * @author Vivian GUY
- * Activity to create a new Circuit
+ * @author Vivian GUY.
+ * Activity to create a new Circuit.
  */
 
 public class GUICreateCircuit extends Activity {
@@ -37,7 +37,7 @@ public class GUICreateCircuit extends Activity {
         private static String GUI_CREATE_CIRCUIT_TAG = "GUICreateCircuit";
 
     /**
-     * Buttons in the GUI
+     * Buttons in the GUI.
      */
         private EditText circuitNameText;
         private EditText lapsText;
@@ -49,12 +49,12 @@ public class GUICreateCircuit extends Activity {
         private Button deleteMarkerBtn;
 
     /**
-     * Item selected in the ListView listMarkers
+     * Item selected in the ListView listMarkers.
      */
         private Integer itemSelected;
 
     /**
-     * The list of markers for the circuit
+     * The list of markers for the circuit.
      */
         private static ArrayList<String> markers;
 
@@ -117,7 +117,7 @@ public class GUICreateCircuit extends Activity {
         // Set buttons listener
 
             /**
-             * Button to add a marker to the list of markers
+             * Button to add a marker to the list of markers.
              */
             addMarkerBtn.setOnTouchListener(new View.OnTouchListener() {
                     @Override
@@ -154,7 +154,7 @@ public class GUICreateCircuit extends Activity {
                 });
 
             /**
-             * Button to the confirm the circuit. It instanced to circuit with the markers described in the list
+             * Button to the confirm the circuit. It instanced to circuit with the markers described in the list.
              */
             confirmBtn.setOnTouchListener(new View.OnTouchListener() {
                     @Override
@@ -171,7 +171,7 @@ public class GUICreateCircuit extends Activity {
                 });
 
             /**
-             * Button to delete the selected marker
+             * Button to delete the selected marker.
              */
             deleteMarkerBtn.setOnTouchListener(new View.OnTouchListener() {
                     @Override
@@ -204,7 +204,7 @@ public class GUICreateCircuit extends Activity {
                 });
 
             /**
-             * Listener to select an item of the listView listMarkers
+             * Listener to select an item of the listView listMarkers.
             */
             listMarkers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -236,7 +236,7 @@ public class GUICreateCircuit extends Activity {
     }
 
     /**
-     * Create the circuit file and instanced it
+     * Create the circuit file and instanced it.
      */
     protected void createCircuitFile() {
         // Create the directory if it doesn't exist

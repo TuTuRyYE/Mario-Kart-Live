@@ -73,7 +73,7 @@ public class BluetoothClient extends Thread {
         // We get a BluetoothSocket object thanks to the BluetoothDevice.
         try {
             // The UUID is the login for the server. It is the same on the server's side.
-            tmpSocket = btDevice.createRfcommSocketToServiceRecord(UUID.fromString("00002415-0000-1000-8000-00805F9B34FB"));
+            tmpSocket = btDevice.createInsecureRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"));
         } catch (IOException e) {
             Log.e(BLUETOOTH_CLIENT_TAG, "IOException while getting a socket : " + e.getMessage());
         }

@@ -183,7 +183,7 @@ public class GUIWelcome extends Activity {
     }
     /**
      * Enables to connect with a Jumping Sumo drone (Romain Verset - 31/01/2017).
-     * <b>Your cell phone has to be connected to the acces point provided by the Jumping Sumo drone.<b/>
+     * <b>Your cell phone has to be connected to the access point provided by the Jumping Sumo drone.<b/>
      */
     private void wifiConnectionBtnAction() {
         try {
@@ -227,7 +227,6 @@ public class GUIWelcome extends Activity {
      * //TODO
      */
     private void setCircuitBtnAction() {
-        //TODO
         Intent i = new Intent(GUIWelcome.this, GUICircuit.class);
         Log.d(GUI_WELCOME_TAG, "Launching a GUICircuit Activity...");
         startActivity(i);

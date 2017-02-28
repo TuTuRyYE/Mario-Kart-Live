@@ -429,7 +429,7 @@ public class GUIGame extends Activity implements GameListener {
     /**
      * Method used by {@link #controller} to send the current frame of its video stream to the GUI (Romain Verset - 01/02/2017).
      *
-     * @param frame The frame received from the device
+     * @param frame The frame received from the device.
      */
     public void receiveFrame(ARFrame frame) {
         if (firstUpdate) {

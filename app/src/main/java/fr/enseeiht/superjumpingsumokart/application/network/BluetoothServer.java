@@ -65,7 +65,7 @@ public class BluetoothServer extends Thread {
         }
         Log.d(BLUETOOTH_SERVER_TAG, "Bluetooth service enabled.");
         try {
-            btSocket = btAdapter.listenUsingRfcommWithServiceRecord("My Server", UUID.fromString("00002415-0000-1000-8000-00805F9B34FB"));
+            btSocket = btAdapter.listenUsingInsecureRfcommWithServiceRecord("My Server", UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"));
         } catch (IOException e) {
             Log.e(BLUETOOTH_SERVER_TAG, "IOException while gettting the server socket : " + e.getMessage());
         }

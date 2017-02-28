@@ -31,8 +31,8 @@ import java.util.ArrayList;
 import fr.enseeiht.superjumpingsumokart.R;
 
 /**
- * @author Vivian GUY
- * Activity to modify a circuit
+ * @author Vivian GUY.
+ * Activity to modify a circuit.
  */
 
 public class GUIModifyCircuit extends Activity {
@@ -55,27 +55,27 @@ public class GUIModifyCircuit extends Activity {
         private Button deleteMarkerBtn;
 
     /**
-     * Item selected in the ListView listMarkers
+     * Item selected in the ListView listMarkers.
      */
         private Integer itemSelected;
 
     /**
-     * The list of markers for the circuit
+     * The list of markers for the circuit.
      */
         private static ArrayList<String> markers;
 
     /**
-     * The adapter for the listView listMarkers
+     * The adapter for the listView listMarkers.
      */
     private ArrayAdapter adapter;
 
     /**
-     * The adapter for the Spinner symbolText
+     * The adapter for the Spinner symbolText.
      */
     private SpinnerAdapter spinnerAdapter;
 
     /**
-     * List of symbols for the Spinner
+     * List of symbols for the Spinner.
      */
     private ArrayList<String> listSymbols;
 
@@ -138,7 +138,7 @@ public class GUIModifyCircuit extends Activity {
         // Set buttons listener
 
             /**
-             * Button to add a marker to the list of markers
+             * Button to add a marker to the list of markers.
              */
             addMarkerBtn.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -174,7 +174,7 @@ public class GUIModifyCircuit extends Activity {
             });
 
             /**
-             * Button to the confirm and modify the circuit. It instanced to circuit with the markers described in the list
+             * Button to the confirm and modify the circuit. It instanced to circuit with the markers described in the list.
              */
             confirmBtn.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -191,7 +191,7 @@ public class GUIModifyCircuit extends Activity {
             });
 
             /**
-             * Button to delete the selected marker
+             * Button to delete the selected marker.
              */
             deleteMarkerBtn.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -225,7 +225,7 @@ public class GUIModifyCircuit extends Activity {
             });
 
             /**
-             * Listener to select an item of the listView listMarkers
+             * Listener to select an item of the listView listMarkers.
              */
             listMarkers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -258,7 +258,7 @@ public class GUIModifyCircuit extends Activity {
 
     /**
      * Modify the circuitFile with the name circuitName.
-     * @param circuitName the name of the circuit to modify
+     * @param circuitName the name of the circuit to modify.
      */
     protected void modifyCircuitFile(String circuitName) {
         // Get the file
@@ -317,8 +317,8 @@ public class GUIModifyCircuit extends Activity {
     }
 
     /**
-     * Set the list of markers for the circuit with name circuitName
-     * @param circuitName the game of the circuit
+     * Set the list of markers for the circuit with name circuitName.
+     * @param circuitName the game of the circuit.
      */
     private void setMarkersList(String circuitName) {
         Log.d(GUI_MODIFY_CIRCUIT_TAG, "setting markers list");
