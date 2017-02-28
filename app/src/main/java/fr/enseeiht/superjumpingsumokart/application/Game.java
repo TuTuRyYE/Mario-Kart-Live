@@ -57,6 +57,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
             registerGameListener(comBT);
             Log.d(GAME_TAG, "2 players game created.");
             if (isServer) {
+                trackInitialised = true;
                 comBT.sendCircuit();
             }
         } else {

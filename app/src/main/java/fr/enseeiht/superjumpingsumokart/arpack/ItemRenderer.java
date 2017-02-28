@@ -33,7 +33,7 @@ public final class ItemRenderer extends ARRenderer {
         Log.d(ITEM_RENDERER_TAG,Integer.toString(SYMBOLS_HASH_MAP.get(DetectionTask.Symbol.HIRO)));
         SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.KANJI, ARToolKit.getInstance().addMarker("single;Data/patt.kanji;80"));
         Log.d(ITEM_RENDERER_TAG,Integer.toString(SYMBOLS_HASH_MAP.get(DetectionTask.Symbol.KANJI)));
-        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.A, ARToolKit.getInstance().addModel("Data/models/box.obj", "single;Data/patt.a;80", DetectionTask.Symbol.A.ordinal(), 20.0f, true));
+        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.A, ARToolKit.getInstance().addModel("Data/models/giantbanana.obj", "single;Data/patt.a;80", DetectionTask.Symbol.A.ordinal(), 20.0f, true));
         return true;
     }
 
@@ -50,8 +50,7 @@ public final class ItemRenderer extends ARRenderer {
 
     public void deleteModelAtSymbol(DetectionTask.Symbol symbol) {
         Log.d(ITEM_RENDERER_TAG, "Deleted model for symbol : " + symbol.name());
-        String symbolString = symbol.name().toLowerCase();
-        SYMBOLS_HASH_MAP.put(symbol, ARToolKit.getInstance().addModel("Data/models/void.obj", "single;Data/patt.".concat(symbolString).concat(";80"), symbol.ordinal(), .0f, false));
+        ARToolKit.getInstance().disableModel(symbol.ordinal());
     }
 
     @Override
