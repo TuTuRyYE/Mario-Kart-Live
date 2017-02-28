@@ -214,7 +214,7 @@ public class GUIGame extends Activity implements GameListener {
         ImageButton jumpBtn = (ImageButton) findViewById(R.id.jumpBtn);
         sendTrapBtn = (ImageButton) findViewById(R.id.sendTrapBtn);
 
-        // Every players is ready
+
         // Defines action listener
         turnLeftBtn.setOnTouchListener(new View.OnTouchListener() {
             @Override

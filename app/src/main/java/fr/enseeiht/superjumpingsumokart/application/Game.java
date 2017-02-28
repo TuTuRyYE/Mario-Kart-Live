@@ -248,9 +248,9 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
     @Override
     public void onSecondPlayerGaveUp() {
         guiGame.notifyVictory();
-        for (GameListener gl : GAME_LISTENERS) {
+/*       for (GameListener gl : GAME_LISTENERS) {
             unregisterGameListener(gl);
-        }
+        }*/
         finished = true;
     }
 

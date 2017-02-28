@@ -182,6 +182,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
                     }
                 GUI_WELCOME.GUI_WELCOME_HANDLER.sendEmptyMessage(GUIWelcome.CIRCUIT_RECEIVED_WHEN_CLIENT);
                 for (BluetoothCommunicationListener bcl : BLUETOOTH_COMMUNICATION_LISTENERS) {
+                    Log.d(BLUETOOTH_COMMUNICATION_TAG, "enter boucle for each");
                     bcl.onCircuitReceived();
                 }
                 break;
