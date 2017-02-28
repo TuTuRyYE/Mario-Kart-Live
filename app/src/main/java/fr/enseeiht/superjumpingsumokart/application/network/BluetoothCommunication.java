@@ -176,7 +176,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
                     DetectionTask.Symbol symbol = DetectionTask.Symbol.valueOf(symbolsType);
                     Circuit.getInstance().addMarker(symbol);
                     }
-                GUI_WELCOME.enableStartARaceButton();
+                GUI_WELCOME.GUI_WELCOME_HANDLER.sendEmptyMessage(GUIWelcome.CIRCUIT_RECEIVED_WHEN_CLIENT);
                 for (BluetoothCommunicationListener bcl : BLUETOOTH_COMMUNICATION_LISTENERS) {
                     bcl.onCircuitReceived();
                 }

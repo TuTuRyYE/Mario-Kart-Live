@@ -41,8 +41,8 @@ public class GUIWelcome extends Activity {
     public final static int BLUETOOTH_SERVER_GOT_CONNECTION = 4;
     public final static int BLUETOOTH_CLIENT_JOINED_GAME = 5;
     public final static int BLUETOOTH_SERVER_SHUTTED_DOWN = 6;
-
     public final static int BLUETOOTH_CLIENT_SHUTTED_DOWN = 7;
+    public final static int CIRCUIT_RECEIVED_WHEN_CLIENT = 8;
 
     public final Handler GUI_WELCOME_HANDLER = new Handler() {
         @Override
@@ -74,6 +74,9 @@ public class GUIWelcome extends Activity {
                 case BLUETOOTH_CLIENT_SHUTTED_DOWN:
                     onClientShutDown();
                 break;
+                case CIRCUIT_RECEIVED_WHEN_CLIENT :
+                    enableStartARaceButton();
+                    break;
                 default :
                     break;
             }
@@ -311,7 +314,7 @@ public class GUIWelcome extends Activity {
         serverHosting = false;
     }
 
-    public void enableStartARaceButton() {
+    private void enableStartARaceButton() {
         startRaceBtn.setEnabled(true);
     }
 }
