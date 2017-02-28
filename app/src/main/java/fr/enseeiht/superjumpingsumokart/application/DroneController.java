@@ -141,17 +141,17 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     public void useItem() {
         if (deviceController != null && running) {
             Log.d(DRONE_CONTROLLER_TAG, "USE ITEM order received !");
-            DetectionTask.Symbol lastMarkerSeen = DRONE.getLastMarkerSeen();
             //check if there is an object of the marker
-            if( (Circuit.getInstance().getObjects().get(lastMarkerSeen))!=null) {
-                DRONE.getCurrentItem().useItem(this);
-                DRONE.setCurrentItem(new NullItem());
-            }
-            else {
+            if( DRONE.getCurrentItem() instanceof NullItem) {
+                boolean used = DRONE.getCurrentItem().useItem(this);
+                if (used) {
+                    DRONE.setCurrentItem(new NullItem());
+                }
+            } else {
                 Log.d(DRONE_CONTROLLER_TAG," USE ITEM can't be used because there is allready an object on the marker. Please Try again");
             }
-            }
         }
+    }
 
     /**
      * Makes the drone jump (Matthieu Michel - 30/01/2017).

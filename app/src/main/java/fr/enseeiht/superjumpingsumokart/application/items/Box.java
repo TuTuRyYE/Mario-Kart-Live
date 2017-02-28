@@ -33,8 +33,15 @@ public class Box extends Item {
     }
 
     @Override
-    public void useItem(DroneController droneController) {
+    public boolean useItem(DroneController droneController) {
+        DetectionTask.Symbol lastMarkerSeen = droneController.getDrone().getLastMarkerSeen();
+        if (lastMarkerSeen != null) {
+            Circuit.getInstance().addObject(lastMarkerSeen, this);
             Log.d(ITEM_TAG, "A TNT box has been put on the circuit");
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

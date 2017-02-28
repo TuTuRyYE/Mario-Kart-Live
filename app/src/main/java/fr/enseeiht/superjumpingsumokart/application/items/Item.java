@@ -42,8 +42,9 @@ public abstract class Item {
      * Method used to use an {@link Item}. (Matthieu Michel - 15/02/2017)
      *
      * @param droneController using the {@link Item}.
+     * @return True if the item has been used, false otherwise.
      */
-    public abstract void useItem(DroneController droneController);
+    public abstract boolean useItem(DroneController droneController);
 
     /**
      * Method used to apply the effect of an {@link Item} on a drone via its controller. (Matthieu Michel - 02/02/2017).

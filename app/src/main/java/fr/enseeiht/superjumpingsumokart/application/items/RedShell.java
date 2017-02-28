@@ -30,9 +30,9 @@ public class RedShell extends Item {
     }
 
     @Override
-    public void useItem(DroneController droneController) {
-
+    public boolean useItem(DroneController droneController) {
         Log.d(ITEM_TAG, "A red shell has been thrown!");
+        return true;
     }
 
     @Override

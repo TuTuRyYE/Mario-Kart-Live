@@ -249,8 +249,8 @@ public class GUIWelcome extends Activity {
      * The button is allowed when the phone and the drone are on the same WiFi network.
      */
     private void disableWifiConnectionBtn() {
-        wifiConnectionBtn.setEnabled(false);
         wifiConnectionBtn.setChecked(false);
+        wifiConnectionBtn.setEnabled(false);
     }
 
     /**

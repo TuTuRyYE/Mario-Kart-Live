@@ -24,8 +24,8 @@ public class NullItem extends Item {
 
 
     @Override
-    public void useItem(DroneController droneController) {
-
+    public boolean useItem(DroneController droneController) {
+        return false;
     }
 
     @Override

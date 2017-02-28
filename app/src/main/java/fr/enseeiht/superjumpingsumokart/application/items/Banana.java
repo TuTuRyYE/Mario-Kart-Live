@@ -4,7 +4,9 @@ import android.util.Log;
 import android.widget.ImageButton;
 
 import fr.enseeiht.superjumpingsumokart.R;
+import fr.enseeiht.superjumpingsumokart.application.Circuit;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
+import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
  * Implementation of Banana {@link Item}.
@@ -31,8 +33,15 @@ public class Banana extends Item {
     }
 
     @Override
-    public void useItem(DroneController droneController) {
-        Log.d(ITEM_TAG, "A banana has been put on the circuit");
+    public boolean useItem(DroneController droneController) {
+        DetectionTask.Symbol lastMarkerSeen = droneController.getDrone().getLastMarkerSeen();
+        if (lastMarkerSeen != null) {
+            Circuit.getInstance().addObject(lastMarkerSeen, this);
+            Log.d(ITEM_TAG, "A banana has been put on the circuit");
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
