@@ -47,11 +47,6 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
      */
     public Game(GUIGame guiGame, BluetoothCommunication comBT, boolean isServer) {
         // Add markers for boxes
-        if (isServer) {
-            createCircuit();
-            //TODO
-            trackInitialised = true;
-        }
         this.guiGame = guiGame;
         registerGameListener(guiGame);
         this.started = false;
@@ -61,7 +56,9 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
             comBT.setGame(this);
             registerGameListener(comBT);
             Log.d(GAME_TAG, "2 players game created.");
-            comBT.sendCircuit();
+            if (isServer) {
+                comBT.sendCircuit();
+            }
         } else {
             otherReady = true;
             Log.d(GAME_TAG, "1 player game created.");
