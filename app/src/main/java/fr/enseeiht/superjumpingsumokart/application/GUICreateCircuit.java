@@ -85,7 +85,9 @@ public class GUICreateCircuit extends Activity {
             listMarkers.addHeaderView(header, null, false);
             listMarkers.setAdapter(adapter);
 
-        // Default marker for the circuit (start line)
+        // Default marker for the circuit (start line and end line)
+            adapter.add("HIRO");
+            adapter.add("HIRO");
             adapter.add("HIRO");
             adapter.add("HIRO");
 
@@ -98,11 +100,16 @@ public class GUICreateCircuit extends Activity {
             listSymbols.add("F");
             listSymbols.add("G");
             listSymbols.add("KANJI");
+            listSymbols.add("Select a type of marker"); // hint
 
         // Adapter for the spinner
-            ArrayAdapter spinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listSymbols);
-            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            symbolText.setAdapter(spinnerAdapter);
+        final SpinnerAdapter spinnerAdapter = new SpinnerAdapter(GUICreateCircuit.this, listSymbols, android.R.layout.simple_spinner_item);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        symbolText.setAdapter(spinnerAdapter);
+
+        // show hint
+        symbolText.setSelection(spinnerAdapter.getCount());
 
 
 
@@ -120,28 +127,25 @@ public class GUICreateCircuit extends Activity {
                             case MotionEvent.ACTION_DOWN:
                                 // Get the texts from the EditTexts objects
                                     String symbol = symbolText.getSelectedItem().toString();
-                                    if (!symbol.isEmpty()) { // if the Spinner is not empty
-                                        // Add the marker to markers list
-                                            adapter.add(symbol);
-                                            if (symbol.equals("KANJI")) { // if it is KANJI, it is a checkpoint so there are two markers
-                                                adapter.add(symbol);
-                                            }
+                                    if (!symbol.equals("Select a type of marker")) { // if a symbol is selected
+                                        // Add the marker to the end of markers list (before 2 end markers)
+                                            adapter.insert(symbol, markers.size()-2);
                                             // Remove the symbol from the list if it isn't "KANJI" (others symbol can appear only one time in the circuit)
                                             if (!symbol.equals("KANJI")) {
-                                                listSymbols.remove(symbol);
+                                                spinnerAdapter.remove(symbol);
                                             }
 
                                             Log.d(GUI_CREATE_CIRCUIT_TAG, "marker " + symbol + " added to the list");
 
                                         // Reset the EditTexts
-                                            symbolText.setSelection(0);
+                                            symbolText.setSelection(spinnerAdapter.getCount());
                                             Log.d(GUI_CREATE_CIRCUIT_TAG, "Spinner reset");
 
                                         // Inform the user that the marker is added
                                             Toast.makeText(GUICreateCircuit.this, "Marker added", Toast.LENGTH_SHORT).show();
                                     }
-                                    else { // if a EditText is empty
-                                        Toast.makeText(GUICreateCircuit.this, "You must enter marker's setting first", Toast.LENGTH_SHORT).show();
+                                    else { // no symbol is selected
+                                        Toast.makeText(GUICreateCircuit.this, "You must select a type of marker first !", Toast.LENGTH_SHORT).show();
                                     }
                                 break;
                         }
@@ -176,12 +180,16 @@ public class GUICreateCircuit extends Activity {
                         switch (event.getAction()) {
                             case MotionEvent.ACTION_DOWN:
                                 if (itemSelected != null) { // if an item is selected
-                                    if (itemSelected == 0) { // if the user tries to delete the default marker start line
+                                    if (itemSelected == 1 || itemSelected == 2 || itemSelected==markers.size() || itemSelected == markers.size() -1 ) { // if the user tries to delete the default markers (start line)
                                         Toast.makeText(GUICreateCircuit.this, "You can't delete this marker !", Toast.LENGTH_SHORT).show();
                                     }
                                     else {
                                         // Remove the selected marker
-                                            adapter.remove(markers.get(itemSelected));
+                                            adapter.remove(markers.get(itemSelected-1));
+                                        // Add it to the list of symbol if it isn't "KANJI"
+                                        if (!markers.get(itemSelected-1).equals("KANJI")){
+                                            spinnerAdapter.add(markers.get(itemSelected-1));
+                                        }
                                         // Reset itemSelected
                                             itemSelected = null;
                                     }
@@ -268,8 +276,6 @@ public class GUICreateCircuit extends Activity {
                                 outputStream.write(stringToWrite.getBytes());
                                 Circuit.getInstance().addMarker(DetectionTask.Symbol.valueOf(s));
                             }
-                            String lastLines = "HIRO" + "\n" + "HIRO";
-                            outputStream.write(lastLines.getBytes());
                             outputStream.close();
                             Log.d(GUI_CREATE_CIRCUIT_TAG, "Circuit file created");
 

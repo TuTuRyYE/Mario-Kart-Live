@@ -160,8 +160,10 @@ public class GUICircuit extends Activity {
 
                                     // Go Back to GUIWelcome activity
                                         Intent i = new Intent(GUICircuit.this, GUIWelcome.class);
+                                        i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                                         Log.d(GUI_CIRCUIT_TAG, "Launching a GUIWelcome Activity...");
                                         startActivity(i);
+
 
                                 } else { // if no item has been selected before
                                     Toast.makeText(GUICircuit.this, "You must select a circuit first !", Toast.LENGTH_SHORT).show();

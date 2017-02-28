@@ -70,6 +70,11 @@ public class GUIModifyCircuit extends Activity {
     private ArrayAdapter adapter;
 
     /**
+     * The adapter for the Spinner symbolText
+     */
+    private SpinnerAdapter spinnerAdapter;
+
+    /**
      * List of symbols for the Spinner
      */
     private ArrayList<String> listSymbols;
@@ -103,20 +108,24 @@ public class GUIModifyCircuit extends Activity {
             listMarkers.setAdapter(adapter);
 
         // List of symbols for the spinner
-        listSymbols = new ArrayList();
-        listSymbols.add("A");
-        listSymbols.add("B");
-        listSymbols.add("C");
-        listSymbols.add("D");
-        listSymbols.add("F");
-        listSymbols.add("G");
-        listSymbols.add("Kanji");
+            listSymbols = new ArrayList<>();
+            listSymbols.add("A");
+            listSymbols.add("B");
+            listSymbols.add("C");
+            listSymbols.add("D");
+            listSymbols.add("F");
+            listSymbols.add("G");
+            listSymbols.add("KANJI");
+            listSymbols.add("Select a type of marker"); // hint
 
         // Adapter for the spinner
-        ArrayAdapter spinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listSymbols);
+        spinnerAdapter = new SpinnerAdapter(GUIModifyCircuit.this, listSymbols, android.R.layout.simple_spinner_item);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         symbolText.setAdapter(spinnerAdapter);
 
+        // show hint
+        symbolText.setSelection(spinnerAdapter.getCount());
 
         // Set the circuit's markers
             final String circuitName = (String) getIntent().getExtras().get("circuitName");
@@ -139,24 +148,24 @@ public class GUIModifyCircuit extends Activity {
                         case MotionEvent.ACTION_DOWN:
                             // Get the texts from the Spinner
                                 String symbol = symbolText.getSelectedItem().toString();
-                                if (!symbol.isEmpty()) { // if the EditTexts are not empty
+                                if (!symbol.equals("Select a type of marker")) { // if a symbol is selected
                                     // Add the marker to markers list
-                                        adapter.add(new String[]{symbol});
+                                        adapter.insert(symbol, markers.size()-2);
                                     // Remove the symbol from the list if it isn't "KANJI" (others symbol can appear only one time in the circuit)
                                         if (!symbol.equals("KANJI")) {
-                                            listSymbols.remove(symbol);
+                                            spinnerAdapter.remove(symbol);
                                         }
                                         Log.d(GUI_MODIFY_CIRCUIT_TAG, "marker added to the list");
 
                                     // Reset the Spinner
-                                        symbolText.setSelection(0);
+                                        symbolText.setSelection(spinnerAdapter.getCount());
                                         Log.d(GUI_MODIFY_CIRCUIT_TAG, "Spinner reset");
 
                                     // Inform the user that the marker is added
                                         Toast.makeText(GUIModifyCircuit.this, "Marker added", Toast.LENGTH_SHORT).show();
                             }
-                            else { // if a EditText is empty
-                                Toast.makeText(GUIModifyCircuit.this, "You must enter marker's setting first", Toast.LENGTH_SHORT).show();
+                            else { // no symbol is selected
+                                Toast.makeText(GUIModifyCircuit.this, "You must select a type of marker first !", Toast.LENGTH_SHORT).show();
                             }
                             break;
                     }
@@ -191,18 +200,18 @@ public class GUIModifyCircuit extends Activity {
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
                             if (itemSelected != null) { // if an item is selected
-                                if (itemSelected == 0) { // if the item selected is the default marker (startline)
+                                if (itemSelected == 1 || itemSelected == 2 || itemSelected==markers.size() || itemSelected == markers.size() -1 ) { // if the item selected is the default markers (startline)
                                     Toast.makeText(GUIModifyCircuit.this, "You can't delete this marker !", Toast.LENGTH_SHORT).show();
                                 }
                                 else {
-                                    // Add it to the list of symbol if it isn't "KANJI"
-                                    if (!markers.get(itemSelected).equals("KANJI")){
-                                        listSymbols.add(markers.get(itemSelected));
-                                    }
                                     // Remove the selected item
-                                        adapter.remove(markers.get(itemSelected));
-
+                                        adapter.remove(markers.get(itemSelected-1));
+                                    // Add it to the list of symbol if it isn't "KANJI"
+                                    if (!markers.get(itemSelected-1).equals("KANJI")){
+                                        spinnerAdapter.add(markers.get(itemSelected-1));
+                                    }
                                     // Reset the item selected
+                                        listMarkers.getChildAt(itemSelected).setBackgroundColor(Color.TRANSPARENT);
                                         itemSelected = null;
                                 }
                             }
@@ -278,8 +287,6 @@ public class GUIModifyCircuit extends Activity {
                                 stringToWrite = s + "\n";
                                 outputStream.write(stringToWrite.getBytes());
                             }
-                            String lastLines = "HIRO" + "\n" + "HIRO";
-                            outputStream.write(lastLines.getBytes());
                             outputStream.close();
                             Log.d(GUI_MODIFY_CIRCUIT_TAG, "Circuit file created");
 
@@ -314,6 +321,7 @@ public class GUIModifyCircuit extends Activity {
      * @param circuitName the game of the circuit
      */
     private void setMarkersList(String circuitName) {
+        Log.d(GUI_MODIFY_CIRCUIT_TAG, "setting markers list");
 
         // Get the file
             String filePath = GUIModifyCircuit.this.getFilesDir() + "/Circuits/" + circuitName;
@@ -334,14 +342,17 @@ public class GUIModifyCircuit extends Activity {
                     lapsText.setText(lineSplit[1]);
                     checkPointToCheckTxt.setText(lineSplit[2]);
 
+
                 // Other line (markers)
                     while ((line = bufferedReader.readLine()) != null) {
                         // Add the marker to markers list
                             adapter.add(line);
-                            if (!line.equals("KANJI")) {
-                                listSymbols.remove(line);
+                        // Remove the marker from the list of symbols if it isn't KANJI or HIRO because other markers are unique
+                            if (!line.equals("KANJI") && !line.equals("HIRO")) {
+                                spinnerAdapter.remove(line);
+                                Log.d(GUI_MODIFY_CIRCUIT_TAG, line + " deleted from spinner");
                             }
-                            Log.d(GUI_MODIFY_CIRCUIT_TAG, "Marker " + line + "added");
+                            Log.d(GUI_MODIFY_CIRCUIT_TAG, "Marker " + line + " added");
                     }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
