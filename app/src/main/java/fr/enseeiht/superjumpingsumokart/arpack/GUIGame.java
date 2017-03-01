@@ -306,6 +306,9 @@ public class GUIGame extends Activity implements GameListener {
                     }
                     int i=0;
                     while (!found && i<markers.size()) {
+                        if (markers.get(i) == null) {
+                            Log.d(GUI_GAME_TAG, "marker i null");
+                        }
                         if (markers.get(i).equals(lastMarkerSeen)) {
                             found = true;
                             nextMarker = markers.get(i+1);
