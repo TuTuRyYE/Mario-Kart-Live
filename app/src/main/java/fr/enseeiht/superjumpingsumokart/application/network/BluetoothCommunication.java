@@ -8,13 +8,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import fr.enseeiht.superjumpingsumokart.application.Circuit;
 import fr.enseeiht.superjumpingsumokart.application.GUIWelcome;
 import fr.enseeiht.superjumpingsumokart.application.Game;
 import fr.enseeiht.superjumpingsumokart.application.GameListener;
-import fr.enseeiht.superjumpingsumokart.application.Vector3D;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
 import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 

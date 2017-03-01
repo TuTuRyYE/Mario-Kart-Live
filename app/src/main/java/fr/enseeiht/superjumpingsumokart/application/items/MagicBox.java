@@ -5,7 +5,6 @@ import android.widget.ImageButton;
 
 import fr.enseeiht.superjumpingsumokart.R;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
-import fr.enseeiht.superjumpingsumokart.application.Vector3D;
 
 /**
  * Implementation of magic Box {@link Item}.

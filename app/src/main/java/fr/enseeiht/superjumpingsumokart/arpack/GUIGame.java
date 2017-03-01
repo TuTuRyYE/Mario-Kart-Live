@@ -33,13 +33,11 @@ import org.artoolkit.ar.base.AndroidUtils;
 import java.util.ArrayList;
 
 import fr.enseeiht.superjumpingsumokart.R;
-import fr.enseeiht.superjumpingsumokart.application.Circuit;
 import fr.enseeiht.superjumpingsumokart.application.Drone;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
 import fr.enseeiht.superjumpingsumokart.application.Game;
 import fr.enseeiht.superjumpingsumokart.application.GameListener;
 import fr.enseeiht.superjumpingsumokart.application.GuiGameListener;
-import fr.enseeiht.superjumpingsumokart.application.Vector3D;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
 import fr.enseeiht.superjumpingsumokart.application.network.BluetoothCommunication;
 import fr.enseeiht.superjumpingsumokart.application.network.WifiConnector;
