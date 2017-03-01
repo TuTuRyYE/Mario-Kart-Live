@@ -32,27 +32,26 @@ public final class ItemRenderer extends ARRenderer {
         Log.d(ITEM_RENDERER_TAG, "configureARScene() called.");
         SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.HIRO,ARToolKit.getInstance().addMarker("single;Data/patt.hiro;80"));
         SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.KANJI, ARToolKit.getInstance().addMarker("single;Data/patt.kanji;80"));
-        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.A, ARToolKit.getInstance().addModel("Data/models/maxbox.obj", "single;Data/patt.a;80", DetectionTask.Symbol.A.ordinal(), 2.0f, false));
-        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.B, ARToolKit.getInstance().addModel("Data/models/giantbanana.obj", "single;Data/patt.a;80", DetectionTask.Symbol.B.ordinal(), 20.0f, true));
+        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.A, ARToolKit.getInstance().addModel2("Data/models/maxbox.obj", "single;Data/patt.a;80", DetectionTask.Symbol.A.ordinal(), 1.0f, false));
+        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.B, ARToolKit.getInstance().addModel2("Data/models/giantbanana.obj", "single;Data/patt.b;80", DetectionTask.Symbol.B.ordinal(), 20.0f, true));
         deleteModelAtSymbol(DetectionTask.Symbol.B);
-        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.C, ARToolKit.getInstance().addModel("Data/models/giantbanana.obj", "single;Data/patt.a;80", DetectionTask.Symbol.C.ordinal(), 20.0f, true));
+        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.C, ARToolKit.getInstance().addModel2("Data/models/giantbanana.obj", "single;Data/patt.c;80", DetectionTask.Symbol.C.ordinal(), 20.0f, true));
         deleteModelAtSymbol(DetectionTask.Symbol.C);
-        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.D, ARToolKit.getInstance().addModel("Data/models/giantbanana.obj", "single;Data/patt.a;80", DetectionTask.Symbol.D.ordinal(), 20.0f, true));
+        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.D, ARToolKit.getInstance().addModel2("Data/models/giantbanana.obj", "single;Data/patt.d;80", DetectionTask.Symbol.D.ordinal(), 20.0f, true));
         deleteModelAtSymbol(DetectionTask.Symbol.D);
-        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.F, ARToolKit.getInstance().addModel("Data/models/giantbanana.obj", "single;Data/patt.a;80", DetectionTask.Symbol.F.ordinal(), 20.0f, true));
+        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.F, ARToolKit.getInstance().addModel2("Data/models/giantbanana.obj", "single;Data/patt.f;80", DetectionTask.Symbol.F.ordinal(), 20.0f, true));
         deleteModelAtSymbol(DetectionTask.Symbol.F);
-        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.G, ARToolKit.getInstance().addModel("Data/models/giantbanana.obj", "single;Data/patt.a;80", DetectionTask.Symbol.G.ordinal(), 20.0f, true));
+        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.G, ARToolKit.getInstance().addModel2("Data/models/giantbanana.obj", "single;Data/patt.g;80", DetectionTask.Symbol.G.ordinal(), 20.0f, true));
         deleteModelAtSymbol(DetectionTask.Symbol.G);
         return true;
     }
 
     public void defineModelAtSymbol(Item item, DetectionTask.Symbol symbol) {
         Log.d(ITEM_RENDERER_TAG, "Defined model for symbol : " + symbol.name());
-        String symbolString = symbol.name().toLowerCase();
         if (item instanceof Banana) {
-            SYMBOLS_HASH_MAP.put(symbol, ARToolKit.getInstance().addModel("Data/models/giantbanana.obj", "single;Data/patt.".concat(symbolString).concat(";80"), symbol.ordinal(), 20.0f, true));
+            ARToolKit.getInstance().addModel("Data/models/giantbanana.obj", SYMBOLS_HASH_MAP.get(symbol), symbol.ordinal(), 20.0f, true);
         } else if (item instanceof Box) {
-            SYMBOLS_HASH_MAP.put(symbol, ARToolKit.getInstance().addModel("Data/models/maxbox.obj", "single;Data/patt.".concat(symbolString).concat(";80"), symbol.ordinal(), 2.5f, false));
+            ARToolKit.getInstance().addModel("Data/models/maxbox.obj", SYMBOLS_HASH_MAP.get(symbol), symbol.ordinal(), 0.75f, false);
         }
 
     }
