@@ -173,6 +173,8 @@ public class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
             }
         }
         Log.d(DETECTION_TASK_TAG, "Detection task time : " + Long.toString(SystemClock.currentThreadTimeMillis() - startTime));
+        bitmapToDisplay = Bitmap.createScaledBitmap(bitmapToDisplay, 1280, 720, true);
+
         return true;
     }
 
@@ -184,7 +186,7 @@ public class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
      */
     @Override
     protected void onPostExecute(Boolean aBoolean) {
-        GUI_GAME.updateCameraSurfaceView(bitmapToDisplay, null);
+        GUI_GAME.updateCameraSurfaceView(bitmapToDisplay);
         GUI_GAME.renderAR();
     }
 
