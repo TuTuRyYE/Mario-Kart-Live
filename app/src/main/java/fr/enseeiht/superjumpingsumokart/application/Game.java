@@ -33,9 +33,9 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
      */
     private final ArrayList<GameListener> GAME_LISTENERS = new ArrayList<>();
 
-    private Drone drone, otherDrone;
+    private Drone otherDrone;
 
-    boolean videoStreamAvailable = false, droneControllerReady = false;
+    private boolean videoStreamAvailable = false, droneControllerReady = false;
     private boolean ready = false, otherReady = false;
     private boolean started = false;
     private boolean finished = false;
@@ -51,6 +51,9 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
         registerGameListener(guiGame);
         this.started = false;
         this.comBT = comBT;
+        if (Circuit.getInstance() == null) {
+            Circuit.initInstance(-1, -1);
+        }
         if (comBT != null) {
             this.comBT = comBT;
             comBT.setGame(this);
@@ -106,20 +109,12 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
         return Circuit.getInstance().getLaps();
     }
 
-    public void setDrone(Drone drone) {
-        this.drone = drone;
-    }
-
     public boolean isFinished() {
         return finished;
     }
 
     private void registerGameListener(GameListener gameListener) {
         GAME_LISTENERS.add(gameListener);
-    }
-
-    public void unregisterGameListener(GameListener gameListener) {
-        GAME_LISTENERS.remove(gameListener);
     }
 
     @Override

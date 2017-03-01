@@ -522,7 +522,4 @@ public class GUIGame extends Activity implements GameListener {
         return renderer;
     }
 
-    public void addDroneInGame(Drone drone) {
-        game.setDrone(drone);
-    }
 }

@@ -140,21 +140,21 @@ public class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
                     switch (s) {
                         case HIRO:
                             Log.d(DETECTION_TASK_TAG, "Distance to marker HIRO : " + Float.toString(-ARToolKit.getInstance().queryMarkerTransformation(id)[14]));
-                            if (-ARToolKit.getInstance().queryMarkerTransformation(id)[14] < 100 && (SystemClock.elapsedRealtime() - timeSinceLastHiro) > 5000) {
+                            if (-ARToolKit.getInstance().queryMarkerTransformation(id)[14] < 350 && (SystemClock.elapsedRealtime() - timeSinceLastHiro) > 5000) {
                                 timeSinceLastHiro = SystemClock.elapsedRealtime();
                                 Log.d(DETECTION_TASK_TAG, "Lap validated");
                             }
                             break;
                         case KANJI:
                             Log.d(DETECTION_TASK_TAG, "Distance to marker KANJI : " + Float.toString(-ARToolKit.getInstance().queryMarkerTransformation(id)[14]));
-                            if (-ARToolKit.getInstance().queryMarkerTransformation(id)[14] < 100 && (SystemClock.elapsedRealtime() - timeSinceLastKanji) > 3000) {
+                            if (-ARToolKit.getInstance().queryMarkerTransformation(id)[14] < 350 && (SystemClock.elapsedRealtime() - timeSinceLastKanji) > 3000) {
                                 timeSinceLastKanji = SystemClock.elapsedRealtime();
                                 Log.d(DETECTION_TASK_TAG, "Lap validated");
                             }
                             break;
                         case A:
                             Log.d(DETECTION_TASK_TAG, "Distance to marker A : " + Float.toString(-ARToolKit.getInstance().queryMarkerTransformation(id)[14]));
-                            if (GUI_GAME.getController().getDrone().getCurrentItem() instanceof NullItem && -ARToolKit.getInstance().queryMarkerTransformation(id)[14] < 75 && (SystemClock.elapsedRealtime() - timeSinceLastA) > 5000) {
+                            if (GUI_GAME.getController().getDrone().getCurrentItem() instanceof NullItem && -ARToolKit.getInstance().queryMarkerTransformation(id)[14] < 250 && (SystemClock.elapsedRealtime() - timeSinceLastA) > 5000) {
                                 timeSinceLastA = SystemClock.elapsedRealtime();
                                 new MagicBox().applyEffect(GUI_GAME.getController());
                                 Log.d(DETECTION_TASK_TAG, "Got a Magic Box");
@@ -162,7 +162,7 @@ public class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
                             break;
                         default:
                             Log.d(DETECTION_TASK_TAG, "Distance to marker " + s.name().concat(" ") + Float.toString(-ARToolKit.getInstance().queryMarkerTransformation(id)[14]));
-                            if (-ARToolKit.getInstance().queryMarkerTransformation(id)[14] < 75) {
+                            if (-ARToolKit.getInstance().queryMarkerTransformation(id)[14] < 250) {
                                 GUI_GAME.touchedSymbol(s);
                                 Log.d(DETECTION_TASK_TAG, "Touched symbol " + s.name());
                             }

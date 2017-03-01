@@ -10,11 +10,12 @@ import java.util.HashMap;
 import javax.microedition.khronos.opengles.GL10;
 
 import fr.enseeiht.superjumpingsumokart.application.items.Banana;
+import fr.enseeiht.superjumpingsumokart.application.items.Box;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
 
 /**
+ * @author Romain Verset, JorgeEnrique.
  * Renderer to render on the {@link GUIGame} {@link android.opengl.GLSurfaceView}.
- * Created by JorgeEnrique on 2/02/2017.
  */
 
 public final class ItemRenderer extends ARRenderer {
@@ -33,7 +34,7 @@ public final class ItemRenderer extends ARRenderer {
         Log.d(ITEM_RENDERER_TAG,Integer.toString(SYMBOLS_HASH_MAP.get(DetectionTask.Symbol.HIRO)));
         SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.KANJI, ARToolKit.getInstance().addMarker("single;Data/patt.kanji;80"));
         Log.d(ITEM_RENDERER_TAG,Integer.toString(SYMBOLS_HASH_MAP.get(DetectionTask.Symbol.KANJI)));
-        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.A, ARToolKit.getInstance().addModel("Data/models/giantbanana.obj", "single;Data/patt.a;80", DetectionTask.Symbol.A.ordinal(), 20.0f, true));
+        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.A, ARToolKit.getInstance().addModel("Data/models/magicbox.obj", "single;Data/patt.a;80", DetectionTask.Symbol.A.ordinal(), 20.0f, true));
         return true;
     }
 
@@ -42,9 +43,9 @@ public final class ItemRenderer extends ARRenderer {
         String symbolString = symbol.name().toLowerCase();
         if (item instanceof Banana) {
             SYMBOLS_HASH_MAP.put(symbol, ARToolKit.getInstance().addModel("Data/models/giantbanana.obj", "single;Data/patt.".concat(symbolString).concat(";80"), symbol.ordinal(), 20.0f, true));
-        } /*else if (item instanceof FakeBox) {
-            ARToolKit.getInstance().addModel("Data/models/box.obj", "single;Data/patt.".concat(symbolString).concat(";80"), id, 20.0f, false);
-        }*/
+        } else if (item instanceof Box) {
+            SYMBOLS_HASH_MAP.put(symbol, ARToolKit.getInstance().addModel("Data/models/magicbox.obj", "single;Data/patt.".concat(symbolString).concat(";80"), symbol.ordinal(), 20.0f, false));
+        }
 
     }
 

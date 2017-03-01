@@ -68,14 +68,6 @@ public class Circuit {
     }
 
     /**
-     * Set the singleton instance of {@link Circuit}.
-     * @param circuit
-     */
-    public static void setInstance(Circuit circuit) {
-        circuitInstance = circuit;
-    }
-
-    /**
      * Initialises the singleton instance of {@link Circuit}.
      * @param laps The number of laps for the circuit.
      */
@@ -116,18 +108,6 @@ public class Circuit {
         this.markers.put(this.markers.size() + 1, symbol);
     }
 
-    public void removeMarker(int position) {
-        DetectionTask.Symbol symbol;
-        // remove the marker
-            this.markers.remove(position);
-        // Adapt the position of others markers
-            for (int i=position; i<markers.size(); i++) {
-                symbol = this.markers.get(i);
-                this.markers.remove(i);
-                this.markers.put(i ,symbol);
-            }
-
-    }
 
     /**
      * Add an object to the list of objects present on the circuit.
