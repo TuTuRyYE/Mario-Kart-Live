@@ -457,10 +457,6 @@ public class GUIGame extends Activity implements GameListener {
         GUI_GAME_LISTENERS.add(guiGameListener);
     }
 
-    public void unregisterGuiGameListener(GuiGameListener guiGameListener) {
-        GUI_GAME_LISTENERS.remove(guiGameListener);
-    }
-
     @Override
     public void onPlayerReady() {
         // Nothing to do here.

@@ -158,10 +158,6 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
         GAME_LISTENERS.add(gameListener);
     }
 
-    public void unregisterGameListener(GameListener gameListener) {
-        GAME_LISTENERS.remove(gameListener);
-    }
-
     @Override
     public void onSecondPlayerReady() {
         this.otherReady = true;

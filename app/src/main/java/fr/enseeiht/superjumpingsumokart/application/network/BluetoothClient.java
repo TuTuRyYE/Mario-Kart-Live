@@ -13,8 +13,8 @@ import fr.enseeiht.superjumpingsumokart.application.GUIWelcome;
 import fr.enseeiht.superjumpingsumokart.application.GuiGameListener;
 
 /**
+ *  @author  Lucas Pascal
  * Defines the bluetooth client used to communicate with another paired phone.
- * Created by Lucas on 07/02/2017.
  */
 public class BluetoothClient extends Thread {
 
