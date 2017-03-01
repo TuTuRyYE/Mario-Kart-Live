@@ -32,7 +32,7 @@ public final class ItemRenderer extends ARRenderer {
         Log.d(ITEM_RENDERER_TAG, "configureARScene() called.");
         SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.HIRO,ARToolKit.getInstance().addMarker("single;Data/patt.hiro;80"));
         SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.KANJI, ARToolKit.getInstance().addMarker("single;Data/patt.kanji;80"));
-        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.A, ARToolKit.getInstance().addModel("Data/models/magicbox.obj", "single;Data/patt.a;80", DetectionTask.Symbol.A.ordinal(), 2.0f, true));
+        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.A, ARToolKit.getInstance().addModel("Data/models/maxbox.obj", "single;Data/patt.a;80", DetectionTask.Symbol.A.ordinal(), 2.0f, false));
         SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.B, ARToolKit.getInstance().addModel("Data/models/giantbanana.obj", "single;Data/patt.a;80", DetectionTask.Symbol.B.ordinal(), 20.0f, true));
         deleteModelAtSymbol(DetectionTask.Symbol.B);
         SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.C, ARToolKit.getInstance().addModel("Data/models/giantbanana.obj", "single;Data/patt.a;80", DetectionTask.Symbol.C.ordinal(), 20.0f, true));
@@ -52,7 +52,7 @@ public final class ItemRenderer extends ARRenderer {
         if (item instanceof Banana) {
             SYMBOLS_HASH_MAP.put(symbol, ARToolKit.getInstance().addModel("Data/models/giantbanana.obj", "single;Data/patt.".concat(symbolString).concat(";80"), symbol.ordinal(), 20.0f, true));
         } else if (item instanceof Box) {
-            SYMBOLS_HASH_MAP.put(symbol, ARToolKit.getInstance().addModel("Data/models/magicbox.obj", "single;Data/patt.".concat(symbolString).concat(";80"), symbol.ordinal(), 2.5f, false));
+            SYMBOLS_HASH_MAP.put(symbol, ARToolKit.getInstance().addModel("Data/models/maxbox.obj", "single;Data/patt.".concat(symbolString).concat(";80"), symbol.ordinal(), 2.5f, false));
         }
 
     }
