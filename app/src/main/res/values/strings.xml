@@ -42,4 +42,7 @@
 
     <string name="modifyCircuit">Modify selected circuit</string>
     <string name="deleteCircuit">Delete selected circuit</string>
+
+    <string name="headerCircuitName">Name of the circuit</string>
+    <string name="headerCircuitLaps">Number of laps</string>
 </resources>

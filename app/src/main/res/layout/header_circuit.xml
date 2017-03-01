@@ -6,20 +6,23 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="48dp"
+        android:layout_marginLeft="10dp">
 
         <TextView
-            android:text="nameCircuit"
+            android:text="@string/headerCircuitName"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:id="@+id/nameCircuitView"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:textSize="20dp" />
 
         <TextView
-            android:text="Laps"
+            android:text="@string/headerCircuitLaps"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:id="@+id/numberLapsView"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:textSize="20dp" />
     </LinearLayout>
 </LinearLayout>
