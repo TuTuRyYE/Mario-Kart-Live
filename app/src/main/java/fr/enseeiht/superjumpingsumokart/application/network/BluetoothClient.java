@@ -10,7 +10,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import fr.enseeiht.superjumpingsumokart.application.GUIWelcome;
-import fr.enseeiht.superjumpingsumokart.application.GuiGameListener;
 
 /**
  *  @author  Lucas Pascal
@@ -115,7 +114,7 @@ public class BluetoothClient extends Thread {
         try {
             if (btSocket != null) {
                 btSocket.close();
-                GUI_WELCOME.GUI_WELCOME_HANDLER.sendEmptyMessage(GUIWelcome.BLUETOOTH_CLIENT_SHUTTED_DOWN);
+                GUI_WELCOME.GUI_WELCOME_HANDLER.sendEmptyMessage(GUIWelcome.BLUETOOTH_CLIENT_SHUT_DOWN);
             }
         } catch (IOException e) {
             Log.e(BLUETOOTH_CLIENT_TAG, "IOException while closing socket : " + e.getMessage());

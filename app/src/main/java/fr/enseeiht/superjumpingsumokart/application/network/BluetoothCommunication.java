@@ -226,7 +226,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
     /**
      * Closes the connection.
      */
-    private void cancel() {
+    public void cancel() {
         try {
             isRunning = false;
             if (BT_SOCKET != null) {
@@ -234,7 +234,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
             }
             BLUETOOTH_COMMUNICATION_LISTENERS.clear();
         } catch (IOException e) {
-            Log.d(BLUETOOTH_COMMUNICATION_TAG, "IOException while closing socket : + " + e.getMessage());
+            Log.d(BLUETOOTH_COMMUNICATION_TAG, "IOException while closing socket : " + e.getMessage());
         }
     }
 

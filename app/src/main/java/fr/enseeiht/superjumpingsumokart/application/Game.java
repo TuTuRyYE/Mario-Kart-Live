@@ -89,21 +89,6 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
         }
     }
 
-    /**
-     * Get the {@link GUIGame} associated to the Game (Vivian - 07/02/2017).
-     * @return the {@link GUIGame} of the {@link Game}.
-     */
-    public GUIGame getGuiGame() {
-        return guiGame;
-    }
-
-    /**
-     * Set the {@link GUIGame} associated to the Game (Vivian - 07/02/2017).
-     * @param guiGame of the {@link Game}.
-     */
-    public void setGuiGame(GUIGame guiGame) {
-        this.guiGame = guiGame;
-    }
 
     /**
      * Check the current status of the {@link Game} (Vivian - 07/02/2017).
@@ -112,31 +97,6 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
     public boolean isStarted() {
         return started;
     }
-
-    /**
-     * Create the {@link Circuit} (Vivian - 07/02/2017).
-     */
-    private void createCircuit () {
-        int laps = 1; // Number of laps for the game
-        int checkPointToCheck = 1;
-        Circuit.initInstance(laps,checkPointToCheck);
-    }
-    /**
-     * Get the number of player on the {@link Game} (Vivian - 07/02/2017).
-     * @return number of Player.
-     */
-    public int getNumberPlayer() {
-        int numberOfPlayer;
-        if (comBT != null){
-            numberOfPlayer = 2;
-        }
-        else {
-            numberOfPlayer = 1;
-        }
-        Log.d(GAME_TAG, "Number of players: " + numberOfPlayer);
-        return numberOfPlayer;
-    }
-
 
     public boolean isReady() {
         return (Circuit.getInstance() !=null && !started);
@@ -154,7 +114,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
         return finished;
     }
 
-    public void registerGameListener(GameListener gameListener) {
+    private void registerGameListener(GameListener gameListener) {
         GAME_LISTENERS.add(gameListener);
     }
 
@@ -238,6 +198,9 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
 
         GAME_LISTENERS.clear();
         finished = true;
+        if (comBT != null) {
+            comBT.cancel();
+        }
     }
 
     @Override
@@ -245,6 +208,9 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
         guiGame.notifyVictory();
         GAME_LISTENERS.clear();
         finished = true;
+        if (comBT != null) {
+            comBT.cancel();
+        }
     }
 
     @Override
@@ -256,6 +222,9 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
         }
         GAME_LISTENERS.clear();
         finished = true;
+        if (comBT != null) {
+            comBT.cancel();
+        }
     }
 
     @Override
@@ -268,6 +237,10 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
         }
         GAME_LISTENERS.clear();
         finished = true;
+        if (comBT != null) {
+            comBT.cancel();
+        }
+
     }
 
     @Override

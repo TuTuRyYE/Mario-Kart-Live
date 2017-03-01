@@ -40,8 +40,8 @@ public class GUIWelcome extends Activity {
     public final static int BLUETOOTH_SERVER_READY = 3;
     public final static int BLUETOOTH_SERVER_GOT_CONNECTION = 4;
     public final static int BLUETOOTH_CLIENT_JOINED_GAME = 5;
-    public final static int BLUETOOTH_SERVER_SHUTTED_DOWN = 6;
-    public final static int BLUETOOTH_CLIENT_SHUTTED_DOWN = 7;
+    public final static int BLUETOOTH_SERVER_SHUT_DOWN = 6;
+    public final static int BLUETOOTH_CLIENT_SHUT_DOWN = 7;
     public final static int CIRCUIT_RECEIVED_WHEN_CLIENT = 8;
 
     public final Handler GUI_WELCOME_HANDLER = new Handler() {
@@ -68,10 +68,10 @@ public class GUIWelcome extends Activity {
                 case BLUETOOTH_SERVER_GOT_CONNECTION :
                     onServerReceivedConnection();
                     break;
-                case BLUETOOTH_SERVER_SHUTTED_DOWN:
+                case BLUETOOTH_SERVER_SHUT_DOWN:
                     onServerShutDown();
                 break;
-                case BLUETOOTH_CLIENT_SHUTTED_DOWN:
+                case BLUETOOTH_CLIENT_SHUT_DOWN:
                     onClientShutDown();
                 break;
                 case CIRCUIT_RECEIVED_WHEN_CLIENT :
@@ -161,6 +161,7 @@ public class GUIWelcome extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        btHostBtn.setBackgroundResource(android.R.drawable.btn_default);
         if (currentDeviceService == null) {
             disableWifiConnectionBtn();
         }
