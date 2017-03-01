@@ -55,7 +55,6 @@ public final class BluetoothCommunication extends Thread implements GameListener
     /**
      * A reference to a {@link Game} instance.
      */
-    private Game game;
 
     private boolean isRunning;
 
@@ -173,7 +172,6 @@ public final class BluetoothCommunication extends Thread implements GameListener
                 int i;
                 for (i=3; i<msgSplit.length; i++){
                     String[] hashSplit = msgSplit[i].split(":");
-                    int id = Integer.parseInt(hashSplit[0]);
                     String symbolsType = hashSplit[1];
                     DetectionTask.Symbol symbol = DetectionTask.Symbol.valueOf(symbolsType);
                     Circuit.getInstance().addMarker(symbol);
@@ -281,13 +279,13 @@ public final class BluetoothCommunication extends Thread implements GameListener
 
     @Override
     public void onPlayerFinishedLap() {
-        Log.d(BLUETOOTH_COMMUNICATION_TAG, "onPlayerFinishedLap called");
+        Log.d(BLUETOOTH_COMMUNICATION_TAG, "onPlayerDetectsArrivalLine called");
         // Creates message
         String dataString = "hasFinishedLap";
         byte[] dataBytes = dataString.getBytes(Charset.forName("UTF-8"));
         // Send the message
         write(dataBytes);
-        Log.d(BLUETOOTH_COMMUNICATION_TAG, "onPlayerFinishedLap sent to the other phone");
+        Log.d(BLUETOOTH_COMMUNICATION_TAG, "onPlayerDetectsArrivalLine sent to the other phone");
     }
 
     @Override
@@ -358,7 +356,6 @@ public final class BluetoothCommunication extends Thread implements GameListener
      */
     public void setGame(Game game) {
         if (game != null) {
-            this.game = game;
             if (!BLUETOOTH_COMMUNICATION_LISTENERS.contains(game)) {
                 registerCommunicationBTListener(game);
             }

@@ -36,9 +36,9 @@ public interface GuiGameListener {
 
     void onPlayerFinished();
 
-    void onPlayerFinishedLap();
+    void onPlayerDetectsArrivalLine();
 
-    void onPlayerValidatedCheckpoint();
+    void onPlayerDetectsCheckpoint();
 
     /**
      * Notify that the {@link fr.enseeiht.superjumpingsumokart.arpack.GUIGame} is able to display the video stream from the Jumping Sumo's camera.

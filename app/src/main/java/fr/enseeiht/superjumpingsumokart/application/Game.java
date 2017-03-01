@@ -211,7 +211,8 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener {
         }
     }
 
-    void onPlayerFinished() {
+    @Override
+    public void onPlayerFinished() {
         if (comBT != null) {
             for (GameListener gl : GAME_LISTENERS) {
                 gl.onPlayerFinished();
@@ -241,7 +242,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener {
     }
 
     @Override
-    public void onPlayerFinishedLap() {
+    public void onPlayerDetectsArrivalLine() {
         if (drone.getCurrentCheckpoint() >= Circuit.getInstance().getCheckpointToCheck()) {
             drone.setCurrentLap(drone.getCurrentLap() + 1);
         }
@@ -252,7 +253,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener {
     }
 
     @Override
-    public void onPlayerValidatedCheckpoint() {
+    public void onPlayerDetectsCheckpoint() {
         drone.setCurrentCheckpoint(drone.getCurrentCheckpoint() + 1);
         for (GameListener gl : GAME_LISTENERS) {
             gl.onPlayerFinishedLap();

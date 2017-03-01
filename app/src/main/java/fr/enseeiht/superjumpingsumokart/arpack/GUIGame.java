@@ -33,7 +33,6 @@ import java.util.HashMap;
 
 import fr.enseeiht.superjumpingsumokart.R;
 import fr.enseeiht.superjumpingsumokart.application.Circuit;
-import fr.enseeiht.superjumpingsumokart.application.Drone;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
 import fr.enseeiht.superjumpingsumokart.application.Game;
 import fr.enseeiht.superjumpingsumokart.application.GameListener;
@@ -543,13 +542,13 @@ public class GUIGame extends Activity implements GameListener {
 
     public void arrivalLineDetected() {
         for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
-            ggl.onPlayerFinishedLap();
+            ggl.onPlayerDetectsArrivalLine();
         }
     }
 
     public void checkpointDeteted() {
         for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
-            ggl.onPlayerValidatedCheckpoint();
+            ggl.onPlayerDetectsCheckpoint();
         }
     }
 
