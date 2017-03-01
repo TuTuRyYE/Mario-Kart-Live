@@ -182,7 +182,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
                     }
                 GUI_WELCOME.GUI_WELCOME_HANDLER.sendEmptyMessage(GUIWelcome.CIRCUIT_RECEIVED_WHEN_CLIENT);
                 for (BluetoothCommunicationListener bcl : BLUETOOTH_COMMUNICATION_LISTENERS) {
-                    Log.d(BLUETOOTH_COMMUNICATION_TAG, "enter boucle for each");
+                    Log.d(BLUETOOTH_COMMUNICATION_TAG,"boucle for each circuit recu");
                     bcl.onCircuitReceived();
                 }
                 break;
@@ -234,9 +234,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
             if (BT_SOCKET != null) {
                 BT_SOCKET.close();
             }
-            for (BluetoothCommunicationListener bcl : BLUETOOTH_COMMUNICATION_LISTENERS) {
-                unregisterBluetoothCommunicationListener(bcl);
-            }
+            BLUETOOTH_COMMUNICATION_LISTENERS.clear();
         } catch (IOException e) {
             Log.d(BLUETOOTH_COMMUNICATION_TAG, "IOException while closing socket : + " + e.getMessage());
         }

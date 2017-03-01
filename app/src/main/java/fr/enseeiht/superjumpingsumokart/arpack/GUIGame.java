@@ -137,8 +137,9 @@ public class GUIGame extends Activity implements GameListener {
                     Toast.makeText(GUIGame.this, "Loosing controller connection", Toast.LENGTH_LONG).show();
                     for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
                         ggl.onPlayerGaveUp();
-                        unregisterGuiGameListener(ggl);
+
                     }
+                    GUI_GAME_LISTENERS.clear();
                     finish();
                     break;
                 case RENDER_AR:
@@ -339,13 +340,12 @@ public class GUIGame extends Activity implements GameListener {
             controller.stopController();
         }
         for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
-            Log.d(GUI_GAME_TAG,"In boucle fo");
             if (game != null && game.isStarted()) {
-                Log.d(GUI_GAME_TAG,"In the if");
                 ggl.onPlayerGaveUp();
             }
-            unregisterGuiGameListener(ggl);
+
         }
+        GUI_GAME_LISTENERS.clear();
     }
 
     @Override
