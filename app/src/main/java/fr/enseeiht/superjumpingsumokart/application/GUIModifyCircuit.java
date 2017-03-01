@@ -109,7 +109,6 @@ public class GUIModifyCircuit extends Activity {
 
         // List of symbols for the spinner
             listSymbols = new ArrayList<>();
-            listSymbols.add("A");
             listSymbols.add("B");
             listSymbols.add("C");
             listSymbols.add("D");
@@ -150,7 +149,7 @@ public class GUIModifyCircuit extends Activity {
                                 String symbol = symbolText.getSelectedItem().toString();
                                 if (!symbol.equals("Select a type of marker")) { // if a symbol is selected
                                     // Add the marker to markers list
-                                        adapter.insert(symbol, markers.size()-2);
+                                        adapter.add(symbol);
                                     // Remove the symbol from the list if it isn't "KANJI" (others symbol can appear only one time in the circuit)
                                         if (!symbol.equals("KANJI")) {
                                             spinnerAdapter.remove(symbol);
@@ -200,10 +199,6 @@ public class GUIModifyCircuit extends Activity {
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
                             if (itemSelected != null) { // if an item is selected
-                                if (itemSelected == 1 || itemSelected == 2 || itemSelected==markers.size() || itemSelected == markers.size() -1 ) { // if the item selected is the default markers (startline)
-                                    Toast.makeText(GUIModifyCircuit.this, "You can't delete this marker !", Toast.LENGTH_SHORT).show();
-                                }
-                                else {
                                     // Remove the selected item
                                         adapter.remove(markers.get(itemSelected-1));
                                     // Add it to the list of symbol if it isn't "KANJI"
@@ -213,7 +208,7 @@ public class GUIModifyCircuit extends Activity {
                                     // Reset the item selected
                                         listMarkers.getChildAt(itemSelected).setBackgroundColor(Color.TRANSPARENT);
                                         itemSelected = null;
-                                }
+
                             }
                             else { // if no item is selected
                                 Toast.makeText(GUIModifyCircuit.this, "You must select a marker first", Toast.LENGTH_SHORT).show();

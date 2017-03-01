@@ -85,15 +85,9 @@ public class GUICreateCircuit extends Activity {
             listMarkers.addHeaderView(header, null, false);
             listMarkers.setAdapter(adapter);
 
-        // Default marker for the circuit (start line and end line)
-            adapter.add("HIRO");
-            adapter.add("HIRO");
-            adapter.add("HIRO");
-            adapter.add("HIRO");
 
         // List of symbols for the spinner
             final ArrayList<String> listSymbols = new ArrayList();
-            listSymbols.add("A");
             listSymbols.add("B");
             listSymbols.add("C");
             listSymbols.add("D");
@@ -129,7 +123,7 @@ public class GUICreateCircuit extends Activity {
                                     String symbol = symbolText.getSelectedItem().toString();
                                     if (!symbol.equals("Select a type of marker")) { // if a symbol is selected
                                         // Add the marker to the end of markers list (before 2 end markers)
-                                            adapter.insert(symbol, markers.size()-2);
+                                            adapter.add(symbol);
                                             // Remove the symbol from the list if it isn't "KANJI" (others symbol can appear only one time in the circuit)
                                             if (!symbol.equals("KANJI")) {
                                                 spinnerAdapter.remove(symbol);
@@ -180,10 +174,6 @@ public class GUICreateCircuit extends Activity {
                         switch (event.getAction()) {
                             case MotionEvent.ACTION_DOWN:
                                 if (itemSelected != null) { // if an item is selected
-                                    if (itemSelected == 1 || itemSelected == 2 || itemSelected==markers.size() || itemSelected == markers.size() -1 ) { // if the user tries to delete the default markers (start line)
-                                        Toast.makeText(GUICreateCircuit.this, "You can't delete this marker !", Toast.LENGTH_SHORT).show();
-                                    }
-                                    else {
                                         // Remove the selected marker
                                             adapter.remove(markers.get(itemSelected-1));
                                         // Add it to the list of symbol if it isn't "KANJI"
@@ -192,7 +182,6 @@ public class GUICreateCircuit extends Activity {
                                         }
                                         // Reset itemSelected
                                             itemSelected = null;
-                                    }
                                 }
                                 else { // if the user hasn't selected an item
                                     Toast.makeText(GUICreateCircuit.this, "You must select a marker first", Toast.LENGTH_SHORT).show();

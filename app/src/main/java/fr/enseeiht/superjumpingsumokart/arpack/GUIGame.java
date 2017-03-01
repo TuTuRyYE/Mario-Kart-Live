@@ -29,8 +29,11 @@ import org.artoolkit.ar.base.ARToolKit;
 import org.artoolkit.ar.base.AndroidUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import fr.enseeiht.superjumpingsumokart.R;
+import fr.enseeiht.superjumpingsumokart.application.Circuit;
+import fr.enseeiht.superjumpingsumokart.application.Drone;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
 import fr.enseeiht.superjumpingsumokart.application.Game;
 import fr.enseeiht.superjumpingsumokart.application.GameListener;
@@ -285,6 +288,39 @@ public class GUIGame extends Activity implements GameListener {
                 for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
                     ggl.onItemUsed(controller.getDrone().getLastMarkerSeen(), item);
                 }
+            }
+        });
+        sendTrapBtn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                // Send the object on the next marker forward if it is a long touch
+                if (motionEvent.getDownTime() > 500) {
+                    Log.d(GUI_GAME_TAG, "sentTrapBtn long touch");
+                    // Get the list of markers and the last marker seen
+                        HashMap<Integer, DetectionTask.Symbol> markers = Circuit.getInstance().getMarkers();
+                        DetectionTask.Symbol lastMarkerSeen = controller.getDrone().getLastMarkerSeen();
+                    // Found the next marker on the circuit
+                        Boolean found = false;
+                        DetectionTask.Symbol nextMarker = null;
+                        int i=1;
+                        while (!found && i<markers.size()) {
+                            if (markers.get(i).equals(lastMarkerSeen)) {
+                                nextMarker = markers.get(i + 1);
+                                found = true;
+                            }
+                            i++;
+                        }
+                    // if there is no marker forward, we put the item on the first marker
+                        if (nextMarker == null) {
+                            nextMarker = markers.get(1);
+                        }
+                        Item item = controller.getDrone().getCurrentItem();
+                        controller.useItem();
+                        for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
+                            ggl.onItemUsed(nextMarker, item);
+                        }
+                }
+                return true;
             }
         });
         jumpBtn.setOnClickListener(new View.OnClickListener() {
