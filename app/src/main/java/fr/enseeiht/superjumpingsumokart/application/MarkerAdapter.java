@@ -42,6 +42,9 @@ public class MarkerAdapter extends ArrayAdapter<String> {
                 convertView.setTag(viewHolder);
             }
 
+        viewHolder.id.setHeight(50);
+        viewHolder.id.setMinHeight(50);
+
         // Get the item [position] of the listView
             String st = getItem(position);
 

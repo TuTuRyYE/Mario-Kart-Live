@@ -44,11 +44,17 @@ public class CircuitAdapter extends ArrayAdapter<String[]> {
                 viewHolder = new fr.enseeiht.superjumpingsumokart.application.CircuitAdapter.CircuitViewHolder();
                 viewHolder.circuitName = (TextView) convertView.findViewById(R.id.nameCircuitView);
                 viewHolder.numberLaps = (TextView) convertView.findViewById(R.id.numberLapsView);
+
                 convertView.setTag(viewHolder);
             }
 
         // Get the item [position] of the listView
             String[] currentCircuit = getItem(position);
+
+        viewHolder.circuitName.setHeight(50);
+        viewHolder.circuitName.setMinHeight(50);
+        viewHolder.numberLaps.setHeight(50);
+        viewHolder.numberLaps.setMinHeight(50);
 
         // Fill the View
             viewHolder.circuitName.setText(currentCircuit[0]);

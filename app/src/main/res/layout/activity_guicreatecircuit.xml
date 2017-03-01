@@ -19,7 +19,7 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="61dp">
+            android:layout_height="wrap_content">
 
             <EditText
                 android:layout_width="wrap_content"
@@ -82,7 +82,7 @@
             android:weightSum="3"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
-            android:layout_height="50dp">
+            android:layout_height="wrap_content">
 
             <Button
                 android:layout_width="0dp"

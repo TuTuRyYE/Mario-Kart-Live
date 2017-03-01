@@ -293,7 +293,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     }
 
     /**
-     * (Romain Verset - 01/02/2017)
+     * (Romain Verset - 01/02/2017).
      * @return True if the {@link ARDeviceController} is running.
      */
     public boolean isRunning() {

@@ -17,11 +17,11 @@ import fr.enseeiht.superjumpingsumokart.application.items.Item;
 import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
+ * @author  Lucas Pascal
  * Bluetooth communication channel used in the application so that to phones can send messages to
  * each other.
  * It manages the bluetooth communication between two paired devices and run in a separate thread
  * in order to avoid UI freezes.
- * Created by Lucas on 07/02/2017.
  */
 public final class BluetoothCommunication extends Thread implements GameListener {
 
@@ -254,9 +254,6 @@ public final class BluetoothCommunication extends Thread implements GameListener
         BLUETOOTH_COMMUNICATION_LISTENERS.add(gameListener);
     }
 
-    private void unregisterBluetoothCommunicationListener(BluetoothCommunicationListener gameListener) {
-        BLUETOOTH_COMMUNICATION_LISTENERS.remove(gameListener);
-    }
 
     @Override
     public void onPlayerReady() {
@@ -356,7 +353,8 @@ public final class BluetoothCommunication extends Thread implements GameListener
 
 
     /**
-     * @param game The game to listen events from.
+     * Set the current {@link Game} associated to the BluetoothCommunication
+     * @param game listened by {@link BluetoothCommunication}.
      */
     public void setGame(Game game) {
         if (game != null) {
