@@ -39,7 +39,8 @@ public class MagicBox extends Item {
     @Override
     public void applyEffect(DroneController droneController) {
         Log.d(ITEM_TAG, "A magic box has been touched");
-        int rand = (int) Math.floor(Math.random() * 3);
+        int rand = 1+ (int) Math.floor(Math.random() * 3);
+
         Item item;
         if (rand == 1) { //Banana
             item = new Banana();
@@ -49,11 +50,12 @@ public class MagicBox extends Item {
             item = new RedShell();
         }
         else {
+
             item = null;
         }
 
         droneController.getDrone().setCurrentItem(item);
-        Log.d(ITEM_TAG, "An item has been assigned to the droneController");
+        Log.d(ITEM_TAG, "A/An, "+ item.getName()+" has been assigned to the droneController");
     }
 
     @Override

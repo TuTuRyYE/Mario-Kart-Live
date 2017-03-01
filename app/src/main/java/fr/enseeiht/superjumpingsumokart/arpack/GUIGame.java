@@ -356,6 +356,7 @@ public class GUIGame extends Activity implements GameListener {
      */
     private void displayTrap() {
         Item currentItem = controller.getDrone().getCurrentItem();
+        Log.d(GUI_GAME_TAG, currentItem.getName()+" is owned by the player");
         currentItem.assignResource(sendTrapBtn);
     }
 
