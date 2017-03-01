@@ -34,7 +34,7 @@ public class Circuit {
      */
     private int lapsNumber;
 
-    public int getCheckPointToCheck() {
+    public int getCheckpointToCheck() {
         return checkPointToCheck;
     }
 

@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
@@ -33,11 +31,9 @@ import org.artoolkit.ar.base.AndroidUtils;
 import java.util.ArrayList;
 
 import fr.enseeiht.superjumpingsumokart.R;
-import fr.enseeiht.superjumpingsumokart.application.Drone;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
 import fr.enseeiht.superjumpingsumokart.application.Game;
 import fr.enseeiht.superjumpingsumokart.application.GameListener;
-import fr.enseeiht.superjumpingsumokart.application.GuiGameListener;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
 import fr.enseeiht.superjumpingsumokart.application.network.BluetoothCommunication;
 import fr.enseeiht.superjumpingsumokart.application.network.WifiConnector;
@@ -193,6 +189,7 @@ public class GUIGame extends Activity implements GameListener {
         Log.d(GUI_GAME_TAG, "Device created, attempting to create its controller...");
         controller = new DroneController(this, currentDevice);
         Log.d(GUI_GAME_TAG, "Controller of the device created.");
+        game.setDrone(controller.getDrone());
 
         // Sets some graphical settings;
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
@@ -505,6 +502,18 @@ public class GUIGame extends Activity implements GameListener {
     public void touchedSymbol(DetectionTask.Symbol symbol) {
         for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
             ggl.onSymbolTouched(symbol);
+        }
+    }
+
+    public void arrivalLineDetected() {
+        for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
+            ggl.onPlayerFinishedLap();
+        }
+    }
+
+    public void checkpointDeteted() {
+        for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
+            ggl.onPlayerValidatedCheckpoint();
         }
     }
 

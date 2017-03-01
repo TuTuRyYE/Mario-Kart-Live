@@ -150,6 +150,7 @@ public class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
                             if (-ARToolKit.getInstance().queryMarkerTransformation(id)[14] < 350 && (SystemClock.elapsedRealtime() - timeSinceLastKanji) > 3000) {
                                 timeSinceLastKanji = SystemClock.elapsedRealtime();
                                 Log.d(DETECTION_TASK_TAG, "Checkpoint validated");
+
                             }
                             break;
                         case A:

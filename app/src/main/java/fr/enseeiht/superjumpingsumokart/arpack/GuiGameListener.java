@@ -1,5 +1,8 @@
-package fr.enseeiht.superjumpingsumokart.application;
+package fr.enseeiht.superjumpingsumokart.arpack;
 
+import fr.enseeiht.superjumpingsumokart.application.Drone;
+import fr.enseeiht.superjumpingsumokart.application.DroneController;
+import fr.enseeiht.superjumpingsumokart.application.Game;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
 import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
@@ -31,10 +34,11 @@ public interface GuiGameListener {
      */
     void onPlayerGaveUp();
 
-    /**
-     * Method called when the {@link Drone} finishes the race.
-     */
     void onPlayerFinished();
+
+    void onPlayerFinishedLap();
+
+    void onPlayerValidatedCheckpoint();
 
     /**
      * Notify that the {@link fr.enseeiht.superjumpingsumokart.arpack.GUIGame} is able to display the video stream from the Jumping Sumo's camera.

@@ -12,11 +12,13 @@ import fr.enseeiht.superjumpingsumokart.application.network.BluetoothCommunicati
 import fr.enseeiht.superjumpingsumokart.application.network.BluetoothCommunicationListener;
 import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
+import fr.enseeiht.superjumpingsumokart.arpack.GuiGameListener;
+
 /**
  * @author Vivian Guy, Matthieu Michel, Romain Verset.
  * This class is used to manage the game.
  */
-public class Game implements BluetoothCommunicationListener, GuiGameListener{
+public class Game implements BluetoothCommunicationListener, GuiGameListener {
 
     /**
      * The logging tag. Useful for debugging.
@@ -33,7 +35,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
      */
     private final ArrayList<GameListener> GAME_LISTENERS = new ArrayList<>();
 
-    private Drone otherDrone;
+    private Drone drone, otherDrone;
 
     private boolean videoStreamAvailable = false, droneControllerReady = false;
     private boolean ready = false, otherReady = false;
@@ -51,9 +53,6 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
         registerGameListener(guiGame);
         this.started = false;
         this.comBT = comBT;
-        if (Circuit.getInstance() == null) {
-            Circuit.initInstance(-1, -1);
-        }
         if (comBT != null) {
             this.comBT = comBT;
             comBT.setGame(this);
@@ -212,8 +211,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
         }
     }
 
-    @Override
-    public void onPlayerFinished() {
+    void onPlayerFinished() {
         if (comBT != null) {
             for (GameListener gl : GAME_LISTENERS) {
                 gl.onPlayerFinished();
@@ -243,6 +241,25 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
     }
 
     @Override
+    public void onPlayerFinishedLap() {
+        if (drone.getCurrentCheckpoint() >= Circuit.getInstance().getCheckpointToCheck()) {
+            drone.setCurrentLap(drone.getCurrentLap() + 1);
+        }
+        if (drone.getCurrentLap() == Circuit.getInstance().getLaps()) {
+            onPlayerFinished();
+        }
+
+    }
+
+    @Override
+    public void onPlayerValidatedCheckpoint() {
+        drone.setCurrentCheckpoint(drone.getCurrentCheckpoint() + 1);
+        for (GameListener gl : GAME_LISTENERS) {
+            gl.onPlayerFinishedLap();
+        }
+    }
+
+    @Override
     public void onCircuitReceived() {
         checkReadyAndStartRace();
     }
@@ -262,5 +279,9 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
     public void onVideoStreamAvailable() {
         videoStreamAvailable = true;
         checkReadyAndStartRace();
+    }
+
+    public void setDrone(Drone drone) {
+        this.drone = drone;
     }
 }

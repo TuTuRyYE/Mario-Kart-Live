@@ -28,6 +28,11 @@ public class Drone {
     private int currentLap;
 
     /**
+     * TODO
+     */
+    private int currentCheckpoint;
+
+    /**
      * Get the last marker seen
      * @return the marker
      */
@@ -55,7 +60,7 @@ public class Drone {
     Drone(String name) {
         this.name = name;
         this.currentItem = new NullItem();
-
+        this.currentCheckpoint = 0;
         this.currentLap = 0;
     }
 
@@ -107,7 +112,15 @@ public class Drone {
      * Set the number of lap the drone has done.
      * @param currentLap the number of lap the drone has done.
      */
-    public void setCurrentLap(int currentLap) {
+    void setCurrentLap(int currentLap) {
         this.currentLap = currentLap;
+    }
+
+    int getCurrentCheckpoint() {
+        return currentCheckpoint;
+    }
+
+    void setCurrentCheckpoint(int currentCheckpoint) {
+        this.currentCheckpoint = currentCheckpoint;
     }
 }
