@@ -79,27 +79,31 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="81dp"
-            android:weightSum="1">
+            android:weightSum="3"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_height="50dp">
 
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:id="@+id/addMarkerBtn"
                 android:text="@string/add_marker_btn"
-                android:layout_weight="0.79" />
+                android:layout_weight="1" />
 
             <Button
                 android:text="@string/confirm_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/confirmBtn" />
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:id="@+id/confirmBtn"
+                android:layout_weight="1" />
 
             <Button
                 android:text="@string/deleteMarker"
-                android:layout_width="193dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/deleteMarkerBtn" />
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:id="@+id/deleteMarkerBtn"
+                android:layout_weight="1" />
         </LinearLayout>
 
     </LinearLayout>
