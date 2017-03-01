@@ -19,8 +19,8 @@
         android:layout_height="match_parent">
 
         <FrameLayout
-            android:layout_width="@dimen/video_width"
-            android:layout_height="@dimen/video_height"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
             android:id="@+id/mainLayout">
@@ -28,8 +28,8 @@
         </FrameLayout>
 
         <FrameLayout
-            android:layout_width="@dimen/video_width"
-            android:layout_height="@dimen/video_height"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true">
 

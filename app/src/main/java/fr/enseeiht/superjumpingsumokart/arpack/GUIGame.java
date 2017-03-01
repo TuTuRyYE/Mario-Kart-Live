@@ -398,13 +398,10 @@ public class GUIGame extends Activity implements GameListener {
      * Method called by {@link #UPDATER} to refresh the view of the GUI and update the displayed
      * frame from the video stream of the device (Romain Verset - 01/02/2017).
      */
-    public void updateCameraSurfaceView(Bitmap frameToDraw, float[] cornerPoints) {
+    public void updateCameraSurfaceView(Bitmap frameToDraw) {
         if (cameraViewAvailable) {
             Canvas canvas = cameraView.getHolder().lockCanvas();
             canvas.drawBitmap(frameToDraw, 0, 0, null);
-            if (cornerPoints != null) {
-                canvas.drawRect(cornerPoints[0], cornerPoints[1], cornerPoints[4], cornerPoints[5], new Paint(Color.RED));
-            }
             cameraView.getHolder().unlockCanvasAndPost(canvas);
 
         }
@@ -479,11 +476,7 @@ public class GUIGame extends Activity implements GameListener {
         UPDATER.sendEmptyMessage(RECEIVE_FRAME);
         UPDATER.sendEmptyMessage(UPDATE_ITEM_ICON);
     }
-
-    public Game getGame() {
-        return game;
-    }
-
+    
     public DroneController getController() {
         return controller;
     }
