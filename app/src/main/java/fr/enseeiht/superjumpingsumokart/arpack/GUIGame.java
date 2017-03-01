@@ -31,8 +31,10 @@ import org.artoolkit.ar.base.ARToolKit;
 import org.artoolkit.ar.base.AndroidUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import fr.enseeiht.superjumpingsumokart.R;
+import fr.enseeiht.superjumpingsumokart.application.Circuit;
 import fr.enseeiht.superjumpingsumokart.application.Drone;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
 import fr.enseeiht.superjumpingsumokart.application.Game;
@@ -288,6 +290,38 @@ public class GUIGame extends Activity implements GameListener {
                 for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
                     ggl.onItemUsed(controller.getDrone().getLastMarkerSeen(), item);
                 }
+            }
+        });
+        sendTrapBtn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getDownTime() > 500) {
+                    Log.d(GUI_GAME_TAG, "sentTrapBtn long touch");
+                    HashMap<Integer, DetectionTask.Symbol> markers = Circuit.getInstance().getMarkers();
+                    DetectionTask.Symbol lastMarkerSeen = controller.getDrone().getLastMarkerSeen();
+                    Boolean found = false;
+                    DetectionTask.Symbol nextMarker = null;
+                    if (markers == null) {
+                        Log.d(GUI_GAME_TAG, "markers null");
+                    }
+                    int i=0;
+                    while (!found && i<markers.size()) {
+                        if (markers.get(i).equals(lastMarkerSeen)) {
+                            found = true;
+                            nextMarker = markers.get(i+1);
+                        }
+                        i++;
+                    }
+                    if (nextMarker != null) {
+                        Item item = controller.getDrone().getCurrentItem();
+                        controller.useItem();
+                        for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
+                            ggl.onItemUsed(nextMarker, item);
+                        }
+                    }
+
+                }
+                return true;
             }
         });
         jumpBtn.setOnClickListener(new View.OnClickListener() {

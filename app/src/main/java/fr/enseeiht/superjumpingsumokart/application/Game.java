@@ -51,9 +51,9 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
         registerGameListener(guiGame);
         this.started = false;
         this.comBT = comBT;
-        if (Circuit.getInstance() == null) {
+/*        if (Circuit.getInstance() == null) {
             Circuit.initInstance(-1, -1);
-        }
+        }*/
         if (comBT != null) {
             this.comBT = comBT;
             comBT.setGame(this);
