@@ -9,10 +9,9 @@ import fr.enseeiht.superjumpingsumokart.application.network.BluetoothCommunicati
 import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
+ * @author Vivian Guy
  * Modelises a circuit in Super Jumping Sumo Kart.
- * Borders of the track are materialised by ARToolkit markers. The first point of the start line is
- * always (0, 0, 0).
- * Created by Vivian on 27/01/2017.
+ * Borders of the track are materialised by ARToolkit markers.
  */
 public class Circuit {
     /**
@@ -116,18 +115,6 @@ public class Circuit {
         this.markers.put(this.markers.size() + 1, symbol);
     }
 
-    public void removeMarker(int position) {
-        DetectionTask.Symbol symbol;
-        // remove the marker
-            this.markers.remove(position);
-        // Adapt the position of others markers
-            for (int i=position; i<markers.size(); i++) {
-                symbol = this.markers.get(i);
-                this.markers.remove(i);
-                this.markers.put(i ,symbol);
-            }
-
-    }
 
     /**
      * Add an object to the list of objects present on the circuit.

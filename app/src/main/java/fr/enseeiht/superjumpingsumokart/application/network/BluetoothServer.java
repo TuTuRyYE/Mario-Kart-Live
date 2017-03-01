@@ -1,7 +1,6 @@
 package fr.enseeiht.superjumpingsumokart.application.network;
 
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
@@ -12,8 +11,8 @@ import java.util.UUID;
 import fr.enseeiht.superjumpingsumokart.application.GUIWelcome;
 
 /**
+ *  @author  Lucas Pascal
  * Defines the bluetooth server used to communicate with another paired phone.
- * Created by Lucas on 07/02/2017.
  */
 public class BluetoothServer extends Thread {
 
@@ -119,7 +118,7 @@ public class BluetoothServer extends Thread {
         try {
             if (btSocket != null) {
                 btSocket.close();
-                GUI_WELCOME.GUI_WELCOME_HANDLER.sendEmptyMessage(GUIWelcome.BLUETOOTH_SERVER_SHUTTED_DOWN);
+                GUI_WELCOME.GUI_WELCOME_HANDLER.sendEmptyMessage(GUIWelcome.BLUETOOTH_SERVER_SHUT_DOWN);
             }
         } catch (IOException e) {
             Log.e(BLUETOOTH_SERVER_TAG, "IOException while closing socket : " + e.getMessage());

@@ -48,6 +48,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
      */
     public void setRunning(boolean running) {
         this.running = running;
+        deviceController.getFeatureJumpingSumo().setPilotingPCMDFlag((byte)1);
     }
 
     private boolean running = false;
@@ -203,8 +204,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
                 break;
             case ARCONTROLLER_DEVICE_STATE_RUNNING :
                 running = true;
-                deviceController.getFeatureJumpingSumo().sendMediaStreamingVideoEnable((byte) 1);
-                deviceController.getFeatureJumpingSumo().setPilotingPCMDFlag((byte) 1);
+                deviceController.getFeatureJumpingSumo().sendMediaStreamingVideoEnable((byte) 0);
                 GUI_GAME.UPDATER.sendEmptyMessage(GUIGame.CONTROLLER_RUNNING);
                 break;
             case ARCONTROLLER_DEVICE_STATE_STOPPING :
@@ -221,7 +221,6 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
             case ARCONTROLLER_DEVICE_STATE_STOPPED :
                 started = false;
                 running = false;
-                //GUI_GAME.notify();
                 break;
             default:
                 break;
@@ -295,7 +294,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     }
 
     /**
-     * (Romain Verset - 01/02/2017)
+     * (Romain Verset - 01/02/2017).
      * @return True if the {@link ARDeviceController} is running.
      */
     public boolean isRunning() {

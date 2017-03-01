@@ -8,22 +8,20 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import fr.enseeiht.superjumpingsumokart.application.Circuit;
 import fr.enseeiht.superjumpingsumokart.application.GUIWelcome;
 import fr.enseeiht.superjumpingsumokart.application.Game;
 import fr.enseeiht.superjumpingsumokart.application.GameListener;
-import fr.enseeiht.superjumpingsumokart.application.Vector3D;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
 import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
+ * @author  Lucas Pascal
  * Bluetooth communication channel used in the application so that to phones can send messages to
  * each other.
  * It manages the bluetooth communication between two paired devices and run in a separate thread
  * in order to avoid UI freezes.
- * Created by Lucas on 07/02/2017.
  */
 public final class BluetoothCommunication extends Thread implements GameListener {
 
@@ -228,7 +226,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
     /**
      * Closes the connection.
      */
-    private void cancel() {
+    public void cancel() {
         try {
             isRunning = false;
             if (BT_SOCKET != null) {
@@ -236,7 +234,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
             }
             BLUETOOTH_COMMUNICATION_LISTENERS.clear();
         } catch (IOException e) {
-            Log.d(BLUETOOTH_COMMUNICATION_TAG, "IOException while closing socket : + " + e.getMessage());
+            Log.d(BLUETOOTH_COMMUNICATION_TAG, "IOException while closing socket : " + e.getMessage());
         }
     }
 
@@ -256,9 +254,6 @@ public final class BluetoothCommunication extends Thread implements GameListener
         BLUETOOTH_COMMUNICATION_LISTENERS.add(gameListener);
     }
 
-    private void unregisterBluetoothCommunicationListener(BluetoothCommunicationListener gameListener) {
-        BLUETOOTH_COMMUNICATION_LISTENERS.remove(gameListener);
-    }
 
     @Override
     public void onPlayerReady() {
@@ -358,7 +353,8 @@ public final class BluetoothCommunication extends Thread implements GameListener
 
 
     /**
-     * @param game The game to listen events from.
+     * Set the current {@link Game} associated to the BluetoothCommunication
+     * @param game listened by {@link BluetoothCommunication}.
      */
     public void setGame(Game game) {
         if (game != null) {

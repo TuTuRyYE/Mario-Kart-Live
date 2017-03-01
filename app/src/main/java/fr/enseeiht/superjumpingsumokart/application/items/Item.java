@@ -2,16 +2,13 @@ package fr.enseeiht.superjumpingsumokart.application.items;
 
 import android.widget.ImageButton;
 
-import fr.enseeiht.superjumpingsumokart.application.Drone;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
-import fr.enseeiht.superjumpingsumokart.application.Vector3D;
-import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
+ * @author Matthieu Michel
  * Interface for items used in the game {@link Item}.
  * It defines the function to apply the effect of the item on a drone and how to
  * draw the icon of the item on the {@link fr.enseeiht.superjumpingsumokart.arpack.GUIGame} activity.
- * Created by Vivian on 27/01/2017.
  */
 
 public abstract class Item {
