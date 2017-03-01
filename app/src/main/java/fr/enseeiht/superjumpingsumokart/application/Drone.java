@@ -1,9 +1,8 @@
 package fr.enseeiht.superjumpingsumokart.application;
 
-import java.util.ArrayList;
 
-import fr.enseeiht.superjumpingsumokart.application.items.Item;
-import fr.enseeiht.superjumpingsumokart.application.items.RedShell;
+import fr.enseeiht.superjumpingsumokart.application.items.*;
+
 import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
@@ -17,10 +16,6 @@ public class Drone {
      */
     private String name;
 
-    /**
-     * The current position of the drone in the 3D space.
-     */
-    private Vector3D currentPosition;
 
     /**
      * The current item the drone has.
@@ -59,9 +54,8 @@ public class Drone {
      */
     Drone(String name) {
         this.name = name;
-        this.currentPosition = new Vector3D(0, 0 ,0);
-        //this.currentItem = new NullItem();
-        this.currentItem = new RedShell();
+        this.currentItem = new NullItem();
+
         this.currentLap = 0;
     }
 
@@ -83,18 +77,6 @@ public class Drone {
         this.name = name;
     }
 
-    public Vector3D getCurrentPosition() {
-
-        return currentPosition;
-    }
-
-    /**
-     * Set the position of the drone.
-     * @param currentPosition the new currentPosition.
-     */
-    public void setCurrentPosition(Vector3D currentPosition) {
-        this.currentPosition = currentPosition;
-    }
 
     /**
      * Get the {@link Item} of the drone.

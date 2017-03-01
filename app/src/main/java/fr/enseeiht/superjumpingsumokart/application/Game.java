@@ -199,9 +199,8 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
     @Override
     public void onSecondPlayerFinished() {
         guiGame.notifyDefeat();
-        for (GameListener gl : GAME_LISTENERS) {
-            unregisterGameListener(gl);
-        }
+
+        GAME_LISTENERS.clear();
         finished = true;
         if (comBT != null) {
             comBT.cancel();
@@ -211,9 +210,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
     @Override
     public void onSecondPlayerGaveUp() {
         guiGame.notifyVictory();
-        for (GameListener gl : GAME_LISTENERS) {
-            unregisterGameListener(gl);
-        }
+        GAME_LISTENERS.clear();
         finished = true;
         if (comBT != null) {
             comBT.cancel();
@@ -227,9 +224,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
                 gl.onPlayerFinished();
             }
         }
-        for (GameListener gl : GAME_LISTENERS) {
-            unregisterGameListener(gl);
-        }
+        GAME_LISTENERS.clear();
         finished = true;
         if (comBT != null) {
             comBT.cancel();
@@ -238,7 +233,6 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener{
 
     @Override
     public void onPlayerGaveUp() {
-        Log.d(GAME_TAG,"Player gives up");
         if (comBT != null) {
             for (GameListener gl : GAME_LISTENERS) {
                 Log.d(GAME_TAG,"Player gives up notify the listener");

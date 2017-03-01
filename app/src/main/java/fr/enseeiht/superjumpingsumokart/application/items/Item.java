@@ -2,10 +2,7 @@ package fr.enseeiht.superjumpingsumokart.application.items;
 
 import android.widget.ImageButton;
 
-import fr.enseeiht.superjumpingsumokart.application.Drone;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
-import fr.enseeiht.superjumpingsumokart.application.Vector3D;
-import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
  * Interface for items used in the game {@link Item}.
