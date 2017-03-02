@@ -72,7 +72,11 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:id="@+id/textView"/>
+            android:id="@+id/textView"
+            android:textAllCaps="true"
+            android:textStyle="normal|bold|italic"
+            android:textSize="36sp"
+            android:textColor="@drawable/title_gradient" />
 
         <ToggleButton
             android:text="@string/connect_wifi_btn"

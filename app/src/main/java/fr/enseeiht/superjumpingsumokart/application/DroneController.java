@@ -36,14 +36,15 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     // Speed constants
     private final static byte NO_SPEED = (byte) 0;
     private final static byte NORMAL_SPEED = (byte) 20;
-    //private final static byte NEG_NORMAL_SPEED = (byte) -20;
+    private final static byte NEG_NORMAL_SPEED = (byte) -20;
     private final static byte SLOW_SPEED = (byte) 10;
-    private final static byte NEG_SLOW_SPEED = (byte) -10;
     private final static byte FAST_SPEED = (byte) 40;
     private final static byte NEG_FAST_SPEED = (byte) -40;
     private final static byte BOOST_SPEED = (byte) 100;
 
-    // Inner state variables
+    /**
+     * Indicates if the drone controller is started or not.
+     */
     private boolean started = false;
 
     /**
@@ -99,7 +100,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     public void moveBackward() {
         if (deviceController != null && running) {
             Log.d(DRONE_CONTROLLER_TAG, "MOVE BACKWARD order received !");
-            deviceController.getFeatureJumpingSumo().setPilotingPCMDSpeed(NEG_SLOW_SPEED);
+            deviceController.getFeatureJumpingSumo().setPilotingPCMDSpeed(NEG_NORMAL_SPEED);
         }
     }
     /**

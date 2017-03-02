@@ -7,7 +7,7 @@ import fr.enseeiht.superjumpingsumokart.application.items.Item;
 import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
- * Created by michelmatthieu on 15/02/2017.
+ * @author michelmatthieu.
  * Interface used in {@link Game} to notify it when there is a modification in {@link fr.enseeiht.superjumpingsumokart.arpack.GUIGame}.
  */
 
@@ -34,10 +34,19 @@ public interface GuiGameListener {
      */
     void onPlayerGaveUp();
 
+    /**
+     * TODO
+     */
     void onPlayerFinished();
 
+    /**
+     * TODO
+     */
     void onPlayerDetectsArrivalLine();
 
+    /**
+     * TODO
+     */
     void onPlayerDetectsCheckpoint();
 
     /**

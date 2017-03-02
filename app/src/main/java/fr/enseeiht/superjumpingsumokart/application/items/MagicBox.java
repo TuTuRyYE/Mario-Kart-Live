@@ -17,7 +17,7 @@ public class MagicBox extends Item {
     /**
      * The logging tag. Useful for debugging.
      */
-    private final static String ITEM_TAG = "ITEM";
+    private final static String ITEM_TAG = "Item";
     /**
      * Name of the {@link Item}.
      */
@@ -39,23 +39,30 @@ public class MagicBox extends Item {
     @Override
     public void applyEffect(DroneController droneController) {
         Log.d(ITEM_TAG, "A magic box has been touched");
-        int rand = 1+ (int) Math.floor(Math.random() * 3);
+        int rand = 1+ (int) Math.floor(Math.random() * 5);
 
         Item item;
-        if (rand == 1) { //Banana
-            item = new Banana();
-        } else if (rand == 2) { //Box
-            item = new Box();
-        } else if (rand ==3) { //Shell
-            item = new RedShell();
+        switch (rand) {
+            case 1 :
+                item = new Banana();
+                break;
+            case 2 :
+                item = new Box();
+                break;
+            case 3 :
+                item = new RedShell();
+                break;
+            case 4 :
+                item = new Mushroom();
+                break;
+            case 5 :
+                item = new Blooper();
+                break;
+            default:
+                item = new NullItem();
         }
-        else {
-
-            item = null;
-        }
-
         droneController.getDrone().setCurrentItem(item);
-        Log.d(ITEM_TAG, "A/An, "+ item.getName()+" has been assigned to the droneController");
+        Log.d(ITEM_TAG, "A, "+ item.getName()+" has been assigned to the droneController");
     }
 
     @Override
