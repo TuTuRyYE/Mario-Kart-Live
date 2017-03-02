@@ -6,11 +6,18 @@ import android.widget.ArrayAdapter;
 import java.util.ArrayList;
 
 /**
- * Created by Vivian on 27/02/2017.
+ * @author Vivian Guy.
+ * Adapter for the the Spinner of GUICreateCircuit and GUIModifyCircuit
  */
 
 public class SpinnerAdapter extends ArrayAdapter<String> {
 
+    /**
+     * Constructor.
+     * @param theContext the context for the spinner
+     * @param objects the list of objects displayed on the spinner
+     * @param theLayoutResId the layout used to display the objects
+     */
         public SpinnerAdapter(Context theContext, ArrayList<String> objects, int theLayoutResId) {
             super(theContext, theLayoutResId, objects);
         }

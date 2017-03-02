@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import fr.enseeiht.superjumpingsumokart.R;
 
 /**
- * @author Vivian
+ * @author Vivian Guy
  * Circuit adapter for the listView in GUICircuit
  */
 
@@ -67,8 +67,8 @@ public class CircuitAdapter extends ArrayAdapter<String[]> {
     }
 
     /**
-     * @author Vivian
-     * ViewHolder for the CircuitAdapter
+     * @author Vivian Guy.
+     * ViewHolder for the CircuitAdapter.
      */
     private class CircuitViewHolder{
         public TextView circuitName;
