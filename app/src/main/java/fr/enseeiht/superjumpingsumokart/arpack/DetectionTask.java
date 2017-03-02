@@ -155,7 +155,7 @@ public class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
 
                             }
                             break;
-                        case MINION:
+                        case CAT:
                             Log.d(DETECTION_TASK_TAG, "Distance to marker Minion : " + Float.toString(-ARToolKit.getInstance().queryMarkerTransformation(id)[14]));
                             if (GUI_GAME.getController().getDrone().getCurrentItem() instanceof NullItem && -ARToolKit.getInstance().queryMarkerTransformation(id)[14] < 250 && (SystemClock.elapsedRealtime() - timeSinceLastMinion) > 5000) {
                                 timeSinceLastMinion = SystemClock.elapsedRealtime();

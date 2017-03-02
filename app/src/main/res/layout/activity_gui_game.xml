@@ -16,11 +16,20 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/jsbg">
 
         <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="640px"
+            android:layout_height="480px"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/animationLayout">
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="640px"
+            android:layout_height="480px"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
             android:id="@+id/mainLayout">
@@ -28,8 +37,8 @@
         </FrameLayout>
 
         <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="640px"
+            android:layout_height="480px"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true">
 
@@ -83,10 +92,10 @@
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/jump_arrow"
             android:id="@+id/jumpBtn"
-            android:layout_marginEnd="73dp"
             android:background="@drawable/jump_arrow"
-            android:layout_alignTop="@+id/moveBackwardBtn"
-            android:layout_toStartOf="@+id/moveBackwardBtn" />
+            android:layout_below="@+id/moveForwardBtn"
+            android:layout_toEndOf="@+id/mainLayout"
+            android:layout_marginStart="25dp" />
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -94,10 +103,10 @@
             app:srcCompat="@drawable/right_arrow"
             android:id="@+id/turnRightBtn"
             android:background="@drawable/right_arrow"
-            android:layout_marginStart="53dp"
-            android:layout_marginBottom="21dp"
+            android:layout_marginBottom="22dp"
             android:layout_alignParentBottom="true"
-            android:layout_toEndOf="@+id/turnLeftBtn" />
+            android:layout_toStartOf="@+id/mainLayout"
+            android:layout_marginEnd="26dp" />
 
     </RelativeLayout>
 </FrameLayout>

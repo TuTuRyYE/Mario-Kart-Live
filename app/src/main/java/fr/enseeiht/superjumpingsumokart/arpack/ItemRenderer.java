@@ -31,9 +31,9 @@ public final class ItemRenderer extends ARRenderer {
     public boolean configureARScene() {
         Log.d(ITEM_RENDERER_TAG, "configureARScene() called.");
 
-        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.HIRO, ARToolKit.getInstance().addModel2("Data/models/flag.obj", "single;Data/patt.hiro;80", DetectionTask.Symbol.HIRO.ordinal(), 100.0f, false));
-        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.KANJI, ARToolKit.getInstance().addModel2("Data/models/checkpoint.obj", "single;Data/patt.kanji;80", DetectionTask.Symbol.KANJI.ordinal(), 100.0f, false));
-        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.MINION, ARToolKit.getInstance().addModel2("Data/models/maxbox.obj", "single;Data/patt.minion;80", DetectionTask.Symbol.MINION.ordinal(), 1.0f, false));
+        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.HIRO, ARToolKit.getInstance().addModel2("Data/models/flag.obj", "single;Data/patt.hiro;80", DetectionTask.Symbol.HIRO.ordinal(), 1.0f, false));
+        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.KANJI, ARToolKit.getInstance().addModel2("Data/models/checkpoint.obj", "single;Data/patt.kanji;80", DetectionTask.Symbol.KANJI.ordinal(), 1.0f, false));
+        SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.MINION, ARToolKit.getInstance().addModel2("Data/models/maxbox.obj", "single;Data/patt.cat;80", DetectionTask.Symbol.CAT.ordinal(), 1.0f, false));
 
         // Initialisation of markers on the circuit.
         SYMBOLS_HASH_MAP.put(DetectionTask.Symbol.A, ARToolKit.getInstance().addModel2("Data/models/giantbanana.obj", "single;Data/patt.a;80", DetectionTask.Symbol.A.ordinal(), 1.0f, false));
