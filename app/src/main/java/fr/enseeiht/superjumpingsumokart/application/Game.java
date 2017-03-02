@@ -62,7 +62,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener {
     private BluetoothCommunication comBT;
 
     /**
-     * Default constructor of the class {@link Game} (Vivian - 07/02/2017).
+     * Default constructor of the class {@link Game}.
      * @param guiGame interface of the {@link Game}.
      */
     public Game(GUIGame guiGame, BluetoothCommunication comBT, boolean isServer) {
@@ -116,7 +116,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener {
     }
 
     /**
-     * Check the current status of the {@link Game} (Vivian - 07/02/2017).
+     * Check the current status of the {@link Game}.
      * @return true if the {@link Game} if started otherwise false.
      */
     public boolean isStarted() {
@@ -124,7 +124,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener {
     }
 
     /**
-     * Check the current status of the {@link Game} (Vivian - 07/02/2017).
+     * Check the current status of the {@link Game}.
      * @return true if the {@link Game} if finished otherwise false.
      */
     public boolean isFinished() {
