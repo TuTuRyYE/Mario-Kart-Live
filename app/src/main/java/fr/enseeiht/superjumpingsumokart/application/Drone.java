@@ -116,7 +116,7 @@ public class Drone {
         this.currentLap = currentLap;
     }
 
-    int getCurrentCheckpoint() {
+    public int getCurrentCheckpoint() {
         return currentCheckpoint;
     }
 

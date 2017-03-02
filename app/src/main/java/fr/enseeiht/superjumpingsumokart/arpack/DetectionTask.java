@@ -142,6 +142,7 @@ public class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
                             Log.d(DETECTION_TASK_TAG, "Distance to marker HIRO : " + Float.toString(-ARToolKit.getInstance().queryMarkerTransformation(id)[14]));
                             if (-ARToolKit.getInstance().queryMarkerTransformation(id)[14] < 350 && (SystemClock.elapsedRealtime() - timeSinceLastHiro) > 5000) {
                                 timeSinceLastHiro = SystemClock.elapsedRealtime();
+                                GUI_GAME.arrivalLineDetected();
                                 Log.d(DETECTION_TASK_TAG, "Lap validated");
                             }
                             break;
@@ -149,6 +150,7 @@ public class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
                             Log.d(DETECTION_TASK_TAG, "Distance to marker KANJI : " + Float.toString(-ARToolKit.getInstance().queryMarkerTransformation(id)[14]));
                             if (-ARToolKit.getInstance().queryMarkerTransformation(id)[14] < 350 && (SystemClock.elapsedRealtime() - timeSinceLastKanji) > 3000) {
                                 timeSinceLastKanji = SystemClock.elapsedRealtime();
+                                GUI_GAME.checkpointDeteted();
                                 Log.d(DETECTION_TASK_TAG, "Checkpoint validated");
 
                             }

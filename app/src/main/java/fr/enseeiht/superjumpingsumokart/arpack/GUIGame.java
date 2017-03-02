@@ -77,6 +77,8 @@ public class GUIGame extends Activity implements GameListener {
      */
     private static final int LAP_COUNT_UPDATE = 8;
 
+    private final static int CHECKPOINT_COUNT_UPDATE = 9;
+
     /**
      * The width of the frames of the Jumping Sumo Camera.
      */
@@ -153,8 +155,10 @@ public class GUIGame extends Activity implements GameListener {
                     Toast.makeText(GUIGame.this, "YOU LOST !", Toast.LENGTH_SHORT).show();
                     break;
                 case LAP_COUNT_UPDATE:
-                    Toast.makeText(GUIGame.this, "Lap " + Integer.toString(controller.getDrone().getCurrentLap()) + "/" + Integer.toString(game.getLapsNumber()), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(GUIGame.this, "Lap " + Integer.toString(controller.getDrone().getCurrentLap()) + "/" + Integer.toString(Circuit.getInstance().getLaps()), Toast.LENGTH_SHORT).show();
                     break;
+                case CHECKPOINT_COUNT_UPDATE :
+                    Toast.makeText(GUIGame.this, "Checkpoint " + Integer.toString(controller.getDrone().getCurrentCheckpoint()) + "/" + Integer.toString(Circuit.getInstance().getCheckpointToCheck()), Toast.LENGTH_SHORT).show();
                 default:
                     break;
             }
@@ -547,6 +551,7 @@ public class GUIGame extends Activity implements GameListener {
     }
 
     public void checkpointDeteted() {
+        UPDATER.sendEmptyMessage(CHECKPOINT_COUNT_UPDATE);
         for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
             ggl.onPlayerDetectsCheckpoint();
         }
