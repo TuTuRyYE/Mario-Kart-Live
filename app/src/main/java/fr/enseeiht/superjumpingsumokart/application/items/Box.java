@@ -9,7 +9,7 @@ import fr.enseeiht.superjumpingsumokart.application.DroneController;
 import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
- * Implementation of trap Box {@link Item}.
+ * @author Matthieu Michel.
  * Created by michelmatthieu on 02/02/2017.
  */
 
