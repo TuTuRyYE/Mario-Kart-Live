@@ -1,4 +1,5 @@
 <resources>
+
     <string name="app_name">SuperJumpingSumoKart</string>
     <string name="title_activity_gui_game">SuperJumpingSumoKart</string>
     <string name="title_activity_gui_welcome">SuperJumpingSumoKart - Home</string>
@@ -45,4 +46,7 @@
 
     <string name="headerCircuitName">Name of the circuit</string>
     <string name="headerCircuitLaps">Number of laps</string>
+
+    <string name="checkpoint">Checkpoints : </string>
+    <string name="laps">Laps : </string>
 </resources>

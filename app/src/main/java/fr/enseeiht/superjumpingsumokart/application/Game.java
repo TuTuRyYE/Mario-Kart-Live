@@ -85,6 +85,8 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener {
         if (ready && otherReady) {
             Log.d(GAME_TAG, "player and other player are ready to start the race");
             started = true;
+            guiGame.UPDATER.sendEmptyMessage(GUIGame.LAP_COUNT_UPDATE);
+            guiGame.UPDATER.sendEmptyMessage(GUIGame.CHECKPOINT_COUNT_UPDATE);
             for (GameListener gl : GAME_LISTENERS) {
                 gl.onStartRace();
             }

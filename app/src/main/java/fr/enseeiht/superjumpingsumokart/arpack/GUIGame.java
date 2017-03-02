@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parrot.arsdk.arcontroller.ARFrame;
@@ -27,6 +28,7 @@ import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
 
 import org.artoolkit.ar.base.ARToolKit;
 import org.artoolkit.ar.base.AndroidUtils;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,9 +77,9 @@ public class GUIGame extends Activity implements GameListener {
     /**
      *
      */
-    private static final int LAP_COUNT_UPDATE = 8;
+    public static final int LAP_COUNT_UPDATE = 8;
 
-    private final static int CHECKPOINT_COUNT_UPDATE = 9;
+    public final static int CHECKPOINT_COUNT_UPDATE = 9;
 
     /**
      * The width of the frames of the Jumping Sumo Camera.
@@ -114,10 +116,12 @@ public class GUIGame extends Activity implements GameListener {
     /**
      * The area to display the video stream from the device.
      */
-    private FrameLayout mainLayout;
+    private FrameLayout mainLayout, animationLayout;
     private SurfaceView cameraView;
     private GLSurfaceView glView;
     private ItemRenderer renderer;
+    private TextView lapsTextView, checkpointTextView;
+
     /**
      * Handler to update GUI.
      */
@@ -155,10 +159,10 @@ public class GUIGame extends Activity implements GameListener {
                     Toast.makeText(GUIGame.this, "YOU LOST !", Toast.LENGTH_SHORT).show();
                     break;
                 case LAP_COUNT_UPDATE:
-                    Toast.makeText(GUIGame.this, "Lap " + Integer.toString(controller.getDrone().getCurrentLap()) + "/" + Integer.toString(Circuit.getInstance().getLaps()), Toast.LENGTH_SHORT).show();
+                    lapsTextView.setText("Lap " + Integer.toString(controller.getDrone().getCurrentLap()) + "/" + Integer.toString(Circuit.getInstance().getLaps()));
                     break;
                 case CHECKPOINT_COUNT_UPDATE :
-                    Toast.makeText(GUIGame.this, "Checkpoint " + Integer.toString(controller.getDrone().getCurrentCheckpoint()) + "/" + Integer.toString(Circuit.getInstance().getCheckpointToCheck()), Toast.LENGTH_SHORT).show();
+                    checkpointTextView.setText("Checkpoint " + Integer.toString(controller.getDrone().getCurrentCheckpoint()) + "/" + Integer.toString(Circuit.getInstance().getCheckpointToCheck()));
                 default:
                     break;
             }
@@ -215,6 +219,8 @@ public class GUIGame extends Activity implements GameListener {
         ImageButton moveForwardBtn = (ImageButton) findViewById(R.id.moveForwardBtn);
         ImageButton jumpBtn = (ImageButton) findViewById(R.id.jumpBtn);
         sendTrapBtn = (ImageButton) findViewById(R.id.sendTrapBtn);
+        checkpointTextView = (TextView) findViewById(R.id.checkpointTextView);
+        lapsTextView = (TextView) findViewById(R.id.lapsTextView);
 
 
         // Defines action listener

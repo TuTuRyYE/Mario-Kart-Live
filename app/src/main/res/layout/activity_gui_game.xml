@@ -17,7 +17,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/jsbg">
+        android:background="@drawable/jsbg"
+        android:layout_marginStart="5px">
 
         <FrameLayout
             android:layout_width="640px"
@@ -105,8 +106,57 @@
             android:background="@drawable/right_arrow"
             android:layout_marginBottom="22dp"
             android:layout_alignParentBottom="true"
-            android:layout_toStartOf="@+id/mainLayout"
-            android:layout_marginEnd="26dp" />
+            android:layout_toStartOf="@+id/animationLayout" />
+
+        <TextView
+            android:text="@string/checkpoint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:id="@+id/textView3"
+            android:textStyle="normal|bold"
+            android:textAllCaps="true"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:layout_below="@+id/sendTrapBtn"
+            android:layout_toStartOf="@+id/moveForwardBtn" />
+
+        <TextView
+            android:text="@string/laps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView2"
+            android:textAllCaps="true"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            android:layout_above="@+id/animationLayout"
+            android:layout_alignStart="@+id/textView3" />
+
+        <TextView
+            android:text="0/0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkpointTextView"
+            android:textColor="@android:color/white"
+            android:textAllCaps="true"
+            android:textStyle="normal|bold"
+            android:layout_alignBaseline="@+id/textView3"
+            android:layout_alignBottom="@+id/textView3"
+            android:layout_toEndOf="@+id/textView3"
+            android:layout_marginStart="10dp" />
+
+        <TextView
+            android:text="0/0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lapsTextView"
+            android:textColor="@android:color/white"
+            android:textAllCaps="true"
+            android:textStyle="normal|bold"
+            android:layout_alignBaseline="@+id/textView2"
+            android:layout_alignBottom="@+id/textView2"
+            android:layout_toEndOf="@+id/textView2"
+            android:layout_marginStart="10dp" />
 
     </RelativeLayout>
 </FrameLayout>
