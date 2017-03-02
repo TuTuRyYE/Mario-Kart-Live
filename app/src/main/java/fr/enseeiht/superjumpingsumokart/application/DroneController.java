@@ -5,10 +5,8 @@ import com.parrot.arsdk.arcommands.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMA
 import com.parrot.arsdk.arcontroller.*;
 import com.parrot.arsdk.ardiscovery.*;
 import com.parrot.arsdk.arcommands.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_ENUM;
-import java.util.ArrayList;
 
 import fr.enseeiht.superjumpingsumokart.application.items.NullItem;
-import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 
 import static java.lang.Thread.sleep;
@@ -42,7 +40,8 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     private final static byte SLOW_SPEED = (byte) 10;
     private final static byte NEG_SLOW_SPEED = (byte) -10;
     private final static byte FAST_SPEED = (byte) 40;
-    //private final static byte NEG_FAST_SPEED = (byte) -40;
+    private final static byte NEG_FAST_SPEED = (byte) -40;
+    private final static byte BOOST_SPEED = (byte) 100;
 
     // Inner state variables
     private boolean started = false;
@@ -109,7 +108,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     public void turnLeft() {
         if (deviceController != null && running) {
             Log.d(DRONE_CONTROLLER_TAG, "TURN LEFT order received !");
-            deviceController.getFeatureJumpingSumo().setPilotingPCMDTurn(NEG_SLOW_SPEED);
+            deviceController.getFeatureJumpingSumo().setPilotingPCMDTurn(NEG_FAST_SPEED);
         }
     }
     /**
@@ -118,7 +117,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     public void turnRight() {
         if (deviceController != null && running) {
             Log.d(DRONE_CONTROLLER_TAG, "TURN RIGHT order received !");
-            deviceController.getFeatureJumpingSumo().setPilotingPCMDTurn(SLOW_SPEED);
+            deviceController.getFeatureJumpingSumo().setPilotingPCMDTurn(FAST_SPEED);
         }
     }
     /**
@@ -178,19 +177,22 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
         }
     }
 
+    /**
+     * Boosts the speed of the drone for a short amount of time (Romain Verset - 02/03/2017).
+     */
     public void boost() {
         if (deviceController != null && running) {
             Log.d(DRONE_CONTROLLER_TAG, "JUMP order received !");
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    deviceController.getFeatureJumpingSumo().setPilotingPCMDTurn(FAST_SPEED);
+                    deviceController.getFeatureJumpingSumo().setPilotingPCMDSpeed(BOOST_SPEED);
                     try {
                         sleep(2000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    deviceController.getFeatureJumpingSumo().setPilotingPCMDTurn(NORMAL_SPEED);
+                    deviceController.getFeatureJumpingSumo().setPilotingPCMDSpeed(NORMAL_SPEED);
                 }
             }).start();
         }
