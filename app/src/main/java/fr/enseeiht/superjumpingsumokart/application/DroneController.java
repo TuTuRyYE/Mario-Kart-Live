@@ -143,19 +143,21 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
      * Method used to use an Item.
      * Send a request to Item class to use the item owned by the player.
      */
-    public void useItem() {
+    public boolean useItem() {
+        boolean used = false;
         if (deviceController != null && running) {
             Log.d(DRONE_CONTROLLER_TAG, "USE ITEM order received !");
             //check if there is an object of the marker
             if(! (DRONE.getCurrentItem() instanceof NullItem)) {
-                boolean used = DRONE.getCurrentItem().useItem(this);
+                 used = DRONE.getCurrentItem().useItem(this);
                 if (used) {
                     DRONE.setCurrentItem(new NullItem());
                 }
             } else {
-                Log.d(DRONE_CONTROLLER_TAG," USE ITEM can't be used because there is allready an object on the marker. Please Try again");
+                Log.d(DRONE_CONTROLLER_TAG,"Please Try again.");
             }
         }
+        return used;
     }
 
     /**

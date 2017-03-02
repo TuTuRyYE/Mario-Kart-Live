@@ -239,9 +239,8 @@ public final class BluetoothCommunication extends Thread implements GameListener
     public void sendCircuit() {
         Circuit c = Circuit.getInstance();
         String dataMsg = "circuit/" + Integer.toString(c.getLaps()) + "/" + c.getCheckpointToCheck();
-        for (int i : c.getMarkers().keySet()) {
-            DetectionTask.Symbol symbol = c.getMarkers().get(i);
-            dataMsg = dataMsg.concat("/"+ Integer.toString(i) + ":" + symbol.name());
+        for (DetectionTask.Symbol symbol : c.getMarkers()) {
+            dataMsg = dataMsg.concat("/"+ c.getMarkers().indexOf(symbol) + ":" + symbol.name());
         }
         byte[] dataMsgBytes = dataMsg.getBytes(Charset.forName("UTF-8"));
         write(dataMsgBytes);

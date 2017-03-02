@@ -1,5 +1,6 @@
 package fr.enseeiht.superjumpingsumokart.application.circuit;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
@@ -26,7 +27,7 @@ public class Circuit {
     /**
      * The markers present on the circuit. Each marker is defined by its order in the circuit and its {@link fr.enseeiht.superjumpingsumokart.arpack.DetectionTask.Symbol}.
      */
-    private HashMap<Integer ,DetectionTask.Symbol> markers;
+    private ArrayList<DetectionTask.Symbol> markers;
 
 
     /**
@@ -58,7 +59,7 @@ public class Circuit {
    private Circuit(int laps, int checkPointToCheck) {
         this.lapsNumber = laps;
         this.checkPointToCheck = checkPointToCheck;
-        this.markers = new HashMap<>();
+        this.markers = new ArrayList<>();
         this.objects = new HashMap<>();
     }
 
@@ -79,7 +80,7 @@ public class Circuit {
      */
     public void addMarker(DetectionTask.Symbol symbol) {
         // Markers are ordered thanks to the key
-         this.markers.put(this.markers.size() + 1, symbol);
+         this.markers.add(symbol);
     }
 
     /**
@@ -128,7 +129,7 @@ public class Circuit {
      * Get the list of markers.
      * @return the list of markers.
      */
-    public HashMap<Integer, DetectionTask.Symbol> getMarkers() {
+    public ArrayList<DetectionTask.Symbol> getMarkers() {
         return markers;
     }
 
