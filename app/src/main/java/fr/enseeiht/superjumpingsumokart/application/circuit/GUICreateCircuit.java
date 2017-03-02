@@ -247,6 +247,7 @@ public class GUICreateCircuit extends Activity {
                         String stringToWrite;
                         try {
                             // Creating the file and the instance of the circuit
+                                Circuit.setCircuitInstance(null); // clear the instance of the circuit it it already existed
                                 Circuit.initInstance(Integer.parseInt(lapTxt), Integer.parseInt(checkPointTxt));
                                 outputStream = new FileOutputStream(circuitFile);
                                 String firstLine = txtName + "/" + lapTxt + "/" + checkPointTxt + "\n";
