@@ -14,17 +14,10 @@ import fr.enseeiht.superjumpingsumokart.application.DroneController;
 public abstract class Item {
 
     /**
-     * Threshold for the distance in order to know if the object is in contact with the device or not.
-     */
-    private final static double THRESHOLD_DISTANCE = 2;
-
-    /**
      * Name of the {@link Item}.
      */
     private final String NAME;
 
-
-    // TODO - Add 3D model
 
     /**
      * Default constructor of the class {@link Item}. (Matthieu Michel - 02/02/2017).

@@ -83,6 +83,10 @@ public class GUIGame extends Activity implements GameListener {
      */
     public final static int CHECKPOINT_COUNT_UPDATE = 9;
 
+    public final static int ANIMATE_BLOOPER = 10;
+
+    public final static int ANIMATE_RED_SHELL = 11;
+
     /**
      * The width of the frames of the Jumping Sumo Camera.
      */
@@ -178,6 +182,11 @@ public class GUIGame extends Activity implements GameListener {
                     break;
                 case CHECKPOINT_COUNT_UPDATE:
                     checkpointTextView.setText(Integer.toString(controller.getDrone().getCurrentCheckpoint()) + "/" + Integer.toString(Circuit.getInstance().getCheckpointToCheck()));
+                    break;
+                case ANIMATE_BLOOPER :
+                    break;
+                case ANIMATE_RED_SHELL :
+                    break;
                 default:
                     break;
             }
@@ -330,6 +339,7 @@ public class GUIGame extends Activity implements GameListener {
         //BluetoothCommunication comBT = (BluetoothCommunication) getIntent().getExtras().get("bluetoothCommunication");
         // Initializes the views of the GUI
         mainLayout = (FrameLayout) findViewById(R.id.mainLayout);
+        animationLayout = (FrameLayout) findViewById(R.id.animationLayout);
         ImageButton turnLeftBtn = (ImageButton) findViewById(R.id.turnLeftBtn);
         ImageButton turnRightBtn = (ImageButton) findViewById(R.id.turnRightBtn);
         ImageButton moveBackwardBtn = (ImageButton) findViewById(R.id.moveBackwardBtn);
