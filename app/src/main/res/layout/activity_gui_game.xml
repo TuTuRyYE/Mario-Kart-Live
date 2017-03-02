@@ -61,16 +61,6 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/left_arrow"
-            android:id="@+id/turnLeftBtn"
-            android:background="@drawable/left_arrow"
-            android:layout_marginStart="22dp"
-            android:layout_alignTop="@+id/turnRightBtn"
-            android:layout_alignParentStart="true" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             app:srcCompat="@drawable/bottom_arrow"
             android:layout_marginEnd="18dp"
             android:id="@+id/moveBackwardBtn"
@@ -88,50 +78,6 @@
             android:layout_alignStart="@+id/moveBackwardBtn"
             android:layout_marginBottom="21dp" />
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/jump_arrow"
-            android:id="@+id/jumpBtn"
-            android:background="@drawable/jump_arrow"
-            android:layout_below="@+id/moveForwardBtn"
-            android:layout_toEndOf="@+id/mainLayout"
-            android:layout_marginStart="25dp" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/right_arrow"
-            android:id="@+id/turnRightBtn"
-            android:background="@drawable/right_arrow"
-            android:layout_marginBottom="22dp"
-            android:layout_alignParentBottom="true"
-            android:layout_toStartOf="@+id/animationLayout" />
-
-        <TextView
-            android:text="@string/checkpoint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:id="@+id/textView3"
-            android:textStyle="normal|bold"
-            android:textAllCaps="true"
-            android:textColor="@android:color/white"
-            android:textSize="14sp"
-            android:layout_below="@+id/sendTrapBtn"
-            android:layout_toStartOf="@+id/moveForwardBtn" />
-
-        <TextView
-            android:text="@string/laps"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView2"
-            android:textAllCaps="true"
-            android:textColor="@android:color/white"
-            android:textSize="24sp"
-            android:layout_above="@+id/animationLayout"
-            android:layout_alignStart="@+id/textView3" />
-
         <TextView
             android:text="0/0"
             android:layout_width="wrap_content"
@@ -143,7 +89,8 @@
             android:layout_alignBaseline="@+id/textView3"
             android:layout_alignBottom="@+id/textView3"
             android:layout_toEndOf="@+id/textView3"
-            android:layout_marginStart="10dp" />
+            android:layout_marginStart="10dp"
+            android:textSize="24sp" />
 
         <TextView
             android:text="0/0"
@@ -156,7 +103,64 @@
             android:layout_alignBaseline="@+id/textView2"
             android:layout_alignBottom="@+id/textView2"
             android:layout_toEndOf="@+id/textView2"
-            android:layout_marginStart="10dp" />
+            android:layout_marginStart="10dp"
+            android:textSize="24sp" />
+
+        <TextView
+            android:text="@string/laps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView2"
+            android:textAllCaps="true"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/animationLayout"
+            android:layout_marginTop="12dp"
+            android:textStyle="normal|bold" />
+
+        <TextView
+            android:text="@string/checkpoint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView3"
+            android:textStyle="normal|bold"
+            android:textAllCaps="true"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            android:layout_alignBaseline="@+id/lapsTextView"
+            android:layout_alignBottom="@+id/lapsTextView"
+            android:layout_toEndOf="@+id/lapsTextView"
+            android:layout_marginStart="58dp" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/jump_arrow"
+            android:id="@+id/jumpBtn"
+            android:background="@drawable/jump_arrow"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/animationLayout" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/right_arrow"
+            android:id="@+id/turnRightBtn"
+            android:background="@drawable/right_arrow"
+            android:layout_marginStart="40dp"
+            android:layout_alignTop="@+id/turnLeftBtn"
+            android:layout_toEndOf="@+id/turnLeftBtn" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/left_arrow"
+            android:id="@+id/turnLeftBtn"
+            android:background="@drawable/left_arrow"
+            android:layout_below="@+id/animationLayout"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="12dp" />
 
     </RelativeLayout>
 </FrameLayout>

@@ -25,8 +25,8 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener {
      * The logging tag. Useful for debugging.
      */
     private final static String GAME_TAG = "GAME";
-    /**
 
+    /**
      * {@link GUIGame}, the interface of the Game.
      */
     private GUIGame guiGame;
@@ -36,12 +36,29 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener {
      */
     private final ArrayList<GameListener> GAME_LISTENERS = new ArrayList<>();
 
+    /**
+     * The two drones attempting the race.
+     */
     private Drone drone, otherDrone;
 
+    /**
+     * Two booleans attesting that the video stream is available and the drone controller is ready.
+     */
     private boolean videoStreamAvailable = false, droneControllerReady = false;
+
+    /**
+     * Two booleans attesting that the two drones are ready.
+     */
     private boolean ready = false, otherReady = false;
-    private boolean started = false;
-    private boolean finished = false;
+
+    /**
+     * Two booleans attesting that the race is started and finished.
+     */
+    private boolean started = false, finished = false;
+
+    /**
+     * The bluetooth communication between the two players.
+     */
     private BluetoothCommunication comBT;
 
     /**
@@ -69,6 +86,10 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener {
         checkReadyAndStartRace();
     }
 
+    /**
+     * Starts the race if the video stream is available, the drone controller is ready and the other
+     * drone too.
+     */
     private void checkReadyAndStartRace() {
         Log.d(GAME_TAG, "checkReadyAndStartRace called");
         if (droneControllerReady) {
@@ -94,7 +115,6 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener {
         }
     }
 
-
     /**
      * Check the current status of the {@link Game} (Vivian - 07/02/2017).
      * @return true if the {@link Game} if started otherwise false.
@@ -103,22 +123,103 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener {
         return started;
     }
 
-    public boolean isReady() {
-        return (Circuit.getInstance() !=null && !started);
-    }
-
-    public int getLapsNumber() {
-        return Circuit.getInstance().getLaps();
-    }
-
+    /**
+     * Check the current status of the {@link Game} (Vivian - 07/02/2017).
+     * @return true if the {@link Game} if finished otherwise false.
+     */
     public boolean isFinished() {
         return finished;
     }
 
+    /**
+     * Add a gameListener.
+     * @param gameListener the listener to add.
+     */
     private void registerGameListener(GameListener gameListener) {
         GAME_LISTENERS.add(gameListener);
     }
 
+    // GuiGameListener methods
+    @Override
+    public void onItemUsed(DetectionTask.Symbol symbol, Item item) {
+        for(GameListener listener  : this.GAME_LISTENERS) {
+            listener.onPlayerUseItem(item,symbol);
+        }
+    }
+
+    @Override
+    public void onSymbolTouched(DetectionTask.Symbol symbol) {
+        Item item = Circuit.getInstance().getObjects().get(symbol);
+        if (item != null) {
+            for (GameListener listener : this.GAME_LISTENERS) {
+                listener.onItemTouched(item, symbol);
+            }
+            Circuit.getInstance().removeObject(symbol);
+            guiGame.getRenderer().deleteModelAtSymbol(symbol);
+        }
+    }
+
+    @Override
+    public void onPlayerFinished() {
+        if (comBT != null) {
+            for (GameListener gl : GAME_LISTENERS) {
+                gl.onPlayerFinished();
+            }
+        }
+        GAME_LISTENERS.clear();
+        finished = true;
+        if (comBT != null) {
+            comBT.cancel();
+        }
+    }
+
+    @Override
+    public void onPlayerGaveUp() {
+        if (comBT != null) {
+            for (GameListener gl : GAME_LISTENERS) {
+                Log.d(GAME_TAG,"Player gives up notify the listener");
+                gl.onPlayerGaveUp();
+            }
+        }
+        GAME_LISTENERS.clear();
+        finished = true;
+        if (comBT != null) {
+            comBT.cancel();
+        }
+    }
+
+    @Override
+    public void onPlayerDetectsArrivalLine() {
+        if (drone.getCurrentCheckpoint() >= Circuit.getInstance().getCheckpointToCheck()) {
+            drone.setCurrentLap(drone.getCurrentLap() + 1 < Circuit.getInstance().getLaps() ? drone.getCurrentLap() + 1 : Circuit.getInstance().getLaps());
+            drone.setCurrentCheckpoint(0);
+            for (GameListener gl : GAME_LISTENERS) {
+                gl.onPlayerFinishedLap();
+            }
+        }
+        if (drone.getCurrentLap() == Circuit.getInstance().getLaps()) {
+            onPlayerFinished();
+        }
+    }
+
+    @Override
+    public void onPlayerDetectsCheckpoint() {
+        drone.setCurrentCheckpoint(drone.getCurrentCheckpoint() + 1 < Circuit.getInstance().getCheckpointToCheck() ? drone.getCurrentCheckpoint() + 1 : Circuit.getInstance().getCheckpointToCheck());
+    }
+
+    @Override
+    public void onDroneControllerReady() {
+        droneControllerReady = true;
+        checkReadyAndStartRace();
+    }
+
+    @Override
+    public void onVideoStreamAvailable() {
+        videoStreamAvailable = true;
+        checkReadyAndStartRace();
+    }
+
+    // BluetoothCommunicationListener methods
     @Override
     public void onSecondPlayerReady() {
         this.otherReady = true;
@@ -173,26 +274,6 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener {
         guiGame.getRenderer().deleteModelAtSymbol(symbol);
     }
 
-
-    @Override
-    public void onItemUsed(DetectionTask.Symbol symbol, Item item) {
-        for(GameListener listener  : this.GAME_LISTENERS) {
-            listener.onPlayerUseItem(item,symbol);
-        }
-    }
-
-    @Override
-    public void onSymbolTouched(DetectionTask.Symbol symbol) {
-        Item item = Circuit.getInstance().getObjects().get(symbol);
-        if (item != null) {
-            for (GameListener listener : this.GAME_LISTENERS) {
-                listener.onItemTouched(item, symbol);
-            }
-            Circuit.getInstance().removeObject(symbol);
-            guiGame.getRenderer().deleteModelAtSymbol(symbol);
-        }
-
-    }
     @Override
     public void onSecondPlayerFinished() {
         guiGame.notifyDefeat();
@@ -215,77 +296,14 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener {
     }
 
     @Override
-    public void onPlayerFinished() {
-        if (comBT != null) {
-            for (GameListener gl : GAME_LISTENERS) {
-                gl.onPlayerFinished();
-            }
-        }
-        GAME_LISTENERS.clear();
-        finished = true;
-        if (comBT != null) {
-            comBT.cancel();
-        }
-    }
-
-    @Override
-    public void onPlayerGaveUp() {
-        if (comBT != null) {
-            for (GameListener gl : GAME_LISTENERS) {
-                Log.d(GAME_TAG,"Player gives up notify the listener");
-                gl.onPlayerGaveUp();
-            }
-        }
-        GAME_LISTENERS.clear();
-        finished = true;
-        if (comBT != null) {
-            comBT.cancel();
-        }
-
-    }
-
-    @Override
-    public void onPlayerDetectsArrivalLine() {
-        if (drone.getCurrentCheckpoint() >= Circuit.getInstance().getCheckpointToCheck()) {
-            drone.setCurrentLap(drone.getCurrentLap() + 1 < Circuit.getInstance().getLaps() ? drone.getCurrentLap() + 1 : Circuit.getInstance().getLaps());
-            drone.setCurrentCheckpoint(0);
-            for (GameListener gl : GAME_LISTENERS) {
-                gl.onPlayerFinishedLap();
-            }
-        }
-        if (drone.getCurrentLap() == Circuit.getInstance().getLaps()) {
-            onPlayerFinished();
-        }
-
-    }
-
-    @Override
-    public void onPlayerDetectsCheckpoint() {
-        drone.setCurrentCheckpoint(drone.getCurrentCheckpoint() + 1 < Circuit.getInstance().getCheckpointToCheck() ? drone.getCurrentCheckpoint() + 1 : Circuit.getInstance().getCheckpointToCheck());
-    }
-
-    @Override
     public void onCircuitReceived() {
         checkReadyAndStartRace();
     }
 
-    @Override
-    public void onBluetoothCommunicationClosed() {
-
-    }
-
-    @Override
-    public void onDroneControllerReady() {
-        droneControllerReady = true;
-        checkReadyAndStartRace();
-    }
-
-    @Override
-    public void onVideoStreamAvailable() {
-        videoStreamAvailable = true;
-        checkReadyAndStartRace();
-    }
-
+    /**
+     * Set the drone
+     * @param drone the drone
+     */
     public void setDrone(Drone drone) {
         this.drone = drone;
     }
