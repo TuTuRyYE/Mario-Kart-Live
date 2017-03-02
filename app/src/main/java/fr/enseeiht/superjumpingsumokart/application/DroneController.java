@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import fr.enseeiht.superjumpingsumokart.application.items.NullItem;
 import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
+
+import static java.lang.Thread.sleep;
+
 /**
  * @author Matthieu Michel, Romain Verset.
  * This class is used as a controller of a Jumping Sumo device.
@@ -31,14 +34,16 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
      * Controller associated to the device.
      */
     private ARDeviceController deviceController;
+
     // Speed constants
     private final static byte NO_SPEED = (byte) 0;
-    private final static byte NORMAL_SPEED = (byte) 40;
-    //private final static byte NEG_NORMAL_SPEED = (byte) -40;
-    private final static byte SLOW_SPEED = (byte) 30;
-    private final static byte NEG_SLOW_SPEED = (byte) -30;
-    //private final static byte FAST_SPEED = (byte) 50;
-    //private final static byte NEG_FAST_SPEED = (byte) 50;
+    private final static byte NORMAL_SPEED = (byte) 20;
+    //private final static byte NEG_NORMAL_SPEED = (byte) -20;
+    private final static byte SLOW_SPEED = (byte) 10;
+    private final static byte NEG_SLOW_SPEED = (byte) -10;
+    private final static byte FAST_SPEED = (byte) 40;
+    //private final static byte NEG_FAST_SPEED = (byte) -40;
+
     // Inner state variables
     private boolean started = false;
 
@@ -154,14 +159,43 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     }
 
     /**
-     * Makes the drone jump (Matthieu Michel - 30/01/2017).
+     * Makes the drone jump high. (Matthieu Michel - 30/01/2017).
      */
-    public void jump() {
+    public void highJump() {
         if (deviceController != null && running) {
             Log.d(DRONE_CONTROLLER_TAG, "JUMP order received !");
             deviceController.getFeatureJumpingSumo().sendAnimationsJump(ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_ENUM.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_HIGH);
         }
     }
+
+    /**
+     * Makes the drone jump high. (Matthieu Michel - 30/01/2017).
+     */
+    public void longJump() {
+        if (deviceController != null && running) {
+            Log.d(DRONE_CONTROLLER_TAG, "JUMP order received !");
+            deviceController.getFeatureJumpingSumo().sendAnimationsJump(ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_ENUM.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_LONG);
+        }
+    }
+
+    public void boost() {
+        if (deviceController != null && running) {
+            Log.d(DRONE_CONTROLLER_TAG, "JUMP order received !");
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    deviceController.getFeatureJumpingSumo().setPilotingPCMDTurn(FAST_SPEED);
+                    try {
+                        sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    deviceController.getFeatureJumpingSumo().setPilotingPCMDTurn(NORMAL_SPEED);
+                }
+            }).start();
+        }
+    }
+
     /**
      * Makes the drone spin (Romain Verset - 31/01/2017).
      */
@@ -172,7 +206,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
         }
     }
     /**
-     * Makes the drone spin and jump (Romain Verset - 31/01/2017).
+     * Makes the drone spin and highJump (Romain Verset - 31/01/2017).
      */
     public void spinningJump() {
         if (deviceController != null && running) {
