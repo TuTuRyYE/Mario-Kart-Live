@@ -47,9 +47,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="fr.enseeiht.superjumpingsumokart.application.GUIWelcome" />
         </activity>
-        <activity android:name=".application.GUICircuit" />
-        <activity android:name=".application.GUICreateCircuit" />
-        <activity android:name=".application.GUIModifyCircuit"></activity>
+        <activity android:name=".application.circuit.GUICircuit" />
+        <activity android:name=".application.circuit.GUICreateCircuit" />
+        <activity android:name=".application.circuit.GUIModifyCircuit"></activity>
     </application>
 
 </manifest>

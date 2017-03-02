@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
+import fr.enseeiht.superjumpingsumokart.application.circuit.Circuit;
 import fr.enseeiht.superjumpingsumokart.application.items.Banana;
 import fr.enseeiht.superjumpingsumokart.application.items.Box;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;

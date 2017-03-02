@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.enseeiht.superjumpingsumokart.R;
+import fr.enseeiht.superjumpingsumokart.application.circuit.GUICircuit;
 import fr.enseeiht.superjumpingsumokart.application.network.BluetoothClient;
 import fr.enseeiht.superjumpingsumokart.application.network.BluetoothServer;
 import fr.enseeiht.superjumpingsumokart.application.network.WifiConnector;

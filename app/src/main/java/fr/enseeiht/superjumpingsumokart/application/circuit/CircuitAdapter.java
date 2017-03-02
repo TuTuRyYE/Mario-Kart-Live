@@ -1,8 +1,6 @@
-package fr.enseeiht.superjumpingsumokart.application;
+package fr.enseeiht.superjumpingsumokart.application.circuit;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +12,7 @@ import java.util.ArrayList;
 import fr.enseeiht.superjumpingsumokart.R;
 
 /**
- * Created by Vivian on 20/02/2017.
+ * @author Vivian
  * Circuit adapter for the listView in GUICircuit
  */
 
@@ -26,6 +24,11 @@ public class CircuitAdapter extends ArrayAdapter<String[]> {
     public static int selectedPos = -1;
 
 
+    /**
+     * Constructor for a CircuitAdapter.
+     * @param context the context for the adapter.
+     * @param circuits the list of circuits to display.
+     */
     public CircuitAdapter(Context context, ArrayList<String[]> circuits) {
         super(context, 0, circuits);
     }
@@ -39,9 +42,9 @@ public class CircuitAdapter extends ArrayAdapter<String[]> {
             }
 
         // Set the viewHolder
-            CircuitAdapter.CircuitViewHolder viewHolder= (fr.enseeiht.superjumpingsumokart.application.CircuitAdapter.CircuitViewHolder) convertView.getTag();
+            CircuitAdapter.CircuitViewHolder viewHolder= (CircuitAdapter.CircuitViewHolder) convertView.getTag();
             if(viewHolder == null){
-                viewHolder = new fr.enseeiht.superjumpingsumokart.application.CircuitAdapter.CircuitViewHolder();
+                viewHolder = new CircuitAdapter.CircuitViewHolder();
                 viewHolder.circuitName = (TextView) convertView.findViewById(R.id.nameCircuitView);
                 viewHolder.numberLaps = (TextView) convertView.findViewById(R.id.numberLapsView);
 
@@ -51,10 +54,11 @@ public class CircuitAdapter extends ArrayAdapter<String[]> {
         // Get the item [position] of the listView
             String[] currentCircuit = getItem(position);
 
-        viewHolder.circuitName.setHeight(50);
-        viewHolder.circuitName.setMinHeight(50);
-        viewHolder.numberLaps.setHeight(50);
-        viewHolder.numberLaps.setMinHeight(50);
+        // Set the viewHolder layout
+            viewHolder.circuitName.setHeight(50);
+            viewHolder.circuitName.setMinHeight(50);
+            viewHolder.numberLaps.setHeight(50);
+            viewHolder.numberLaps.setMinHeight(50);
 
         // Fill the View
             viewHolder.circuitName.setText(currentCircuit[0]);
@@ -63,6 +67,7 @@ public class CircuitAdapter extends ArrayAdapter<String[]> {
     }
 
     /**
+     * @author Vivian
      * ViewHolder for the CircuitAdapter
      */
     private class CircuitViewHolder{

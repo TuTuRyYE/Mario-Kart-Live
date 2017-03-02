@@ -1,4 +1,4 @@
-package fr.enseeiht.superjumpingsumokart.application;
+package fr.enseeiht.superjumpingsumokart.application.circuit;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -22,6 +22,7 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 import fr.enseeiht.superjumpingsumokart.R;
+import fr.enseeiht.superjumpingsumokart.application.GUIWelcome;
 import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
