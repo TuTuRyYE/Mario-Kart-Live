@@ -5,6 +5,7 @@ import android.widget.ImageButton;
 
 import fr.enseeiht.superjumpingsumokart.R;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
+import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 
 /**
  * Implementation of red shell {@link Item}.
@@ -21,11 +22,14 @@ public class RedShell extends Item {
      */
     private final static String NAME = "redshell";
 
+    private final GUIGame GUI_GAME;
+
     /**
      * Default constructor of the class {@link Item}. (Lucas Pascal) - 17/02/2017).
      */
-    public RedShell() {
+    public RedShell(GUIGame guiGame) {
         super(NAME);
+        GUI_GAME = guiGame;
 
     }
 

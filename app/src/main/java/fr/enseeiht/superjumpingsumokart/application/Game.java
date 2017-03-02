@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import fr.enseeiht.superjumpingsumokart.application.circuit.Circuit;
 import fr.enseeiht.superjumpingsumokart.application.items.Banana;
+import fr.enseeiht.superjumpingsumokart.application.items.Blooper;
 import fr.enseeiht.superjumpingsumokart.application.items.Box;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
 import fr.enseeiht.superjumpingsumokart.application.items.RedShell;
@@ -132,7 +133,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener {
     }
 
     /**
-     * Add a gameListener.
+     * Add a {@link GameListener}.
      * @param gameListener the listener to add.
      */
     private void registerGameListener(GameListener gameListener) {
@@ -245,7 +246,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener {
         switch (name) {
             case "redshell":
                 Log.d(GAME_TAG,"You've been hit by a shell!");
-                RedShell redShell = new RedShell();
+                RedShell redShell = new RedShell(guiGame);
                 redShell.applyEffect(guiGame.getController());
                 break;
             case "banana":
@@ -263,6 +264,10 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener {
                 Circuit.getInstance().addObject(itemMarker,box);
                 guiGame.getRenderer().defineModelAtSymbol(box, itemMarker);
                 break;
+            case "blooper" :
+                Log.d(GAME_TAG, "Blooper received");
+                Blooper blooper = new Blooper(guiGame);
+                blooper.applyEffect(guiGame.getController());
         }
     }
 

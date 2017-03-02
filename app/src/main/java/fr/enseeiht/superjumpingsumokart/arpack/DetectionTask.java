@@ -159,7 +159,7 @@ public class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
                             Log.d(DETECTION_TASK_TAG, "Distance to marker A : " + Float.toString(-ARToolKit.getInstance().queryMarkerTransformation(id)[14]));
                             if (GUI_GAME.getController().getDrone().getCurrentItem() instanceof NullItem && -ARToolKit.getInstance().queryMarkerTransformation(id)[14] < 250 && (SystemClock.elapsedRealtime() - timeSinceLastMinion) > 5000) {
                                 timeSinceLastMinion = SystemClock.elapsedRealtime();
-                                new MagicBox().applyEffect(GUI_GAME.getController());
+                                new MagicBox(GUI_GAME).applyEffect(GUI_GAME.getController());
                                 Log.d(DETECTION_TASK_TAG, "Got a Magic Box");
                             }
                             break;
