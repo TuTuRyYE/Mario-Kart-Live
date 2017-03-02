@@ -34,7 +34,7 @@
                 android:width="@dimen/menu_btn_width" />
 
             <Button
-                android:text="Select Circuit"
+                android:text="@string/set_circuit_btn"
                 android:layout_height="wrap_content"
                 android:id="@+id/setCircuitBtn"
                 android:width="@dimen/menu_btn_width" />

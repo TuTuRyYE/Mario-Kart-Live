@@ -44,28 +44,28 @@
             <Button
                 android:text="@string/create_circuit_btn"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:id="@+id/createCircuitButton"
                 android:layout_weight="1"/>
 
             <Button
                 android:text="@string/modifyCircuit"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:id="@+id/modifyCircuitBtn"
                 android:layout_weight="1"/>
 
             <Button
                 android:text="@string/deleteCircuit"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:id="@+id/deleteCircuitBtn"
                 android:layout_weight="1"/>
 
             <Button
                 android:text="@string/chose_selected_btn"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:id="@+id/choseSelectedButton"
                 android:layout_weight="1" />
         </LinearLayout>
