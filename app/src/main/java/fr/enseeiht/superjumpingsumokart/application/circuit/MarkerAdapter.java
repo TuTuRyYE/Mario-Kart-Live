@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import fr.enseeiht.superjumpingsumokart.R;
 
 /**
- * Created by Vivian on 17/02/2017.
+ *@author Vivian Guy.
  * Adapter for the ListView of GUICreateCircuit and GUIModifyCircuit.
  */
 

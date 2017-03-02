@@ -6,7 +6,7 @@ import android.widget.ArrayAdapter;
 import java.util.ArrayList;
 
 /**
- * Created by Vivian on 27/02/2017.
+ * @author Vivian Guy.
  */
 
 public class SpinnerAdapter extends ArrayAdapter<String> {

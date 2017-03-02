@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import fr.enseeiht.superjumpingsumokart.R;
 
 /**
- * @author Vivian
- * Circuit adapter for the listView in GUICircuit
+ * @author Vivian Guy.
+ * Circuit adapter for the listView in GUICircuit.
  */
 
 public class CircuitAdapter extends ArrayAdapter<String[]> {

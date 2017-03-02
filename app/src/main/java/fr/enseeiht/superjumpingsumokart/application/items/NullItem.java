@@ -6,9 +6,9 @@ import fr.enseeiht.superjumpingsumokart.R;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
 
 /**
+ * @author Matthieu Michel.
  * Implementation of null {@link Item}.
  * This item symbolizes the absence of item.
- * Created by michelmatthieu on 06/02/2017.
  */
 
 public class NullItem extends Item {
