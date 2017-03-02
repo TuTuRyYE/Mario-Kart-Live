@@ -76,7 +76,7 @@
             android:textAllCaps="true"
             android:textStyle="normal|bold|italic"
             android:textSize="36sp"
-            android:textColor="@drawable/title_gradient" />
+            android:textColor="@android:color/darker_gray" />
 
         <ToggleButton
             android:text="@string/connect_wifi_btn"
