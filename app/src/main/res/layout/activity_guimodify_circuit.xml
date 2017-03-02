@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="fr.enseeiht.superjumpingsumokart.application.GUIModifyCircuit">
+    tools:context="fr.enseeiht.superjumpingsumokart.application.circuit.GUIModifyCircuit">
 
     <LinearLayout
         android:orientation="vertical"
@@ -92,18 +92,19 @@
                 android:layout_weight="1" />
 
             <Button
+                android:text="@string/deleteMarker"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:id="@+id/deleteMarkerBtn"
+                android:layout_weight="1" />
+
+            <Button
                 android:text="@string/confirm_btn"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:id="@+id/confirmBtn"
                 android:layout_weight="1" />
 
-            <Button
-                android:text="@string/deleteMarker"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:id="@+id/deleteMarkerBtn"
-                android:layout_weight="1" />
         </LinearLayout>
 
     </LinearLayout>

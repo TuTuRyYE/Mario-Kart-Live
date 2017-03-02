@@ -6,7 +6,7 @@ import fr.enseeiht.superjumpingsumokart.application.items.*;
 import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
- * Created by Vivian on 27/01/2017.
+ * @author Vivian Guy.
  * Class representing a drone
  */
 

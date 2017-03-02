@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import fr.enseeiht.superjumpingsumokart.R;
-import fr.enseeiht.superjumpingsumokart.application.Circuit;
+import fr.enseeiht.superjumpingsumokart.application.circuit.Circuit;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
 import fr.enseeiht.superjumpingsumokart.application.Game;
 import fr.enseeiht.superjumpingsumokart.application.GameListener;
@@ -74,10 +74,13 @@ public class GUIGame extends Activity implements GameListener {
     public final static int DEFEAT = 7;
 
     /**
-     *
+     * Message for the {@link Handler} of the {@link GUIGame} activity.
      */
     public static final int LAP_COUNT_UPDATE = 8;
 
+    /**
+     * Message for the {@link Handler} of the {@link GUIGame} activity.
+     */
     public final static int CHECKPOINT_COUNT_UPDATE = 9;
 
     public final static int ANIMATE_BLOOPER = 10;
@@ -97,29 +100,42 @@ public class GUIGame extends Activity implements GameListener {
      * The logging tag. Useful for debugging.
      */
     private static String GUI_GAME_TAG = "GUIGame";
+
+    /**
+     * The list of GuiGameListener
+     */
     private final ArrayList<GuiGameListener> GUI_GAME_LISTENERS = new ArrayList<>();
+
     /**
      * The controller that dispatches commands from the user to the device.
      */
     private DroneController controller;
+
     /**
      * The current frame to display.
      */
     private byte[] currentFrame;
+
+    /**
+     * The trap button to display.
+     */
     private ImageButton sendTrapBtn;
+
     /**
      * Boolean variables used to know when to initialise the {@link ARToolKit} markers.
      */
     private boolean firstUpdate = true;
+
     /**
      * Boolean variable used to know when the camera view is available so that we know when to start
      * the markers research.
      */
     private boolean cameraViewAvailable = false;
+
     /**
      * The area to display the video stream from the device.
      */
-    private FrameLayout mainLayout, animationLayout;
+    private FrameLayout mainLayout;
     private SurfaceView cameraView;
     private GLSurfaceView glView;
     private ItemRenderer renderer;
@@ -164,7 +180,7 @@ public class GUIGame extends Activity implements GameListener {
                 case LAP_COUNT_UPDATE:
                     lapsTextView.setText(Integer.toString(controller.getDrone().getCurrentLap()) + "/" + Integer.toString(Circuit.getInstance().getLaps()));
                     break;
-                case CHECKPOINT_COUNT_UPDATE :
+                case CHECKPOINT_COUNT_UPDATE:
                     checkpointTextView.setText(Integer.toString(controller.getDrone().getCurrentCheckpoint()) + "/" + Integer.toString(Circuit.getInstance().getCheckpointToCheck()));
                     break;
                 case ANIMATE_BLOOPER :
@@ -176,10 +192,112 @@ public class GUIGame extends Activity implements GameListener {
             }
         }
     };
+
     /**
      * The {@link Game} associated to the current {@link GUIGame}.
      */
     private Game game;
+
+    /**
+     * Method used to display the current trap owned by the player (Matthieu Michel - 30/01/2017).
+     */
+    private void displayTrap() {
+        Item currentItem = controller.getDrone().getCurrentItem();
+        Log.d(GUI_GAME_TAG, currentItem.getName()+" is owned by the player");
+        currentItem.assignResource(sendTrapBtn);
+    }
+
+    /**
+     * Method called by {@link #UPDATER} to refresh the view of the GUI and update the displayed
+     * frame from the video stream of the device (Romain Verset - 01/02/2017).
+     */
+    public void updateCameraSurfaceView(Bitmap frameToDraw) {
+        if (cameraViewAvailable) {
+            Canvas canvas = cameraView.getHolder().lockCanvas();
+            canvas.drawBitmap(frameToDraw, 0, 0, null);
+            cameraView.getHolder().unlockCanvasAndPost(canvas);
+        }
+    }
+
+    /**
+     * Render 3D models.
+     */
+    public void renderAR() {
+        if (glView != null && renderer != null && ARToolKit.getInstance().getProjectionMatrix() != null) {
+            Log.d(GUI_GAME_TAG, "renderAR() called.");
+            glView.requestRender();
+        }
+    }
+
+    /**
+     * TODO
+     */
+    private void initCameraSurfaceView() {
+        cameraView = (SurfaceView) findViewById(R.id.cameraSurfaceView);
+        cameraView.getHolder().addCallback(new SurfaceHolder.Callback() {
+            @Override
+            public void surfaceCreated(SurfaceHolder holder) {
+                cameraViewAvailable = true;
+                Log.d(GUI_GAME_TAG, "Camera surface view created, ready to display.");
+            }
+
+            @Override
+            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+                //NOTHING TO DO
+            }
+
+            @Override
+            public void surfaceDestroyed(SurfaceHolder holder) {
+                cameraViewAvailable = false;
+                ARToolKit.getInstance().cleanup();
+                Log.d(GUI_GAME_TAG, "Camera surface view destroyed.");
+            }
+        });
+    }
+
+    /**
+     * TODO
+     */
+    private void initGLSurfaceView() {
+        // Create the GL view
+        glView = new GLSurfaceView(GUIGame.this);
+        glView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
+        glView.getHolder().setFormat(PixelFormat.TRANSLUCENT); // Needs to be a translucent surface so the camera preview shows through.
+        renderer = new ItemRenderer();
+        glView.setRenderer(renderer);
+        glView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+        glView.setZOrderMediaOverlay(true); // Request that GL view's SurfaceView be on top of other SurfaceViews (including CameraPreview's SurfaceView).
+        mainLayout.addView(glView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        if (glView != null) {
+            glView.onResume();
+        }
+    }
+
+
+    /**
+     * Method used by {@link #controller} to send the current frame of its video stream to the GUI.
+     * @param frame The frame received from the device.
+     */
+    public void receiveFrame(ARFrame frame) {
+        if (firstUpdate) {
+            renderer.configureARScene();
+            firstUpdate = false;
+            for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
+                ggl.onVideoStreamAvailable();
+            }
+        }
+        currentFrame = frame.getByteData();
+        UPDATER.sendEmptyMessage(RECEIVE_FRAME);
+        UPDATER.sendEmptyMessage(UPDATE_ITEM_ICON);
+    }
+
+    /**
+     * Add a {@link GuiGameListener}.
+     * @param guiGameListener the listener.
+     */
+    public void registerGuiGameListener(GuiGameListener guiGameListener) {
+        GUI_GAME_LISTENERS.add(guiGameListener);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -305,28 +423,28 @@ public class GUIGame extends Activity implements GameListener {
                 if (motionEvent.getDownTime() > 500) {
                     Log.d(GUI_GAME_TAG, "sentTrapBtn long touch");
                     // Get the list of markers and the last marker seen
-                        HashMap<Integer, DetectionTask.Symbol> markers = Circuit.getInstance().getMarkers();
-                        DetectionTask.Symbol lastMarkerSeen = controller.getDrone().getLastMarkerSeen();
+                    HashMap<Integer, DetectionTask.Symbol> markers = Circuit.getInstance().getMarkers();
+                    DetectionTask.Symbol lastMarkerSeen = controller.getDrone().getLastMarkerSeen();
                     // Found the next marker on the circuit
-                        Boolean found = false;
-                        DetectionTask.Symbol nextMarker = null;
-                        int i=1;
-                        while (!found && i<markers.size()) {
-                            if (markers.get(i).equals(lastMarkerSeen)) {
-                                nextMarker = markers.get(i + 1);
-                                found = true;
-                            }
-                            i++;
+                    Boolean found = false;
+                    DetectionTask.Symbol nextMarker = null;
+                    int i=1;
+                    while (!found && i<markers.size()) {
+                        if (markers.get(i).equals(lastMarkerSeen)) {
+                            nextMarker = markers.get(i + 1);
+                            found = true;
                         }
+                        i++;
+                    }
                     // if there is no marker forward, we put the item on the first marker
-                        if (nextMarker == null) {
-                            nextMarker = markers.get(1);
-                        }
-                        Item item = controller.getDrone().getCurrentItem();
-                        controller.useItem();
-                        for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
-                            ggl.onItemUsed(nextMarker, item);
-                        }
+                    if (nextMarker == null) {
+                        nextMarker = markers.get(1);
+                    }
+                    Item item = controller.getDrone().getCurrentItem();
+                    controller.useItem();
+                    for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
+                        ggl.onItemUsed(nextMarker, item);
+                    }
                 } else {
                     Item item = controller.getDrone().getCurrentItem();
                     controller.useItem();
@@ -388,7 +506,6 @@ public class GUIGame extends Activity implements GameListener {
             if (game != null && game.isStarted()) {
                 ggl.onPlayerGaveUp();
             }
-
         }
         GUI_GAME_LISTENERS.clear();
     }
@@ -398,106 +515,7 @@ public class GUIGame extends Activity implements GameListener {
         super.onDestroy();
     }
 
-    /**
-     * Method used to display the current trap owned by the player (Matthieu Michel - 30/01/2017).
-     */
-    private void displayTrap() {
-        Item currentItem = controller.getDrone().getCurrentItem();
-        Log.d(GUI_GAME_TAG, currentItem.getName()+" is owned by the player");
-        currentItem.assignResource(sendTrapBtn);
-    }
-
-    /**
-     * Method called by {@link #UPDATER} to refresh the view of the GUI and update the displayed
-     * frame from the video stream of the device (Romain Verset - 01/02/2017).
-     */
-    public void updateCameraSurfaceView(Bitmap frameToDraw) {
-        if (cameraViewAvailable) {
-            Canvas canvas = cameraView.getHolder().lockCanvas();
-            canvas.drawBitmap(frameToDraw, 0, 0, null);
-            cameraView.getHolder().unlockCanvasAndPost(canvas);
-
-        }
-    }
-
-    public void renderAR() {
-        if (glView != null && renderer != null && ARToolKit.getInstance().getProjectionMatrix() != null) {
-            Log.d(GUI_GAME_TAG, "renderAR() called.");
-            glView.requestRender();
-        }
-    }
-
-    /**
-     * TODO
-     */
-    private void initCameraSurfaceView() {
-        cameraView = (SurfaceView) findViewById(R.id.cameraSurfaceView);
-        cameraView.getHolder().addCallback(new SurfaceHolder.Callback() {
-            @Override
-            public void surfaceCreated(SurfaceHolder holder) {
-                cameraViewAvailable = true;
-                Log.d(GUI_GAME_TAG, "Camera surface view created, ready to display.");
-            }
-
-            @Override
-            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-                //NOTHING TO DO
-            }
-
-            @Override
-            public void surfaceDestroyed(SurfaceHolder holder) {
-                cameraViewAvailable = false;
-                ARToolKit.getInstance().cleanup();
-                Log.d(GUI_GAME_TAG, "Camera surface view destroyed.");
-            }
-        });
-    }
-
-    /**
-     * TODO
-     */
-    private void initGLSurfaceView() {
-        // Create the GL view
-        glView = new GLSurfaceView(GUIGame.this);
-        glView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
-        glView.getHolder().setFormat(PixelFormat.TRANSLUCENT); // Needs to be a translucent surface so the camera preview shows through.
-        renderer = new ItemRenderer();
-        glView.setRenderer(renderer);
-        glView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-        glView.setZOrderMediaOverlay(true); // Request that GL view's SurfaceView be on top of other SurfaceViews (including CameraPreview's SurfaceView).
-        mainLayout.addView(glView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        if (glView != null) {
-            glView.onResume();
-        }
-    }
-
-
-    /**
-     * Method used by {@link #controller} to send the current frame of its video stream to the GUI (Romain Verset - 01/02/2017).
-     *
-     * @param frame The frame received from the device.
-     */
-    public void receiveFrame(ARFrame frame) {
-        if (firstUpdate) {
-            renderer.configureARScene();
-            firstUpdate = false;
-            for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
-                ggl.onVideoStreamAvailable();
-            }
-        }
-        currentFrame = frame.getByteData();
-        UPDATER.sendEmptyMessage(RECEIVE_FRAME);
-        UPDATER.sendEmptyMessage(UPDATE_ITEM_ICON);
-    }
-    
-    public DroneController getController() {
-        return controller;
-    }
-
-    public void registerGuiGameListener(GuiGameListener guiGameListener) {
-        GUI_GAME_LISTENERS.add(guiGameListener);
-    }
-
+    // GameListener methods
     @Override
     public void onPlayerReady() {
         // Nothing to do here.
@@ -537,30 +555,45 @@ public class GUIGame extends Activity implements GameListener {
     }
 
 
+    /**
+     * Notify the {@link Game} of a defeat.
+     */
     public void notifyDefeat() {
         if (!game.isFinished()) {
             UPDATER.sendEmptyMessage(DEFEAT);
         }
     }
 
+    /**
+     * Notify the {@link Game} of a victory.
+     */
     public void notifyVictory() {
         if (!game.isFinished()) {
             UPDATER.sendEmptyMessage(VICTORY);
         }
     }
 
+    /**
+     * Notify the {@link Game} that a symbol has been touched.
+     */
     public void touchedSymbol(DetectionTask.Symbol symbol) {
         for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
             ggl.onSymbolTouched(symbol);
         }
     }
 
+    /**
+     * Notify the {@link Game} that the arrival line has been detected.
+     */
     public void arrivalLineDetected() {
         for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
             ggl.onPlayerDetectsArrivalLine();
         }
     }
 
+    /**
+     * Notify the {@link Game} that a checkpoint has been detected.
+     */
     public void checkpointDeteted() {
         UPDATER.sendEmptyMessage(CHECKPOINT_COUNT_UPDATE);
         for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
@@ -568,8 +601,19 @@ public class GUIGame extends Activity implements GameListener {
         }
     }
 
+    /**
+     * Get the renderer.
+     * @return the renderer.
+     */
     public ItemRenderer getRenderer() {
         return renderer;
     }
 
+    /**
+     * Get the {@link DroneController}.
+     * @return the drone controller.
+     */
+    public DroneController getController() {
+        return controller;
+    }
 }

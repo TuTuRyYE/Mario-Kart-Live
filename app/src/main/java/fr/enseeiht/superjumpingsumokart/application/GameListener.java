@@ -1,10 +1,11 @@
 package fr.enseeiht.superjumpingsumokart.application;
 
+import fr.enseeiht.superjumpingsumokart.application.circuit.Circuit;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
 import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
- * Created by Vivian on 15/02/2017.
+ * @author Vivian Guy.
  * Inteface for the communication between BT and Game.
  */
 

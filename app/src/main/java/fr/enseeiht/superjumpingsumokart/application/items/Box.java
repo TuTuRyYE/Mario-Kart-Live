@@ -4,12 +4,12 @@ import android.util.Log;
 import android.widget.ImageButton;
 
 import fr.enseeiht.superjumpingsumokart.R;
-import fr.enseeiht.superjumpingsumokart.application.Circuit;
+import fr.enseeiht.superjumpingsumokart.application.circuit.Circuit;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
 import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
- * Implementation of trap Box {@link Item}.
+ * @author Matthieu Michel.
  * Created by michelmatthieu on 02/02/2017.
  */
 

@@ -4,13 +4,13 @@ import android.util.Log;
 import android.widget.ImageButton;
 
 import fr.enseeiht.superjumpingsumokart.R;
-import fr.enseeiht.superjumpingsumokart.application.Circuit;
+import fr.enseeiht.superjumpingsumokart.application.circuit.Circuit;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
 import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
+ * @author Matthieu Michel.
  * Implementation of Banana {@link Item}.
- * Created by michelmatthieu on 02/02/2017.
  */
 
 public class Banana extends Item {

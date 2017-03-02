@@ -1,4 +1,4 @@
-package fr.enseeiht.superjumpingsumokart.application;
+package fr.enseeiht.superjumpingsumokart.application.circuit;
 
 import android.content.Context;
 
@@ -14,14 +14,17 @@ import java.util.ArrayList;
 import fr.enseeiht.superjumpingsumokart.R;
 
 /**
- * Created by Vivian on 17/02/2017.
+ * @author Vivian Guy.
  * Adapter for the ListView of GUICreateCircuit and GUIModifyCircuit.
  */
 
 public class MarkerAdapter extends ArrayAdapter<String> {
 
-
-
+    /**
+     * Constructor for a MarkerAdapter.
+     * @param context the context for the adapter.
+     * @param markers the list of markers to display.
+     */
     public MarkerAdapter(Context context, ArrayList<String> markers) {
         super(context, 0, markers);
     }
@@ -42,8 +45,9 @@ public class MarkerAdapter extends ArrayAdapter<String> {
                 convertView.setTag(viewHolder);
             }
 
-        viewHolder.id.setHeight(50);
-        viewHolder.id.setMinHeight(50);
+        // Set viewHolder display
+            viewHolder.id.setHeight(50);
+            viewHolder.id.setMinHeight(50);
 
         // Get the item [position] of the listView
             String st = getItem(position);
@@ -55,10 +59,10 @@ public class MarkerAdapter extends ArrayAdapter<String> {
     }
 
     /**
+     * @author Vivian Guy.
      * ViewHolder for the MarkerAdapter.
      */
     private class MarkerViewHolder{
         public TextView id;
-
     }
 }

@@ -7,8 +7,8 @@ import fr.enseeiht.superjumpingsumokart.R;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
 
 /**
+ * @author Vivian Guy.
  * Implementation of magic Box {@link Item}.
- * Created by Vivian on 06/02/2017.
  */
 
 
