@@ -28,7 +28,7 @@ public class Blooper extends Item {
     @Override
     public boolean useItem(DroneController droneController) {
         Log.d(ITEM_TAG, "Used a blooper");
-        return false;
+        return true;
     }
 
     @Override
