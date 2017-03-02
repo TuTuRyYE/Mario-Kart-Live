@@ -168,7 +168,7 @@ public class GUIWelcome extends Activity {
     }
 
     /**
-     * Switch the current {@link GUIWelcome} {@link android.app.Activity} for a {@link GUIGame} {@link android.app.Activity} (Romain Verset - 31/01/2017).
+     * Switch the current {@link GUIWelcome} {@link android.app.Activity} for a {@link GUIGame} {@link android.app.Activity}.
      * This switch requires to have a drone connected with the application.
      */
     private void startRaceBtnAction(){
@@ -183,7 +183,7 @@ public class GUIWelcome extends Activity {
         }
     }
     /**
-     * Enables to connect with a Jumping Sumo drone (Romain Verset - 31/01/2017).
+     * Enables to connect with a Jumping Sumo drone.
      * <b>Your cell phone has to be connected to the access point provided by the Jumping Sumo drone.<b/>
      */
     private void wifiConnectionBtnAction() {
@@ -200,7 +200,8 @@ public class GUIWelcome extends Activity {
         }
     }
     /**
-     * //TODO
+     * Enables to connect the phone with an other phone in bluetooth to launch multiplayer mode.
+     * <b> Create a bluetooth server on your cell.</b>
      */
     private void btHostBtnAction() {
         if (!serverHosting) {
@@ -212,7 +213,8 @@ public class GUIWelcome extends Activity {
         }
     }
     /**
-     * //TODO
+     * Enables to connect your phone to a bluetooth server to launch multiplayer mode.
+     * <b> Join a bluetooth server </b>
      */
     private void btJoinBtnAction() {
         if (!clientConnected) {
@@ -225,7 +227,7 @@ public class GUIWelcome extends Activity {
         }
     }
     /**
-     * //TODO
+     * Enables to choose a circuit.
      */
     private void setCircuitBtnAction() {
         Intent i = new Intent(GUIWelcome.this, GUICircuit.class);
@@ -234,7 +236,7 @@ public class GUIWelcome extends Activity {
 
     }
     /**
-     * Default action to do when the exit button is clicked (Romain Verset - 31/01/2017).
+     * Default action to do when the exit button is clicked.
      * It closes the eventual connection between the application and the drone and cleans
      * all variables used to avoid memory leak.
      */
@@ -249,7 +251,7 @@ public class GUIWelcome extends Activity {
     }
 
     /**
-     * Disable the WIFI connection button (Romain Verset - 31/01/2017).
+     * Disable the WIFI connection button.
      * The button is allowed when the phone and the drone are on the same WiFi network.
      */
     private void disableWifiConnectionBtn() {
@@ -258,7 +260,7 @@ public class GUIWelcome extends Activity {
     }
 
     /**
-     * Enable the WIFI connection button (Romain Verset - 31/01/2017).
+     * Enable the WIFI connection button.
      * The button is allowed when the phone and the drone are on the same WiFi network.
      */
     private void enableWifiConnectionBtn() {
@@ -266,7 +268,7 @@ public class GUIWelcome extends Activity {
     }
 
     /**
-     * Callback called when the {@link BluetoothServer} is ready and waiting for a {@link BluetoothClient} (Romain Verset - 17/02/2017).
+     * Callback called when the {@link BluetoothServer} is ready and waiting for a {@link BluetoothClient}.
      */
     private void onServerReady() {
         this.btHostBtn.setBackgroundColor(getResources().getColor(R.color.waitingForClient));
@@ -274,7 +276,7 @@ public class GUIWelcome extends Activity {
     }
 
     /**
-     * Callback called when a {@link BluetoothClient} connects to the {@link BluetoothServer} (Romain Verset - 17/02/2017).
+     * Callback called when a {@link BluetoothClient} connects to the {@link BluetoothServer}.
      */
     private void onServerReceivedConnection() {
         btHostBtn.setBackgroundColor(getResources().getColor(R.color.connected));
@@ -282,7 +284,7 @@ public class GUIWelcome extends Activity {
     }
 
     /**
-     * Callback called when the {@link BluetoothClient} has sucessfully connected to a {@link BluetoothServer} (Romain Verset - 17/02/2017).
+     * Callback called when the {@link BluetoothClient} has sucessfully connected to a {@link BluetoothServer}.
      */
     private void onClientConnected() {
         btJoinBtn.setBackgroundColor(getResources().getColor(R.color.connected));
@@ -291,7 +293,7 @@ public class GUIWelcome extends Activity {
     }
 
     /**
-     * Callback called when the {@link BluetoothClient} is no longer available (Romain Verset - 17/02/2017).
+     * Callback called when the {@link BluetoothClient} is no longer available.
      */
     private void onClientShutDown() {
         btJoinBtn.setBackgroundColor(getResources().getColor(R.color.notConnected));
@@ -303,7 +305,7 @@ public class GUIWelcome extends Activity {
     }
 
     /**
-     * Callback called when the {@link BluetoothServer} is no longer available (Romain Verset - 17/02/2017).
+     * Callback called when the {@link BluetoothServer} is no longer available.
      */
     public void onServerShutDown() {
         btHostBtn.setBackgroundResource(android.R.drawable.btn_default);
@@ -314,6 +316,10 @@ public class GUIWelcome extends Activity {
         serverHosting = false;
     }
 
+
+    /**
+     * Enable the player to click on start a race.
+     */
     private void enableStartARaceButton() {
         startRaceBtn.setEnabled(true);
     }

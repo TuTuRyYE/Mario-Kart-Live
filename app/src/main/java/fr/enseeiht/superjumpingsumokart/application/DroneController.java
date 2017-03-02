@@ -60,7 +60,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     private int fps_count = 0;
 
     /**
-     * Default Constructor of the class {@link DroneController} (Matthieu Michel - 30/01/2017).
+     * Default Constructor of the class {@link DroneController}.
      * It binds the {@link}.
      * @param guiGame interface of the Game.
      * @param device the device to create the controller for.
@@ -77,14 +77,14 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
         }
     }
     /**
-     * Get the {@link Drone} (Matthieu Michel - 30/01/2017).
+     * Get the {@link Drone}.
      * @return the drone.
      */
     public Drone getDrone() {
         return DRONE;
     }
     /**
-     * Makes the drone go forward with the constant speed (Matthieu Michel - 30/01/2017).
+     * Makes the drone go forward with the constant speed.
      */
     public void moveForward() {
         Log.d(DRONE_CONTROLLER_TAG, "MOVE FORWARD order received !");
@@ -94,7 +94,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
         }
     }
     /**
-     *  Makes the drone go backward with the constant speed (Matthieu Michel - 30/01/2017).
+     *  Makes the drone go backward with the constant speed.
      */
     public void moveBackward() {
         if (deviceController != null && running) {
@@ -103,7 +103,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
         }
     }
     /**
-     * Makes the drone turn left with the constant speed (Matthieu Michel - 30/01/2017).
+     * Makes the drone turn left with the constant speed.
      */
     public void turnLeft() {
         if (deviceController != null && running) {
@@ -112,7 +112,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
         }
     }
     /**
-     * Makes the device turn right with the constant speed (Matthieu Michel - 30/01/2017).
+     * Makes the device turn right with the constant speed.
      */
     public void turnRight() {
         if (deviceController != null && running) {
@@ -121,7 +121,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
         }
     }
     /**
-     * Stops the device (Matthieu Michel - 30/01/2017).
+     * Stops the device.
      */
     public void stopMotion() {
         if (deviceController != null && running) {
@@ -130,7 +130,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
         }
     }
     /**
-     * Removes the rotation offset so that the device goes straight forward or backward (Matthieu Michel - 30/01/2017).
+     * Removes the rotation offset so that the device goes straight forward or backward.
      */
     public void stopRotation() {
         if (deviceController != null && running) {
@@ -139,7 +139,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
         }
     }
     /**
-     * Method used to use an Item (Matthieu Michel - 30/01/2017).
+     * Method used to use an Item.
      * Send a request to Item class to use the item owned by the player.
      */
     public void useItem() {
@@ -158,7 +158,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     }
 
     /**
-     * Makes the drone jump high. (Matthieu Michel - 30/01/2017).
+     * Makes the drone jump high.
      */
     public void highJump() {
         if (deviceController != null && running) {
@@ -168,7 +168,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     }
 
     /**
-     * Makes the drone jump high. (Matthieu Michel - 30/01/2017).
+     * Makes the drone jump high.
      */
     public void longJump() {
         if (deviceController != null && running) {
@@ -178,7 +178,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     }
 
     /**
-     * Boosts the speed of the drone for a short amount of time (Romain Verset - 02/03/2017).
+     * Boosts the speed of the drone for a short amount of time.
      */
     public void boost() {
         if (deviceController != null && running) {
@@ -199,7 +199,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     }
 
     /**
-     * Makes the drone spin (Romain Verset - 31/01/2017).
+     * Makes the drone spin.
      */
     public void spin() {
         if (deviceController != null && running) {
@@ -208,7 +208,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
         }
     }
     /**
-     * Makes the drone spin and highJump (Romain Verset - 31/01/2017).
+     * Makes the drone spin and highJump.
      */
     public void spinningJump() {
         if (deviceController != null && running) {
@@ -216,7 +216,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
         }
     }
     /**
-     * Makes the drone go slower (Romain Verset - 31/01/2017).
+     * Makes the drone go slower.
      */
     public void slow() {
         if (deviceController != null && running) {
@@ -225,7 +225,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     }
 
     /**
-     * Notify the user when there is a switch of state for the device (Matthieu Michel - 30/01/2017).
+     * Notify the user when there is a switch of state for the device.
      * @param deviceController controller associated to the device.
      * @param newState         new state of the drone (moving, turning, stop..).
      * @param error            type of the error.
@@ -276,7 +276,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
         return ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_OK;
     }
     /**
-     * Get the current frame of the video and send it to {@link #GUI_GAME} where the frame will be displayed. (Matthieu Michel - 30/01/2017)
+     * Get the current frame of the video and send it to {@link #GUI_GAME} where the frame will be displayed.
      * @param deviceController controller associated to the device.
      * @param frame            current frame get from the drone.
      * @return ARCONTROLLER_OK if there is no problem (if display went well) otherwise ARCONTROLLER_ERROR_STREAM if there is a streaming problem.
@@ -299,7 +299,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
         //Nothing to do.
     }
     /**
-     * Start the controller of the device (Romain Verset - 01/02/2017).
+     * Start the controller of the device.
      * @return The code resulting in the call of {@link ARDeviceController} stop() method on {@link #deviceController}.
      */
     public ARCONTROLLER_ERROR_ENUM startController() {
@@ -310,7 +310,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
         return errCode;
     }
     /**
-     * Stops the device controller by launching an external {@link Thread} (Romain Verset - 01/02/2017).
+     * Stops the device controller by launching an external {@link Thread}.
      * It first stops the engine (speed equals to 0) and then disconnects the driver.
      */
     public ARCONTROLLER_ERROR_ENUM stopController() {
@@ -329,7 +329,6 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     }
 
     /**
-     * (Romain Verset - 01/02/2017).
      * @return True if the {@link ARDeviceController} is running.
      */
     public boolean isRunning() {
