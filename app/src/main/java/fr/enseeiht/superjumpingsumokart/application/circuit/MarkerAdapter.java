@@ -1,4 +1,4 @@
-package fr.enseeiht.superjumpingsumokart.application;
+package fr.enseeiht.superjumpingsumokart.application.circuit;
 
 import android.content.Context;
 

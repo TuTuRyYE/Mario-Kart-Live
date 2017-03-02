@@ -45,15 +45,9 @@ public interface BluetoothCommunicationListener {
      */
     void onSecondPlayerTouchedItem(final String msg);
 
-
-
     /**
      * Notify a circuit has been received from bluetooth communication.
      */
     void onCircuitReceived();
 
-    /**
-     * Notify the bluetooth communication has been closed on the other side.
-     */
-    void onBluetoothCommunicationClosed();
 }

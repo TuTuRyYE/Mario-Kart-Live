@@ -1,4 +1,4 @@
-package fr.enseeiht.superjumpingsumokart.application;
+package fr.enseeiht.superjumpingsumokart.application.circuit;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -24,6 +24,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import fr.enseeiht.superjumpingsumokart.R;
+import fr.enseeiht.superjumpingsumokart.application.GUIWelcome;
 import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
@@ -31,7 +32,6 @@ import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
  * The activity used for handling circuits. From this activity, the user can chose/modify/delete
  * a existing circuit or create a new one.
  */
-
 
 public class GUICircuit extends Activity {
 
