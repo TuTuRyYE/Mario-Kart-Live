@@ -26,7 +26,7 @@ import fr.enseeiht.superjumpingsumokart.application.GUIWelcome;
 import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
- * @author Vivian GUY.
+ * @author Vivian Guy.
  * Activity to create a new Circuit.
  */
 
@@ -76,7 +76,7 @@ public class GUICreateCircuit extends Activity {
             deleteMarkerBtn = (Button) findViewById(R.id.deleteMarkerBtn);
 
 
-        // List of markers for the circuit
+        // Initialize the list of markers for the circuit
             markers = new ArrayList<>();
 
         // Adapter for the listView
@@ -94,22 +94,20 @@ public class GUICreateCircuit extends Activity {
             listSymbols.add("D");
             listSymbols.add("F");
             listSymbols.add("G");
-            listSymbols.add("KANJI");
-            listSymbols.add("Select a type of marker"); // hint
+            listSymbols.add("Select a type of marker"); // hint for the user
 
         // Adapter for the spinner
-        final SpinnerAdapter spinnerAdapter = new SpinnerAdapter(GUICreateCircuit.this, listSymbols, android.R.layout.simple_spinner_item);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            final SpinnerAdapter spinnerAdapter = new SpinnerAdapter(GUICreateCircuit.this, listSymbols, android.R.layout.simple_spinner_item);
+            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            symbolText.setAdapter(spinnerAdapter);
 
-        symbolText.setAdapter(spinnerAdapter);
-
-        // show hint
-        symbolText.setSelection(spinnerAdapter.getCount());
-
+        // Show the hint
+            symbolText.setSelection(spinnerAdapter.getCount());
 
 
 
-        // Set buttons listener
+
+        // BUTTONS LISTENERS
 
             /**
              * Button to add a marker to the list of markers.
@@ -125,12 +123,9 @@ public class GUICreateCircuit extends Activity {
                                     if (!symbol.equals("Select a type of marker")) { // if a symbol is selected
                                         // Add the marker to the end of markers list (before 2 end markers)
                                             adapter.add(symbol);
-                                            // Remove the symbol from the list if it isn't "KANJI" (others symbol can appear only one time in the circuit)
-                                            if (!symbol.equals("KANJI")) {
+                                            // Remove the symbol from the list (symbols can appear only one time in the circuit)
                                                 spinnerAdapter.remove(symbol);
-                                            }
-
-                                            Log.d(GUI_CREATE_CIRCUIT_TAG, "marker " + symbol + " added to the list");
+                                                Log.d(GUI_CREATE_CIRCUIT_TAG, "marker " + symbol + " added to the list");
 
                                         // Reset the EditTexts
                                             symbolText.setSelection(spinnerAdapter.getCount());
@@ -177,10 +172,8 @@ public class GUICreateCircuit extends Activity {
                                 if (itemSelected != null) { // if an item is selected
                                         // Remove the selected marker
                                             adapter.remove(markers.get(itemSelected-1));
-                                        // Add it to the list of symbol if it isn't "KANJI"
-                                        if (!markers.get(itemSelected-1).equals("KANJI")){
+                                        // Add it to the list of symbols available
                                             spinnerAdapter.add(markers.get(itemSelected-1));
-                                        }
                                         // Reset itemSelected
                                             itemSelected = null;
                                 }
@@ -245,51 +238,51 @@ public class GUICreateCircuit extends Activity {
             String lapTxt = lapsText.getText().toString();
             String checkPointTxt = checkPointToCheckText.getText().toString();
 
-        // Create the file
-        if (!txtName.isEmpty() && !lapTxt.equals("0") && !lapTxt.isEmpty() && !checkPointTxt.equals("0") && !checkPointTxt.isEmpty()) { // if the user has put a circuit name and a number of lap different from 0
+        // Create the file if the EditTexts are correctly filled
+            if (!txtName.isEmpty() && !lapTxt.equals("0") && !lapTxt.isEmpty() && !checkPointTxt.equals("0") && !checkPointTxt.isEmpty()) { // if the user has put a circuit name, a number of lap different from 0 and checkpoint different from 0
+                // Create the file
+                    File circuitFile = new File(path, circuitNameText.getText().toString());
+                    if (!circuitFile.exists()) { // if a file with the same name doesn't exist
+                        FileOutputStream outputStream;
+                        String stringToWrite;
+                        try {
+                            // Creating the file and the instance of the circuit
+                                Circuit.initInstance(Integer.parseInt(lapTxt), Integer.parseInt(checkPointTxt));
+                                outputStream = new FileOutputStream(circuitFile);
+                                String firstLine = txtName + "/" + lapTxt + "/" + checkPointTxt + "\n";
+                                Circuit.getInstance().setName(txtName);
+                                Circuit.getInstance().setCheckPointToCheck(Integer.parseInt(checkPointTxt));
+                                outputStream.write(firstLine.getBytes());
+                                for (String s : markers) {
+                                    stringToWrite = s + "\n";
+                                    outputStream.write(stringToWrite.getBytes());
+                                    Circuit.getInstance().addMarker(DetectionTask.Symbol.valueOf(s));
+                                }
+                                outputStream.close();
+                                Log.d(GUI_CREATE_CIRCUIT_TAG, "Circuit file created");
 
-            // Create the file
-                File circuitFile = new File(path, circuitNameText.getText().toString());
-                if (!circuitFile.exists()) { // if a file with the same name doesn't exist
-                    FileOutputStream outputStream;
-                    String stringToWrite;
-                    try {
-                        // Creating the file and the instance of the circuit
-                            Circuit.initInstance(Integer.parseInt(lapTxt), Integer.parseInt(checkPointTxt));
-                            outputStream = new FileOutputStream(circuitFile);
-                            String firstLine = txtName + "/" + lapTxt + "/" + checkPointTxt + "\n";
-                            Circuit.getInstance().setName(txtName);
-                            Circuit.getInstance().setCheckPointToCheck(Integer.parseInt(checkPointTxt));
-                            outputStream.write(firstLine.getBytes());
-                            for (String s : markers) {
-                                stringToWrite = s + "\n";
-                                outputStream.write(stringToWrite.getBytes());
-                                Circuit.getInstance().addMarker(DetectionTask.Symbol.valueOf(s));
-                            }
-                            outputStream.close();
-                            Log.d(GUI_CREATE_CIRCUIT_TAG, "Circuit file created");
+                            // Inform the user that the file has been created
+                                Toast.makeText(GUICreateCircuit.this, "Circuit created!", Toast.LENGTH_SHORT).show();
 
-                        // Inform the user that the file has been created
-                            Toast.makeText(GUICreateCircuit.this, "Circuit created!", Toast.LENGTH_SHORT).show();
-
-                        // Go back to GUIWelcome Activity
-                            Intent i = new Intent(GUICreateCircuit.this, GUIWelcome.class);
-                            Log.d(GUI_CREATE_CIRCUIT_TAG, "Launching a GUIWelcome Activity...");
-                            startActivity(i);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                            // Go back to GUIWelcome Activity
+                                //Intent i = new Intent(GUICreateCircuit.this, GUIWelcome.class);
+                                Log.d(GUI_CREATE_CIRCUIT_TAG, "Launching a GUIWelcome Activity...");
+                                //startActivity(i);
+                                finish();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
+                else { // A circuit with the same name already exists
+                    Toast.makeText(GUICreateCircuit.this, "A circuit with this name already exists !", Toast.LENGTH_SHORT).show();
                 }
-            else { // A circuit with the same name already exists
-                Toast.makeText(GUICreateCircuit.this, "A circuit with this name already exists !", Toast.LENGTH_SHORT).show();
+            } else { // The user's input aren't correct
+                if (lapTxt.equals("0")) {
+                    Toast.makeText(GUICreateCircuit.this, "Lap number must be different to 0 !", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(GUICreateCircuit.this, "You have to put a circuit name and a lap number !", Toast.LENGTH_SHORT).show();
+                }
             }
-        } else { // The user's input aren't correct
-            if (lapTxt.equals("0")) {
-                Toast.makeText(GUICreateCircuit.this, "Lap number must be different to 0 !", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(GUICreateCircuit.this, "You have to put a circuit name and a lap number !", Toast.LENGTH_SHORT).show();
-            }
-        }
 
     }
 }
