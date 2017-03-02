@@ -28,7 +28,6 @@ import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
 
 import org.artoolkit.ar.base.ARToolKit;
 import org.artoolkit.ar.base.AndroidUtils;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -159,10 +158,10 @@ public class GUIGame extends Activity implements GameListener {
                     Toast.makeText(GUIGame.this, "YOU LOST !", Toast.LENGTH_SHORT).show();
                     break;
                 case LAP_COUNT_UPDATE:
-                    lapsTextView.setText("Lap " + Integer.toString(controller.getDrone().getCurrentLap()) + "/" + Integer.toString(Circuit.getInstance().getLaps()));
+                    lapsTextView.setText(Integer.toString(controller.getDrone().getCurrentLap()) + "/" + Integer.toString(Circuit.getInstance().getLaps()));
                     break;
                 case CHECKPOINT_COUNT_UPDATE :
-                    checkpointTextView.setText("Checkpoint " + Integer.toString(controller.getDrone().getCurrentCheckpoint()) + "/" + Integer.toString(Circuit.getInstance().getCheckpointToCheck()));
+                    checkpointTextView.setText(Integer.toString(controller.getDrone().getCurrentCheckpoint()) + "/" + Integer.toString(Circuit.getInstance().getCheckpointToCheck()));
                 default:
                     break;
             }
@@ -288,17 +287,7 @@ public class GUIGame extends Activity implements GameListener {
                 return true;
             }
         });
-        sendTrapBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(GUI_GAME_TAG, "Use item pressed.");
-                Item item = controller.getDrone().getCurrentItem();
-                controller.useItem();
-                for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
-                    ggl.onItemUsed(controller.getDrone().getLastMarkerSeen(), item);
-                }
-            }
-        });
+
         sendTrapBtn.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -328,6 +317,12 @@ public class GUIGame extends Activity implements GameListener {
                         for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
                             ggl.onItemUsed(nextMarker, item);
                         }
+                } else {
+                    Item item = controller.getDrone().getCurrentItem();
+                    controller.useItem();
+                    for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
+                        ggl.onItemUsed(controller.getDrone().getLastMarkerSeen(), item);
+                    }
                 }
                 return true;
             }
@@ -336,7 +331,7 @@ public class GUIGame extends Activity implements GameListener {
             @Override
             public void onClick(View v) {
                 Log.d(GUI_GAME_TAG, "Jump pressed.");
-                controller.jump();
+                controller.boost();
             }
         });
     }

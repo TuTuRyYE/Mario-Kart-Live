@@ -48,7 +48,7 @@ public class Box extends Item {
     public void applyEffect(DroneController droneController) {
         Log.d(ITEM_TAG, "A TNT box has been touched");
         droneController.stopMotion();
-        droneController.jump();
+        droneController.highJump();
     }
 
     @Override
