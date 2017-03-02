@@ -92,18 +92,19 @@
                 android:layout_weight="1" />
 
             <Button
+                android:text="@string/deleteMarker"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:id="@+id/deleteMarkerBtn"
+                android:layout_weight="1" />
+
+            <Button
                 android:text="@string/confirm_btn"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:id="@+id/confirmBtn"
                 android:layout_weight="1" />
 
-            <Button
-                android:text="@string/deleteMarker"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:id="@+id/deleteMarkerBtn"
-                android:layout_weight="1" />
         </LinearLayout>
 
     </LinearLayout>
