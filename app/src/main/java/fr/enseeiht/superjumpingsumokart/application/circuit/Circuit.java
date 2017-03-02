@@ -117,14 +117,6 @@ public class Circuit {
     }
 
     /**
-     * Set the instance of the circuit
-     * @param circuitInstance the instance of the circuit
-     */
-    public static void setCircuitInstance(Circuit circuitInstance) {
-        Circuit.circuitInstance = circuitInstance;
-    }
-
-    /**
      * Get the number of laps.
      * @return the number of laps to complete the circuit.
      */

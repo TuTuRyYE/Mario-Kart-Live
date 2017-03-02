@@ -246,18 +246,13 @@ public class GUICreateCircuit extends Activity {
                         FileOutputStream outputStream;
                         String stringToWrite;
                         try {
-                            // Creating the file and the instance of the circuit
-                                Circuit.setCircuitInstance(null); // clear the instance of the circuit it it already existed
-                                Circuit.initInstance(Integer.parseInt(lapTxt), Integer.parseInt(checkPointTxt));
+                            // Creating the file  of the circuit
                                 outputStream = new FileOutputStream(circuitFile);
                                 String firstLine = txtName + "/" + lapTxt + "/" + checkPointTxt + "\n";
-                                Circuit.getInstance().setName(txtName);
-                                Circuit.getInstance().setCheckPointToCheck(Integer.parseInt(checkPointTxt));
                                 outputStream.write(firstLine.getBytes());
                                 for (String s : markers) {
                                     stringToWrite = s + "\n";
                                     outputStream.write(stringToWrite.getBytes());
-                                    Circuit.getInstance().addMarker(DetectionTask.Symbol.valueOf(s));
                                 }
                                 outputStream.close();
                                 Log.d(GUI_CREATE_CIRCUIT_TAG, "Circuit file created");
