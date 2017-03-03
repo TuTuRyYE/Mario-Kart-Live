@@ -47,22 +47,22 @@ public class GUIGame extends Activity implements GameListener {
      * Message for the {@link Handler} of the {@link GUIGame} activity.
      */
     public final static int RECEIVE_FRAME = 0;
-    /**
-     * Message for the {@link Handler} of the {@link GUIGame} activity.
-     */
-    public final static int UPDATE_ITEM_ICON = 1;
+
     /**
      * Message for the {@link Handler} of the {@link GUIGame} activity.
      */
     public final static int RENDER_AR = 3;
+
     /**
      * Message for the {@link Handler} of the {@link GUIGame} activity.
      */
     public final static int CONTROLLER_STOPPING_ON_ERROR = 4;
+
     /**
      * Message for the {@link Handler} of the {@link GUIGame} activity.
      */
     public final static int CONTROLLER_RUNNING = 5;
+
     /**
      * Message for the {@link Handler} of the {@link GUIGame} activity.
      */
@@ -74,16 +74,28 @@ public class GUIGame extends Activity implements GameListener {
     public final static int DEFEAT = 7;
 
     /**
-     *
+     * Message for the {@link Handler} of the {@link GUIGame} activity.
      */
     public static final int LAP_COUNT_UPDATE = 8;
 
+    /**
+     * Message for the {@link Handler} of the {@link GUIGame} activity.
+     */
     public final static int CHECKPOINT_COUNT_UPDATE = 9;
 
+    /**
+     * Message for the {@link Handler} of the {@link GUIGame} activity.
+     */
     public final static int ANIMATE_BLOOPER = 10;
 
+    /**
+     * Message for the {@link Handler} of the {@link GUIGame} activity.
+     */
     public final static int ANIMATE_RED_SHELL = 11;
 
+    /**
+     * Message for the {@link Handler} of the {@link GUIGame} activity.
+     */
     public final static int ANIMATE_MAGIC_BOX = 12;
 
     /**
@@ -137,9 +149,6 @@ public class GUIGame extends Activity implements GameListener {
                 case RECEIVE_FRAME:
                     new DetectionTask(GUIGame.this).execute(currentFrame);
                     break;
-                case UPDATE_ITEM_ICON:
-                    displayTrap();
-                    break;
                 case CONTROLLER_STOPPING_ON_ERROR:
                     Toast.makeText(GUIGame.this, "Loosing controller connection", Toast.LENGTH_LONG).show();
                     for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
@@ -183,6 +192,7 @@ public class GUIGame extends Activity implements GameListener {
                     sendTrapBtn.setBackgroundResource(R.drawable.magic_box_animation);
                     AnimationDrawable admb = (AnimationDrawable) sendTrapBtn.getBackground();
                     admb.start();
+                    displayTrap();
                     break;
                 default:
                     break;
@@ -494,7 +504,6 @@ public class GUIGame extends Activity implements GameListener {
         }
         currentFrame = frame.getByteData();
         UPDATER.sendEmptyMessage(RECEIVE_FRAME);
-        UPDATER.sendEmptyMessage(UPDATE_ITEM_ICON);
     }
     
     public DroneController getController() {
@@ -568,7 +577,7 @@ public class GUIGame extends Activity implements GameListener {
         }
     }
 
-    public void checkpointDeteted() {
+    public void checkpointDetected() {
         UPDATER.sendEmptyMessage(CHECKPOINT_COUNT_UPDATE);
         for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
             ggl.onPlayerDetectsCheckpoint();

@@ -163,8 +163,8 @@
             app:srcCompat="@drawable/jump_arrow"
             android:id="@+id/jumpBtn"
             android:background="@drawable/jump_arrow"
-            android:layout_alignParentBottom="true"
-            android:layout_toEndOf="@+id/textView3" />
+            android:layout_below="@+id/moveForwardBtn"
+            android:layout_toEndOf="@+id/checkpointTextView" />
 
     </RelativeLayout>
 </FrameLayout>

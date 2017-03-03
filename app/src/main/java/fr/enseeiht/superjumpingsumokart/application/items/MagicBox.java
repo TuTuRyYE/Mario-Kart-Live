@@ -74,6 +74,6 @@ public class MagicBox extends Item {
 
     @Override
     public void assignResource(ImageButton ib) {
-        ib.setImageResource(R.drawable.magicbox);
+        ib.setBackgroundResource(R.drawable.magicbox);
     }
 }

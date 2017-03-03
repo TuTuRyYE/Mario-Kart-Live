@@ -150,7 +150,7 @@ public class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
                             Log.d(DETECTION_TASK_TAG, "Distance to marker KANJI : " + Float.toString(-ARToolKit.getInstance().queryMarkerTransformation(id)[14]));
                             if (-ARToolKit.getInstance().queryMarkerTransformation(id)[14] < 350 && (SystemClock.elapsedRealtime() - timeSinceLastKanji) > 3000) {
                                 timeSinceLastKanji = SystemClock.elapsedRealtime();
-                                GUI_GAME.checkpointDeteted();
+                                GUI_GAME.checkpointDetected();
                                 Log.d(DETECTION_TASK_TAG, "Checkpoint validated");
 
                             }
