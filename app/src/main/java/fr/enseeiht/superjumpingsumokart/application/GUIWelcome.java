@@ -26,7 +26,7 @@ import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 /**
  * @author Romain Verset
  * The activity used as home screen for the application. From there it is possible to connect to a
- * drone, to launch a race, to edit circuits and to connect with another SuperJumpingSumoKart
+ * drone, to launch a race, to manage circuits and to connect with another SuperJumpingSumoKart
  * application using Bluetooth.
  */
 public class GUIWelcome extends Activity {
@@ -36,15 +36,52 @@ public class GUIWelcome extends Activity {
         ARSDK.loadSDKLibs();
     }
 
-    public final static int DEVICE_SERVICE_CONNECTED = 0;
-    public final static int DEVICE_SERVICE_DISCONNECTED = 1;
-    public final static int BLUETOOTH_SERVER_READY = 3;
-    public final static int BLUETOOTH_SERVER_GOT_CONNECTION = 4;
-    public final static int BLUETOOTH_CLIENT_JOINED_GAME = 5;
-    public final static int BLUETOOTH_SERVER_SHUT_DOWN = 6;
-    public final static int BLUETOOTH_CLIENT_SHUT_DOWN = 7;
-    public final static int CIRCUIT_RECEIVED_WHEN_CLIENT = 8;
+    /**
+     * The logging tag. Useful for debugging.
+     */
+    private final static String GUI_WELCOME_TAG = "GUIWelcome";
 
+    /**
+     * Message for {@link #GUI_WELCOME_HANDLER}.
+     */
+    public final static int DEVICE_SERVICE_CONNECTED = 0;
+
+    /**
+     * Message for {@link #GUI_WELCOME_HANDLER}.
+     */public final static int DEVICE_SERVICE_DISCONNECTED = 1;
+
+    /**
+     * Message for {@link #GUI_WELCOME_HANDLER}.
+     */
+    public final static int BLUETOOTH_SERVER_READY = 3;
+
+    /**
+     * Message for {@link #GUI_WELCOME_HANDLER}.
+     */
+    public final static int BLUETOOTH_SERVER_GOT_CONNECTION = 4;
+
+    /**
+     * Message for {@link #GUI_WELCOME_HANDLER}.
+     */
+    public final static int BLUETOOTH_CLIENT_JOINED_GAME = 5;
+
+    /**
+     * Message for {@link #GUI_WELCOME_HANDLER}.
+     */
+    public final static int BLUETOOTH_SERVER_SHUT_DOWN = 6;
+
+    /**
+     * Message for {@link #GUI_WELCOME_HANDLER}.
+     */
+    public final static int BLUETOOTH_CLIENT_SHUT_DOWN = 7;
+
+    /**
+     * Message for {@link #GUI_WELCOME_HANDLER}.
+     */
+    public final static int CIRCUIT_RECEIVED = 8;
+    /**
+     * Handler used so that other {@link Thread} can communicate with the {@Activity} thread.
+     */
     public final Handler GUI_WELCOME_HANDLER = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -75,7 +112,7 @@ public class GUIWelcome extends Activity {
                 case BLUETOOTH_CLIENT_SHUT_DOWN:
                     onClientShutDown();
                 break;
-                case CIRCUIT_RECEIVED_WHEN_CLIENT :
+                case CIRCUIT_RECEIVED:
                     enableStartARaceButton();
                     break;
                 default :
@@ -83,10 +120,6 @@ public class GUIWelcome extends Activity {
             }
         }
     };
-    /**
-     * The logging tag. Useful for debugging.
-     */
-    private final static String GUI_WELCOME_TAG = "GUIWelcome";
 
     // Buttons in the GUI
     private Button startRaceBtn;
@@ -97,11 +130,29 @@ public class GUIWelcome extends Activity {
     private Button exitBtn;
     // Connection and device variables
     private WifiConnector wifiConnector = null;
+
+    /**
+     * Manages the bluetooth socket if on server side. If on client side, is null.
+     */
     private BluetoothServer server = null;
+
+    /**
+     * Manages the bluetooth socket if on client side. If on server side, is null.
+     */
     private BluetoothClient client = null;
+
+    /**
+     * The connection with the drone device.
+     */
     private ARDiscoveryDeviceService currentDeviceService = null;
+
+    /**
+     * The list of drone connections available. Contains only one element if connected on the WiFi
+     * hotspot of a drone.
+     */
     private List<ARDiscoveryDeviceService> devicesList = new ArrayList<>();
 
+    // Inner state variables.
     private boolean isServer = true;
     private boolean serverHosting, clientConnected;
 
@@ -239,12 +290,18 @@ public class GUIWelcome extends Activity {
     /**
      * Default action to do when the exit button is clicked.
      * It closes the eventual connection between the application and the drone and cleans
-     * all variables used to avoid memory leak.
+     * all variables used to avoid memory leak. It also closes all bluetooth connections.
      */
     private void exitBtnAction() {
         if (wifiConnector != null) {
             wifiConnector.stop();
             wifiConnector = null;
+        }
+        if (client != null) {
+            client.cancel();
+        }
+        if (server != null) {
+            server.cancel();
         }
         currentDeviceService = null;
         devicesList = null;

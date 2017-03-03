@@ -107,9 +107,9 @@ public class BluetoothClient extends Thread {
     }
 
     /**
-     * Closes the connection.
+     * Closes the connection on the client side.
      */
-    private void cancel() {
+    public void cancel() {
         Log.d(BLUETOOTH_CLIENT_TAG, "Cancel called.");
         try {
             if (btSocket != null) {
