@@ -329,7 +329,7 @@ public class GUIGame extends Activity implements GameListener {
                     ArrayList<DetectionTask.Symbol> markers = Circuit.getInstance().getMarkers();
                     // Send the object on the next marker forward if it is a long touch
                     if (motionEvent.getDownTime() > 1000 && markers.size() > 1) {
-                        Log.d(GUI_GAME_TAG, "sentTrapBtn long touch");
+                        Log.d(GUI_GAME_TAG, "sendTrapBtn long touch");
                         // Get the list of markers and the last marker seen
                         // Found the next marker on the circuit
                         int lastMarkerSeenIndex = markers.indexOf(lastMarkerSeen);
