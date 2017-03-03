@@ -13,6 +13,9 @@ import fr.enseeiht.superjumpingsumokart.application.DroneController;
 
 public class NullItem extends Item {
 
+    /**
+     * Name of the {@link Item}.
+     */
     private final static String NAME = "nullItem";
 
     /**

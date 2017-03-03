@@ -20,8 +20,7 @@ public abstract class Item {
 
 
     /**
-     * Default constructor of the class {@link Item}. (Matthieu Michel - 02/02/2017).
-     *
+     * Default constructor of the class {@link Item}.
      * @param name name given to the Item.
      */
     public Item(String name) {
@@ -29,36 +28,30 @@ public abstract class Item {
     }
 
     /**
-     * Method used to use an {@link Item}. (Matthieu Michel - 15/02/2017)
-     *
+     * Method used to use an {@link Item}.
      * @param droneController using the {@link Item}.
      * @return True if the item has been used, false otherwise.
      */
     public abstract boolean useItem(DroneController droneController);
 
     /**
-     * Method used to apply the effect of an {@link Item} on a drone via its controller. (Matthieu Michel - 02/02/2017).
+     * Method used to apply the effect of an {@link Item} on a drone via its controller.
      */
     public abstract void applyEffect(DroneController droneController);
 
     /**
-     * Put the object image on a {@link ImageButton} (Romain Verset - 02/02/2017).
-     *
+     * Put the object image on a {@link ImageButton}.
      * @param ib The {@link ImageButton} on which the image has to be displayed.
      */
     public abstract void assignResource(ImageButton ib);
 
 
     /**
-     * Get the name of the Item. (Matthieu Michel - 02/02/2017).
-     *
+     * Get the name of the Item.
      * @return name of the Item.
      */
     public String getName() {
         return this.NAME;
     }
-
-
-
 
 }

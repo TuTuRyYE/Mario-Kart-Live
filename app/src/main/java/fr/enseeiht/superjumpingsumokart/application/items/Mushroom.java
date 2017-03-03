@@ -13,10 +13,19 @@ import fr.enseeiht.superjumpingsumokart.application.DroneController;
 
 public class Mushroom extends Item {
 
+    /**
+     * The logging tag. Useful for debugging.
+     */
     private final static String ITEM_TAG = "Item.Mushroom";
 
+    /**
+     * Name of the {@link Item}.
+     */
     private final static String NAME = "mushroom";
 
+    /**
+     * Default constructor of the class {@link Item}.
+     */
     public Mushroom() {
         super(NAME);
     }
