@@ -19,16 +19,19 @@ public class MagicBox extends Item {
      * The logging tag. Useful for debugging.
      */
     private final static String ITEM_TAG = "Item.MagicBox";
+
     /**
      * Name of the {@link Item}.
      */
     private final static String NAME = "magicBox";
 
+    /**
+     * Reference of the {@link GUIGame}.
+     */
     private final GUIGame GUI_GAME;
 
     /**
-     * Default constructor of the class {@link Item}. (Matthieu Michel - 02/02/2017).
-     *
+     * Default constructor of the class {@link Item}.
      */
     public MagicBox(GUIGame guiGame) {
         super(NAME);

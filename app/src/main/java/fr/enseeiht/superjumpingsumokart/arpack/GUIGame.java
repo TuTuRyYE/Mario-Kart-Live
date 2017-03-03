@@ -31,7 +31,6 @@ import org.artoolkit.ar.base.ARToolKit;
 import org.artoolkit.ar.base.AndroidUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import fr.enseeiht.superjumpingsumokart.R;
 import fr.enseeiht.superjumpingsumokart.application.circuit.Circuit;
@@ -246,7 +245,7 @@ public class GUIGame extends Activity implements GameListener {
         lapsTextView = (TextView) findViewById(R.id.lapsTextView);
 
 
-        // Defines action listener
+        // Defines action listeners
         turnLeftBtn.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -315,37 +314,31 @@ public class GUIGame extends Activity implements GameListener {
         sendTrapBtn.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                // Send the object on the next marker forward if it is a long touch
-                if (motionEvent.getDownTime() > 500) {
-                    Log.d(GUI_GAME_TAG, "sentTrapBtn long touch");
-                    // Get the list of markers and the last marker seen
-                        HashMap<Integer, DetectionTask.Symbol> markers = Circuit.getInstance().getMarkers();
-                        DetectionTask.Symbol lastMarkerSeen = controller.getDrone().getLastMarkerSeen();
-                    // Found the next marker on the circuit
-                        Boolean found = false;
-                        DetectionTask.Symbol nextMarker = null;
-                        int i=1;
-                        while (!found && i<markers.size()) {
-                            if (markers.get(i).equals(lastMarkerSeen)) {
-                                nextMarker = markers.get(i + 1);
-                                found = true;
-                            }
-                            i++;
-                        }
-                    // if there is no marker forward, we put the item on the first marker
-                        if (nextMarker == null) {
-                            nextMarker = markers.get(1);
-                        }
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    DetectionTask.Symbol lastMarkerSeen = controller.getDrone().getLastMarkerSeen();
+                    ArrayList<DetectionTask.Symbol> markers = Circuit.getInstance().getMarkers();
+                    // Send the object on the next marker forward if it is a long touch
+                    if (motionEvent.getDownTime() > 1000) {
+                        Log.d(GUI_GAME_TAG, "sentTrapBtn long touch");
+                        // Get the list of markers and the last marker seen
+                        // Found the next marker on the circuit
+                        int lastMarkerSeenIndex = markers.indexOf(lastMarkerSeen);
+                        int nextMarkerIndex = (lastMarkerSeenIndex + 1 == markers.size()) ? 0 : lastMarkerSeenIndex + 1;
+                        DetectionTask.Symbol nextMarker = markers.get(nextMarkerIndex);
                         Item item = controller.getDrone().getCurrentItem();
-                        controller.useItem();
-                        for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
-                            ggl.onItemUsed(nextMarker, item);
+                        if (controller.useItem()) {
+                            for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
+                                ggl.onItemUsed(nextMarker, item);
+                            }
                         }
-                } else {
-                    Item item = controller.getDrone().getCurrentItem();
-                    controller.useItem();
-                    for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
-                        ggl.onItemUsed(controller.getDrone().getLastMarkerSeen(), item);
+                    } else {
+                        Log.d(GUI_GAME_TAG, "Send trap button released, short press.");
+                        Item item = controller.getDrone().getCurrentItem();
+                        if (controller.useItem()) {
+                            for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
+                                ggl.onItemUsed(lastMarkerSeen, item);
+                            }
+                        }
                     }
                 }
                 return true;
@@ -355,7 +348,7 @@ public class GUIGame extends Activity implements GameListener {
             @Override
             public void onClick(View v) {
                 Log.d(GUI_GAME_TAG, "Jump pressed.");
-                controller.boost();
+                controller.longJump();
             }
         });
     }
