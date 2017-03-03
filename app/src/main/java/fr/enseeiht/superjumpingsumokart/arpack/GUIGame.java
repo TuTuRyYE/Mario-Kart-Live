@@ -133,7 +133,7 @@ public class GUIGame extends Activity implements GameListener {
     /**
      * The area to display the video stream from the device.
      */
-    private FrameLayout mainLayout, animationLayout;
+    private FrameLayout mainLayout, animationLayout/*, magicBoxSpinnerLayout*/;
     private SurfaceView cameraView;
     private GLSurfaceView glView;
     private ItemRenderer renderer;
@@ -189,11 +189,10 @@ public class GUIGame extends Activity implements GameListener {
                     adrs.start();
                     break;
                 case ANIMATE_MAGIC_BOX :
-                    sendTrapBtn.setBackgroundResource(R.drawable.magic_box_animation);
-                    AnimationDrawable admb = (AnimationDrawable) sendTrapBtn.getBackground();
+                   /* magicBoxSpinnerLayout.setBackgroundResource(R.drawable.magic_box_animation);
+                    AnimationDrawable admb = (AnimationDrawable) magicBoxSpinnerLayout.getBackground();
                     admb.start();
-                    displayTrap();
-                    break;
+                    break;*/
                 default:
                     break;
             }
@@ -245,6 +244,7 @@ public class GUIGame extends Activity implements GameListener {
         // Initializes the views of the GUI
         mainLayout = (FrameLayout) findViewById(R.id.mainLayout);
         animationLayout = (FrameLayout) findViewById(R.id.animationLayout);
+        //magicBoxSpinnerLayout = (FrameLayout) findViewById(R.id.magicBoxSpinnerLayout);
         ImageButton turnLeftBtn = (ImageButton) findViewById(R.id.turnLeftBtn);
         ImageButton turnRightBtn = (ImageButton) findViewById(R.id.turnRightBtn);
         ImageButton moveBackwardBtn = (ImageButton) findViewById(R.id.moveBackwardBtn);
@@ -327,16 +327,17 @@ public class GUIGame extends Activity implements GameListener {
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     DetectionTask.Symbol lastMarkerSeen = controller.getDrone().getLastMarkerSeen();
                     ArrayList<DetectionTask.Symbol> markers = Circuit.getInstance().getMarkers();
+                    long pressDuration = motionEvent.getEventTime() - motionEvent.getDownTime();
                     // Send the object on the next marker forward if it is a long touch
-                    if (motionEvent.getDownTime() > 1000 && markers.size() > 1) {
-                        Log.d(GUI_GAME_TAG, "sendTrapBtn long touch");
+                    if (pressDuration > 1000 && markers.size() > 1) {
+                        Log.d(GUI_GAME_TAG, "sentTrapBtn long touch");
                         // Get the list of markers and the last marker seen
                         // Found the next marker on the circuit
                         int lastMarkerSeenIndex = markers.indexOf(lastMarkerSeen);
                         int nextMarkerIndex = (lastMarkerSeenIndex + 1 == markers.size()) ? 0 : lastMarkerSeenIndex + 1;
                         DetectionTask.Symbol nextMarker = markers.get(nextMarkerIndex);
                         Item item = controller.getDrone().getCurrentItem();
-                        if (controller.useItem()) {
+                        if (controller.useItem(nextMarker)) {
                             for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
                                 ggl.onItemUsed(nextMarker, item);
                             }
@@ -344,7 +345,7 @@ public class GUIGame extends Activity implements GameListener {
                     } else {
                         Log.d(GUI_GAME_TAG, "Send trap button released, short press.");
                         Item item = controller.getDrone().getCurrentItem();
-                        if (controller.useItem()) {
+                        if (controller.useItem(lastMarkerSeen)) {
                             for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
                                 ggl.onItemUsed(lastMarkerSeen, item);
                             }
@@ -445,7 +446,8 @@ public class GUIGame extends Activity implements GameListener {
     }
 
     /**
-     * TODO
+     * Initialises the camera surface view.
+     * Finds the surface view in the layout and adds necessary callbacks to the it.
      */
     private void initCameraSurfaceView() {
         cameraView = (SurfaceView) findViewById(R.id.cameraSurfaceView);
@@ -471,7 +473,9 @@ public class GUIGame extends Activity implements GameListener {
     }
 
     /**
-     * TODO
+     * Initialises the OpenGL surface view.
+     * Instantiates a {@link GLSurfaceView} and configures it. Also provides the renderer to the OpenGL surface view
+     * and add it in the layout of the activity.
      */
     private void initGLSurfaceView() {
         // Create the GL view
@@ -505,11 +509,18 @@ public class GUIGame extends Activity implements GameListener {
         currentFrame = frame.getByteData();
         UPDATER.sendEmptyMessage(RECEIVE_FRAME);
     }
-    
+
+    /**
+     * @return The {@link DroneController} used by the activity.
+     */
     public DroneController getController() {
         return controller;
     }
 
+    /**
+     * Register a {@link GuiGameListener}so that it can be notified when needed.
+     * @param guiGameListener The listener to register.
+     */
     public void registerGuiGameListener(GuiGameListener guiGameListener) {
         GUI_GAME_LISTENERS.add(guiGameListener);
     }
@@ -552,31 +563,46 @@ public class GUIGame extends Activity implements GameListener {
         controller.setRunning(true);
     }
 
-
+    /**
+     * TODO
+     */
     public void notifyDefeat() {
         if (!game.isFinished()) {
             UPDATER.sendEmptyMessage(DEFEAT);
         }
     }
 
+    /**
+     * TODO
+     */
     public void notifyVictory() {
         if (!game.isFinished()) {
             UPDATER.sendEmptyMessage(VICTORY);
         }
     }
 
+    /**
+     * TODO
+     * @param symbol
+     */
     public void touchedSymbol(DetectionTask.Symbol symbol) {
         for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
             ggl.onSymbolTouched(symbol);
         }
     }
 
+    /**
+     * TODO
+     */
     public void arrivalLineDetected() {
         for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
             ggl.onPlayerDetectsArrivalLine();
         }
     }
 
+    /**
+     * TODO
+     */
     public void checkpointDetected() {
         UPDATER.sendEmptyMessage(CHECKPOINT_COUNT_UPDATE);
         for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
@@ -584,6 +610,9 @@ public class GUIGame extends Activity implements GameListener {
         }
     }
 
+    /**
+     * @return The renderer used in conjunction with the {@link GLSurfaceView} of the activity.
+     */
     public ItemRenderer getRenderer() {
         return renderer;
     }

@@ -5,6 +5,7 @@ import android.widget.ImageButton;
 
 import fr.enseeiht.superjumpingsumokart.R;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
+import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 
 /**
@@ -39,7 +40,7 @@ public class MagicBox extends Item {
     }
 
     @Override
-    public boolean useItem(DroneController droneController) {
+    public boolean useItem(DroneController droneController, DetectionTask.Symbol symbol) {
         return true;
     }
 
@@ -74,6 +75,6 @@ public class MagicBox extends Item {
 
     @Override
     public void assignResource(ImageButton ib) {
-        ib.setBackgroundResource(R.drawable.magicbox);
+        ib.setImageResource(R.drawable.magicbox);
     }
 }

@@ -80,7 +80,7 @@ public class GUIWelcome extends Activity {
      */
     public final static int CIRCUIT_RECEIVED = 8;
     /**
-     * Handler used so that other {@link Thread} can communicate with the {@Activity} thread.
+     * Handler used so that other {@link Thread} can communicate with the {@link Activity} thread.
      */
     public final Handler GUI_WELCOME_HANDLER = new Handler() {
         @Override
@@ -108,10 +108,10 @@ public class GUIWelcome extends Activity {
                     break;
                 case BLUETOOTH_SERVER_SHUT_DOWN:
                     onServerShutDown();
-                break;
+                    break;
                 case BLUETOOTH_CLIENT_SHUT_DOWN:
                     onClientShutDown();
-                break;
+                    break;
                 case CIRCUIT_RECEIVED:
                     enableStartARaceButton();
                     break;
@@ -126,8 +126,6 @@ public class GUIWelcome extends Activity {
     private ToggleButton wifiConnectionBtn;
     private Button btHostBtn;
     private Button btJoinBtn;
-    private Button setCircuitBtn;
-    private Button exitBtn;
     // Connection and device variables
     private WifiConnector wifiConnector = null;
 
@@ -169,8 +167,8 @@ public class GUIWelcome extends Activity {
         wifiConnectionBtn.setEnabled(false);
         btHostBtn = (Button) findViewById(R.id.connectBluetoothBtn);
         btJoinBtn = (Button) findViewById(R.id.joinBluetoothBtn);
-        setCircuitBtn = (Button) findViewById(R.id.setCircuitBtn);
-        exitBtn = (Button) findViewById(R.id.exitBtn);
+        Button setCircuitBtn = (Button) findViewById(R.id.setCircuitBtn);
+        Button exitBtn = (Button) findViewById(R.id.exitBtn);
         // Defines action listener
         startRaceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -208,12 +206,18 @@ public class GUIWelcome extends Activity {
                 exitBtnAction();
             }
         });
+
+        btHostBtn.setBackgroundResource(android.R.drawable.btn_default);
+        btJoinBtn.setBackgroundResource(android.R.drawable.btn_default);
+        wifiConnectionBtn.setBackgroundResource(android.R.drawable.btn_default);
+        exitBtn.setBackgroundResource(android.R.drawable.btn_default);
+        setCircuitBtn.setBackgroundResource(android.R.drawable.btn_default);
+        startRaceBtn.setBackgroundResource(android.R.drawable.btn_default);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        btHostBtn.setBackgroundResource(android.R.drawable.btn_default);
         if (currentDeviceService == null) {
             disableWifiConnectionBtn();
         }
@@ -234,6 +238,7 @@ public class GUIWelcome extends Activity {
             Toast.makeText(GUIWelcome.this, R.string.no_drone_connected, Toast.LENGTH_SHORT).show();
         }
     }
+
     /**
      * Enables to connect with a Jumping Sumo drone.
      * <b>Your cell phone has to be connected to the access point provided by the Jumping Sumo drone.<b/>
@@ -251,6 +256,7 @@ public class GUIWelcome extends Activity {
             Log.d(GUI_WELCOME_TAG, "Unable to bind the device service");
         }
     }
+
     /**
      * Enables to connect the phone with an other phone in bluetooth to launch multiplayer mode.
      * <b> Create a bluetooth server on your cell.</b>
@@ -264,9 +270,10 @@ public class GUIWelcome extends Activity {
             onServerShutDown();
         }
     }
+
     /**
      * Enables to connect your phone to a bluetooth server to launch multiplayer mode.
-     * <b> Join a bluetooth server </b>
+     * Join a bluetooth server.
      */
     private void btJoinBtnAction() {
         if (!clientConnected) {
@@ -278,15 +285,16 @@ public class GUIWelcome extends Activity {
             onClientShutDown();
         }
     }
+
     /**
-     * Enables to choose a circuit.
+     * Sends to a {@link GUICircuit} activity in order to manage circuits.
      */
     private void setCircuitBtnAction() {
         Intent i = new Intent(GUIWelcome.this, GUICircuit.class);
         Log.d(GUI_WELCOME_TAG, "Launching a GUICircuit Activity...");
         startActivity(i);
-
     }
+
     /**
      * Default action to do when the exit button is clicked.
      * It closes the eventual connection between the application and the drone and cleans
@@ -309,6 +317,14 @@ public class GUIWelcome extends Activity {
     }
 
     /**
+     * Enable the WIFI connection button.
+     * The button is allowed when the phone and the drone are on the same WiFi network.
+     */
+    private void enableWifiConnectionBtn() {
+        wifiConnectionBtn.setEnabled(true);
+    }
+
+    /**
      * Disable the WIFI connection button.
      * The button is allowed when the phone and the drone are on the same WiFi network.
      */
@@ -318,11 +334,12 @@ public class GUIWelcome extends Activity {
     }
 
     /**
-     * Enable the WIFI connection button.
-     * The button is allowed when the phone and the drone are on the same WiFi network.
+     * Enable the player to click on start a race.
+     * Used only when two players are conneced via Bluetooth. In this case client can not click on
+     * {@link GUIWelcome#startRaceBtn} while the server has not sent its {@link fr.enseeiht.superjumpingsumokart.application.circuit.Circuit#circuitInstance}.
      */
-    private void enableWifiConnectionBtn() {
-        wifiConnectionBtn.setEnabled(true);
+    private void enableStartARaceButton() {
+        startRaceBtn.setEnabled(true);
     }
 
     /**
@@ -362,6 +379,7 @@ public class GUIWelcome extends Activity {
         clientConnected = false;
     }
 
+
     /**
      * Callback called when the {@link BluetoothServer} is no longer available.
      */
@@ -372,13 +390,5 @@ public class GUIWelcome extends Activity {
             server = null;
         }
         serverHosting = false;
-    }
-
-
-    /**
-     * Enable the player to click on start a race.
-     */
-    private void enableStartARaceButton() {
-        startRaceBtn.setEnabled(true);
     }
 }

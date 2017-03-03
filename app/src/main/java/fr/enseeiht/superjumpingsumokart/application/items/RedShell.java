@@ -5,6 +5,7 @@ import android.widget.ImageButton;
 
 import fr.enseeiht.superjumpingsumokart.R;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
+import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 
 /**
@@ -38,7 +39,7 @@ public class RedShell extends Item {
     }
 
     @Override
-    public boolean useItem(DroneController droneController) {
+    public boolean useItem(DroneController droneController, DetectionTask.Symbol symbol) {
         Log.d(ITEM_TAG, "A red shell has been thrown!");
         return true;
     }
@@ -51,6 +52,6 @@ public class RedShell extends Item {
 
     @Override
     public void assignResource(ImageButton ib) {
-        ib.setBackgroundResource(R.drawable.redshell);
+        ib.setImageResource(R.drawable.redshell);
     }
 }

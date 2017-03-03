@@ -2,6 +2,7 @@ package fr.enseeiht.superjumpingsumokart.application.circuit;
 
 import android.content.Context;
 
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 
 import android.view.View;
@@ -18,42 +19,43 @@ import fr.enseeiht.superjumpingsumokart.R;
  * Adapter for the ListView of GUICreateCircuit and GUIModifyCircuit.
  */
 
-public class MarkerAdapter extends ArrayAdapter<String> {
+class MarkerAdapter extends ArrayAdapter<String> {
 
     /**
      * Constructor for a MarkerAdapter.
      * @param context the context for the adapter.
      * @param markers the list of markers to display.
      */
-    public MarkerAdapter(Context context, ArrayList<String> markers) {
+    MarkerAdapter(Context context, ArrayList<String> markers) {
         super(context, 0, markers);
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
 
         // Set the layout for the View
-            if(convertView == null){
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_marker,parent, false);
-            }
+        if(convertView == null){
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_marker,parent, false);
+        }
 
         // Set the viewHolder
-            MarkerViewHolder viewHolder= (MarkerViewHolder) convertView.getTag();
-            if(viewHolder == null){
-                viewHolder = new MarkerViewHolder();
-                viewHolder.id = (TextView) convertView.findViewById(R.id.id);
-                convertView.setTag(viewHolder);
-            }
+        MarkerViewHolder viewHolder= (MarkerViewHolder) convertView.getTag();
+        if(viewHolder == null){
+            viewHolder = new MarkerViewHolder();
+            viewHolder.id = (TextView) convertView.findViewById(R.id.id);
+            convertView.setTag(viewHolder);
+        }
 
         // Set viewHolder display
-            viewHolder.id.setHeight(50);
-            viewHolder.id.setMinHeight(50);
+        viewHolder.id.setHeight(50);
+        viewHolder.id.setMinHeight(50);
 
         // Get the item [position] of the listView
-            String st = getItem(position);
+        String st = getItem(position);
 
         // Fill the View
-            viewHolder.id.setText(st);
+        viewHolder.id.setText(st);
 
         return convertView;
     }

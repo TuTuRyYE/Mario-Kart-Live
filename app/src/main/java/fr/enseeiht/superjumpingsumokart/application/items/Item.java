@@ -3,6 +3,7 @@ package fr.enseeiht.superjumpingsumokart.application.items;
 import android.widget.ImageButton;
 
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
+import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
  * @author Matthieu Michel.
@@ -30,9 +31,10 @@ public abstract class Item {
     /**
      * Method used to use an {@link Item}.
      * @param droneController using the {@link Item}.
+     * @param marker The marker on which the item shoulb be used (if the item requires a marker).
      * @return True if the item has been used, false otherwise.
      */
-    public abstract boolean useItem(DroneController droneController);
+    public abstract boolean useItem(DroneController droneController, DetectionTask.Symbol marker);
 
     /**
      * Method used to apply the effect of an {@link Item} on a drone via its controller.

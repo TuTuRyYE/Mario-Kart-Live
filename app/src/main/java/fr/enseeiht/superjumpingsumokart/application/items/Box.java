@@ -33,10 +33,9 @@ public class Box extends Item {
     }
 
     @Override
-    public boolean useItem(DroneController droneController) {
-        DetectionTask.Symbol lastMarkerSeen = droneController.getDrone().getLastMarkerSeen();
-        if (lastMarkerSeen != null) {
-            Circuit.getInstance().addObject(lastMarkerSeen, this);
+    public boolean useItem(DroneController controller, DetectionTask.Symbol symbol) {
+        if (symbol != null) {
+            Circuit.getInstance().addObject(symbol, this);
             Log.d(ITEM_TAG, "A TNT box has been put on the circuit");
             return true;
         } else {
@@ -53,6 +52,6 @@ public class Box extends Item {
 
     @Override
     public void assignResource(ImageButton ib) {
-        ib.setBackgroundResource(R.drawable.redbox);
+        ib.setImageResource(R.drawable.redbox);
     }
 }

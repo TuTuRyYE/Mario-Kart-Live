@@ -17,7 +17,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/jsbg"
+        android:background="@drawable/jsbg2"
         android:layout_marginStart="5px">
 
         <FrameLayout
@@ -163,8 +163,9 @@
             app:srcCompat="@drawable/jump_arrow"
             android:id="@+id/jumpBtn"
             android:background="@drawable/jump_arrow"
-            android:layout_below="@+id/moveForwardBtn"
-            android:layout_toEndOf="@+id/checkpointTextView" />
+            android:layout_below="@+id/mainLayout"
+            android:layout_toStartOf="@+id/checkpointTextView"
+            android:layout_marginEnd="34dp" />
 
     </RelativeLayout>
 </FrameLayout>

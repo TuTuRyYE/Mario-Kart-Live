@@ -4,6 +4,8 @@
     <string name="title_activity_gui_game">SuperJumpingSumoKart</string>
     <string name="title_activity_gui_welcome">SuperJumpingSumoKart - Home</string>
 
+    <string name="home_screen_title">Super Jumping Sumo Kart</string>
+
     <string name="set_circuit_btn">Select Circuit</string>
     <string name="start_race_btn">Start a race</string>
     <string name="connect_wifi_btn">Connect to a Jumping Sumo</string>

@@ -82,6 +82,24 @@ public final class BluetoothCommunication extends Thread implements GameListener
     }
 
     /**
+     * Initialises the singleton instance of BluetoothCommunication.
+     * @param socket Socket used for communications.
+     */
+    static void initInstance(BluetoothSocket socket, GUIWelcome guiWelcome) {
+        if (btComInstance == null) {
+            btComInstance = new BluetoothCommunication(socket, guiWelcome);
+        }
+    }
+
+    /**
+     * Get the instance of BluetoothCommunication
+     * @return The singleton instance of BluetoothCommunication.
+     */
+    public static BluetoothCommunication getInstance() {
+        return btComInstance;
+    }
+
+    /**
      * Listening on the input stream continuously
      */
     public void run() {
@@ -107,6 +125,21 @@ public final class BluetoothCommunication extends Thread implements GameListener
                 cancel();
                 break;
             }
+        }
+    }
+
+    /**
+     * Closes the connection.
+     */
+    public void cancel() {
+        try {
+            isRunning = false;
+            if (BT_SOCKET != null) {
+                BT_SOCKET.close();
+            }
+            BLUETOOTH_COMMUNICATION_LISTENERS.clear();
+        } catch (IOException e) {
+            Log.d(BLUETOOTH_COMMUNICATION_TAG, "IOException while closing socket : " + e.getMessage());
         }
     }
 
@@ -165,7 +198,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
                     String symbolsType = hashSplit[1];
                     DetectionTask.Symbol symbol = DetectionTask.Symbol.valueOf(symbolsType);
                     Circuit.getInstance().addMarker(symbol);
-                    }
+                }
                 GUI_WELCOME.GUI_WELCOME_HANDLER.sendEmptyMessage(GUIWelcome.CIRCUIT_RECEIVED);
                 for (BluetoothCommunicationListener bcl : BLUETOOTH_COMMUNICATION_LISTENERS) {
                     Log.d(BLUETOOTH_COMMUNICATION_TAG,"boucle for each circuit recu");
@@ -198,7 +231,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
     }
 
     /**
-     * Write a message on the outputsteam of the socket.
+     * Write a message on the output steam of the socket.
      * @param bytes The bytes of the message.
      */
     private void write(byte[] bytes) {
@@ -207,21 +240,6 @@ public final class BluetoothCommunication extends Thread implements GameListener
         } catch (IOException e) {
             Log.d(BLUETOOTH_COMMUNICATION_TAG, "IOException : + " + e.getMessage());
             cancel();
-        }
-    }
-
-    /**
-     * Closes the connection.
-     */
-    public void cancel() {
-        try {
-            isRunning = false;
-            if (BT_SOCKET != null) {
-                BT_SOCKET.close();
-            }
-            BLUETOOTH_COMMUNICATION_LISTENERS.clear();
-        } catch (IOException e) {
-            Log.d(BLUETOOTH_COMMUNICATION_TAG, "IOException while closing socket : " + e.getMessage());
         }
     }
 
@@ -245,6 +263,18 @@ public final class BluetoothCommunication extends Thread implements GameListener
      */
     private void registerCommunicationBTListener(BluetoothCommunicationListener btListener) {
         BLUETOOTH_COMMUNICATION_LISTENERS.add(btListener);
+    }
+
+    /**
+     * Set the current {@link Game} associated to the BluetoothCommunication
+     * @param game listened by {@link BluetoothCommunication}.
+     */
+    public void setGame(Game game) {
+        if (game != null) {
+            if (!BLUETOOTH_COMMUNICATION_LISTENERS.contains(game)) {
+                registerCommunicationBTListener(game);
+            }
+        }
     }
 
     // BluetoothCommunication Listeners methods
@@ -342,35 +372,5 @@ public final class BluetoothCommunication extends Thread implements GameListener
         // Send the message
         write(dateBytes);
         Log.d(BLUETOOTH_COMMUNICATION_TAG, "onStartRace sent to the other phone");
-    }
-
-    /**
-     * Initialises the singleton instance of BluetoothCommunication.
-     * @param socket Socket used for communications.
-     */
-    static void initInstance(BluetoothSocket socket, GUIWelcome guiWelcome) {
-        if (btComInstance == null) {
-            btComInstance = new BluetoothCommunication(socket, guiWelcome);
-        }
-    }
-
-    /**
-     * Get the instance of BluetoothCommunication
-     * @return The singleton instance of BluetoothCommunication.
-     */
-    public static BluetoothCommunication getInstance() {
-        return btComInstance;
-    }
-
-    /**
-     * Set the current {@link Game} associated to the BluetoothCommunication
-     * @param game listened by {@link BluetoothCommunication}.
-     */
-    public void setGame(Game game) {
-        if (game != null) {
-            if (!BLUETOOTH_COMMUNICATION_LISTENERS.contains(game)) {
-                registerCommunicationBTListener(game);
-            }
-        }
     }
 }

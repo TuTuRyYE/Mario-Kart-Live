@@ -75,4 +75,5 @@
     <item android:drawable="@drawable/anim_redshell_00072" android:duration="33"/>
     <item android:drawable="@drawable/anim_redshell_00073" android:duration="33"/>
     <item android:drawable="@drawable/anim_redshell_00074" android:duration="33"/>
+    <item android:drawable="@drawable/alpha_frame_640x480" android:duration="33"/>
 </animation-list>

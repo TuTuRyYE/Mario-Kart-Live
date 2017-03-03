@@ -117,6 +117,14 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener {
     }
 
     /**
+     * Add a {@link GameListener}.
+     * @param gameListener the listener to add.
+     */
+    private void registerGameListener(GameListener gameListener) {
+        GAME_LISTENERS.add(gameListener);
+    }
+
+    /**
      * Check the current status of the {@link Game}.
      * @return true if the {@link Game} if started otherwise false.
      */
@@ -133,11 +141,11 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener {
     }
 
     /**
-     * Add a {@link GameListener}.
-     * @param gameListener the listener to add.
+     * Set the drone
+     * @param drone the drone
      */
-    private void registerGameListener(GameListener gameListener) {
-        GAME_LISTENERS.add(gameListener);
+    public void setDrone(Drone drone) {
+        this.drone = drone;
     }
 
     // GuiGameListener methods
@@ -303,13 +311,5 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener {
     @Override
     public void onCircuitReceived() {
         checkReadyAndStartRace();
-    }
-
-    /**
-     * Set the drone
-     * @param drone the drone
-     */
-    public void setDrone(Drone drone) {
-        this.drone = drone;
     }
 }
