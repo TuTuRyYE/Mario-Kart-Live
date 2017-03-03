@@ -82,24 +82,6 @@ public final class BluetoothCommunication extends Thread implements GameListener
     }
 
     /**
-     * Initialises the singleton instance of BluetoothCommunication.
-     * @param socket Socket used for communications.
-     */
-    static void initInstance(BluetoothSocket socket, GUIWelcome guiWelcome) {
-        if (btComInstance == null) {
-            btComInstance = new BluetoothCommunication(socket, guiWelcome);
-        }
-    }
-
-    /**
-     * Get the instance of BluetoothCommunication
-     * @return The singleton instance of BluetoothCommunication.
-     */
-    public static BluetoothCommunication getInstance() {
-        return btComInstance;
-    }
-
-    /**
      * Listening on the input stream continuously
      */
     public void run() {
@@ -265,6 +247,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
         BLUETOOTH_COMMUNICATION_LISTENERS.add(btListener);
     }
 
+    // BluetoothCommunication Listeners methods
 
     @Override
     public void onPlayerReady() {
@@ -361,7 +344,23 @@ public final class BluetoothCommunication extends Thread implements GameListener
         Log.d(BLUETOOTH_COMMUNICATION_TAG, "onStartRace sent to the other phone");
     }
 
+    /**
+     * Initialises the singleton instance of BluetoothCommunication.
+     * @param socket Socket used for communications.
+     */
+    static void initInstance(BluetoothSocket socket, GUIWelcome guiWelcome) {
+        if (btComInstance == null) {
+            btComInstance = new BluetoothCommunication(socket, guiWelcome);
+        }
+    }
 
+    /**
+     * Get the instance of BluetoothCommunication
+     * @return The singleton instance of BluetoothCommunication.
+     */
+    public static BluetoothCommunication getInstance() {
+        return btComInstance;
+    }
 
     /**
      * Set the current {@link Game} associated to the BluetoothCommunication
