@@ -143,8 +143,7 @@ public class GUIGame extends Activity implements GameListener {
     /**
      * The area to display the video stream from the device.
      */
-    private FrameLayout mainLayout, animationLayout;
-    private ImageButton sendTrapAnim;
+    private FrameLayout mainLayout, animationLayout, sendTrapAnim;
     private SurfaceView cameraView;
     private GLSurfaceView glView;
     private ItemRenderer renderer;
@@ -258,7 +257,7 @@ public class GUIGame extends Activity implements GameListener {
         // Initializes the views of the GUI
         mainLayout = (FrameLayout) findViewById(R.id.mainLayout);
         animationLayout = (FrameLayout) findViewById(R.id.animationLayout);
-        sendTrapAnim = (ImageButton) findViewById(R.id.sendTrapLayout);
+        sendTrapAnim = (FrameLayout) findViewById(R.id.sendTrapLayout);
         sendTrapAnim.setBackgroundResource(R.drawable.alpha_frame_50x50);
         ImageButton turnLeftBtn = (ImageButton) findViewById(R.id.turnLeftBtn);
         ImageButton turnRightBtn = (ImageButton) findViewById(R.id.turnRightBtn);
