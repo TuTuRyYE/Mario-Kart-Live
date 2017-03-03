@@ -96,13 +96,15 @@ public class BluetoothServer extends Thread {
                 break;
             }
         }
-        GUI_WELCOME.GUI_WELCOME_HANDLER.sendEmptyMessage(GUIWelcome.BLUETOOTH_SERVER_GOT_CONNECTION);
         // We launch the BT communication threads.
-        BluetoothCommunication.initInstance(socket, GUI_WELCOME);
-        //The bluetooth communication.
-        BluetoothCommunication btComServer = BluetoothCommunication.getInstance();
-        btComServer.start();
-        Log.d(BLUETOOTH_SERVER_TAG, "Bluetooth communication launched.");
+        if (socket != null) {
+            GUI_WELCOME.GUI_WELCOME_HANDLER.sendEmptyMessage(GUIWelcome.BLUETOOTH_SERVER_GOT_CONNECTION);
+            BluetoothCommunication.initInstance(socket, GUI_WELCOME);
+            //The bluetooth communication.
+            BluetoothCommunication btComServer = BluetoothCommunication.getInstance();
+            btComServer.start();
+            Log.d(BLUETOOTH_SERVER_TAG, "Bluetooth communication launched.");
+        }
     }
 
     /**

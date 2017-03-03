@@ -54,18 +54,6 @@
             android:elevation="24dp">
         </FrameLayout>
 
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/magicBoxSpinnerLayout"
-            android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/sendTrapBtn"
-            android:layout_alignBottom="@+id/sendTrapBtn"
-            android:layout_alignTop="@+id/sendTrapBtn"
-            android:layout_alignEnd="@+id/sendTrapBtn"
-            android:elevation="24dp"
-            android:background="@drawable/alpha_frame_50x50" />
-
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

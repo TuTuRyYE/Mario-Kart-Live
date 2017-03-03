@@ -133,7 +133,7 @@ public class GUIGame extends Activity implements GameListener {
     /**
      * The area to display the video stream from the device.
      */
-    private FrameLayout mainLayout, animationLayout, magicBoxSpinnerLayout;
+    private FrameLayout mainLayout, animationLayout/*, magicBoxSpinnerLayout*/;
     private SurfaceView cameraView;
     private GLSurfaceView glView;
     private ItemRenderer renderer;
@@ -189,10 +189,10 @@ public class GUIGame extends Activity implements GameListener {
                     adrs.start();
                     break;
                 case ANIMATE_MAGIC_BOX :
-                    magicBoxSpinnerLayout.setBackgroundResource(R.drawable.magic_box_animation);
+                   /* magicBoxSpinnerLayout.setBackgroundResource(R.drawable.magic_box_animation);
                     AnimationDrawable admb = (AnimationDrawable) magicBoxSpinnerLayout.getBackground();
                     admb.start();
-                    break;
+                    break;*/
                 default:
                     break;
             }
@@ -244,7 +244,7 @@ public class GUIGame extends Activity implements GameListener {
         // Initializes the views of the GUI
         mainLayout = (FrameLayout) findViewById(R.id.mainLayout);
         animationLayout = (FrameLayout) findViewById(R.id.animationLayout);
-        magicBoxSpinnerLayout = (FrameLayout) findViewById(R.id.magicBoxSpinnerLayout);
+        //magicBoxSpinnerLayout = (FrameLayout) findViewById(R.id.magicBoxSpinnerLayout);
         ImageButton turnLeftBtn = (ImageButton) findViewById(R.id.turnLeftBtn);
         ImageButton turnRightBtn = (ImageButton) findViewById(R.id.turnRightBtn);
         ImageButton moveBackwardBtn = (ImageButton) findViewById(R.id.moveBackwardBtn);

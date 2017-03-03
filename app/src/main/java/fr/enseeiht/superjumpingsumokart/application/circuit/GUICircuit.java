@@ -154,9 +154,11 @@ public class GUICircuit extends Activity {
 
                             // Go Back to GUIWelcome activity
                             Intent i = new Intent(GUICircuit.this, GUIWelcome.class);
-                            i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             Log.d(GUI_CIRCUIT_TAG, "Launching a GUIWelcome Activity...");
                             startActivity(i);
+                            finish();
+
 
 
                         } else { // if no item has been selected before
