@@ -29,19 +29,27 @@ public final class BluetoothCommunication extends Thread implements GameListener
      * Logging tag. Useful for debugging.
      */
     private final static String BLUETOOTH_COMMUNICATION_TAG = "BluetoothCommunication";
-    private final GUIWelcome GUI_WELCOME;
+
     /**
-     * The singleton instance of {@link BluetoothCommunication}.
+     * The GUIWelcome activity.
+     */
+    private final GUIWelcome GUI_WELCOME;
+
+    /**
+     * The singleton instance of BluetoothCommunication.
      */
     private static BluetoothCommunication btComInstance = null;
+
     /**
      * The socket used for communications.
      */
     private final BluetoothSocket BT_SOCKET;
+
     /**
-     * List of instances listening to the singleton of {@link BluetoothCommunication}.
+     * List of instances listening to the singleton of BluetoothCommunication.
      */
     private final ArrayList<BluetoothCommunicationListener> BLUETOOTH_COMMUNICATION_LISTENERS = new ArrayList<>();
+
     /**
      * The {@link InputStream} on which messages are received.
      */
@@ -53,14 +61,12 @@ public final class BluetoothCommunication extends Thread implements GameListener
     private OutputStream btOutputStream;
 
     /**
-     * A reference to a {@link Game} instance.
+     * A boolean indicating that the BluetoothCommunication service is running.
      */
-
     private boolean isRunning;
 
     /**
-     * Default constructor of {@link BluetoothCommunication}.
-     *
+     * Default constructor of BluetoothCommunication.
      * @param socket Socket used for communications.
      */
     private BluetoothCommunication(BluetoothSocket socket, GUIWelcome guiWelcome) {
@@ -76,8 +82,7 @@ public final class BluetoothCommunication extends Thread implements GameListener
     }
 
     /**
-     * Initialises the singleton instance of {@link BluetoothCommunication}.
-     *
+     * Initialises the singleton instance of BluetoothCommunication.
      * @param socket Socket used for communications.
      */
     static void initInstance(BluetoothSocket socket, GUIWelcome guiWelcome) {
@@ -87,12 +92,16 @@ public final class BluetoothCommunication extends Thread implements GameListener
     }
 
     /**
-     * @return The singleton instance of {@link BluetoothCommunication}.
+     * Get the instance of BluetoothCommunication
+     * @return The singleton instance of BluetoothCommunication.
      */
     public static BluetoothCommunication getInstance() {
         return btComInstance;
     }
 
+    /**
+     * Listening on the input stream continuously
+     */
     public void run() {
         byte[] buffer = new byte[1024];
         int bytes;
@@ -121,7 +130,6 @@ public final class BluetoothCommunication extends Thread implements GameListener
 
     /**
      * Parse a message and then dispatch notifications to listeners in {@link BluetoothCommunication#BLUETOOTH_COMMUNICATION_LISTENERS}.
-     *
      * @param receivedMsg The received message to parse.
      */
     private void dispatchMessage(String receivedMsg) {
@@ -209,7 +217,6 @@ public final class BluetoothCommunication extends Thread implements GameListener
 
     /**
      * Write a message on the outputsteam of the socket.
-     *
      * @param bytes The bytes of the message.
      */
     private void write(byte[] bytes) {
@@ -236,6 +243,9 @@ public final class BluetoothCommunication extends Thread implements GameListener
         }
     }
 
+    /**
+     * Send the circuit to the other player (server to client)
+     */
     public void sendCircuit() {
         Circuit c = Circuit.getInstance();
         String dataMsg = "circuit/" + Integer.toString(c.getLaps()) + "/" + c.getCheckpointToCheck();
@@ -247,8 +257,12 @@ public final class BluetoothCommunication extends Thread implements GameListener
         Log.d(BLUETOOTH_COMMUNICATION_TAG, "Circuit send to client, string : " + dataMsg);
     }
 
-    private void registerCommunicationBTListener(BluetoothCommunicationListener gameListener) {
-        BLUETOOTH_COMMUNICATION_LISTENERS.add(gameListener);
+    /**
+     * Register a {@link BluetoothCommunicationListener} to the list of Bluetooth_communication_listeners
+     * @param btListener the BluetoothCommunicationListener to register
+     */
+    private void registerCommunicationBTListener(BluetoothCommunicationListener btListener) {
+        BLUETOOTH_COMMUNICATION_LISTENERS.add(btListener);
     }
 
 

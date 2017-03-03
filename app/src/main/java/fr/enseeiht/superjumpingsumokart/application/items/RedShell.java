@@ -17,15 +17,19 @@ public class RedShell extends Item {
      * The logging tag. Useful for debugging.
      */
     private final static String ITEM_TAG = "ITEM";
+
     /**
      * Name of the {@link Item}.
      */
     private final static String NAME = "redshell";
 
+    /**
+     * Reference of the {@link GUIGame}.
+     */
     private final GUIGame GUI_GAME;
 
     /**
-     * Default constructor of the class {@link Item}. (Lucas Pascal) - 17/02/2017).
+     * Default constructor of the class {@link Item}.
      */
     public RedShell(GUIGame guiGame) {
         super(NAME);

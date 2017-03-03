@@ -26,7 +26,7 @@ public class Box extends Item {
     private final static String NAME = "box";
 
     /**
-     * Default constructor of the class {@link Item}. (Matthieu Michel - 02/02/2017).
+     * Default constructor of the class {@link Item}.
      */
     public Box() {
         super(NAME);

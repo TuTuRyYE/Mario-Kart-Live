@@ -14,12 +14,24 @@ import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 
 public class Blooper extends Item {
 
+    /**
+     * The logging tag. Useful for debugging.
+     */
     private final static String ITEM_TAG = "Item.Blooper";
 
+    /**
+     * Name of the {@link Item}.
+     */
     private final static String NAME = "blooper";
 
+    /**
+     * Reference of the {@link GUIGame}.
+     */
     private final GUIGame GUI_GAME;
 
+    /**
+     * Default constructor of the class {@link Item}.
+     */
     public Blooper (GUIGame guiGame){
         super(NAME);
         GUI_GAME = guiGame;
