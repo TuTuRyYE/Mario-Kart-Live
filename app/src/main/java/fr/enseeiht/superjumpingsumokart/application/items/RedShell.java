@@ -52,6 +52,6 @@ public class RedShell extends Item {
 
     @Override
     public void assignResource(ImageButton ib) {
-        ib.setBackgroundResource(R.drawable.redshell);
+        ib.setImageResource(R.drawable.redshell);
     }
 }

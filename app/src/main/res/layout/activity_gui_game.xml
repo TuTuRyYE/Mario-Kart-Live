@@ -167,5 +167,15 @@
             android:layout_toStartOf="@+id/checkpointTextView"
             android:layout_marginEnd="34dp" />
 
+        <FrameLayout
+            android:layout_width="50px"
+            android:layout_height="50px"
+            android:id="@+id/magicBoxSpinnerLayout"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/sendTrapBtn"
+            android:layout_alignBottom="@+id/sendTrapBtn"
+            android:layout_alignTop="@+id/sendTrapBtn"
+            android:layout_alignEnd="@+id/sendTrapBtn" />
+
     </RelativeLayout>
 </FrameLayout>

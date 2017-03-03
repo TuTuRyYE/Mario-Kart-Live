@@ -52,6 +52,6 @@ public class Box extends Item {
 
     @Override
     public void assignResource(ImageButton ib) {
-        ib.setBackgroundResource(R.drawable.redbox);
+        ib.setImageResource(R.drawable.redbox);
     }
 }

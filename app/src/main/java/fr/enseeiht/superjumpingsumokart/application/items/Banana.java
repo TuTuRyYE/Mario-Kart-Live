@@ -46,13 +46,12 @@ public class Banana extends Item {
     @Override
     public void applyEffect(DroneController droneController) {
         Log.d(ITEM_TAG, "A banana has been touched");
-        droneController.slow();
         droneController.spin();
 
     }
 
     @Override
     public void assignResource(ImageButton ib) {
-        ib.setBackgroundResource(R.drawable.banana);
+        ib.setImageResource(R.drawable.banana);
     }
 }

@@ -45,6 +45,6 @@ public class Mushroom extends Item {
 
     @Override
     public void assignResource(ImageButton ib) {
-        ib.setBackgroundResource(R.drawable.mushroom);
+        ib.setImageResource(R.drawable.mushroom);
     }
 }

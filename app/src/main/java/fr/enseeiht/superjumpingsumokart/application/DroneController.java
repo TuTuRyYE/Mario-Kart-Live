@@ -155,7 +155,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
                     DRONE.setCurrentItem(new NullItem());
                 }
             } else {
-                Log.d(DRONE_CONTROLLER_TAG,"Please Try again.");
+                Log.d(DRONE_CONTROLLER_TAG,"Item not used, Please Try again.");
             }
         }
         return used;
