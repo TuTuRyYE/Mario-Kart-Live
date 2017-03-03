@@ -180,8 +180,8 @@ public class GUIGame extends Activity implements GameListener {
                     adrs.start();
                     break;
                 case ANIMATE_MAGIC_BOX :
-                    animationLayout.setBackgroundResource(R.drawable.magic_box_animation);
-                    AnimationDrawable admb = (AnimationDrawable) animationLayout.getBackground();
+                    sendTrapBtn.setBackgroundResource(R.drawable.magic_box_animation);
+                    AnimationDrawable admb = (AnimationDrawable) sendTrapBtn.getBackground();
                     admb.start();
                     break;
                 default:
@@ -318,7 +318,7 @@ public class GUIGame extends Activity implements GameListener {
                     DetectionTask.Symbol lastMarkerSeen = controller.getDrone().getLastMarkerSeen();
                     ArrayList<DetectionTask.Symbol> markers = Circuit.getInstance().getMarkers();
                     // Send the object on the next marker forward if it is a long touch
-                    if (motionEvent.getDownTime() > 1000) {
+                    if (motionEvent.getDownTime() > 1000 && markers.size() > 1) {
                         Log.d(GUI_GAME_TAG, "sentTrapBtn long touch");
                         // Get the list of markers and the last marker seen
                         // Found the next marker on the circuit
