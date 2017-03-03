@@ -93,4 +93,5 @@
     <item android:drawable="@drawable/anim_roulement_00090" android:duration="33"/>
     <item android:drawable="@drawable/anim_roulement_00091" android:duration="33"/>
     <item android:drawable="@drawable/anim_roulement_00092" android:duration="33"/>
+    <item android:drawable="@drawable/alpha_frame_50x50" android:duration="33"/>
 </animation-list>

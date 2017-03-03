@@ -7,7 +7,8 @@ import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
  * @author Vivian Guy.
- * Class representing a drone
+ * Class representing a drone in the application.
+ * It represents a drone as a player, not as a device.
  */
 
 public class Drone {
@@ -23,33 +24,17 @@ public class Drone {
     private Item currentItem;
 
     /**
-     * The current number of lap the drone has done on a given circuit.
+     * The current number of lap made by the drone on the {@link fr.enseeiht.superjumpingsumokart.application.circuit.Circuit#circuitInstance}.
      */
     private int currentLap;
 
     /**
-     * TODO
+     * The current number of checkpoint validated by the drone on the {@link fr.enseeiht.superjumpingsumokart.application.circuit.Circuit#circuitInstance}.
      */
     private int currentCheckpoint;
 
     /**
-     * Get the last marker seen
-     * @return the marker
-     */
-    public DetectionTask.Symbol getLastMarkerSeen() {
-        return lastMarkerSeen;
-    }
-
-    /**
-     * Set the last marker seen
-     * @param lastMarkerSeen the marker
-     */
-    public void setLastMarkerSeen(DetectionTask.Symbol lastMarkerSeen) {
-        this.lastMarkerSeen = lastMarkerSeen;
-    }
-
-    /**
-     * The last marker detected
+     * The last marker seen by the drone.
      */
     private DetectionTask.Symbol lastMarkerSeen;
 
@@ -65,11 +50,9 @@ public class Drone {
     }
 
     /**
-     * Get the name of the drone.
      * @return the name/id of the drone.
      */
     public String getName() {
-
         return name;
     }
 
@@ -82,7 +65,6 @@ public class Drone {
         this.name = name;
     }
 
-
     /**
      * Get the {@link Item} of the drone.
      * @return the current item of the drone.
@@ -90,6 +72,7 @@ public class Drone {
     public Item getCurrentItem() {
         return currentItem;
     }
+
 
     /**
      * Set the {@link Item} of the drone.
@@ -116,11 +99,33 @@ public class Drone {
         this.currentLap = currentLap;
     }
 
+    /**
+     *
+     * @return The current number of checkpoints validated by the drone.
+     */
     public int getCurrentCheckpoint() {
         return currentCheckpoint;
     }
 
+    /**
+     * Set the number of checkpoint validated by the drone.
+     * @param currentCheckpoint the number of checkpoint validated by the drone.
+     */
     void setCurrentCheckpoint(int currentCheckpoint) {
         this.currentCheckpoint = currentCheckpoint;
+    }
+
+    /**
+     * @return the marker last marker seen by the drone.
+     */
+    public DetectionTask.Symbol getLastMarkerSeen() {
+        return lastMarkerSeen;
+    }
+
+    /**
+     * @param lastMarkerSeen the marker to put as last marker seen.
+     */
+    public void setLastMarkerSeen(DetectionTask.Symbol lastMarkerSeen) {
+        this.lastMarkerSeen = lastMarkerSeen;
     }
 }

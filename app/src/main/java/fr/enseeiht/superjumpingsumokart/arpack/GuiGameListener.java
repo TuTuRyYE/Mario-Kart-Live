@@ -4,7 +4,6 @@ import fr.enseeiht.superjumpingsumokart.application.Drone;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
 import fr.enseeiht.superjumpingsumokart.application.Game;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
-import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
  * @author michelmatthieu.
@@ -35,17 +34,17 @@ public interface GuiGameListener {
     void onPlayerGaveUp();
 
     /**
-     * TODO
+     * Method called when the controlled {@link Drone} finishes the race.
      */
     void onPlayerFinished();
 
     /**
-     * TODO
+     * Method called when the controlled {@link Drone} detects an ARToolkit marker symbolizing the arrival line.
      */
     void onPlayerDetectsArrivalLine();
 
     /**
-     * TODO
+     * Method called when the controlled {@link Drone} detects an ARToolkit marker symbolizing a checkpoint.
      */
     void onPlayerDetectsCheckpoint();
 

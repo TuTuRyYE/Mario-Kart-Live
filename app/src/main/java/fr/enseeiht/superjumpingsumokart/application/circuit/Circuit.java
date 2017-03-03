@@ -15,11 +15,6 @@ import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 public class Circuit {
 
     /**
-     * The logging tag. Useful for debugging.
-     */
-    private final static String CIRCUIT_TAG = "CIRCUIT";
-
-    /**
      * The name of the circuit.
      */
     private String name;
@@ -56,7 +51,7 @@ public class Circuit {
      * @param laps .
      * @param checkPointToCheck .
      */
-   private Circuit(int laps, int checkPointToCheck) {
+    private Circuit(int laps, int checkPointToCheck) {
         this.lapsNumber = laps;
         this.checkPointToCheck = checkPointToCheck;
         this.markers = new ArrayList<>();
@@ -80,7 +75,7 @@ public class Circuit {
      */
     public void addMarker(DetectionTask.Symbol symbol) {
         // Markers are ordered thanks to the key
-         this.markers.add(symbol);
+        this.markers.add(symbol);
     }
 
     /**
@@ -149,13 +144,6 @@ public class Circuit {
         this.name = name;
     }
 
-    /**
-     * Set the number of check point to complete a circuit's lap
-     * @param checkPointToCheck
-     */
-    public void setCheckPointToCheck(int checkPointToCheck) {
-        this.checkPointToCheck = checkPointToCheck;
-    }
 
     /**
      * Get the list of objects present on the circuit

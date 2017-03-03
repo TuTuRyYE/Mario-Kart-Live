@@ -11,7 +11,7 @@ import java.util.UUID;
 import fr.enseeiht.superjumpingsumokart.application.GUIWelcome;
 
 /**
- *  @author  Lucas Pascal
+ * @author  Lucas Pascal
  * Defines the bluetooth server used to communicate with another paired phone.
  */
 public class BluetoothServer extends Thread {
@@ -29,11 +29,6 @@ public class BluetoothServer extends Thread {
     private BluetoothServerSocket btSocket;
 
     /**
-     * The local bluetooth adapter.
-     */
-    private BluetoothAdapter btAdapter;
-
-    /**
      * Certifies that the bluetooth connexion is established.
      */
     private boolean isConnected;
@@ -49,7 +44,7 @@ public class BluetoothServer extends Thread {
 
     @Override
     public void run() {
-        btAdapter = BluetoothAdapter.getDefaultAdapter();
+        BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
         // If the bluetooth service is disabled on the phone, enables it.
         if (!btAdapter.isEnabled()) {
             btAdapter.enable();

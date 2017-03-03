@@ -17,7 +17,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/jsbg"
+        android:background="@drawable/jsbg2"
         android:layout_marginStart="5px">
 
         <FrameLayout
@@ -175,7 +175,8 @@
             android:layout_alignStart="@+id/sendTrapBtn"
             android:layout_alignBottom="@+id/sendTrapBtn"
             android:layout_alignTop="@+id/sendTrapBtn"
-            android:layout_alignEnd="@+id/sendTrapBtn" />
+            android:layout_alignEnd="@+id/sendTrapBtn"
+            android:elevation="24dp" />
 
     </RelativeLayout>
 </FrameLayout>

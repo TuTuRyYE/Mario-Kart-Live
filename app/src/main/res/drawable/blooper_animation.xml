@@ -98,4 +98,5 @@
     <item android:drawable="@drawable/anim_ink_00096" android:duration="33"/>
     <item android:drawable="@drawable/anim_ink_00097" android:duration="33"/>
     <item android:drawable="@drawable/anim_ink_00098" android:duration="33"/>
+    <item android:drawable="@drawable/alpha_frame_640x480" android:duration="33"/>
 </animation-list>

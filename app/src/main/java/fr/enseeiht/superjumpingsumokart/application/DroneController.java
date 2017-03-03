@@ -17,18 +17,22 @@ import static java.lang.Thread.sleep;
  * This class is used as a controller of a Jumping Sumo device.
  */
 public class DroneController implements ARDeviceControllerListener, ARDeviceControllerStreamListener {
+
     /**
      * The logging tag. Useful for debugging.
      */
     private final static String DRONE_CONTROLLER_TAG = "DRONE_CONTROLLER";
+
     /**
      * Drone associated to the {@link DroneController}.
      */
     private final Drone DRONE;
+
     /**
      * Graphic user interface of the game, this is the interface displayed during a race.
      */
     private final GUIGame GUI_GAME;
+
     /**
      * Controller associated to the device.
      */
@@ -38,7 +42,6 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     private final static byte NO_SPEED = (byte) 0;
     private final static byte NORMAL_SPEED = (byte) 20;
     private final static byte NEG_NORMAL_SPEED = (byte) -20;
-    private final static byte SLOW_SPEED = (byte) 10;
     private final static byte FAST_SPEED = (byte) 40;
     private final static byte NEG_FAST_SPEED = (byte) -40;
     private final static byte BOOST_SPEED = (byte) 100;
@@ -49,16 +52,13 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     private boolean started = false;
 
     /**
-     * Set the state of the race.
-     * @param running the state of the race.
+     * Indicates if the drone controller is running or not.
      */
-    public void setRunning(boolean running) {
-        this.running = running;
-        deviceController.getFeatureJumpingSumo().setPilotingPCMDFlag((byte)1);
-    }
-
     private boolean running = false;
 
+    /**
+     * Fps counter.
+     */
     private int fps_count = 0;
 
     /**
@@ -78,13 +78,38 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
             Log.e(DRONE_CONTROLLER_TAG, "Unable to create device controller : " + e.getMessage());
         }
     }
+
     /**
-     * Get the {@link Drone}.
-     * @return the drone.
+     * Start the controller of the device.
+     * @return The code resulting in the call of {@link ARDeviceController} stop() method on {@link #deviceController}.
      */
-    public Drone getDrone() {
-        return DRONE;
+    public ARCONTROLLER_ERROR_ENUM startController() {
+        ARCONTROLLER_ERROR_ENUM errCode = ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_OK;
+        if (deviceController != null && !started) {
+            errCode = deviceController.start();
+        }
+        return errCode;
     }
+
+    /**
+     * Stops the device controller by launching an external {@link Thread}.
+     * It first stops the engine (speed equals to 0) and then disconnects the driver.
+     */
+    public ARCONTROLLER_ERROR_ENUM stopController() {
+        ARCONTROLLER_ERROR_ENUM errCode = ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_OK;
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (deviceController != null && started && running) {
+                    stopMotion();
+                    deviceController.stop();
+                }
+            }
+        }).start();
+        return errCode;
+    }
+
     /**
      * Makes the drone go forward with the constant speed.
      */
@@ -95,6 +120,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
             deviceController.getFeatureJumpingSumo().setPilotingPCMDSpeed(NORMAL_SPEED);
         }
     }
+
     /**
      *  Makes the drone go backward with the constant speed.
      */
@@ -104,6 +130,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
             deviceController.getFeatureJumpingSumo().setPilotingPCMDSpeed(NEG_NORMAL_SPEED);
         }
     }
+
     /**
      * Makes the drone turn left with the constant speed.
      */
@@ -113,6 +140,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
             deviceController.getFeatureJumpingSumo().setPilotingPCMDTurn(NEG_FAST_SPEED);
         }
     }
+
     /**
      * Makes the device turn right with the constant speed.
      */
@@ -122,6 +150,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
             deviceController.getFeatureJumpingSumo().setPilotingPCMDTurn(FAST_SPEED);
         }
     }
+
     /**
      * Stops the device.
      */
@@ -131,6 +160,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
             deviceController.getFeatureJumpingSumo().setPilotingPCMDSpeed(NO_SPEED);
         }
     }
+
     /**
      * Removes the rotation offset so that the device goes straight forward or backward.
      */
@@ -140,6 +170,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
             deviceController.getFeatureJumpingSumo().setPilotingPCMDTurn(NO_SPEED);
         }
     }
+
     /**
      * Method used to use an Item.
      * Send a request to Item class to use the item owned by the player.
@@ -150,7 +181,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
             Log.d(DRONE_CONTROLLER_TAG, "USE ITEM order received !");
             //check if there is an object of the marker
             if(! (DRONE.getCurrentItem() instanceof NullItem)) {
-                 used = DRONE.getCurrentItem().useItem(this, symbol);
+                used = DRONE.getCurrentItem().useItem(this, symbol);
                 if (used) {
                     DRONE.setCurrentItem(new NullItem());
                 }
@@ -211,6 +242,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
             deviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation(ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_SPIN);
         }
     }
+
     /**
      * Makes the drone spin and highJump.
      */
@@ -219,13 +251,29 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
             deviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation(ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_SPINJUMP);
         }
     }
+
     /**
-     * Makes the drone go slower.
+     * Get the {@link Drone}.
+     * @return the drone.
      */
-    public void slow() {
-        if (deviceController != null && running) {
-            deviceController.getFeatureJumpingSumo().setPilotingPCMDSpeed(SLOW_SPEED);
-        }
+    public Drone getDrone() {
+        return DRONE;
+    }
+
+    /**
+     * @return True if the {@link ARDeviceController} is running.
+     */
+    public boolean isRunning() {
+        return running;
+    }
+
+    /**
+     * Set the state of the race.
+     * @param running the state of the race.
+     */
+    public void setRunning(boolean running) {
+        this.running = running;
+        deviceController.getFeatureJumpingSumo().setPilotingPCMDFlag((byte)1);
     }
 
     /**
@@ -265,20 +313,24 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
                 break;
         }
     }
+
     //When the extension state is changed.
     @Override
     public void onExtensionStateChanged(ARDeviceController deviceController, ARCONTROLLER_DEVICE_STATE_ENUM newState, ARDISCOVERY_PRODUCT_ENUM product, String name, ARCONTROLLER_ERROR_ENUM error) {
         //Nothing to do.
     }
+
     //When a signal is received from the device (low battery for instance).
     @Override
     public void onCommandReceived(ARDeviceController deviceController, ARCONTROLLER_DICTIONARY_KEY_ENUM commandKey, ARControllerDictionary elementDictionary) {
         //Nothing to do.
     }
+
     @Override
     public ARCONTROLLER_ERROR_ENUM configureDecoder(ARDeviceController deviceController, ARControllerCodec codec) {
         return ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_OK;
     }
+
     /**
      * Get the current frame of the video and send it to {@link #GUI_GAME} where the frame will be displayed.
      * @param deviceController controller associated to the device.
@@ -297,46 +349,11 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
         }
         return ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_OK;
     }
+
     // When a frame is timedOut.
     @Override
     public void onFrameTimeout(ARDeviceController deviceController) {
         //Nothing to do.
-    }
-    /**
-     * Start the controller of the device.
-     * @return The code resulting in the call of {@link ARDeviceController} stop() method on {@link #deviceController}.
-     */
-    public ARCONTROLLER_ERROR_ENUM startController() {
-        ARCONTROLLER_ERROR_ENUM errCode = ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_OK;
-        if (deviceController != null && !started) {
-            errCode = deviceController.start();
-        }
-        return errCode;
-    }
-    /**
-     * Stops the device controller by launching an external {@link Thread}.
-     * It first stops the engine (speed equals to 0) and then disconnects the driver.
-     */
-    public ARCONTROLLER_ERROR_ENUM stopController() {
-        ARCONTROLLER_ERROR_ENUM errCode = ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_OK;
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (deviceController != null && started && running) {
-                    stopMotion();
-                    deviceController.stop();
-                }
-            }
-        }).start();
-        return errCode;
-    }
-
-    /**
-     * @return True if the {@link ARDeviceController} is running.
-     */
-    public boolean isRunning() {
-        return running;
     }
 
 }

@@ -446,7 +446,8 @@ public class GUIGame extends Activity implements GameListener {
     }
 
     /**
-     * TODO
+     * Initialises the camera surface view.
+     * Finds the surface view in the layout and adds necessary callbacks to the it.
      */
     private void initCameraSurfaceView() {
         cameraView = (SurfaceView) findViewById(R.id.cameraSurfaceView);
@@ -472,7 +473,9 @@ public class GUIGame extends Activity implements GameListener {
     }
 
     /**
-     * TODO
+     * Initialises the OpenGL surface view.
+     * Instantiates a {@link GLSurfaceView} and configures it. Also provides the renderer to the OpenGL surface view
+     * and add it in the layout of the activity.
      */
     private void initGLSurfaceView() {
         // Create the GL view
@@ -506,11 +509,18 @@ public class GUIGame extends Activity implements GameListener {
         currentFrame = frame.getByteData();
         UPDATER.sendEmptyMessage(RECEIVE_FRAME);
     }
-    
+
+    /**
+     * @return The {@link DroneController} used by the activity.
+     */
     public DroneController getController() {
         return controller;
     }
 
+    /**
+     * Register a {@link GuiGameListener}so that it can be notified when needed.
+     * @param guiGameListener The listener to register.
+     */
     public void registerGuiGameListener(GuiGameListener guiGameListener) {
         GUI_GAME_LISTENERS.add(guiGameListener);
     }
@@ -553,31 +563,46 @@ public class GUIGame extends Activity implements GameListener {
         controller.setRunning(true);
     }
 
-
+    /**
+     * TODO
+     */
     public void notifyDefeat() {
         if (!game.isFinished()) {
             UPDATER.sendEmptyMessage(DEFEAT);
         }
     }
 
+    /**
+     * TODO
+     */
     public void notifyVictory() {
         if (!game.isFinished()) {
             UPDATER.sendEmptyMessage(VICTORY);
         }
     }
 
+    /**
+     * TODO
+     * @param symbol
+     */
     public void touchedSymbol(DetectionTask.Symbol symbol) {
         for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
             ggl.onSymbolTouched(symbol);
         }
     }
 
+    /**
+     * TODO
+     */
     public void arrivalLineDetected() {
         for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
             ggl.onPlayerDetectsArrivalLine();
         }
     }
 
+    /**
+     * TODO
+     */
     public void checkpointDetected() {
         UPDATER.sendEmptyMessage(CHECKPOINT_COUNT_UPDATE);
         for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
@@ -585,6 +610,9 @@ public class GUIGame extends Activity implements GameListener {
         }
     }
 
+    /**
+     * @return The renderer used in conjunction with the {@link GLSurfaceView} of the activity.
+     */
     public ItemRenderer getRenderer() {
         return renderer;
     }
