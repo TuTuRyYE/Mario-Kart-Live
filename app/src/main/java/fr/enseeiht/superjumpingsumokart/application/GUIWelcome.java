@@ -206,6 +206,13 @@ public class GUIWelcome extends Activity {
                 exitBtnAction();
             }
         });
+
+        btHostBtn.setBackgroundResource(android.R.drawable.btn_default);
+        btJoinBtn.setBackgroundResource(android.R.drawable.btn_default);
+        wifiConnectionBtn.setBackgroundResource(android.R.drawable.btn_default);
+        exitBtn.setBackgroundResource(android.R.drawable.btn_default);
+        setCircuitBtn.setBackgroundResource(android.R.drawable.btn_default);
+        startRaceBtn.setBackgroundResource(android.R.drawable.btn_default);
     }
 
     @Override
