@@ -78,25 +78,5 @@
     <item android:drawable="@drawable/anim_ink_00076" android:duration="33"/>
     <item android:drawable="@drawable/anim_ink_00077" android:duration="33"/>
     <item android:drawable="@drawable/anim_ink_00078" android:duration="33"/>
-    <item android:drawable="@drawable/anim_ink_00079" android:duration="33"/>
-    <item android:drawable="@drawable/anim_ink_00080" android:duration="33"/>
-    <item android:drawable="@drawable/anim_ink_00081" android:duration="33"/>
-    <item android:drawable="@drawable/anim_ink_00082" android:duration="33"/>
-    <item android:drawable="@drawable/anim_ink_00083" android:duration="33"/>
-    <item android:drawable="@drawable/anim_ink_00084" android:duration="33"/>
-    <item android:drawable="@drawable/anim_ink_00085" android:duration="33"/>
-    <item android:drawable="@drawable/anim_ink_00086" android:duration="33"/>
-    <item android:drawable="@drawable/anim_ink_00087" android:duration="33"/>
-    <item android:drawable="@drawable/anim_ink_00088" android:duration="33"/>
-    <item android:drawable="@drawable/anim_ink_00089" android:duration="33"/>
-    <item android:drawable="@drawable/anim_ink_00090" android:duration="33"/>
-    <item android:drawable="@drawable/anim_ink_00091" android:duration="33"/>
-    <item android:drawable="@drawable/anim_ink_00092" android:duration="33"/>
-    <item android:drawable="@drawable/anim_ink_00093" android:duration="33"/>
-    <item android:drawable="@drawable/anim_ink_00094" android:duration="33"/>
-    <item android:drawable="@drawable/anim_ink_00095" android:duration="33"/>
-    <item android:drawable="@drawable/anim_ink_00096" android:duration="33"/>
-    <item android:drawable="@drawable/anim_ink_00097" android:duration="33"/>
-    <item android:drawable="@drawable/anim_ink_00098" android:duration="33"/>
     <item android:drawable="@drawable/alpha_frame_640x480" android:duration="33"/>
 </animation-list>

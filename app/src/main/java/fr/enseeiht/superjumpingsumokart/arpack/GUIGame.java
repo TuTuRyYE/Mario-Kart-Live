@@ -258,7 +258,7 @@ public class GUIGame extends Activity implements GameListener {
         mainLayout = (FrameLayout) findViewById(R.id.mainLayout);
         animationLayout = (FrameLayout) findViewById(R.id.animationLayout);
         sendTrapAnim = (FrameLayout) findViewById(R.id.sendTrapLayout);
-        sendTrapAnim.setBackgroundResource(R.drawable.alpha_frame_50x50);
+        sendTrapAnim.setBackgroundColor(getResources().getColor(android.R.color.transparent));
         ImageButton turnLeftBtn = (ImageButton) findViewById(R.id.turnLeftBtn);
         ImageButton turnRightBtn = (ImageButton) findViewById(R.id.turnRightBtn);
         ImageButton moveBackwardBtn = (ImageButton) findViewById(R.id.moveBackwardBtn);
