@@ -70,7 +70,12 @@
             android:layout_alignEnd="@+id/sendTrapBtn"
             android:layout_alignBottom="@+id/sendTrapBtn"
             android:layout_alignTop="@+id/sendTrapBtn"
-            android:id="@+id/sendTrapLayout" />
+            android:id="@+id/sendTrapLayout"
+            android:elevation="24dp"
+            android:clickable="false"
+            android:focusable="false"
+            android:longClickable="false"
+            android:focusableInTouchMode="false" />
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -132,7 +137,7 @@
             android:layout_alignBaseline="@+id/lapsTextView"
             android:layout_alignBottom="@+id/lapsTextView"
             android:layout_toEndOf="@+id/lapsTextView"
-            android:layout_marginStart="58dp" />
+            android:layout_marginStart="30dp" />
 
         <TextView
             android:text="@string/lms"
@@ -146,7 +151,7 @@
             android:layout_alignBaseline="@+id/lapsTextView"
             android:layout_alignBottom="@+id/lapsTextView"
             android:layout_toEndOf="@+id/checkpointTextView"
-            android:layout_marginStart="58dp" />
+            android:layout_marginStart="30dp" />
 
         <TextView
             android:text="@string/default_lms"
@@ -203,6 +208,5 @@
             android:textStyle="normal|bold"
             android:layout_alignParentTop="true"
             android:layout_toStartOf="@+id/mainLayout" />
-
     </RelativeLayout>
 </FrameLayout>
