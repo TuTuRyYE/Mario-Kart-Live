@@ -5,6 +5,7 @@ import android.widget.ImageButton;
 
 import fr.enseeiht.superjumpingsumokart.R;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
+import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 
 /**
@@ -38,7 +39,7 @@ public class Blooper extends Item {
     }
 
     @Override
-    public boolean useItem(DroneController droneController) {
+    public boolean useItem(DroneController controller, DetectionTask.Symbol symbol) {
         Log.d(ITEM_TAG, "Used a blooper");
         return true;
     }

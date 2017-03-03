@@ -7,6 +7,7 @@ import com.parrot.arsdk.ardiscovery.*;
 import com.parrot.arsdk.arcommands.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_ENUM;
 
 import fr.enseeiht.superjumpingsumokart.application.items.NullItem;
+import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 
 import static java.lang.Thread.sleep;
@@ -143,13 +144,13 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
      * Method used to use an Item.
      * Send a request to Item class to use the item owned by the player.
      */
-    public boolean useItem() {
+    public boolean useItem(DetectionTask.Symbol symbol) {
         boolean used = false;
         if (deviceController != null && running) {
             Log.d(DRONE_CONTROLLER_TAG, "USE ITEM order received !");
             //check if there is an object of the marker
             if(! (DRONE.getCurrentItem() instanceof NullItem)) {
-                 used = DRONE.getCurrentItem().useItem(this);
+                 used = DRONE.getCurrentItem().useItem(this, symbol);
                 if (used) {
                     DRONE.setCurrentItem(new NullItem());
                 }

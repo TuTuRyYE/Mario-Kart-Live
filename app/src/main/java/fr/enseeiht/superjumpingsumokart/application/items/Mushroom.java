@@ -5,6 +5,7 @@ import android.widget.ImageButton;
 
 import fr.enseeiht.superjumpingsumokart.R;
 import fr.enseeiht.superjumpingsumokart.application.DroneController;
+import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
  * @author Romain Verset.
@@ -31,7 +32,7 @@ public class Mushroom extends Item {
     }
 
     @Override
-    public boolean useItem(DroneController droneController) {
+    public boolean useItem(DroneController droneController, DetectionTask.Symbol symbol) {
         Log.d(ITEM_TAG, "You used a mushroom !");
         droneController.boost();
         return true;

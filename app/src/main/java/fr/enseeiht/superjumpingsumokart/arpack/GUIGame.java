@@ -327,8 +327,9 @@ public class GUIGame extends Activity implements GameListener {
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     DetectionTask.Symbol lastMarkerSeen = controller.getDrone().getLastMarkerSeen();
                     ArrayList<DetectionTask.Symbol> markers = Circuit.getInstance().getMarkers();
+                    long pressDuration = motionEvent.getEventTime() - motionEvent.getDownTime();
                     // Send the object on the next marker forward if it is a long touch
-                    if (motionEvent.getDownTime() > 1000 && markers.size() > 1) {
+                    if (pressDuration > 1000 && markers.size() > 1) {
                         Log.d(GUI_GAME_TAG, "sentTrapBtn long touch");
                         // Get the list of markers and the last marker seen
                         // Found the next marker on the circuit
@@ -336,7 +337,7 @@ public class GUIGame extends Activity implements GameListener {
                         int nextMarkerIndex = (lastMarkerSeenIndex + 1 == markers.size()) ? 0 : lastMarkerSeenIndex + 1;
                         DetectionTask.Symbol nextMarker = markers.get(nextMarkerIndex);
                         Item item = controller.getDrone().getCurrentItem();
-                        if (controller.useItem()) {
+                        if (controller.useItem(nextMarker)) {
                             for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
                                 ggl.onItemUsed(nextMarker, item);
                             }
@@ -344,7 +345,7 @@ public class GUIGame extends Activity implements GameListener {
                     } else {
                         Log.d(GUI_GAME_TAG, "Send trap button released, short press.");
                         Item item = controller.getDrone().getCurrentItem();
-                        if (controller.useItem()) {
+                        if (controller.useItem(lastMarkerSeen)) {
                             for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
                                 ggl.onItemUsed(lastMarkerSeen, item);
                             }
