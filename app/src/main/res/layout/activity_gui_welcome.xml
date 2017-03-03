@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@drawable/jsbg"
     tools:context="fr.enseeiht.superjumpingsumokart.application.GUIWelcome">
 
     <RelativeLayout
@@ -17,8 +18,7 @@
         tools:context="fr.enseeiht.superjumpingsumokart.application.GUIWelcome"
         tools:showIn="@layout/activity_gui_welcome"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:background="@drawable/jsbg">
+        android:layout_alignParentStart="true">
 
         <GridLayout
             android:layout_width="wrap_content"
