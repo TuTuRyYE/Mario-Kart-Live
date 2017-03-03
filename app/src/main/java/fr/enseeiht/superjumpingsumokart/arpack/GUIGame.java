@@ -193,6 +193,7 @@ public class GUIGame extends Activity implements GameListener {
                     break;
                 case LAST_MARKER_SEEN_UPDATE :
                     lmsTextView.setText((controller.getDrone().getLastMarkerSeen().name()));
+                    break;
                 case ANIMATE_BLOOPER :
                     animationLayout.setBackgroundResource(R.drawable.blooper_animation);
                     AnimationDrawable adb = (AnimationDrawable) animationLayout.getBackground();
@@ -453,6 +454,9 @@ public class GUIGame extends Activity implements GameListener {
         }
     }
 
+    /**
+     * TODO
+     */
     public void renderAR() {
         if (glView != null && renderer != null && ARToolKit.getInstance().getProjectionMatrix() != null) {
             Log.d(GUI_GAME_TAG, "renderAR() called.");
