@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.enseeiht.superjumpingsumokart.R;
+import fr.enseeiht.superjumpingsumokart.application.circuit.Circuit;
 import fr.enseeiht.superjumpingsumokart.application.circuit.GUICircuit;
 import fr.enseeiht.superjumpingsumokart.application.network.BluetoothClient;
 import fr.enseeiht.superjumpingsumokart.application.network.BluetoothCommunication;
@@ -229,14 +230,16 @@ public class GUIWelcome extends Activity {
      * This switch requires to have a drone connected with the application.
      */
     private void startRaceBtnAction(){
-        if (currentDeviceService != null) {
+        if (currentDeviceService == null) {
+            Toast.makeText(GUIWelcome.this, R.string.no_drone_connected, Toast.LENGTH_SHORT).show();
+        } else if (Circuit.getInstance() == null) {
+            Toast.makeText(GUIWelcome.this, R.string.no_circuit_selected, Toast.LENGTH_SHORT).show();
+        } else {
             Intent i = new Intent(GUIWelcome.this, GUIGame.class);
             i.putExtra("currentDeviceService", currentDeviceService);
             i.putExtra("isServer", isServer);
             Log.d(GUI_WELCOME_TAG, "Launching a GUIGame Activity...");
             startActivity(i);
-        } else {
-            Toast.makeText(GUIWelcome.this, R.string.no_drone_connected, Toast.LENGTH_SHORT).show();
         }
     }
 

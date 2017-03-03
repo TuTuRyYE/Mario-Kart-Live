@@ -50,4 +50,7 @@
     <string name="checkpoint">Checkpoints : </string>
     <string name="laps">Laps : </string>
     <string name="default_lap_checkpoint">0/0</string>
+    <string name="no_circuit_selected">No circuit is selected. You must select a circuit before starting a race.</string>
+    <string name="lms">LMS :</string>
+    <string name="default_lms">\?</string>
 </resources>

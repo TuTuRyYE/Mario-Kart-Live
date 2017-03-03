@@ -91,6 +91,11 @@ public class GUIGame extends Activity implements GameListener {
     /**
      * Message for the {@link Handler} of the {@link GUIGame} activity.
      */
+    public final static int LAST_MARKER_SEEN_UPDATE = 2;
+
+    /**
+     * Message for the {@link Handler} of the {@link GUIGame} activity.
+     */
     public final static int ANIMATE_BLOOPER = 10;
 
     /**
@@ -143,7 +148,7 @@ public class GUIGame extends Activity implements GameListener {
     private SurfaceView cameraView;
     private GLSurfaceView glView;
     private ItemRenderer renderer;
-    private TextView lapsTextView, checkpointTextView;
+    private TextView lapsTextView, checkpointTextView, lmsTextView;
 
     /**
      * Handler to update GUI.
@@ -187,6 +192,8 @@ public class GUIGame extends Activity implements GameListener {
                 case CHECKPOINT_COUNT_UPDATE :
                     checkpointTextView.setText(Integer.toString(controller.getDrone().getCurrentCheckpoint()) + "/" + Integer.toString(Circuit.getInstance().getCheckpointToCheck()));
                     break;
+                case LAST_MARKER_SEEN_UPDATE :
+                    lmsTextView.setText((controller.getDrone().getLastMarkerSeen().name()));
                 case ANIMATE_BLOOPER :
                     animationLayout.setBackgroundResource(R.drawable.blooper_animation);
                     AnimationDrawable adb = (AnimationDrawable) animationLayout.getBackground();
@@ -261,6 +268,7 @@ public class GUIGame extends Activity implements GameListener {
         sendTrapBtn = (ImageButton) findViewById(R.id.sendTrapBtn);
         checkpointTextView = (TextView) findViewById(R.id.checkpointTextView);
         lapsTextView = (TextView) findViewById(R.id.lapsTextView);
+        lmsTextView = (TextView) findViewById(R.id.lmsTextView);
 
 
         // Defines action listeners
@@ -337,7 +345,7 @@ public class GUIGame extends Activity implements GameListener {
                     ArrayList<DetectionTask.Symbol> markers = Circuit.getInstance().getMarkers();
                     long pressDuration = motionEvent.getEventTime() - motionEvent.getDownTime();
                     // Send the object on the next marker forward if it is a long touch
-                    if (pressDuration > 1000 && markers.size() > 1) {
+                    if (pressDuration > 500 && markers.size() > 1) {
                         Log.d(GUI_GAME_TAG, "sentTrapBtn long touch");
                         // Get the list of markers and the last marker seen
                         // Found the next marker on the circuit
@@ -598,6 +606,13 @@ public class GUIGame extends Activity implements GameListener {
         for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
             ggl.onSymbolTouched(symbol);
         }
+    }
+
+    /**
+     * TODO
+     */
+    public void circuitMarkerDetected() {
+        UPDATER.sendEmptyMessage(LAST_MARKER_SEEN_UPDATE);
     }
 
     /**

@@ -170,6 +170,7 @@ public class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
                                 Log.d(DETECTION_TASK_TAG, "Touched symbol " + s.name());
                             }
                             GUI_GAME.getController().getDrone().setLastMarkerSeen(s);
+                            GUI_GAME.circuitMarkerDetected();
                             break;
                     }
                 }
