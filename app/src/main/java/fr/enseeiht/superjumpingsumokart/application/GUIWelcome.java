@@ -20,6 +20,7 @@ import java.util.List;
 import fr.enseeiht.superjumpingsumokart.R;
 import fr.enseeiht.superjumpingsumokart.application.circuit.GUICircuit;
 import fr.enseeiht.superjumpingsumokart.application.network.BluetoothClient;
+import fr.enseeiht.superjumpingsumokart.application.network.BluetoothCommunication;
 import fr.enseeiht.superjumpingsumokart.application.network.BluetoothServer;
 import fr.enseeiht.superjumpingsumokart.application.network.WifiConnector;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
@@ -311,6 +312,7 @@ public class GUIWelcome extends Activity {
         if (server != null) {
             server.cancel();
         }
+        BluetoothCommunication.deleteInstance();
         currentDeviceService = null;
         devicesList = null;
         finish();

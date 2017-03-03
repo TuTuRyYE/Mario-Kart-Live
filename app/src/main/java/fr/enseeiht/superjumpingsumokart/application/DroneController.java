@@ -344,7 +344,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
             if (!frame.isIFrame()) {
                 return ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_ERROR_STREAM;
             }
-            GUI_GAME.receiveFrame(frame);
+            GUI_GAME.onFrameReceived(frame);
             fps_count = 0;
         }
         return ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_OK;

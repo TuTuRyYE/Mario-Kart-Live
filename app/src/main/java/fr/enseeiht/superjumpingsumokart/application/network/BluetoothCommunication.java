@@ -91,6 +91,13 @@ public final class BluetoothCommunication extends Thread implements GameListener
         }
     }
 
+    public static void deleteInstance() {
+        if (btComInstance != null) {
+            btComInstance.cancel();
+            btComInstance = null;
+        }
+    }
+
     /**
      * Get the instance of BluetoothCommunication
      * @return The singleton instance of BluetoothCommunication.

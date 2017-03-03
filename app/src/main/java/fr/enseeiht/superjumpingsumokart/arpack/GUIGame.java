@@ -51,6 +51,11 @@ public class GUIGame extends Activity implements GameListener {
     /**
      * Message for the {@link Handler} of the {@link GUIGame} activity.
      */
+    public final static int DISPLAY_ITEM = 1;
+
+    /**
+     * Message for the {@link Handler} of the {@link GUIGame} activity.
+     */
     public final static int RENDER_AR = 3;
 
     /**
@@ -133,7 +138,8 @@ public class GUIGame extends Activity implements GameListener {
     /**
      * The area to display the video stream from the device.
      */
-    private FrameLayout mainLayout, animationLayout/*, magicBoxSpinnerLayout*/;
+    private FrameLayout mainLayout, animationLayout;
+    private ImageButton sendTrapAnim;
     private SurfaceView cameraView;
     private GLSurfaceView glView;
     private ItemRenderer renderer;
@@ -160,6 +166,9 @@ public class GUIGame extends Activity implements GameListener {
                     break;
                 case RENDER_AR:
                     renderAR();
+                    break;
+                case DISPLAY_ITEM :
+                    displayItem();
                     break;
                 case CONTROLLER_RUNNING:
                     for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
@@ -189,10 +198,10 @@ public class GUIGame extends Activity implements GameListener {
                     adrs.start();
                     break;
                 case ANIMATE_MAGIC_BOX :
-                   /* magicBoxSpinnerLayout.setBackgroundResource(R.drawable.magic_box_animation);
-                    AnimationDrawable admb = (AnimationDrawable) magicBoxSpinnerLayout.getBackground();
+                    sendTrapAnim.setBackgroundResource(R.drawable.magic_box_animation);
+                    AnimationDrawable admb = (AnimationDrawable) sendTrapAnim.getBackground();
                     admb.start();
-                    break;*/
+                    break;
                 default:
                     break;
             }
@@ -239,12 +248,11 @@ public class GUIGame extends Activity implements GameListener {
         // Logs information about the displaying screen
         AndroidUtils.reportDisplayInformation(this);
 
-        // Get the BT communication
-        //BluetoothCommunication comBT = (BluetoothCommunication) getIntent().getExtras().get("bluetoothCommunication");
         // Initializes the views of the GUI
         mainLayout = (FrameLayout) findViewById(R.id.mainLayout);
         animationLayout = (FrameLayout) findViewById(R.id.animationLayout);
-        //magicBoxSpinnerLayout = (FrameLayout) findViewById(R.id.magicBoxSpinnerLayout);
+        sendTrapAnim = (ImageButton) findViewById(R.id.sendTrapLayout);
+        sendTrapAnim.setBackgroundResource(R.drawable.alpha_frame_50x50);
         ImageButton turnLeftBtn = (ImageButton) findViewById(R.id.turnLeftBtn);
         ImageButton turnRightBtn = (ImageButton) findViewById(R.id.turnRightBtn);
         ImageButton moveBackwardBtn = (ImageButton) findViewById(R.id.moveBackwardBtn);
@@ -406,9 +414,9 @@ public class GUIGame extends Activity implements GameListener {
             if (game != null && game.isStarted()) {
                 ggl.onPlayerGaveUp();
             }
-
         }
         GUI_GAME_LISTENERS.clear();
+        BluetoothCommunication.deleteInstance();
     }
 
     @Override
@@ -419,7 +427,7 @@ public class GUIGame extends Activity implements GameListener {
     /**
      * Method used to display the current trap owned by the player (Matthieu Michel - 30/01/2017).
      */
-    private void displayTrap() {
+    private void displayItem() {
         Item currentItem = controller.getDrone().getCurrentItem();
         Log.d(GUI_GAME_TAG, currentItem.getName()+" is owned by the player");
         currentItem.assignResource(sendTrapBtn);
@@ -498,7 +506,7 @@ public class GUIGame extends Activity implements GameListener {
      *
      * @param frame The frame received from the device.
      */
-    public void receiveFrame(ARFrame frame) {
+    public void onFrameReceived(ARFrame frame) {
         if (firstUpdate) {
             renderer.configureARScene();
             firstUpdate = false;
@@ -508,6 +516,7 @@ public class GUIGame extends Activity implements GameListener {
         }
         currentFrame = frame.getByteData();
         UPDATER.sendEmptyMessage(RECEIVE_FRAME);
+        UPDATER.sendEmptyMessage(DISPLAY_ITEM);
     }
 
     /**
@@ -545,7 +554,7 @@ public class GUIGame extends Activity implements GameListener {
         if (symbol != null) {
             renderer.defineModelAtSymbol(item, symbol);
         }
-        displayTrap();
+        displayItem();
     }
 
     @Override

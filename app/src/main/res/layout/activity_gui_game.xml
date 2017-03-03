@@ -65,6 +65,13 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@+id/turnRightBtn"
+            android:id="@+id/sendTrapLayout" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:srcCompat="@drawable/bottom_arrow"
             android:layout_marginEnd="18dp"
             android:id="@+id/moveBackwardBtn"
