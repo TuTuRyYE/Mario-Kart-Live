@@ -59,9 +59,8 @@ public class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedRecei
     private boolean hasStarted = false;
 
     /**
-     * Default constructor of the class (Romain Verset - 30/01/2017).
+     * Default constructor of the class.
      * Sets up the context and starts the discovering service.
-     *
      * @param appContext The context of the android {@link android.app.Activity} running this connector.
      */
     public WifiConnector(Context appContext) {
@@ -70,8 +69,7 @@ public class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedRecei
     }
 
     /**
-     * Creates a device using a discovery service (Romain Verset - 30/01/2017).
-     *
+     * Creates a device using a discovery service.
      * @param discoveryDeviceService The discovery service used to construct the device.
      * @return The device corresponding to the given {@link ARDiscoveryDeviceService}.
      */
@@ -98,7 +96,7 @@ public class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedRecei
     }
 
     /**
-     * Starts the discovery service (Romain Verset - 30/01/2017).
+     * Starts the discovery service.
      * This method first check if a connection is available. If so, it then tries to discover drones
      * to connect with.
      */
@@ -143,7 +141,7 @@ public class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedRecei
     }
 
     /**
-     * Stops every services started by this connector (Romain Verset - 30/01/2017).
+     * Stops every services started by this connector.
      * It runs a separate thread to properly unbind and close the connection service and  to close
      * the discovery service.
      */
@@ -169,7 +167,6 @@ public class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedRecei
     }
 
     /**
-     * (Romain Verset - 30/01/2017).
      * Register this connector so that it receives notification about changes in the list of available
      * devices.
      */
@@ -180,7 +177,6 @@ public class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedRecei
     }
 
     /**
-     * (Romain Verset - 30/01/2017).
      * Unregister this connector so that it no longer receives notification about changes in the
      * list of available devices.
      */
@@ -191,7 +187,7 @@ public class WifiConnector implements ARDiscoveryServicesDevicesListUpdatedRecei
 
     /**
      * Describes the action to do when there is an update in the available devices list.
-     * Here send a message to the {@link GUIWelcome} handler. {@link GUIWelcome}.
+     * Here send a message to the {@link GUIWelcome} handler.
      */
     @Override
     public void onServicesDevicesListUpdated() {
