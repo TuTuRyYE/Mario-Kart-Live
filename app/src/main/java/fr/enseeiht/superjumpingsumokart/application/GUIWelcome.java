@@ -211,7 +211,6 @@ public class GUIWelcome extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        btHostBtn.setBackgroundResource(android.R.drawable.btn_default);
         if (currentDeviceService == null) {
             disableWifiConnectionBtn();
         }
