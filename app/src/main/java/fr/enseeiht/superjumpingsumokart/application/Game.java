@@ -70,6 +70,9 @@ public class Game implements BluetoothCommunicationListener, GUIGameListener {
         // Add markers for boxes
         this.guiGame = guiGame;
         registerGameListener(guiGame);
+        if (Circuit.getInstance() == null) {
+            Circuit.initInstance(-1, -1);
+        }
         this.started = false;
         this.comBT = comBT;
         if (comBT != null) {

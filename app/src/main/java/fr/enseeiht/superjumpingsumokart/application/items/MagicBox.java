@@ -48,25 +48,23 @@ public class MagicBox extends Item {
     public void applyEffect(DroneController droneController) {
         Log.d(ITEM_TAG, "A magic box has been touched");
         GUI_GAME.GUI_GAME_HANDLER.sendEmptyMessage(GUIGame.ANIMATE_MAGIC_BOX);
-        int rand = 1+ (int) Math.floor(Math.random() * 0); //TODO Changer le rand.
+        int rand = 1+ (int) Math.floor(Math.random() * 5);
         Item item;
         switch (rand) {
             case 1 :
-                //item = new RedShell(GUI_GAME);
                 item = new Banana();
                 break;
             case 2 :
-                item = new Blooper(GUI_GAME);
-                //item = new FakeBox();
+                item = new FakeBox();
                 break;
             case 3 :
-                item = new RedShell(GUI_GAME);
+                item = new RedShell(null);
                 break;
             case 4 :
                 item = new Mushroom();
                 break;
             case 5 :
-                item = new Blooper(GUI_GAME);
+                item = new Blooper(null);
                 break;
             default:
                 item = new NullItem();
