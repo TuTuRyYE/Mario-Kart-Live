@@ -9,9 +9,8 @@ import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 
 /**
- * @author Vivian Guy.
- *
  * Implementation of magic box {@link Item}.
+ * @author Vivian Guy.
  */
 
 

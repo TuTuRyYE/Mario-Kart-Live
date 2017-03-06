@@ -9,9 +9,8 @@ import fr.enseeiht.superjumpingsumokart.application.DroneController;
 import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
- * @author Matthieu Michel.
- *
  * Implementation of Banana {@link Item}.
+ * @author Matthieu Michel.
  */
 
 public class Banana extends Item {

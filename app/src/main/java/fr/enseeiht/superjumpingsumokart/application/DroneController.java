@@ -13,9 +13,8 @@ import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 import static java.lang.Thread.sleep;
 
 /**
- * @author Matthieu Michel, Romain Verset.
- *
  * This class is used as a controller of a Jumping Sumo device.
+ * @author Matthieu Michel, Romain Verset.
  */
 public class DroneController implements ARDeviceControllerListener, ARDeviceControllerStreamListener {
 

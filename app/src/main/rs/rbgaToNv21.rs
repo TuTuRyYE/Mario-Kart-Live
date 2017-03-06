@@ -1,6 +1,5 @@
 //File : rgbaToNV21.rs
-
-//@author Romain Verset
+//Author : Romain Verset
 
 #pragma version(1)
 #pragma rs_fp_relaxed

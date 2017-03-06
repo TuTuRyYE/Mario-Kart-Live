@@ -9,9 +9,8 @@ import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 
 /**
- * @author Romain Verset.
- *
  * Implements a Blooper {@link Item}.
+ * @author Romain Verset.
  */
 
 public class Blooper extends Item {

@@ -27,9 +27,8 @@ import java.util.ArrayList;
 import fr.enseeiht.superjumpingsumokart.R;
 
 /**
- * @author Vivian Guy.
- *
  * Activity to modify a circuit.
+ * @author Vivian Guy.
  */
 
 public class GUIModifyCircuit extends Activity {

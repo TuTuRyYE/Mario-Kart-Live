@@ -42,11 +42,10 @@ import fr.enseeiht.superjumpingsumokart.application.network.BluetoothCommunicati
 import fr.enseeiht.superjumpingsumokart.application.network.WifiConnector;
 
 /**
- * @author Romain Verset
- *
  * User interface {@link Activity} used while in game.
  * It it composed of several to pilot the drone device buttons and two {@link SurfaceView}, one for
  * the video stream upcoming from the drone device, another one for OpenGL rendering.
+ * @author Romain Verset
  *
  */
 public class GUIGame extends Activity implements GameListener {

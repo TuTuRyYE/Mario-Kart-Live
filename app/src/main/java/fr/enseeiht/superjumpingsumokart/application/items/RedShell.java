@@ -9,9 +9,8 @@ import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 
 /**
- * @author Lucas Pascal.
- *
  * Implementation of red shell {@link Item}.
+ * @author Lucas Pascal.
  */
 
 public class RedShell extends Item {

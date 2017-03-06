@@ -15,9 +15,8 @@ import java.util.ArrayList;
 import fr.enseeiht.superjumpingsumokart.R;
 
 /**
- * @author Vivian Guy.
- *
  * {@link android.widget.Adapter} for {@link GUICreateCircuit#listMarkers} and {@link GUIModifyCircuit#listMarkers}.
+ * @author Vivian Guy.
  */
 
 class MarkerAdapter extends ArrayAdapter<String> {

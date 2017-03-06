@@ -8,9 +8,8 @@ import fr.enseeiht.superjumpingsumokart.application.DroneController;
 import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
- * @author Romain Verset.
- *
  * Implementation of a boost mushroom.
+ * @author Romain Verset.
  */
 
 class Mushroom extends Item {

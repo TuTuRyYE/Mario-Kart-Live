@@ -27,10 +27,9 @@ import fr.enseeiht.superjumpingsumokart.application.GUIWelcome;
 import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
- * @author Vivian Guy.
- *
  * The activity used for handling circuits. From this activity, the user can chose/modify/delete
  * a existing circuit or create a new one.
+ * @author Vivian Guy.
  */
 
 public class GUICircuit extends Activity {

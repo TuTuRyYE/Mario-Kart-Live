@@ -7,10 +7,9 @@ import fr.enseeiht.superjumpingsumokart.application.items.Item;
 import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
- * @author Vivian Guy.
- *
- * Modelises a circuit in Super Jumping Sumo Kart.
+ * Represents a circuit in Super Jumping Sumo Kart.
  * Borders of the track are materialised by ARToolkit markers. The Circuit class is a singleton class.
+ * @author Vivian Guy.
  */
 public class Circuit {
 

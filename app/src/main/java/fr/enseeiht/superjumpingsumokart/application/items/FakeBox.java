@@ -9,9 +9,8 @@ import fr.enseeiht.superjumpingsumokart.application.DroneController;
 import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
- * @author Matthieu Michel.
- *
  * Implementation of a box {@link Item}.
+ * @author Matthieu Michel.
  */
 
 public class FakeBox extends Item {

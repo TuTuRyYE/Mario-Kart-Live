@@ -26,11 +26,10 @@ import fr.enseeiht.superjumpingsumokart.application.network.BluetoothServer;
 import fr.enseeiht.superjumpingsumokart.application.network.WifiConnector;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 /**
- * @author Romain Verset.
- *
  * The activity used as home screen for the application. From there it is possible to connect to a
  * drone, to launch a race, to manage circuits and to connect with another SuperJumpingSumoKart
  * application using Bluetooth.
+ * @author Romain Verset.
  */
 public class GUIWelcome extends Activity {
 

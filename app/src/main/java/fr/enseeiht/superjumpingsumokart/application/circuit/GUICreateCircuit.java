@@ -23,9 +23,8 @@ import java.util.ArrayList;
 import fr.enseeiht.superjumpingsumokart.R;
 
 /**
- * @author Vivian Guy.
- *
  * {@link Activity} to create a new Circuit.
+ * @author Vivian Guy.
  */
 
 public class GUICreateCircuit extends Activity {

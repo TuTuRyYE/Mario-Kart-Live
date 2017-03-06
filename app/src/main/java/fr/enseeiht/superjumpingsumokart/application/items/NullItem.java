@@ -7,10 +7,9 @@ import fr.enseeiht.superjumpingsumokart.application.DroneController;
 import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
- * @author Matthieu Michel.
- *
  * Implementation of a null {@link Item}.
  * This item symbolizes the absence of item.
+ * @author Matthieu Michel.
  */
 
 public class NullItem extends Item {

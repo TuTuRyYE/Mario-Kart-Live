@@ -6,10 +6,9 @@ import fr.enseeiht.superjumpingsumokart.application.items.*;
 import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
- * @author Vivian Guy.
- *
  * Class representing a drone in the application.
  * It represents a drone as a player, not as a device.
+ * @author Vivian Guy.
  */
 
 public class Drone {
