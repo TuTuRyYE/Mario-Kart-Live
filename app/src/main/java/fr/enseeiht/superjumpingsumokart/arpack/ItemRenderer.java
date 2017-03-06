@@ -15,6 +15,7 @@ import fr.enseeiht.superjumpingsumokart.application.items.Item;
 
 /**
  * @author Romain Verset, JorgeEnrique.
+ *
  * Provides the necessary methods to associate markers pattern and 3D models together.
  * Renderer to render on the {@link GUIGame} {@link android.opengl.GLSurfaceView}.
  */

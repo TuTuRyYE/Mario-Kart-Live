@@ -16,6 +16,7 @@ import fr.enseeiht.superjumpingsumokart.R;
 
 /**
  * @author Vivian Guy.
+ *
  * {@link android.widget.Adapter} for {@link GUICreateCircuit#listMarkers} and {@link GUIModifyCircuit#listMarkers}.
  */
 

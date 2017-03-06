@@ -6,6 +6,7 @@ import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
  * @author Vivian Guy.
+ *
  * Interface for the communication between {@link fr.enseeiht.superjumpingsumokart.application.network.BluetoothCommunication}, {@link fr.enseeiht.superjumpingsumokart.arpack.GUIGame} and {@link Game}.
  * Methods from this interface enable to notify the Bluetooth module and the user interface from the
  * first player's action.

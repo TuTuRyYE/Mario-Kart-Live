@@ -7,6 +7,7 @@ import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
  * @author Matthieu Michel.
+ *
  * Interface for items used in the game.
  * It defines the function to apply the effect of the item on a drone and how to
  * draw the icon of the item on the {@link fr.enseeiht.superjumpingsumokart.arpack.GUIGame} activity.

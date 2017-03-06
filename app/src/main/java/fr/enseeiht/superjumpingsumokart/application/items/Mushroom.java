@@ -9,6 +9,7 @@ import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
  * @author Romain Verset.
+ *
  * Implementation of a boost mushroom.
  */
 

@@ -10,6 +10,7 @@ import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
  * @author Matthieu Michel.
+ *
  * Implementation of Banana {@link Item}.
  */
 

@@ -8,6 +8,7 @@ import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
  * @author Matthieu Michel.
+ *
  * Implementation of a null {@link Item}.
  * This item symbolizes the absence of item.
  */

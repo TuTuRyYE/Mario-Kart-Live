@@ -24,6 +24,7 @@ import fr.enseeiht.superjumpingsumokart.R;
 
 /**
  * @author Vivian Guy.
+ *
  * {@link Activity} to create a new Circuit.
  */
 

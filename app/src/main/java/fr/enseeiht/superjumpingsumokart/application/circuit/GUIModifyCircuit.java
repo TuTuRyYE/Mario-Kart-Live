@@ -28,6 +28,7 @@ import fr.enseeiht.superjumpingsumokart.R;
 
 /**
  * @author Vivian Guy.
+ *
  * Activity to modify a circuit.
  */
 

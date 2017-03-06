@@ -18,6 +18,7 @@ import fr.enseeiht.superjumpingsumokart.arpack.GUIGameListener;
 
 /**
  * @author Vivian Guy, Matthieu Michel, Romain Verset.
+ *
  * This class is used to manage the game.
  */
 public class Game implements BluetoothCommunicationListener, GUIGameListener {

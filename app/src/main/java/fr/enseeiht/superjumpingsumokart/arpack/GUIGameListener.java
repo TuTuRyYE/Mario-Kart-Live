@@ -7,6 +7,7 @@ import fr.enseeiht.superjumpingsumokart.application.items.Item;
 
 /**
  * @author michelmatthieu.
+ *
  * Interface used in {@link Game} to notify it when there is a modification in {@link fr.enseeiht.superjumpingsumokart.arpack.GUIGame}.
  */
 

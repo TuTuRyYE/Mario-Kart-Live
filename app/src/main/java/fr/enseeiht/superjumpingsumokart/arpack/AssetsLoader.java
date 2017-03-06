@@ -6,6 +6,7 @@ import org.artoolkit.ar.base.assets.AssetHelper;
 
 /**
  * @author JorgeEnrique.
+ *
  * Assets loader to enable the access to ressource for native code.
  */
 

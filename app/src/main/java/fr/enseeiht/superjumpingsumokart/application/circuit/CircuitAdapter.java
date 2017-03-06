@@ -13,7 +13,8 @@ import java.util.ArrayList;
 import fr.enseeiht.superjumpingsumokart.R;
 
 /**
- * @author Vivian Guy
+ * @author Vivian Guy.
+ *
  * Circuit adapter for {@link GUICircuit#existingCircuitsListView}.
  */
 

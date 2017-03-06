@@ -10,6 +10,7 @@ import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 
 /**
  * @author Romain Verset.
+ *
  * Implements a Blooper {@link Item}.
  */
 

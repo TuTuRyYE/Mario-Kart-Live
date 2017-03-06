@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 /**
  * @author Vivian Guy.
+ *
  * {@link android.widget.Adapter} for {@link GUICreateCircuit#symbolSpinner} and {@link GUIModifyCircuit#symbolSpinner}.
  */
 
