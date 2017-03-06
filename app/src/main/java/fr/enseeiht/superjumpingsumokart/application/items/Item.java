@@ -21,16 +21,17 @@ public abstract class Item {
 
     /**
      * Default constructor of the class {@link Item}.
-     * @param name name given to the Item.
+     * @param name Name of the item.
      */
     public Item(String name) {
         NAME = name;
     }
 
     /**
-     * Method used to use an {@link Item}.
-     * @param droneController using the {@link Item}.
-     * @param marker The marker on which the item shoulb be used (if the item requires a marker).
+     * Method used to use an item.
+     * Describes what happens hen the item is used, not its effect upon reception.
+     * @param droneController The drone controller using the item.
+     * @param marker The marker on which the item should be used (if the item requires a marker).
      * @return True if the item has been used, false otherwise.
      */
     public abstract boolean useItem(DroneController droneController, DetectionTask.Symbol marker);

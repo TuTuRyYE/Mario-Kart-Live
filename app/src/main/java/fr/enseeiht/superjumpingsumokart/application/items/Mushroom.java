@@ -12,7 +12,7 @@ import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
  * @author Romain Verset.
  */
 
-class Mushroom extends Item {
+public class Mushroom extends Item {
 
     /**
      * The logging tag. Useful for debugging.
@@ -27,7 +27,7 @@ class Mushroom extends Item {
     /**
      * Default constructor of the class {@link Mushroom}.
      */
-    Mushroom() {
+    public Mushroom() {
         super(NAME);
     }
 
