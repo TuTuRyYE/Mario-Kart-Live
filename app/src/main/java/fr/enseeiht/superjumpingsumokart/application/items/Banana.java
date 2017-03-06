@@ -26,7 +26,7 @@ public class Banana extends Item {
     private final static String NAME = "banana";
 
     /**
-     * Default constructor of the class {@link Item}.
+     * Default constructor of the class {@link Banana}.
      */
     public Banana() {
         super(NAME);

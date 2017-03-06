@@ -39,15 +39,18 @@ public class GUICircuit extends Activity {
      */
     private static String GUI_CIRCUIT_TAG = "GUICircuit";
 
+    /**
+     * The {@link View} holding  the existing {@link Circuit} stored on the phone.
+     */
     private ListView existingCircuitsListView;
 
     /**
-     * List of existing circuit in the folder Circuits of the internal storage saved as a String Array [name, lap].
+     * List of existing circuit in the folder Circuits of the internal storage saved as a {@link String} array [name, lap].
      */
     private ArrayList<String[]> existingCircuits;
 
     /**
-     * The adapter for the existingCircuitsListView.
+     * The {@link CircuitAdapter} for the {@link GUICircuit#existingCircuitsListView}.
      */
     private ArrayAdapter adapter;
 
@@ -62,10 +65,7 @@ public class GUICircuit extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guicircuit);
 
-        // Get the objects from the layout
-            /*
-      Buttons in the GUI.
-     */
+        // Buttons in the GUI.
         Button createNewCircuitBtn = (Button) findViewById(R.id.createCircuitButton);
         Button choseSelectedBtn = (Button) findViewById(R.id.choseSelectedButton);
         this.existingCircuitsListView = (ListView) findViewById(R.id.existingCircuitsList);
@@ -103,7 +103,7 @@ public class GUICircuit extends Activity {
             }
         });
 
-        /**
+         /*
          *  Button to select and instanced the selected circuit.
          */
         choseSelectedBtn.setOnTouchListener(new View.OnTouchListener() {
@@ -170,7 +170,7 @@ public class GUICircuit extends Activity {
             }
         });
 
-        /**
+        /*
          * Listener to select an item on the existingCircuitsListView.
          */
         existingCircuitsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -195,7 +195,7 @@ public class GUICircuit extends Activity {
             }
         });
 
-        /**
+        /*
          * Button to delete the selected circuit.
          */
         deleteCircuitBtn.setOnTouchListener(new View.OnTouchListener() {
@@ -230,7 +230,7 @@ public class GUICircuit extends Activity {
             }
         });
 
-        /**
+        /*
          * Button to modify the selected circuit. Launch a GUIModifyCircuit Activity.
          */
         modifyCircuitBtn.setOnTouchListener(new View.OnTouchListener() {

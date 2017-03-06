@@ -7,20 +7,20 @@ import java.util.ArrayList;
 import fr.enseeiht.superjumpingsumokart.application.circuit.Circuit;
 import fr.enseeiht.superjumpingsumokart.application.items.Banana;
 import fr.enseeiht.superjumpingsumokart.application.items.Blooper;
-import fr.enseeiht.superjumpingsumokart.application.items.Box;
+import fr.enseeiht.superjumpingsumokart.application.items.FakeBox;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
 import fr.enseeiht.superjumpingsumokart.application.items.RedShell;
 import fr.enseeiht.superjumpingsumokart.application.network.BluetoothCommunication;
 import fr.enseeiht.superjumpingsumokart.application.network.BluetoothCommunicationListener;
 import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
-import fr.enseeiht.superjumpingsumokart.arpack.GuiGameListener;
+import fr.enseeiht.superjumpingsumokart.arpack.GUIGameListener;
 
 /**
  * @author Vivian Guy, Matthieu Michel, Romain Verset.
  * This class is used to manage the game.
  */
-public class Game implements BluetoothCommunicationListener, GuiGameListener {
+public class Game implements BluetoothCommunicationListener, GUIGameListener {
 
     /**
      * The logging tag. Useful for debugging.
@@ -108,8 +108,8 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener {
         if (ready && otherReady) {
             Log.d(GAME_TAG, "player and other player are ready to start the race");
             started = true;
-            guiGame.UPDATER.sendEmptyMessage(GUIGame.LAP_COUNT_UPDATE);
-            guiGame.UPDATER.sendEmptyMessage(GUIGame.CHECKPOINT_COUNT_UPDATE);
+            guiGame.GUI_GAME_HANDLER.sendEmptyMessage(GUIGame.LAP_COUNT_UPDATE);
+            guiGame.GUI_GAME_HANDLER.sendEmptyMessage(GUIGame.CHECKPOINT_COUNT_UPDATE);
             for (GameListener gl : GAME_LISTENERS) {
                 gl.onStartRace();
             }
@@ -148,7 +148,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener {
         this.drone = drone;
     }
 
-    // GuiGameListener methods
+    // GUIGameListener methods
     @Override
     public void onItemUsed(DetectionTask.Symbol symbol, Item item) {
         for(GameListener listener  : this.GAME_LISTENERS) {
@@ -232,7 +232,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener {
     @Override
     public void onSecondPlayerReady() {
         this.otherReady = true;
-        otherDrone = new Drone("BAD_JUMPY");
+        otherDrone = new Drone();
         checkReadyAndStartRace();
     }
 
@@ -268,7 +268,7 @@ public class Game implements BluetoothCommunicationListener, GuiGameListener {
             case "box":
                 Log.d(GAME_TAG,"A box has been put on the circuit by second player");
                 itemMarker = DetectionTask.Symbol.valueOf(msgSplit[1]);
-                Box box = new Box();
+                FakeBox box = new FakeBox();
                 Circuit.getInstance().addObject(itemMarker,box);
                 guiGame.getRenderer().defineModelAtSymbol(box, itemMarker);
                 break;

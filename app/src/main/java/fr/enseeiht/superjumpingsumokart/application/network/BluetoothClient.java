@@ -38,11 +38,6 @@ public class BluetoothClient extends Thread {
     private BluetoothDevice btDevice;
 
     /**
-     * The local bluetooth adapter.
-     */
-    private BluetoothAdapter btAdapter;
-
-    /**
      * Create the client for the bluetooth connexion.
      *
      * @param guiWelcome The {@link GUIWelcome} activity that instantiates this {@link BluetoothClient}.
@@ -55,7 +50,7 @@ public class BluetoothClient extends Thread {
     public void run() {
         BluetoothSocket tmpSocket = null;
         BluetoothDevice tmpDevice = null;
-        btAdapter = BluetoothAdapter.getDefaultAdapter();
+        BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
         Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
         //It is assumed the two phones are already paired so we got only one device in pairedDevices.
         if (pairedDevices.size() > 0) {

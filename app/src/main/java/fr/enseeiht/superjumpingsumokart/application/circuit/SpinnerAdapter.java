@@ -7,16 +7,16 @@ import java.util.ArrayList;
 
 /**
  * @author Vivian Guy.
- * Adapter for the the Spinner of GUICreateCircuit and GUIModifyCircuit
+ * {@link android.widget.Adapter} for {@link GUICreateCircuit#symbolSpinner} and {@link GUIModifyCircuit#symbolSpinner}.
  */
 
-public class SpinnerAdapter extends ArrayAdapter<String> {
+class SpinnerAdapter extends ArrayAdapter<String> {
 
     /**
-     * Constructor.
-     * @param theContext the context for the spinner
-     * @param objects the list of objects displayed on the spinner
-     * @param theLayoutResId the layout used to display the objects
+     * Constructor for {@link SpinnerAdapter}.
+     * @param theContext The context for the spinner.
+     * @param objects The list of objects displayed on the spinner.
+     * @param theLayoutResId The layout used to display the objects.
      */
     SpinnerAdapter(Context theContext, ArrayList<String> objects, int theLayoutResId) {
         super(theContext, theLayoutResId, objects);

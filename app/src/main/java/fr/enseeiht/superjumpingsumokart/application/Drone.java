@@ -12,11 +12,6 @@ import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
  */
 
 public class Drone {
-    /**
-     * The name of the drone.
-     */
-    private String name;
-
 
     /**
      * The current item the drone has.
@@ -40,29 +35,11 @@ public class Drone {
 
     /**
      * Constructor for the class {@link Drone}.
-     * @param name the name/id of the drone.
      */
-    Drone(String name) {
-        this.name = name;
+    Drone() {
         this.currentItem = new NullItem();
         this.currentCheckpoint = 0;
         this.currentLap = 0;
-    }
-
-    /**
-     * @return the name/id of the drone.
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Set the name of the drone.
-     * @param name the new name of the drone.
-     */
-    public void setName(String name) {
-
-        this.name = name;
     }
 
     /**
@@ -72,7 +49,6 @@ public class Drone {
     public Item getCurrentItem() {
         return currentItem;
     }
-
 
     /**
      * Set the {@link Item} of the drone.
@@ -84,7 +60,6 @@ public class Drone {
     }
 
     /**
-     * Get the number of lap the drone has done.
      * @return the number of lap the drone has done.
      */
     public int getCurrentLap() {
@@ -92,7 +67,6 @@ public class Drone {
     }
 
     /**
-     * Set the number of lap the drone has done.
      * @param currentLap the number of lap the drone has done.
      */
     void setCurrentLap(int currentLap) {
@@ -108,7 +82,6 @@ public class Drone {
     }
 
     /**
-     * Set the number of checkpoint validated by the drone.
      * @param currentCheckpoint the number of checkpoint validated by the drone.
      */
     void setCurrentCheckpoint(int currentCheckpoint) {
@@ -116,14 +89,14 @@ public class Drone {
     }
 
     /**
-     * @return the marker last marker seen by the drone.
+     * @return The marker last marker seen by the drone.
      */
     public DetectionTask.Symbol getLastMarkerSeen() {
         return lastMarkerSeen;
     }
 
     /**
-     * @param lastMarkerSeen the marker to put as last marker seen.
+     * @param lastMarkerSeen The marker to put as last marker seen.
      */
     public void setLastMarkerSeen(DetectionTask.Symbol lastMarkerSeen) {
         this.lastMarkerSeen = lastMarkerSeen;

@@ -9,10 +9,10 @@ import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
  * @author Romain Verset.
- * Implementation of a boosting Mushroom.
+ * Implementation of a boost mushroom.
  */
 
-public class Mushroom extends Item {
+class Mushroom extends Item {
 
     /**
      * The logging tag. Useful for debugging.
@@ -25,9 +25,9 @@ public class Mushroom extends Item {
     private final static String NAME = "mushroom";
 
     /**
-     * Default constructor of the class {@link Item}.
+     * Default constructor of the class {@link Mushroom}.
      */
-    public Mushroom() {
+    Mushroom() {
         super(NAME);
     }
 

@@ -19,7 +19,6 @@ import android.widget.Toast;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -40,15 +39,6 @@ public class GUIModifyCircuit extends Activity {
     private static String GUI_MODIFY_CIRCUIT_TAG = "GUIModifyCircuit";
 
     /**
-     * Buttons of the GUI
-     */
-    private EditText circuitNameText;
-    private EditText lapsText;
-    private EditText checkPointToCheckTxt;
-    private ListView listMarkers;
-    private Spinner symbolText;
-
-    /**
      * Item selected in the ListView listMarkers.
      */
     private Integer itemSelected;
@@ -64,13 +54,23 @@ public class GUIModifyCircuit extends Activity {
     private ArrayAdapter adapter;
 
     /**
-     * The adapter for the Spinner symbolText.
+     * The adapter for the {@link GUIModifyCircuit#symbolSpinner}.
      */
     private SpinnerAdapter spinnerAdapter;
+
+    /*
+     * Buttons of the GUI
+     */
+    private EditText circuitNameText;
+    private EditText lapsText;
+    private EditText checkPointToCheckTxt;
+    private ListView listMarkers;
+    private Spinner symbolSpinner;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guimodify_circuit);
 
@@ -79,15 +79,13 @@ public class GUIModifyCircuit extends Activity {
         lapsText = (EditText) findViewById(R.id.lapsText);
         checkPointToCheckTxt = (EditText) findViewById(R.id.nbCheckPointTxt);
         listMarkers = (ListView) findViewById(R.id.listMarkers);
-        symbolText = (Spinner) findViewById(R.id.symbolText);
+        symbolSpinner = (Spinner) findViewById(R.id.symbolText);
         Button addMarkerBtn = (Button) findViewById(R.id.addMarkerBtn);
         Button confirmBtn = (Button) findViewById(R.id.confirmBtn);
         Button deleteMarkerBtn = (Button) findViewById(R.id.deleteMarkerBtn);
 
-
         // List of markers for the circuit
         markers = new ArrayList<>();
-
 
         // Adapter for the listView
         adapter = new MarkerAdapter(GUIModifyCircuit.this, markers);
@@ -108,19 +106,17 @@ public class GUIModifyCircuit extends Activity {
         // Adapter for the spinner
         spinnerAdapter = new SpinnerAdapter(GUIModifyCircuit.this, listSymbols, android.R.layout.simple_spinner_item);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        symbolText.setAdapter(spinnerAdapter);
+        symbolSpinner.setAdapter(spinnerAdapter);
 
         // Show hint
-        symbolText.setSelection(spinnerAdapter.getCount());
+        symbolSpinner.setSelection(spinnerAdapter.getCount());
 
         // Set the circuit's markers
         final String circuitName = (String) getIntent().getExtras().get("circuitName");
         setMarkersList(circuitName);
 
-
         // BUTTONS LISTENERS
-
-        /**
+        /*
          * Button to add a marker to the list of markers.
          */
         addMarkerBtn.setOnTouchListener(new View.OnTouchListener() {
@@ -130,7 +126,7 @@ public class GUIModifyCircuit extends Activity {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         // Get the texts from the Spinner
-                        String symbol = symbolText.getSelectedItem().toString();
+                        String symbol = symbolSpinner.getSelectedItem().toString();
                         if (!symbol.equals("Select a type of marker")) { // if a symbol is selected
                             // Add the marker to markers list
                             adapter.add(symbol);
@@ -138,7 +134,7 @@ public class GUIModifyCircuit extends Activity {
                             spinnerAdapter.remove(symbol);
                             Log.d(GUI_MODIFY_CIRCUIT_TAG, "marker added to the list");
                             // Reset the Spinner
-                            symbolText.setSelection(spinnerAdapter.getCount());
+                            symbolSpinner.setSelection(spinnerAdapter.getCount());
                             Log.d(GUI_MODIFY_CIRCUIT_TAG, "Spinner reset");
                             // Inform the user that the marker is added
                             Toast.makeText(GUIModifyCircuit.this, "Marker added", Toast.LENGTH_SHORT).show();
@@ -152,7 +148,7 @@ public class GUIModifyCircuit extends Activity {
             }
         });
 
-        /**
+        /*
          * Button to the confirm and modify the circuit. It instanced to circuit with the markers described in the list.
          */
         confirmBtn.setOnTouchListener(new View.OnTouchListener() {
@@ -169,7 +165,7 @@ public class GUIModifyCircuit extends Activity {
             }
         });
 
-        /**
+        /*
          * Button to delete the selected marker.
          */
         deleteMarkerBtn.setOnTouchListener(new View.OnTouchListener() {
@@ -197,7 +193,7 @@ public class GUIModifyCircuit extends Activity {
             }
         });
 
-        /**
+        /*
          * Listener to select an item of the listView listMarkers.
          */
         listMarkers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -226,12 +222,12 @@ public class GUIModifyCircuit extends Activity {
                 }
             }
         });
-
     }
 
     /**
-     * Modify the circuitFile with the name circuitName.
-     * @param circuitName the name of the circuit to modify.
+     * Modify a file when an existing {@link Circuit} is edited.
+     * It deletes the old file and create a brand new one with updated markers, laps and/or checkpoints.
+     * @param circuitName The name of the circuit to modify.
      */
     protected void modifyCircuitFile(String circuitName) {
         // Get the file
@@ -266,7 +262,7 @@ public class GUIModifyCircuit extends Activity {
                         outputStream.write(stringToWrite.getBytes());
                     }
                     outputStream.close();
-                    Log.d(GUI_MODIFY_CIRCUIT_TAG, "Circuit file created");
+                    Log.d(GUI_MODIFY_CIRCUIT_TAG, "Circuit file created.");
 
                     // Inform the user that the circuit file has been created (and so modified)
                     Toast.makeText(GUIModifyCircuit.this, "Circuit modified!", Toast.LENGTH_SHORT).show();
@@ -291,8 +287,6 @@ public class GUIModifyCircuit extends Activity {
                 Toast.makeText(GUIModifyCircuit.this, "You have to put a circuit name and a lap number !", Toast.LENGTH_SHORT).show();
             }
         }
-
-
     }
 
     /**

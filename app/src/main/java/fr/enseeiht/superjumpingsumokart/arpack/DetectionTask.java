@@ -24,7 +24,7 @@ import fr.enseeiht.superjumpingsumokart.application.items.NullItem;
  */
 public class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
 
-    public enum Symbol {HIRO, KANJI, A, B, C, D, F, G};
+    public enum Symbol {HIRO, KANJI, A, B, C, D, F, G}
 
     /**
      * Logging tag. Useful for debugging.
@@ -74,10 +74,10 @@ public class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
      */
     private Allocation nv21Out = Allocation.createTyped(rs, nv21Type.create(), Allocation.USAGE_SCRIPT);
 
+    // TIMERS VARIABLES
     private static long timeSinceLastHiro;
     private static long timeSinceLastKanji;
     private static long timeSinceLastMinion;
-
 
     /**
      * Default constructor of {@link DetectionTask} (Romain Verset, Jorge Gutierrez - 08/02/2017).
@@ -95,7 +95,7 @@ public class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
      * NV21 bytes. Finally it runs the marker detection on the NV21 bytes (Android ARToolkit supports only NV21 encoding).
      *
      * @param frames The bytes revceived from the Jumping Sumo Camera stream.
-     * @return True if a marker has been detected, false otherwise.
+     * @return True. Useless return statement.
      */
     @Override
     protected Boolean doInBackground(byte[]... frames) {
@@ -160,7 +160,7 @@ public class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
                             if (GUI_GAME.getController().getDrone().getCurrentItem() instanceof NullItem && -ARToolKit.getInstance().queryMarkerTransformation(id)[14] < 250 && (SystemClock.elapsedRealtime() - timeSinceLastMinion) > 5000) {
                                 timeSinceLastMinion = SystemClock.elapsedRealtime();
                                 new MagicBox(GUI_GAME).applyEffect(GUI_GAME.getController());
-                                Log.d(DETECTION_TASK_TAG, "Got a Magic Box");
+                                Log.d(DETECTION_TASK_TAG, "Got a Magic FakeBox");
                             }
                             break;
                         default:
@@ -181,13 +181,12 @@ public class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
     }
 
     /**
-     * Tasks performed on the UI {@link Thread} ONCE the {@link #doInBackground(byte[]...)} method is
+     * Tasks performed on the UI {@link Thread} <b>once</b> the {@link #doInBackground(byte[]...)} method is
      * over (Romain Verset - 08/02/2017).
-     *
-     * @param aBoolean .
+     * @param b Useless parameter.
      */
     @Override
-    protected void onPostExecute(Boolean aBoolean) {
+    protected void onPostExecute(Boolean b) {
         GUI_GAME.updateCameraSurfaceView(bitmapToDisplay);
         GUI_GAME.renderAR();
     }

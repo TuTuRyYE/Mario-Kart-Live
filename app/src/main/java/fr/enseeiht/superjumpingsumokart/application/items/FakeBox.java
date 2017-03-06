@@ -10,15 +10,15 @@ import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
  * @author Matthieu Michel.
- * Created by michelmatthieu on 02/02/2017.
+ * Implementation of a box {@link Item}.
  */
 
-public class Box extends Item {
+public class FakeBox extends Item {
 
     /**
      * The logging tag. Useful for debugging.
      */
-    private final static String ITEM_TAG = "ITEM";
+    private final static String ITEM_TAG = "Item.FakeBox";
 
     /**
      * Name of the {@link Item}.
@@ -26,9 +26,9 @@ public class Box extends Item {
     private final static String NAME = "box";
 
     /**
-     * Default constructor of the class {@link Item}.
+     * Default constructor of the class {@link FakeBox}.
      */
-    public Box() {
+    public FakeBox() {
         super(NAME);
     }
 

@@ -10,7 +10,7 @@ import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 
 /**
  * @author Vivian Guy.
- * Implementation of magic Box {@link Item}.
+ * Implementation of magic box {@link Item}.
  */
 
 
@@ -32,7 +32,7 @@ public class MagicBox extends Item {
     private final GUIGame GUI_GAME;
 
     /**
-     * Default constructor of the class {@link Item}.
+     * Default constructor of the class {@link MagicBox}.
      */
     public MagicBox(GUIGame guiGame) {
         super(NAME);
@@ -47,24 +47,26 @@ public class MagicBox extends Item {
     @Override
     public void applyEffect(DroneController droneController) {
         Log.d(ITEM_TAG, "A magic box has been touched");
-        GUI_GAME.UPDATER.sendEmptyMessage(GUIGame.ANIMATE_MAGIC_BOX);
-        int rand = 1+ (int) Math.floor(Math.random() * 5);
+        GUI_GAME.GUI_GAME_HANDLER.sendEmptyMessage(GUIGame.ANIMATE_MAGIC_BOX);
+        int rand = 1+ (int) Math.floor(Math.random() * 0); //TODO Changer le rand.
         Item item;
         switch (rand) {
             case 1 :
+                //item = new RedShell(GUI_GAME);
                 item = new Banana();
                 break;
             case 2 :
-                item = new Box();
+                item = new Blooper(GUI_GAME);
+                //item = new FakeBox();
                 break;
             case 3 :
-                item = new RedShell(null);
+                item = new RedShell(GUI_GAME);
                 break;
             case 4 :
                 item = new Mushroom();
                 break;
             case 5 :
-                item = new Blooper(null);
+                item = new Blooper(GUI_GAME);
                 break;
             default:
                 item = new NullItem();

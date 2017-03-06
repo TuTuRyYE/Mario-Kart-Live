@@ -9,8 +9,7 @@ import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 /**
  * @author Vivian Guy
  * Modelises a circuit in Super Jumping Sumo Kart.
- * Borders of the track are materialised by ARToolkit markers.
- * Circuit is a Singleton.
+ * Borders of the track are materialised by ARToolkit markers. The Circuit class is a singleton class.
  */
 public class Circuit {
 
@@ -24,7 +23,6 @@ public class Circuit {
      */
     private ArrayList<DetectionTask.Symbol> markers;
 
-
     /**
      * The number of laps a player has to do to complete the circuit.
      */
@@ -35,21 +33,20 @@ public class Circuit {
      */
     private int checkPointToCheck;
 
-
     /**
      * The markers containing an item on the circuit.
      */
     private HashMap<DetectionTask.Symbol,Item> objects;
 
     /**
-     * Instance of the circuit.
+     * Singleton instance of {@link Circuit}.
      */
     private static Circuit circuitInstance;
 
     /**
      * Constructor for singleton circuit.
-     * @param laps .
-     * @param checkPointToCheck .
+     * @param laps The number of laps player will have to perform.
+     * @param checkPointToCheck The number of checkpoints between each lap.
      */
     private Circuit(int laps, int checkPointToCheck) {
         this.lapsNumber = laps;
@@ -70,8 +67,8 @@ public class Circuit {
     }
 
     /**
-     * Add markers to the list of markers present on the circuit.
-     * @param symbol the symbol of the marker added.
+     * Adds markers to the list of markers present on the circuit.
+     * @param symbol The symbol of the marker added.
      */
     public void addMarker(DetectionTask.Symbol symbol) {
         // Markers are ordered thanks to the key
@@ -79,17 +76,17 @@ public class Circuit {
     }
 
     /**
-     * Add an object to the list of objects present on the circuit.
-     * @param symbol the symbol of the marker.
-     * @param item the object.
+     * Adds an object to the list of objects present on the circuit.
+     * @param symbol The symbol of the marker.
+     * @param item The item to put on the circuit.
      */
     public void addObject(DetectionTask.Symbol symbol,Item item){
         this.objects.put(symbol,item);
     }
 
     /**
-     * Remove an object from the list of objects present on the circuit.
-     * @param symbol the symbol of the marker associated to the object deleted.
+     * Removes an object from the list of objects present on the circuit.
+     * @param symbol The symbol of the marker associated to the object to remove.
      */
     public void removeObject(DetectionTask.Symbol symbol){ this.objects.remove(symbol); }
 
@@ -97,59 +94,52 @@ public class Circuit {
     //   GETTER AND SETTER
 
     /**
-     * Get the number of check point to check to complete the circuit.
-     * @return the number of check point.
-     */
-    public int getCheckpointToCheck() {
-        return checkPointToCheck;
-    }
-
-    /**
-     * Get the instance of the circuit.
-     * @return The singleton instance of the circuit.
+     * @return The singleton instance of {@link Circuit}.
      */
     public static Circuit getInstance() {
         return circuitInstance;
     }
 
     /**
-     * Get the number of laps.
-     * @return the number of laps to complete the circuit.
-     */
-    public int getLaps() {
-        return lapsNumber;
-    }
-
-    /**
-     * Get the list of markers.
-     * @return the list of markers.
-     */
-    public ArrayList<DetectionTask.Symbol> getMarkers() {
-        return markers;
-    }
-
-    /**
-     * Get the name of the circuit.
-     * @return the name of the circuit.
+     * @return The name of the circuit.
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Set the name of the circuit.
-     * @param name the name of the circuit.
+     * @return The list of markers of the circuit.
      */
-    public void setName(String name) {
-        this.name = name;
+    public ArrayList<DetectionTask.Symbol> getMarkers() {
+        return markers;
+    }
+
+    /**
+     * @return The number of laps required to complete the circuit.
+     */
+    public int getLaps() {
+        return lapsNumber;
+    }
+
+    /**
+     * @return The number of checkpoints.
+     */
+    public int getCheckpointToCheck() {
+        return checkPointToCheck;
+    }
+
+    /**
+     * @return The list of {@link Item} present on the circuit.
+     */
+    public HashMap<DetectionTask.Symbol, Item> getObjects() {
+        return objects;
     }
 
 
     /**
-     * Get the list of objects present on the circuit
-     * @return the list of objects present on the circuit
+     * @param name The name of the circuit.
      */
-    public HashMap<DetectionTask.Symbol, Item> getObjects() {
-        return objects;
+    public void setName(String name) {
+        this.name = name;
     }
 }

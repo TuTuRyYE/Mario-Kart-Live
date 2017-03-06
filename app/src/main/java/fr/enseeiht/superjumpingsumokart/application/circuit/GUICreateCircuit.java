@@ -1,7 +1,6 @@
 package fr.enseeiht.superjumpingsumokart.application.circuit;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,12 +21,10 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 import fr.enseeiht.superjumpingsumokart.R;
-import fr.enseeiht.superjumpingsumokart.application.GUIWelcome;
-import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
  * @author Vivian Guy.
- * Activity to create a new Circuit.
+ * {@link Activity} to create a new Circuit.
  */
 
 public class GUICreateCircuit extends Activity {
@@ -37,25 +34,22 @@ public class GUICreateCircuit extends Activity {
      */
     private static String GUI_CREATE_CIRCUIT_TAG = "GUICreateCircuit";
 
-    /**
+    /*
      * Buttons in the GUI.
      */
     private EditText circuitNameText;
     private EditText lapsText;
     private EditText checkPointToCheckText;
     private ListView listMarkers;
-    private Spinner symbolText;
-    private Button addMarkerBtn;
-    private Button confirmBtn;
-    private Button deleteMarkerBtn;
+    private Spinner symbolSpinner;
 
     /**
-     * Item selected in the ListView listMarkers.
+     * {@link fr.enseeiht.superjumpingsumokart.application.items.Item} selected in the ListView listMarkers.
      */
     private Integer itemSelected;
 
     /**
-     * The list of markers for the circuit.
+     * The list of markers of the circuit.
      */
     private static ArrayList<String> markers;
 
@@ -70,11 +64,10 @@ public class GUICreateCircuit extends Activity {
         lapsText = (EditText) findViewById(R.id.lapsText);
         checkPointToCheckText = (EditText) findViewById(R.id.nbCheckPointTxt);
         listMarkers = (ListView) findViewById(R.id.listMarkers);
-        symbolText = (Spinner) findViewById(R.id.symbolText);
-        addMarkerBtn = (Button) findViewById(R.id.addMarkerBtn);
-        confirmBtn = (Button) findViewById(R.id.confirmBtn);
-        deleteMarkerBtn = (Button) findViewById(R.id.deleteMarkerBtn);
-
+        symbolSpinner = (Spinner) findViewById(R.id.symbolText);
+        Button addMarkerBtn = (Button) findViewById(R.id.addMarkerBtn);
+        Button confirmBtn = (Button) findViewById(R.id.confirmBtn);
+        Button deleteMarkerBtn = (Button) findViewById(R.id.deleteMarkerBtn);
 
         // Initialize the list of markers for the circuit
         markers = new ArrayList<>();
@@ -86,9 +79,8 @@ public class GUICreateCircuit extends Activity {
         listMarkers.addHeaderView(header, null, false);
         listMarkers.setAdapter(adapter);
 
-
         // List of symbols for the spinner
-        final ArrayList<String> listSymbols = new ArrayList();
+        final ArrayList<String> listSymbols = new ArrayList<>();
         listSymbols.add("B");
         listSymbols.add("C");
         listSymbols.add("D");
@@ -99,17 +91,13 @@ public class GUICreateCircuit extends Activity {
         // Adapter for the spinner
         final SpinnerAdapter spinnerAdapter = new SpinnerAdapter(GUICreateCircuit.this, listSymbols, android.R.layout.simple_spinner_item);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        symbolText.setAdapter(spinnerAdapter);
+        symbolSpinner.setAdapter(spinnerAdapter);
 
         // Show the hint
-        symbolText.setSelection(spinnerAdapter.getCount());
-
-
-
+        symbolSpinner.setSelection(spinnerAdapter.getCount());
 
         // BUTTONS LISTENERS
-
-        /**
+        /*
          * Button to add a marker to the list of markers.
          */
         addMarkerBtn.setOnTouchListener(new View.OnTouchListener() {
@@ -119,7 +107,7 @@ public class GUICreateCircuit extends Activity {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         // Get the texts from the EditTexts objects
-                        String symbol = symbolText.getSelectedItem().toString();
+                        String symbol = symbolSpinner.getSelectedItem().toString();
                         if (!symbol.equals("Select a type of marker")) { // if a symbol is selected
                             // Add the marker to the end of markers list (before 2 end markers)
                             adapter.add(symbol);
@@ -128,7 +116,7 @@ public class GUICreateCircuit extends Activity {
                             Log.d(GUI_CREATE_CIRCUIT_TAG, "marker " + symbol + " added to the list");
 
                             // Reset the EditTexts
-                            symbolText.setSelection(spinnerAdapter.getCount());
+                            symbolSpinner.setSelection(spinnerAdapter.getCount());
                             Log.d(GUI_CREATE_CIRCUIT_TAG, "Spinner reset");
 
                             // Inform the user that the marker is added
@@ -143,7 +131,7 @@ public class GUICreateCircuit extends Activity {
             }
         });
 
-        /**
+        /*
          * Button to the confirm the circuit. It instanced to circuit with the markers described in the list.
          */
         confirmBtn.setOnTouchListener(new View.OnTouchListener() {
@@ -160,7 +148,7 @@ public class GUICreateCircuit extends Activity {
             }
         });
 
-        /**
+        /*
          * Button to delete the selected marker.
          */
         deleteMarkerBtn.setOnTouchListener(new View.OnTouchListener() {
@@ -186,7 +174,7 @@ public class GUICreateCircuit extends Activity {
             }
         });
 
-        /**
+        /*
          * Listener to select an item of the listView listMarkers.
          */
         listMarkers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -219,7 +207,7 @@ public class GUICreateCircuit extends Activity {
     }
 
     /**
-     * Create the circuit file and instanced it.
+     * Creates the circuit file and instantiates it.
      */
     protected void createCircuitFile() {
         // Create the directory if it doesn't exist

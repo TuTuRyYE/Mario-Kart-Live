@@ -7,7 +7,7 @@ import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
  * @author Matthieu Michel.
- * Interface for items used in the game {@link Item}.
+ * Interface for items used in the game.
  * It defines the function to apply the effect of the item on a drone and how to
  * draw the icon of the item on the {@link fr.enseeiht.superjumpingsumokart.arpack.GUIGame} activity.
  */
@@ -18,7 +18,6 @@ public abstract class Item {
      * Name of the {@link Item}.
      */
     private final String NAME;
-
 
     /**
      * Default constructor of the class {@link Item}.
@@ -47,10 +46,9 @@ public abstract class Item {
      */
     public abstract void assignResource(ImageButton ib);
 
-
     /**
      * Get the name of the Item.
-     * @return name of the Item.
+     * @return The name of the Item.
      */
     public String getName() {
         return this.NAME;

@@ -14,7 +14,7 @@ import fr.enseeiht.superjumpingsumokart.R;
 
 /**
  * @author Vivian Guy
- * Circuit adapter for the listView in GUICircuit
+ * Circuit adapter for {@link GUICircuit#existingCircuitsListView}.
  */
 
 class CircuitAdapter extends ArrayAdapter<String[]> {
@@ -24,11 +24,10 @@ class CircuitAdapter extends ArrayAdapter<String[]> {
      */
     static int selectedPos = -1;
 
-
     /**
      * Constructor for a CircuitAdapter.
-     * @param context the context for the adapter.
-     * @param circuits the list of circuits to display.
+     * @param context The context for the adapter.
+     * @param circuits The list of circuits to display.
      */
     CircuitAdapter(Context context, ArrayList<String[]> circuits) {
         super(context, 0, circuits);
@@ -72,7 +71,7 @@ class CircuitAdapter extends ArrayAdapter<String[]> {
 
     /**
      * @author Vivian Guy.
-     * ViewHolder for the CircuitAdapter.
+     * ViewHolder for {@link CircuitAdapter}.
      */
     private class CircuitViewHolder{
         TextView circuitName;

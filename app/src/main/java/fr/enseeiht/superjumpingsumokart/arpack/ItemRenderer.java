@@ -10,7 +10,7 @@ import java.util.HashMap;
 import javax.microedition.khronos.opengles.GL10;
 
 import fr.enseeiht.superjumpingsumokart.application.items.Banana;
-import fr.enseeiht.superjumpingsumokart.application.items.Box;
+import fr.enseeiht.superjumpingsumokart.application.items.FakeBox;
 import fr.enseeiht.superjumpingsumokart.application.items.Item;
 
 /**
@@ -59,7 +59,7 @@ public final class ItemRenderer extends ARRenderer {
     }
 
     /**
-     * Puts an {@link Item} on the {@link fr.enseeiht.superjumpingsumokart.application.Circuit} (Romain Verset 27/02/2017).
+     * Puts an {@link Item} on the {@link fr.enseeiht.superjumpingsumokart.application.circuit.Circuit} (Romain Verset 27/02/2017).
      * The item is associated with an ARToolkit marker, the identification is made according to the
      * symbol of the marker.
      * @param item The {@link Item} to put on the circuit.
@@ -69,15 +69,14 @@ public final class ItemRenderer extends ARRenderer {
         Log.d(ITEM_RENDERER_TAG, "Defined model for symbol : " + symbol.name());
         if (item instanceof Banana) {
             ARToolKit.getInstance().addModel("Data/models/giantbanana.obj", SYMBOLS_HASH_MAP.get(symbol), symbol.ordinal(), 20.0f, true);
-        } else if (item instanceof Box) {
+        } else if (item instanceof FakeBox) {
             ARToolKit.getInstance().addModel("Data/models/magicbox.obj", SYMBOLS_HASH_MAP.get(symbol), symbol.ordinal(), 1.0f, false);
         }
-
     }
 
     /**
-     * Deletes an {@link Item} on the {@link fr.enseeiht.superjumpingsumokart.application.Circuit} (Romain Verset 27/02/2017).
-     * @param symbol
+     * Deletes an {@link Item} on the {@link fr.enseeiht.superjumpingsumokart.application.circuit.Circuit} (Romain Verset 27/02/2017).
+     * @param symbol The symbol on which the item to delete is put on.
      */
     public void deleteModelAtSymbol(DetectionTask.Symbol symbol) {
         Log.d(ITEM_RENDERER_TAG, "Deleted model for symbol : " + symbol.name());

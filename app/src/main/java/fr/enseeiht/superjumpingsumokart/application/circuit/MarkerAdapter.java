@@ -16,15 +16,15 @@ import fr.enseeiht.superjumpingsumokart.R;
 
 /**
  * @author Vivian Guy.
- * Adapter for the ListView of GUICreateCircuit and GUIModifyCircuit.
+ * {@link android.widget.Adapter} for {@link GUICreateCircuit#listMarkers} and {@link GUIModifyCircuit#listMarkers}.
  */
 
 class MarkerAdapter extends ArrayAdapter<String> {
 
     /**
-     * Constructor for a MarkerAdapter.
-     * @param context the context for the adapter.
-     * @param markers the list of markers to display.
+     * Constructor for {@link MarkerAdapter}.
+     * @param context The context for the adapter.
+     * @param markers The list of markers to display.
      */
     MarkerAdapter(Context context, ArrayList<String> markers) {
         super(context, 0, markers);
@@ -62,7 +62,7 @@ class MarkerAdapter extends ArrayAdapter<String> {
 
     /**
      * @author Vivian Guy.
-     * ViewHolder for the MarkerAdapter.
+     * ViewHolder for {@link MarkerAdapter}.
      */
     private class MarkerViewHolder{
         public TextView id;

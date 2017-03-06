@@ -262,11 +262,11 @@ public class GUIWelcome extends Activity {
     }
 
     /**
-     * Enables to connect the phone with an other phone in bluetooth to launch multiplayer mode.
-     * <b> Create a bluetooth server on your cell.</b>
+     * Enables to connect the phone with an other phone in bluetooth to launch multi player game.
      */
     private void btHostBtnAction() {
         if (!serverHosting) {
+            startRaceBtn.setEnabled(false);
             server = new BluetoothServer(GUIWelcome.this);
             server.start();
             serverHosting = true;
@@ -276,8 +276,7 @@ public class GUIWelcome extends Activity {
     }
 
     /**
-     * Enables to connect your phone to a bluetooth server to launch multiplayer mode.
-     * Join a bluetooth server.
+     * Enables to connect your phone to a bluetooth server to launch a multi player game.
      */
     private void btJoinBtnAction() {
         if (!clientConnected) {
@@ -351,8 +350,8 @@ public class GUIWelcome extends Activity {
      * Callback called when the {@link BluetoothServer} is ready and waiting for a {@link BluetoothClient}.
      */
     private void onServerReady() {
-        this.btHostBtn.setBackgroundColor(getResources().getColor(R.color.waitingForClient));
-        this.btHostBtn.setText(getResources().getString(R.string.hostBTButtonOn));
+        btHostBtn.setBackgroundColor(getResources().getColor(R.color.waitingForClient));
+        btHostBtn.setText(getResources().getString(R.string.hostBTButtonOn));
     }
 
     /**
@@ -360,7 +359,8 @@ public class GUIWelcome extends Activity {
      */
     private void onServerReceivedConnection() {
         btHostBtn.setBackgroundColor(getResources().getColor(R.color.connected));
-        this.btHostBtn.setText(getResources().getString(R.string.hostBTButtonOnAndPlayerConnected));
+        btHostBtn.setText(getResources().getString(R.string.hostBTButtonOnAndPlayerConnected));
+        enableStartARaceButton();
     }
 
     /**
@@ -368,7 +368,7 @@ public class GUIWelcome extends Activity {
      */
     private void onClientConnected() {
         btJoinBtn.setBackgroundColor(getResources().getColor(R.color.connected));
-        this.btJoinBtn.setText(getResources().getString(R.string.joinBTButtonOn));
+        btJoinBtn.setText(getResources().getString(R.string.joinBTButtonOn));
         clientConnected = true;
     }
 
@@ -377,7 +377,7 @@ public class GUIWelcome extends Activity {
      */
     private void onClientShutDown() {
         btJoinBtn.setBackgroundColor(getResources().getColor(R.color.notConnected));
-        this.btJoinBtn.setText(getResources().getString(R.string.joinBTButtonOff));
+        btJoinBtn.setText(getResources().getString(R.string.joinBTButtonOff));
         if (client != null) {
             client = null;
         }

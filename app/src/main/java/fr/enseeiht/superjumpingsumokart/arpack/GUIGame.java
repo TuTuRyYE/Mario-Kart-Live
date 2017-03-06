@@ -41,118 +41,24 @@ import fr.enseeiht.superjumpingsumokart.application.items.Item;
 import fr.enseeiht.superjumpingsumokart.application.network.BluetoothCommunication;
 import fr.enseeiht.superjumpingsumokart.application.network.WifiConnector;
 
+/**
+ * @author Romain Verset
+ * User interface {@link Activity} used while in game.
+ * It it composed of several to pilot the drone device buttons and two {@link SurfaceView}, one for
+ * the video stream upcoming from the drone device, another one for OpenGL rendering.
+ *
+ */
 public class GUIGame extends Activity implements GameListener {
-
-    /**
-     * Message for the {@link Handler} of the {@link GUIGame} activity.
-     */
-    public final static int RECEIVE_FRAME = 0;
-
-    /**
-     * Message for the {@link Handler} of the {@link GUIGame} activity.
-     */
-    public final static int DISPLAY_ITEM = 1;
-
-    /**
-     * Message for the {@link Handler} of the {@link GUIGame} activity.
-     */
-    public final static int RENDER_AR = 3;
-
-    /**
-     * Message for the {@link Handler} of the {@link GUIGame} activity.
-     */
-    public final static int CONTROLLER_STOPPING_ON_ERROR = 4;
-
-    /**
-     * Message for the {@link Handler} of the {@link GUIGame} activity.
-     */
-    public final static int CONTROLLER_RUNNING = 5;
-
-    /**
-     * Message for the {@link Handler} of the {@link GUIGame} activity.
-     */
-    public final static int VICTORY = 6;
-
-    /**
-     * Message for the {@link Handler} of the {@link GUIGame} activity.
-     */
-    public final static int DEFEAT = 7;
-
-    /**
-     * Message for the {@link Handler} of the {@link GUIGame} activity.
-     */
-    public static final int LAP_COUNT_UPDATE = 8;
-
-    /**
-     * Message for the {@link Handler} of the {@link GUIGame} activity.
-     */
-    public final static int CHECKPOINT_COUNT_UPDATE = 9;
-
-    /**
-     * Message for the {@link Handler} of the {@link GUIGame} activity.
-     */
-    public final static int LAST_MARKER_SEEN_UPDATE = 2;
-
-    /**
-     * Message for the {@link Handler} of the {@link GUIGame} activity.
-     */
-    public final static int ANIMATE_BLOOPER = 10;
-
-    /**
-     * Message for the {@link Handler} of the {@link GUIGame} activity.
-     */
-    public final static int ANIMATE_RED_SHELL = 11;
-
-    /**
-     * Message for the {@link Handler} of the {@link GUIGame} activity.
-     */
-    public final static int ANIMATE_MAGIC_BOX = 12;
-
-    /**
-     * The width of the frames of the Jumping Sumo Camera.
-     */
-    final static int VIDEO_WIDTH = 640;
-    /**
-     * The height of the frames of the Jumping Sumo Camera.
-     */
-    final static int VIDEO_HEIGHT = 480;
 
     /**
      * The logging tag. Useful for debugging.
      */
     private static String GUI_GAME_TAG = "GUIGame";
-    private final ArrayList<GuiGameListener> GUI_GAME_LISTENERS = new ArrayList<>();
-    /**
-     * The controller that dispatches commands from the user to the device.
-     */
-    private DroneController controller;
-    /**
-     * The current frame to display.
-     */
-    private byte[] currentFrame;
-    private ImageButton sendTrapBtn;
-    /**
-     * Boolean variables used to know when to initialise the {@link ARToolKit} markers.
-     */
-    private boolean firstUpdate = true;
-    /**
-     * Boolean variable used to know when the camera view is available so that we know when to start
-     * the markers research.
-     */
-    private boolean cameraViewAvailable = false;
-    /**
-     * The area to display the video stream from the device.
-     */
-    private FrameLayout mainLayout, animationLayout, sendTrapAnim;
-    private SurfaceView cameraView;
-    private GLSurfaceView glView;
-    private ItemRenderer renderer;
-    private TextView lapsTextView, checkpointTextView, lmsTextView;
 
     /**
-     * Handler to update GUI.
+     * Handler used to communicate with the Bluetooth thread and the drone Controller thread.
      */
-    public final Handler UPDATER = new Handler() {
+    public final Handler GUI_GAME_HANDLER = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -161,9 +67,8 @@ public class GUIGame extends Activity implements GameListener {
                     break;
                 case CONTROLLER_STOPPING_ON_ERROR:
                     Toast.makeText(GUIGame.this, "Loosing controller connection", Toast.LENGTH_LONG).show();
-                    for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
+                    for (GUIGameListener ggl : GUI_GAME_LISTENERS) {
                         ggl.onPlayerGaveUp();
-
                     }
                     GUI_GAME_LISTENERS.clear();
                     finish();
@@ -175,7 +80,7 @@ public class GUIGame extends Activity implements GameListener {
                     displayItem();
                     break;
                 case CONTROLLER_RUNNING:
-                    for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
+                    for (GUIGameListener ggl : GUI_GAME_LISTENERS) {
                         ggl.onDroneControllerReady();
                     }
                     break;
@@ -197,16 +102,19 @@ public class GUIGame extends Activity implements GameListener {
                 case ANIMATE_BLOOPER :
                     animationLayout.setBackgroundResource(R.drawable.blooper_animation);
                     AnimationDrawable adb = (AnimationDrawable) animationLayout.getBackground();
+                    adb.stop(); // We need to stop the animation before starting in order to make it repeatable.
                     adb.start();
                     break;
                 case ANIMATE_RED_SHELL :
                     animationLayout.setBackgroundResource(R.drawable.red_shell_animation);
                     AnimationDrawable adrs = (AnimationDrawable) animationLayout.getBackground();
+                    adrs.stop(); // We need to stop the animation before starting in order to make it repeatable.
                     adrs.start();
                     break;
                 case ANIMATE_MAGIC_BOX :
                     sendTrapAnim.setBackgroundResource(R.drawable.magic_box_animation);
                     AnimationDrawable admb = (AnimationDrawable) sendTrapAnim.getBackground();
+                    admb.stop(); // We need to stop the animation before starting in order to make it repeatable.
                     admb.start();
                     break;
                 default:
@@ -214,10 +122,132 @@ public class GUIGame extends Activity implements GameListener {
             }
         }
     };
+
     /**
-     * The {@link Game} associated to the current {@link GUIGame}.
+     * Message for {@link GUIGame#GUI_GAME_HANDLER}.
+     */
+    public final static int RECEIVE_FRAME = 0;
+
+    /**
+     * Message for {@link GUIGame#GUI_GAME_HANDLER}.
+     */
+    public final static int DISPLAY_ITEM = 1;
+
+    /**
+     * Message for {@link GUIGame#GUI_GAME_HANDLER}.
+     */
+    public final static int RENDER_AR = 3;
+
+    /**
+     * Message for {@link GUIGame#GUI_GAME_HANDLER}.
+     */
+    public final static int CONTROLLER_STOPPING_ON_ERROR = 4;
+
+    /**
+     * Message for {@link GUIGame#GUI_GAME_HANDLER}.
+     */
+    public final static int CONTROLLER_RUNNING = 5;
+
+    /**
+     * Message for {@link GUIGame#GUI_GAME_HANDLER}.
+     */
+    public final static int VICTORY = 6;
+
+    /**
+     * Message for {@link GUIGame#GUI_GAME_HANDLER}.
+     */
+    public final static int DEFEAT = 7;
+
+    /**
+     * Message for {@link GUIGame#GUI_GAME_HANDLER}.
+     */
+    public static final int LAP_COUNT_UPDATE = 8;
+
+    /**
+     * Message for {@link GUIGame#GUI_GAME_HANDLER}.
+     */
+    public final static int CHECKPOINT_COUNT_UPDATE = 9;
+
+    /**
+     * Message for {@link GUIGame#GUI_GAME_HANDLER}.
+     */
+    public final static int LAST_MARKER_SEEN_UPDATE = 2;
+
+    /**
+     * Message for {@link GUIGame#GUI_GAME_HANDLER}.
+     */
+    public final static int ANIMATE_BLOOPER = 10;
+
+    /**
+     * Message for {@link GUIGame#GUI_GAME_HANDLER}.
+     */
+    public final static int ANIMATE_RED_SHELL = 11;
+
+    /**
+     * Message for {@link GUIGame#GUI_GAME_HANDLER}.
+     */
+    public final static int ANIMATE_MAGIC_BOX = 12;
+
+    /**
+     * The width of the frames of the Jumping Sumo Camera.
+     */
+    final static int VIDEO_WIDTH = 640;
+
+    /**
+     * The height of the frames of the Jumping Sumo Camera.
+     */
+    final static int VIDEO_HEIGHT = 480;
+
+    /**
+     * List of listeners to notify when an event occurs in an instance of {@link GUIGame}.
+     */
+    private final ArrayList<GUIGameListener> GUI_GAME_LISTENERS = new ArrayList<>();
+
+    /**
+     * The controller that dispatches commands from the user to the device.
+     */
+    private DroneController controller;
+
+    /**
+     * The game associated to the current {@link GUIGame}.
      */
     private Game game;
+
+    /**
+     * The current frame to display.
+     */
+    private byte[] currentFrame;
+
+    /**
+     * The renderer provided to {@link GUIGame#glView}.
+     */
+    private ItemRenderer renderer;
+
+    /**
+     * Inner state variable.
+     * Boolean variables used to know when to initialise the {@link ARToolKit} markers.
+     */
+    private boolean firstUpdate = true;
+
+    /**
+     * Inner state variable.
+     * Boolean variable used to know when the camera view is available so that we know when to start
+     * the markers research.
+     */
+    private boolean cameraViewAvailable = false;
+
+    // VIEWS VARIABLE
+
+    /**
+     * The button used to display and use the {@link fr.enseeiht.superjumpingsumokart.application.Drone#currentItem}.
+     */
+    private ImageButton sendTrapBtn;
+
+    private FrameLayout mainLayout, animationLayout, sendTrapAnim;
+    private TextView lapsTextView, checkpointTextView, lmsTextView;
+    private SurfaceView cameraView;
+
+    private GLSurfaceView glView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -228,7 +258,7 @@ public class GUIGame extends Activity implements GameListener {
         // Binds with the bluetooth connector
         BluetoothCommunication bluetoothConnector = BluetoothCommunication.getInstance();
         if (bluetoothConnector != null) {
-            Log.d(GUI_GAME_TAG, "BluetoothConnector not null, multiplayer mode.");
+            Log.d(GUI_GAME_TAG, "BluetoothConnector not null, multi player mode.");
         }
 
         // Checks if the activity is a server or a client
@@ -269,7 +299,6 @@ public class GUIGame extends Activity implements GameListener {
         checkpointTextView = (TextView) findViewById(R.id.checkpointTextView);
         lapsTextView = (TextView) findViewById(R.id.lapsTextView);
         lmsTextView = (TextView) findViewById(R.id.lmsTextView);
-
 
         // Defines action listeners
         turnLeftBtn.setOnTouchListener(new View.OnTouchListener() {
@@ -354,7 +383,7 @@ public class GUIGame extends Activity implements GameListener {
                         DetectionTask.Symbol nextMarker = markers.get(nextMarkerIndex);
                         Item item = controller.getDrone().getCurrentItem();
                         if (controller.useItem(nextMarker)) {
-                            for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
+                            for (GUIGameListener ggl : GUI_GAME_LISTENERS) {
                                 ggl.onItemUsed(nextMarker, item);
                             }
                         }
@@ -362,7 +391,7 @@ public class GUIGame extends Activity implements GameListener {
                         Log.d(GUI_GAME_TAG, "Send trap button released, short press.");
                         Item item = controller.getDrone().getCurrentItem();
                         if (controller.useItem(lastMarkerSeen)) {
-                            for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
+                            for (GUIGameListener ggl : GUI_GAME_LISTENERS) {
                                 ggl.onItemUsed(lastMarkerSeen, item);
                             }
                         }
@@ -418,50 +447,13 @@ public class GUIGame extends Activity implements GameListener {
         if (controller.isRunning()) {
             controller.stopController();
         }
-        for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
+        for (GUIGameListener ggl : GUI_GAME_LISTENERS) {
             if (game != null && game.isStarted()) {
                 ggl.onPlayerGaveUp();
             }
         }
         GUI_GAME_LISTENERS.clear();
         BluetoothCommunication.deleteInstance();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    /**
-     * Method used to display the current trap owned by the player (Matthieu Michel - 30/01/2017).
-     */
-    private void displayItem() {
-        Item currentItem = controller.getDrone().getCurrentItem();
-        Log.d(GUI_GAME_TAG, currentItem.getName()+" is owned by the player");
-        currentItem.assignResource(sendTrapBtn);
-    }
-
-    /**
-     * Method called by {@link #UPDATER} to refresh the view of the GUI and update the displayed
-     * frame from the video stream of the device (Romain Verset - 01/02/2017).
-     */
-    public void updateCameraSurfaceView(Bitmap frameToDraw) {
-        if (cameraViewAvailable) {
-            Canvas canvas = cameraView.getHolder().lockCanvas();
-            canvas.drawBitmap(frameToDraw, 0, 0, null);
-            cameraView.getHolder().unlockCanvasAndPost(canvas);
-
-        }
-    }
-
-    /**
-     * TODO
-     */
-    public void renderAR() {
-        if (glView != null && renderer != null && ARToolKit.getInstance().getProjectionMatrix() != null) {
-            Log.d(GUI_GAME_TAG, "renderAR() called.");
-            glView.requestRender();
-        }
     }
 
     /**
@@ -511,24 +503,117 @@ public class GUIGame extends Activity implements GameListener {
         }
     }
 
-
     /**
      * Method used by {@link #controller} to send the current frame of its video stream to the GUI (Romain Verset - 01/02/2017).
-     *
      * @param frame The frame received from the device.
      */
     public void onFrameReceived(ARFrame frame) {
         if (firstUpdate) {
             renderer.configureARScene();
             firstUpdate = false;
-            for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
+            for (GUIGameListener ggl : GUI_GAME_LISTENERS) {
                 ggl.onVideoStreamAvailable();
             }
         }
         currentFrame = frame.getByteData();
-        UPDATER.sendEmptyMessage(RECEIVE_FRAME);
-        UPDATER.sendEmptyMessage(DISPLAY_ITEM);
+        GUI_GAME_HANDLER.sendEmptyMessage(RECEIVE_FRAME);
+        GUI_GAME_HANDLER.sendEmptyMessage(DISPLAY_ITEM);
     }
+
+    /**
+     * Method called by {@link #GUI_GAME_HANDLER} to refresh the view of the GUI and update the displayed
+     * frame from the video stream of the device (Romain Verset - 01/02/2017).
+     */
+    public void updateCameraSurfaceView(Bitmap frameToDraw) {
+        if (cameraViewAvailable) {
+            Canvas canvas = cameraView.getHolder().lockCanvas();
+            canvas.drawBitmap(frameToDraw, 0, 0, null);
+            cameraView.getHolder().unlockCanvasAndPost(canvas);
+        }
+    }
+
+    /**
+     * Render loaded models according to visible markers on {@link GUIGame#glView}.
+     */
+    public void renderAR() {
+        if (glView != null && renderer != null && ARToolKit.getInstance().getProjectionMatrix() != null) {
+            Log.d(GUI_GAME_TAG, "renderAR() called.");
+            glView.requestRender();
+        }
+    }
+
+    /**
+     * Method used to display the current trap owned by the player (Matthieu Michel - 30/01/2017).
+     */
+    private void displayItem() {
+        Item currentItem = controller.getDrone().getCurrentItem();
+        Log.d(GUI_GAME_TAG, currentItem.getName()+" is owned by the player");
+        currentItem.assignResource(sendTrapBtn);
+    }
+
+    /**
+     * Register a {@link GUIGameListener}so that it can be notified when needed.
+     * @param guiGameListener The listener to register.
+     */
+    public void registerGuiGameListener(GUIGameListener guiGameListener) {
+        GUI_GAME_LISTENERS.add(guiGameListener);
+    }
+
+    /**
+     * Display a message on the screen to notify the player he has won.
+     */
+    public void notifyVictory() {
+        if (!game.isFinished()) {
+            GUI_GAME_HANDLER.sendEmptyMessage(VICTORY);
+        }
+    }
+
+    /**
+     * Display a message on the screen to notify the player he has lost.
+     */
+    public void notifyDefeat() {
+        if (!game.isFinished()) {
+            GUI_GAME_HANDLER.sendEmptyMessage(DEFEAT);
+        }
+    }
+
+    /**
+     * Called when a {@link DetectionTask} detects a marker not associated with the arrival line or a checkpoint.
+     */
+    public void circuitMarkerDetected() {
+        GUI_GAME_HANDLER.sendEmptyMessage(LAST_MARKER_SEEN_UPDATE);
+    }
+
+    /**
+     * Called when a {@link DetectionTask} detects a marker associated with a checkpoint ({@link fr.enseeiht.superjumpingsumokart.arpack.DetectionTask.Symbol#KANJI} by default).
+     */
+    public void checkpointDetected() {
+        GUI_GAME_HANDLER.sendEmptyMessage(CHECKPOINT_COUNT_UPDATE);
+        for (GUIGameListener ggl : GUI_GAME_LISTENERS) {
+            ggl.onPlayerDetectsCheckpoint();
+        }
+    }
+
+    /**
+     * Called when a {@link DetectionTask} detects a marker associated with the arrival line ({@link fr.enseeiht.superjumpingsumokart.arpack.DetectionTask.Symbol#HIRO} by default).
+     */
+    public void arrivalLineDetected() {
+        for (GUIGameListener ggl : GUI_GAME_LISTENERS) {
+            ggl.onPlayerDetectsArrivalLine();
+        }
+    }
+
+    /**
+     * Method called when a {@link fr.enseeiht.superjumpingsumokart.arpack.DetectionTask.Symbol} is detected by the drone and the drone is close enough to "activate" it.
+     * @param symbol The symbol touched by the drone.
+     */
+    public void touchedSymbol(DetectionTask.Symbol symbol) {
+        for (GUIGameListener ggl : GUI_GAME_LISTENERS) {
+            ggl.onSymbolTouched(symbol);
+        }
+    }
+
+    // GETTERS AND SETTERS
 
     /**
      * @return The {@link DroneController} used by the activity.
@@ -538,26 +623,17 @@ public class GUIGame extends Activity implements GameListener {
     }
 
     /**
-     * Register a {@link GuiGameListener}so that it can be notified when needed.
-     * @param guiGameListener The listener to register.
+     * @return The renderer used in conjunction with {@link GUIGame#glView}.
      */
-    public void registerGuiGameListener(GuiGameListener guiGameListener) {
-        GUI_GAME_LISTENERS.add(guiGameListener);
+    public ItemRenderer getRenderer() {
+        return renderer;
     }
 
-    @Override
-    public void onPlayerReady() {
-        // Nothing to do here.
-    }
-
-    @Override
-    public void onPlayerFinished() {
-        notifyVictory();
-    }
+    // GAME_LISTENER METHODS
 
     @Override
     public void onPlayerFinishedLap() {
-        UPDATER.sendEmptyMessage(GUIGame.LAP_COUNT_UPDATE);
+        GUI_GAME_HANDLER.sendEmptyMessage(GUIGame.LAP_COUNT_UPDATE);
     }
 
     @Override
@@ -574,6 +650,16 @@ public class GUIGame extends Activity implements GameListener {
     }
 
     @Override
+    public void onPlayerReady() {
+        // Nothing to do here.
+    }
+
+    @Override
+    public void onPlayerFinished() {
+        notifyVictory();
+    }
+
+    @Override
     public void onItemTouched(Item item, DetectionTask.Symbol symbol) {
         item.applyEffect(controller);
     }
@@ -582,66 +668,4 @@ public class GUIGame extends Activity implements GameListener {
     public void onStartRace() {
         controller.setRunning(true);
     }
-
-    /**
-     * TODO
-     */
-    public void notifyDefeat() {
-        if (!game.isFinished()) {
-            UPDATER.sendEmptyMessage(DEFEAT);
-        }
-    }
-
-    /**
-     * TODO
-     */
-    public void notifyVictory() {
-        if (!game.isFinished()) {
-            UPDATER.sendEmptyMessage(VICTORY);
-        }
-    }
-
-    /**
-     * TODO
-     * @param symbol
-     */
-    public void touchedSymbol(DetectionTask.Symbol symbol) {
-        for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
-            ggl.onSymbolTouched(symbol);
-        }
-    }
-
-    /**
-     * TODO
-     */
-    public void circuitMarkerDetected() {
-        UPDATER.sendEmptyMessage(LAST_MARKER_SEEN_UPDATE);
-    }
-
-    /**
-     * TODO
-     */
-    public void arrivalLineDetected() {
-        for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
-            ggl.onPlayerDetectsArrivalLine();
-        }
-    }
-
-    /**
-     * TODO
-     */
-    public void checkpointDetected() {
-        UPDATER.sendEmptyMessage(CHECKPOINT_COUNT_UPDATE);
-        for (GuiGameListener ggl : GUI_GAME_LISTENERS) {
-            ggl.onPlayerDetectsCheckpoint();
-        }
-    }
-
-    /**
-     * @return The renderer used in conjunction with the {@link GLSurfaceView} of the activity.
-     */
-    public ItemRenderer getRenderer() {
-        return renderer;
-    }
-
 }

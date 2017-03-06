@@ -30,7 +30,7 @@ public class RedShell extends Item {
     private final GUIGame GUI_GAME;
 
     /**
-     * Default constructor of the class {@link Item}.
+     * Default constructor of the class {@link RedShell}.
      */
     public RedShell(GUIGame guiGame) {
         super(NAME);
@@ -41,7 +41,7 @@ public class RedShell extends Item {
     @Override
     public boolean useItem(DroneController droneController, DetectionTask.Symbol symbol) {
         Log.d(ITEM_TAG, "A red shell has been thrown!");
-        GUI_GAME.UPDATER.sendEmptyMessage(GUIGame.ANIMATE_RED_SHELL);
+        GUI_GAME.GUI_GAME_HANDLER.sendEmptyMessage(GUIGame.ANIMATE_RED_SHELL);
         return true;
     }
 

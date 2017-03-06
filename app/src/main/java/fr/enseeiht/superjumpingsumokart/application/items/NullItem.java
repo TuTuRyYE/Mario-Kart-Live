@@ -8,7 +8,7 @@ import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
  * @author Matthieu Michel.
- * Implementation of null {@link Item}.
+ * Implementation of a null {@link Item}.
  * This item symbolizes the absence of item.
  */
 
@@ -20,7 +20,7 @@ public class NullItem extends Item {
     private final static String NAME = "nullItem";
 
     /**
-     * Default constructor of the class {@link Item}. (Matthieu Michel - 06/02/2017).
+     * Default constructor of the class {@link NullItem}. (Matthieu Michel - 06/02/2017).
      */
     public NullItem() {
         super(NAME);

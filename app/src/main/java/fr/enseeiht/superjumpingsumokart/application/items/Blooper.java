@@ -10,7 +10,7 @@ import fr.enseeiht.superjumpingsumokart.arpack.GUIGame;
 
 /**
  * @author Romain Verset.
- * Implements a Blooper item.
+ * Implements a Blooper {@link Item}.
  */
 
 public class Blooper extends Item {
@@ -31,7 +31,7 @@ public class Blooper extends Item {
     private final GUIGame GUI_GAME;
 
     /**
-     * Default constructor of the class {@link Item}.
+     * Default constructor of the class {@link Blooper}.
      */
     public Blooper (GUIGame guiGame){
         super(NAME);
@@ -41,13 +41,13 @@ public class Blooper extends Item {
     @Override
     public boolean useItem(DroneController controller, DetectionTask.Symbol symbol) {
         Log.d(ITEM_TAG, "Used a blooper");
-        GUI_GAME.UPDATER.sendEmptyMessage(GUIGame.ANIMATE_BLOOPER);
+        GUI_GAME.GUI_GAME_HANDLER.sendEmptyMessage(GUIGame.ANIMATE_BLOOPER);
         return true;
     }
 
     @Override
     public void applyEffect(DroneController droneController) {
-        GUI_GAME.UPDATER.sendEmptyMessage(GUIGame.ANIMATE_BLOOPER);
+        GUI_GAME.GUI_GAME_HANDLER.sendEmptyMessage(GUIGame.ANIMATE_BLOOPER);
     }
 
     @Override

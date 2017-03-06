@@ -6,7 +6,9 @@ import fr.enseeiht.superjumpingsumokart.arpack.DetectionTask;
 
 /**
  * @author Vivian Guy.
- * Inteface for the communication between BT and Game.
+ * Interface for the communication between {@link fr.enseeiht.superjumpingsumokart.application.network.BluetoothCommunication}, {@link fr.enseeiht.superjumpingsumokart.arpack.GUIGame} and {@link Game}.
+ * Methods from this interface enable to notify the Bluetooth module and the user interface from the
+ * first player's action.
  */
 
 public interface GameListener {
@@ -29,7 +31,7 @@ public interface GameListener {
 
     /**
      * Called when the player use an {@link Item}.
-     * @param item the item used.
+     * @param item The item used.
      */
     void onPlayerUseItem(Item item, DetectionTask.Symbol lastMarkerSeen);
 
@@ -40,7 +42,7 @@ public interface GameListener {
 
     /**
      * Called when an {@link Item} is touched on the {@link Circuit}.
-     * @param item the item touched.
+     * @param item The item touched.
      */
     void onItemTouched(Item item, DetectionTask.Symbol symbol);
 
