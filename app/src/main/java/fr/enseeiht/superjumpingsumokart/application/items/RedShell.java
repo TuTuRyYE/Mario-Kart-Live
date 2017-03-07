@@ -41,7 +41,9 @@ public class RedShell extends Item {
     @Override
     public boolean useItem(DroneController droneController, DetectionTask.Symbol symbol) {
         Log.d(ITEM_TAG, "A red shell has been thrown!");
-        GUI_GAME.GUI_GAME_HANDLER.sendEmptyMessage(GUIGame.ANIMATE_RED_SHELL);
+        if (GUI_GAME != null) {
+            GUI_GAME.GUI_GAME_HANDLER.sendEmptyMessage(GUIGame.ANIMATE_RED_SHELL);
+        }
         return true;
     }
 
