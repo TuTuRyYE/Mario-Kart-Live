@@ -41,14 +41,12 @@ public class Blooper extends Item {
     @Override
     public boolean useItem(DroneController controller, DetectionTask.Symbol symbol) {
         Log.d(ITEM_TAG, "Used a blooper");
-        if (GUI_GAME != null) {
-            GUI_GAME.GUI_GAME_HANDLER.sendEmptyMessage(GUIGame.ANIMATE_BLOOPER);
-        }
         return true;
     }
 
     @Override
     public void applyEffect(DroneController droneController) {
+        Log.d(ITEM_TAG, "Blooper effect applied.");
         GUI_GAME.GUI_GAME_HANDLER.sendEmptyMessage(GUIGame.ANIMATE_BLOOPER);
     }
 

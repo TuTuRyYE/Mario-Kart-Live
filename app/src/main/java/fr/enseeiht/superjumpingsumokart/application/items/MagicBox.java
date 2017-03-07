@@ -51,7 +51,7 @@ public class MagicBox extends Item {
         Item item;
         switch (rand) {
             case 1 :
-                item = new Blooper(null);
+                item = new RedShell(null);
                 break;
             case 2 :
                 item = new FakeBox();
