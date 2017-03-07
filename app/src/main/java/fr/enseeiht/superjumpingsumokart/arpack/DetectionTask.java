@@ -165,7 +165,7 @@ public class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
                             break;
                         default:
                             Log.d(DETECTION_TASK_TAG, "Distance to marker " + s.name().concat(" ") + Float.toString(-ARToolKit.getInstance().queryMarkerTransformation(id)[14]));
-                            if (-ARToolKit.getInstance().queryMarkerTransformation(id)[14] < 250) {
+                            if (-ARToolKit.getInstance().queryMarkerTransformation(id)[14] < 300) {
                                 GUI_GAME.touchedSymbol(s);
                                 Log.d(DETECTION_TASK_TAG, "Touched symbol " + s.name());
                             }
