@@ -25,7 +25,7 @@ import fr.enseeiht.superjumpingsumokart.application.GUIWelcome;
 
 /**
  * @author Romain Verset.
- *         This class allows the application to remotly connect with a Jumpin Sumo Evo Light Parrot drone.
+ *         This class allows the application to remotly connect with a Jumping Sumo Evo Light Parrot drone.
  *         Created by Romain Verset on 30/01/17.
  */
 

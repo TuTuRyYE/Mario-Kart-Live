@@ -232,8 +232,6 @@ public class GUIWelcome extends Activity {
     private void startRaceBtnAction(){
         if (currentDeviceService == null) {
             Toast.makeText(GUIWelcome.this, R.string.no_drone_connected, Toast.LENGTH_SHORT).show();
-        } else if (Circuit.getInstance() == null) {
-            Toast.makeText(GUIWelcome.this, R.string.no_circuit_selected, Toast.LENGTH_SHORT).show();
         } else {
             Intent i = new Intent(GUIWelcome.this, GUIGame.class);
             i.putExtra("currentDeviceService", currentDeviceService);

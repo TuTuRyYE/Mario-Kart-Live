@@ -47,7 +47,9 @@ public class Blooper extends Item {
     @Override
     public void applyEffect(DroneController droneController) {
         Log.d(ITEM_TAG, "Blooper effect applied.");
-        GUI_GAME.GUI_GAME_HANDLER.sendEmptyMessage(GUIGame.ANIMATE_BLOOPER);
+        if (GUI_GAME != null) {
+            GUI_GAME.GUI_GAME_HANDLER.sendEmptyMessage(GUIGame.ANIMATE_BLOOPER);
+        }
     }
 
     @Override

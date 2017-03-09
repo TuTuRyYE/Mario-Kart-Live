@@ -35,7 +35,6 @@ public class RedShell extends Item {
     public RedShell(GUIGame guiGame) {
         super(NAME);
         GUI_GAME = guiGame;
-
     }
 
     @Override
@@ -47,7 +46,9 @@ public class RedShell extends Item {
     @Override
     public void applyEffect(DroneController droneController) {
         Log.d(ITEM_TAG, "You've been hit by a red shell!");
-        GUI_GAME.GUI_GAME_HANDLER.sendEmptyMessage(GUIGame.ANIMATE_RED_SHELL);
+        if (GUI_GAME != null) {
+            GUI_GAME.GUI_GAME_HANDLER.sendEmptyMessage(GUIGame.ANIMATE_RED_SHELL);
+        }
         droneController.spinningJump();
     }
 

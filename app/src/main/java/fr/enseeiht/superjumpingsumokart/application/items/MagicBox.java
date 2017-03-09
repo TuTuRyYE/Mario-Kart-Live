@@ -47,7 +47,7 @@ public class MagicBox extends Item {
     @Override
     public void applyEffect(DroneController droneController) {
         GUI_GAME.GUI_GAME_HANDLER.sendEmptyMessage(GUIGame.ANIMATE_MAGIC_BOX);
-        int rand = 1+ (int) Math.floor(Math.random() * 0);
+        int rand = 1+ (int) Math.floor(Math.random() * 5);
         Item item;
         switch (rand) {
             case 1 :

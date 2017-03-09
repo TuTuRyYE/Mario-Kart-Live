@@ -94,7 +94,7 @@ public class DetectionTask extends AsyncTask<byte[], Void, Boolean> {
      * Then launches the {@link ScriptC_rbgaToNv21} {@link #script} to convert ARGB_8888 bytes into
      * NV21 bytes. Finally it runs the marker detection on the NV21 bytes (Android ARToolkit supports only NV21 encoding).
      *
-     * @param frames The bytes revceived from the Jumping Sumo Camera stream.
+     * @param frames The bytes received from the Jumping Sumo Camera stream.
      * @return True. Useless return statement.
      */
     @Override
