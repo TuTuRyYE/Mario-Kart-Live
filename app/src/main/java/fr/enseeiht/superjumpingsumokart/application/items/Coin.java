@@ -31,18 +31,6 @@ public class Coin extends Item {
     public Coin() {
         super(NAME);
     }
-/*
-   @Override
-   public boolean useItem(DroneController controller, DetectionTask.Symbol symbol) {
-       if (symbol != null) {
-           Circuit.getInstance().addObject(symbol, this);
-           Log.d(ITEM_TAG, "A banana has been put on the circuit");
-           return true;
-       } else {
-           return false;
-       }
-   }
-*/
 
     @Override
     public boolean useItem(DroneController droneController, DetectionTask.Symbol marker) {
@@ -57,7 +45,7 @@ public class Coin extends Item {
 
     @Override
     public void assignResource(ImageButton ib) {
-        ib.setImageResource(R.drawable.coin);
+       // ib.setImageResource(R.drawable.coin);
     }
 }
 
