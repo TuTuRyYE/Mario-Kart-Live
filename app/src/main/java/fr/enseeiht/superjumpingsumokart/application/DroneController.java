@@ -43,6 +43,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     private final static byte NORMAL_SPEED = (byte) 20;
     private final static byte NEG_NORMAL_SPEED = (byte) -20;
     private final static byte FAST_SPEED = (byte) 40;
+    private final static byte COIN_SPEED = (byte) 60;
     private final static byte NEG_FAST_SPEED = (byte) -40;
     private final static byte BOOST_SPEED = (byte) 100;
 
@@ -60,6 +61,11 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
      * Fps counter.
      */
     private int fps_count = 0;
+
+    /**
+     * Indicates if the coin limit is reached or not.
+     */
+    private boolean coinLimitReached = false;
 
     /**
      * Default Constructor of the class {@link DroneController}.
@@ -111,13 +117,19 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     }
 
     /**
-     * Makes the drone go forward with the constant speed.
+     * Makes the drone go forward with the constant speed (NORMAL_SPEED or COIN_SPEED depending on coinLimitReached).
      */
     public void moveForward() {
         Log.d(DRONE_CONTROLLER_TAG, "MOVE FORWARD order received !");
         if (deviceController != null && started) {
+            byte speed;
+            if(coinLimitReached) {
+                speed = COIN_SPEED;
+            } else {
+                speed = NORMAL_SPEED;
+            }
             Log.d(DRONE_CONTROLLER_TAG, "MOVE FORWARD order received !");
-            deviceController.getFeatureJumpingSumo().setPilotingPCMDSpeed(NORMAL_SPEED);
+            deviceController.getFeatureJumpingSumo().setPilotingPCMDSpeed(speed);
         }
     }
 
@@ -274,6 +286,14 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
     public void setRunning(boolean running) {
         this.running = running;
         deviceController.getFeatureJumpingSumo().setPilotingPCMDFlag((byte)1);
+    }
+
+    public boolean isCoinLimitReached() {
+        return coinLimitReached;
+    }
+
+    public void setCoinLimitReached(boolean coinLimitReached) {
+        this.coinLimitReached = coinLimitReached;
     }
 
     /**
