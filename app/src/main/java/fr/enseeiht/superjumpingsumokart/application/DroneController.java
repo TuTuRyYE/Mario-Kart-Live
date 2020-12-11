@@ -128,7 +128,7 @@ public class DroneController implements ARDeviceControllerListener, ARDeviceCont
             } else {
                 speed = NORMAL_SPEED;
             }
-            Log.d(DRONE_CONTROLLER_TAG, "MOVE FORWARD order received !");
+            Log.d(DRONE_CONTROLLER_TAG, "MOVE FORWARD order received with speed = " + speed);
             deviceController.getFeatureJumpingSumo().setPilotingPCMDSpeed(speed);
         }
     }

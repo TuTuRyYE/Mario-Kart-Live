@@ -2,11 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Projet_Long.iml" filepath="$PROJECT_DIR$/Projet_Long.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Projet_Long_Git.iml" filepath="$PROJECT_DIR$/Projet_Long_Git.iml" />
-      <module fileurl="file://$PROJECT_DIR$/SuperJumpingSumoKart.iml" filepath="$PROJECT_DIR$/SuperJumpingSumoKart.iml" />
-      <module fileurl="file://$PROJECT_DIR$/aRBaseLib/aRBaseLib.iml" filepath="$PROJECT_DIR$/aRBaseLib/aRBaseLib.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Mario-Kart-Live.iml" filepath="$PROJECT_DIR$/.idea/modules/Mario-Kart-Live.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/aRBaseLib/Mario-Kart-Live.aRBaseLib.iml" filepath="$PROJECT_DIR$/.idea/modules/aRBaseLib/Mario-Kart-Live.aRBaseLib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Mario-Kart-Live.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Mario-Kart-Live.app.iml" />
     </modules>
   </component>
 </project>
